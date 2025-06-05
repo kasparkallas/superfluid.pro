@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@font-face {
+	font-family: "GT Walsheim Pro";
+	src: url("/fonts/GT-Walsheim-Pro-Regular.woff2") format("woff2"), url("/fonts/GT-Walsheim-Pro-Regular.woff")
+		format("woff"), url("/fonts/GT-Walsheim-Pro-Regular.ttf") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "GT Walsheim Pro";
+	src: url("/fonts/GT-Walsheim-Pro-Medium.woff2") format("woff2"), url("/fonts/GT-Walsheim-Pro-Medium.woff")
+		format("woff"), url("/fonts/GT-Walsheim-Pro-Medium.ttf") format("truetype");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+:root {
+	--background: #ffffff;
+	--foreground: #171717;
+	--font-gt-walsheim: "GT Walsheim Pro", system-ui, sans-serif;
+	--font-open-sans: var(--font-open-sans-google);
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-sans: var(--font-open-sans);
+	--font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+	}
+}
+
+body {
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-open-sans);
+}
+
+@keyframes gradient {
+	0%,
+	100% {
+		background-size: 200% 200%;
+		background-position: left center;
+	}
+	50% {
+		background-size: 200% 200%;
+		background-position: right center;
+	}
+}
+
+.animate-gradient {
+	animation: gradient 6s ease infinite;
+}
+
+.sdk-card:hover {
+	box-shadow: 0 0 30px rgba(35, 35, 255, 0.2);
+}
+
+.mcp-card:hover {
+	box-shadow: 0 0 30px rgba(131, 48, 253, 0.2);
+}

@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Superfluid MCP Server
 
-## Getting Started
+A Model Context Protocol (MCP) server that provides AI assistants with access to Superfluid Protocol tools and data. This server enables Claude, Cursor, and other MCP-compatible AI clients to interact with Superfluid contracts, networks, tokens, and ecosystem resources.
 
-First, run the development server:
+## Features
+
+- **7 MCP Tools** across 4 categories:
+  - Contract ABIs (list contracts, get ABIs)
+  - Network Metadata (list networks, get network data)
+  - Token Information (get token details, search tokens)
+  - Ecosystem Resources (find community resources)
+- **Multiple Transports** - SSE and HTTP endpoints
+- **Type-Safe** - Full TypeScript implementation
+- **Production Ready** - Built with Next.js for easy deployment
+
+## Quick Start
+
+Install dependencies and start the server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The server will be available at:
+- Main server: `http://localhost:3000`
+- SSE endpoint: `http://localhost:3000/api/sse`
+- HTTP endpoint: `http://localhost:3000/api/http`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## MCP Client Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Claude Desktop
 
-## Learn More
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
-To learn more about Next.js, take a look at the following resources:
+```json
+{
+  "mcpServers": {
+    "superfluid": {
+      "command": "node",
+      "args": ["path/to/scripts/test-client.mjs", "http://localhost:3000/api"]
+    }
+  }
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Continue.dev / Cursor
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Configure in your MCP settings to use: `http://localhost:3000/api/sse`
 
-## Deploy on Vercel
+## Available Tools
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. `list-superfluid-contracts` - List all available contract names
+2. `get-superfluid-contract-abi` - Get specific contract ABI
+3. `list-superfluid-metadata-networks` - List all Superfluid networks
+4. `get-superfluid-network-metadata` - Get network details by chain ID
+5. `get-superfluid-token` - Get token details by address
+6. `find-superfluid-tokens` - Search tokens by symbol/name
+7. `find-ecosystem-resources` - Find community resources
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+- `src/app/[transport]/route.ts` - MCP transport handlers
+- `src/app/[transport]/(tools)/` - Individual tool implementations
+- `src/types.ts` - TypeScript type definitions
+- `scripts/test-client.mjs` - Test client for local development
+
+## Deployment
+
+Deploy to Vercel or any Next.js-compatible platform. The server is designed to work with Vercel's MCP adapter for production use.

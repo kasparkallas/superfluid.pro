@@ -2,3 +2,4 @@ packages:
   - 'mcp/*'
   - 'sdk/*'
   - 'sdk/examples/*'
+  - 'website'

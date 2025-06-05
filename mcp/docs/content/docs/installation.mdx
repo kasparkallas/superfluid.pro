@@ -12,7 +12,7 @@ description: How to set up the Superfluid MCP server
 
 ```bash
 git clone https://github.com/superfluid-finance/superfluid-pro
-cd superfluid-pro/mcp/package
+cd superfluid-pro/mcp/server
 pnpm install
 pnpm dev
 ```
@@ -36,7 +36,7 @@ Add to your Claude Desktop configuration file:
     "superfluid": {
       "command": "node",
       "args": [
-        "/path/to/superfluid-pro/mcp/package/scripts/test-client.mjs",
+        "/path/to/superfluid-pro/mcp/server/scripts/test-client.mjs",
         "http://localhost:3000/api"
       ]
     }
@@ -61,7 +61,7 @@ Add to your Continue configuration (`.continue/config.json`):
 
 ### Cursor
 
-[Add to Cursor](cursor://settings/addMCPServer?name=superfluid&command=node&args=/path/to/superfluid-pro/mcp/package/scripts/test-client.mjs,http://localhost:3000/api)
+[Add to Cursor](cursor://settings/addMCPServer?name=superfluid&command=node&args=/path/to/superfluid-pro/mcp/server/scripts/test-client.mjs,http://localhost:3000/api)
 
 Or manually configure in Cursor settings. See [Cursor MCP docs](https://docs.cursor.com/deeplinks) for details.
 
