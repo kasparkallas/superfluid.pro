@@ -1,0 +1,33 @@
+{
+	"name": "@sfpro/mcp",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"build:sdk": "pnpm --filter sdk build",
+		"start": "next start",
+		"lint": "next lint",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.12.1",
+		"@superfluid-finance/metadata": "^1.6.0",
+		"@superfluid-finance/tokenlist": "^5.25.0",
+		"@vercel/mcp-adapter": "^0.7.3",
+		"fuse.js": "^7.1.0",
+		"next": "15.3.3",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"redis": "^5.1.1",
+		"@sfpro/sdk": "workspace:*",
+		"viem": "^2.30.5",
+		"zod": "^3.25.46"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"typescript": "^5"
+	}
+}

@@ -1,0 +1,123 @@
+---
+title: Host
+description: Superfluid Host contract API reference
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Superfluid Host contract is the central registry and entry point for the Superfluid protocol. It manages protocol governance, app registration, and provides batch transaction capabilities.
+
+## Overview
+
+The Host contract serves as:
+- Protocol registry for Super Tokens and agreements
+- Governance and configuration manager
+- Batch call executor for complex operations
+- App registration and callback system
+
+## Read Functions
+
+### getGovernance
+
+Returns the current governance address.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadHost } from '@superfluid-finance/sdk/wagmi';
+
+const { data: governance } = useReadHost({
+  address: '0x...',
+  functionName: 'getGovernance',
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { host } from '@superfluid-finance/sdk/abi';
+
+const governance = await client.readContract({
+  address: '0x...',
+  abi: host,
+  functionName: 'getGovernance',
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readHost } from '@superfluid-finance/sdk/actions';
+
+const governance = await readHost(client, {
+  address: '0x...',
+  functionName: 'getGovernance',
+});
+```
+</Tab>
+</Tabs>
+
+### getSuperTokenFactory
+
+Returns the Super Token factory address.
+
+### getAgreementClass
+
+Returns the address of a registered agreement by type.
+
+## Write Functions
+
+### callAgreement
+
+Executes an agreement operation through the host.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteHost } from '@superfluid-finance/sdk/wagmi';
+
+const { writeContract } = useWriteHost();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'callAgreement',
+  args: [agreementAddress, callData, userData],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { host } from '@superfluid-finance/sdk/abi';
+
+const hash = await client.writeContract({
+  address: '0x...',
+  abi: host,
+  functionName: 'callAgreement',
+  args: [agreementAddress, callData, userData],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { writeHost } from '@superfluid-finance/sdk/actions';
+
+const hash = await writeHost(client, {
+  address: '0x...',
+  functionName: 'callAgreement',
+  args: [agreementAddress, callData, userData],
+});
+```
+</Tab>
+</Tabs>
+
+### batchCall
+
+Executes multiple operations in a single transaction. See [Batch Calls](/docs/batch-calls) for detailed usage.
+
+### registerApp
+
+Registers a Super App with the protocol.
+
+## Related
+
+- [Batch Calls Guide](/docs/batch-calls)
+- [CFA Agreement](/docs/api/advanced/cfa)
+- [Super Token Factory](/docs/api/essential/super-token-factory)

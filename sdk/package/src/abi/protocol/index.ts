@@ -1,0 +1,18 @@
+export {
+	hostAbi,
+	hostAddress,
+	cfaAbi,
+	cfaAddress,
+	gdaAbi,
+	gdaAddress,
+	idaAbi,
+	idaAddress,
+	governanceAbi,
+	governanceAddress,
+	togaAbi,
+	togaAddress,
+	superTokenFactoryAbi,
+	superTokenFactoryAddress,
+	batchLiquidatorAbi,
+	batchLiquidatorAddress,
+} from "./generated.js";

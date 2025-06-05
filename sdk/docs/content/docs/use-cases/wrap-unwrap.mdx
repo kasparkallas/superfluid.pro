@@ -1,0 +1,455 @@
+---
+title: How to wrap/unwrap Super Tokens
+description: Learn how to convert between regular tokens and Super Tokens
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Super Tokens are the foundation of Superfluid. Before you can stream or distribute tokens, you need to convert regular tokens into Super Tokens.
+
+<Callout type="info">
+All Super Token amounts use 18 decimals internally, regardless of the underlying token's decimals.
+</Callout>
+
+## Wrapper Super Tokens
+
+Most Super Tokens are created by wrapping existing ERC-20 tokens.
+
+### Wrapping (Upgrade)
+
+To wrap tokens, you first need to approve the Super Token contract to spend your underlying tokens:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteContract } from "wagmi"
+import { erc20Abi } from "viem"
+import { parseUnits } from "viem"
+
+const underlyingToken = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" // USDC
+const superToken = "0x..." // USDCx address
+const amount = parseUnits("100", 6) // 100 USDC
+
+function WrapTokens() {
+  // Step 1: Approve hook
+  const { writeContract: approve } = useWriteContract()
+  
+  // Step 2: Upgrade hook
+  const { writeContract: upgrade } = useWriteSuperToken({ // [!code focus]
+    address: superToken, // [!code focus]
+    functionName: "upgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  const handleWrap = async () => {
+    // First approve
+    await approve({
+      address: underlyingToken,
+      abi: erc20Abi,
+      functionName: "approve",
+      args: [superToken, amount]
+    })
+    
+    // Then upgrade
+    await upgrade?.()
+  }
+  
+  return (
+    <button onClick={handleWrap}>
+      Wrap 100 USDC to USDCx
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { erc20Abi, createWalletClient, http, parseUnits } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const underlyingToken = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" // USDC
+const superToken = "0x1234567890abcdef..." // USDCx address - replace with actual address
+const amount = parseUnits("100", 6) // 100 USDC (6 decimals)
+
+async function wrapTokens() {
+  // Step 1: Approve the Super Token to spend underlying tokens
+  const approveHash = await walletClient.writeContract({
+    address: underlyingToken,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [superToken, amount]
+  })
+  
+  // Step 2: Upgrade tokens to Super Tokens
+  const upgradeHash = await walletClient.writeContract({ // [!code focus]
+    address: superToken, // [!code focus]
+    abi: superTokenAbi, // [!code focus]
+    functionName: "upgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return { approveHash, upgradeHash }
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { erc20Abi } from "viem"
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseUnits } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const underlyingToken = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48" // USDC
+const superToken = "0x..." // USDCx address
+const amount = parseUnits("100", 6) // 100 USDC
+
+async function wrapTokens() {
+  // Step 1: Approve (using viem directly)
+  const walletClient = wagmiConfig.getClient({ chainId: mainnet.id })
+  const approveHash = await walletClient.writeContract({
+    address: underlyingToken,
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [superToken, amount]
+  })
+  
+  // Step 2: Upgrade tokens
+  const upgradeHash = await writeSuperToken(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    address: superToken, // [!code focus]
+    functionName: "upgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return { approveHash, upgradeHash }
+}
+```
+</Tab>
+</Tabs>
+
+### Unwrapping (Downgrade)
+
+Converting Super Tokens back to regular tokens:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const superToken = "0x..." // USDCx address
+const amount = parseEther("100") // 100 Super Tokens
+
+function UnwrapTokens() {
+  const { writeContract: downgrade } = useWriteSuperToken({ // [!code focus]
+    address: superToken, // [!code focus]
+    functionName: "downgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => downgrade?.()}>
+      Unwrap 100 USDCx to USDC
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x1234567890abcdef..." // USDCx address - replace with actual address
+const amount = parseEther("100") // 100 Super Tokens (always 18 decimals)
+
+async function unwrapTokens() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: superToken, // [!code focus]
+    abi: superTokenAbi, // [!code focus]
+    functionName: "downgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const amount = parseEther("100") // 100 Super Tokens
+
+async function unwrapTokens() {
+  const hash = await writeSuperToken(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    address: superToken, // [!code focus]
+    functionName: "downgrade", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Native Asset Super Tokens
+
+Native Super Tokens (like ETHx) have special functions for wrapping/unwrapping:
+
+### Wrapping Native Assets
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const ethx = "0x..." // ETHx address
+const amount = parseEther("1") // 1 ETH
+
+function WrapETH() {
+  const { writeContract: upgrade } = useWriteSuperToken({ // [!code focus]
+    address: ethx, // [!code focus]
+    functionName: "upgradeByETH", // [!code focus]
+    value: amount // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => upgrade?.()}>
+      Wrap 1 ETH to ETHx
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const ethx = "0xabcdef1234567890..." // ETHx address - replace with actual address
+const amount = parseEther("1") // 1 ETH
+
+async function wrapETH() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: ethx, // [!code focus]
+    abi: superTokenAbi, // [!code focus]
+    functionName: "upgradeByETH", // [!code focus]
+    value: amount // Note: value, not args! // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const ethx = "0x..." // ETHx address
+const amount = parseEther("1") // 1 ETH
+
+async function wrapETH() {
+  const hash = await writeSuperToken(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    address: ethx, // [!code focus]
+    functionName: "upgradeByETH", // [!code focus]
+    value: amount // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+### Unwrapping Native Assets
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const ethx = "0x..." // ETHx address
+const amount = parseEther("1") // 1 ETHx
+
+function UnwrapETH() {
+  const { writeContract: downgrade } = useWriteSuperToken({ // [!code focus]
+    address: ethx, // [!code focus]
+    functionName: "downgradeByETH", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => downgrade?.()}>
+      Unwrap 1 ETHx to ETH
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const ethx = "0xabcdef1234567890..." // ETHx address - replace with actual address
+const amount = parseEther("1") // 1 ETHx
+
+async function unwrapETH() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: ethx, // [!code focus]
+    abi: superTokenAbi, // [!code focus]
+    functionName: "downgradeByETH", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const ethx = "0x..." // ETHx address
+const amount = parseEther("1") // 1 ETHx
+
+async function unwrapETH() {
+  const hash = await writeSuperToken(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    address: ethx, // [!code focus]
+    functionName: "downgradeByETH", // [!code focus]
+    args: [amount] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Important Notes
+
+1. **Decimals**: Super Tokens always use 18 decimals internally
+2. **Approvals**: Required for wrapper tokens, not for native assets
+3. **Gas**: Leave some native tokens for gas fees
+4. **Balances**: Check balances before wrapping/unwrapping
+
+## Next Steps
+
+- Learn to [manage CFA flows](/docs/use-cases/manage-cfa-flow)
+- Create [GDA pools](/docs/use-cases/create-gda-pool)
+- Explore [batch operations](/docs/use-cases/batch-calls)

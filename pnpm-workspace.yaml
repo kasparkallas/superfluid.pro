@@ -1,2 +1,4 @@
 packages:
-  - 'apps/*' 
+  - 'mcp'
+  - 'sdk/*'
+  - 'sdk/examples/*'

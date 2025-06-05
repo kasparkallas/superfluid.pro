@@ -1,0 +1,148 @@
+---
+title: Instant Distribution Agreement (IDA)
+description: IDA contract API reference for instant token distributions
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The Instant Distribution Agreement (IDA) enables instant, gas-efficient token distributions to multiple recipients. It uses a publish-subscribe model where publishers can distribute tokens to subscribers based on their subscription units.
+
+## Overview
+
+The IDA contract provides:
+- Index-based publish/subscribe system
+- Proportional instant distributions
+- Gas-efficient multi-recipient transfers
+- Subscription approval mechanisms
+
+<Callout type="note">
+**Note**: IDA is being superseded by GDA (General Distribution Agreement) which offers more features including streaming distributions. Consider using GDA for new implementations.
+</Callout>
+
+## Read Functions
+
+### getIndex
+
+Returns information about a distribution index.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadInstantDistributionAgreementV1 } from '@superfluid-finance/sdk/wagmi';
+
+const { data: index } = useReadInstantDistributionAgreementV1({
+  address: '0x...',
+  functionName: 'getIndex',
+  args: [token, publisher, indexId],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { instantDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+
+const index = await client.readContract({
+  address: '0x...',
+  abi: instantDistributionAgreementV1,
+  functionName: 'getIndex',
+  args: [token, publisher, indexId],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readInstantDistributionAgreementV1 } from '@superfluid-finance/sdk/actions';
+
+const index = await readInstantDistributionAgreementV1(client, {
+  address: '0x...',
+  functionName: 'getIndex',
+  args: [token, publisher, indexId],
+});
+```
+</Tab>
+</Tabs>
+
+### getSubscription
+
+Returns subscription information for a subscriber.
+
+### getSubscriptionByID
+
+Returns subscription information by its unique ID.
+
+### listSubscriptions
+
+Returns all subscriptions for a subscriber.
+
+## Write Functions
+
+### createIndex
+
+Creates a new distribution index through the Host contract.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteIdaForwarder } from '@superfluid-finance/sdk/wagmi';
+
+const { writeContract } = useWriteIdaForwarder();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'createIndex',
+  args: [token, indexId],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { instantDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+
+// Note: IDA operations must be called through the Host contract
+const callData = encodeFunctionData({
+  abi: instantDistributionAgreementV1,
+  functionName: 'createIndex',
+  args: [token, indexId, userData],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+// Use the forwarder contract for direct calls
+import { writeIdaForwarder } from '@superfluid-finance/sdk/actions';
+
+const hash = await writeIdaForwarder(client, {
+  address: '0x...',
+  functionName: 'createIndex',
+  args: [token, indexId],
+});
+```
+</Tab>
+</Tabs>
+
+### updateSubscriptionUnits
+
+Updates a subscriber's units (share) in an index.
+
+### distribute
+
+Distributes tokens to all subscribers of an index.
+
+### approveSubscription
+
+Approves a subscription to automatically receive distributions.
+
+### deleteSubscription
+
+Deletes a subscription from an index.
+
+### claim
+
+Claims pending distributions for a subscriber.
+
+## Related
+
+- [IDA Forwarder](/docs/api/essential/ida-forwarder) - Simplified interface for IDA operations
+- [GDA](/docs/api/advanced/gda) - Next-generation distribution agreement with streaming support
+- [Host Contract](/docs/api/advanced/host) - Required for direct IDA calls

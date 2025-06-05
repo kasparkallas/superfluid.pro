@@ -1,0 +1,473 @@
+---
+title: Super Token
+description: API reference for Super Token contract interactions
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Super Tokens are ERC-20 compatible tokens with additional streaming capabilities. This reference covers the essential functions for interacting with Super Tokens.
+
+## Contract Addresses
+
+```ts twoslash
+// Super Token addresses - replace with actual addresses for your network
+const usdcx = "0x1234567890abcdef..." // USDCx address
+const daix = "0xabcdef1234567890..." // DAIx address 
+const ethx = "0xfedcba0987654321..." // ETHx address
+```
+
+## Read Functions
+
+### balanceOf
+
+Get the Super Token balance of an account.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { data: balance } = useReadSuperToken({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  functionName: "balanceOf", // [!code focus]
+  args: ["0x..."] // Account address // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const balance = await client.readContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "balanceOf", // [!code focus]
+  args: ["0x..."] // Account address // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() }
+})
+
+const balance = await readSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  functionName: "balanceOf", // [!code focus]
+  args: ["0x..."] // Account address // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### realtimeBalanceOfNow
+
+Get the real-time balance including accumulated streams.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { data } = useReadSuperToken({ // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "realtimeBalanceOfNow", // [!code focus]
+  args: ["0x..."] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const result = await client.readContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "realtimeBalanceOfNow", // [!code focus]
+  args: ["0x..."] // Account address // [!code focus]
+}) // [!code focus]
+
+// Returns: [availableBalance, deposit, owedDeposit, timestamp]
+const [balance, deposit, owedDeposit, timestamp] = result
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() }
+})
+
+const result = await readSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "realtimeBalanceOfNow", // [!code focus]
+  args: ["0x..."] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### getUnderlyingToken
+
+Get the underlying ERC-20 token address (for wrapper Super Tokens).
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { data: underlyingToken } = useReadSuperToken({ // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "getUnderlyingToken" // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const underlyingToken = await client.readContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "getUnderlyingToken" // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() }
+})
+
+const underlyingToken = await readSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "getUnderlyingToken" // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+## Write Functions
+
+### upgrade
+
+Wrap underlying tokens to Super Tokens.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseUnits } from "viem"
+
+const { writeContract: upgrade } = useWriteSuperToken({ // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "upgrade", // [!code focus]
+  args: [parseUnits("100", 6)] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseUnits } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "upgrade", // [!code focus]
+  args: [parseUnits("100", 6)] // Amount (check underlying decimals) // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseUnits } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "upgrade", // [!code focus]
+  args: [parseUnits("100", 6)] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### downgrade
+
+Unwrap Super Tokens back to underlying tokens.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const { writeContract: downgrade } = useWriteSuperToken({ // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "downgrade", // [!code focus]
+  args: [parseEther("100")] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "downgrade", // [!code focus]
+  args: [parseEther("100")] // Amount (always 18 decimals) // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "downgrade", // [!code focus]
+  args: [parseEther("100")] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### upgradeByETH
+
+Wrap native assets (ETH, MATIC, etc.) to Super Tokens.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const { writeContract: upgrade } = useWriteSuperToken({ // [!code focus]
+  address: "0x...", // ETHx address // [!code focus]
+  functionName: "upgradeByETH", // [!code focus]
+  value: parseEther("1") // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: "0x...", // ETHx address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "upgradeByETH", // [!code focus]
+  value: parseEther("1") // Amount of ETH to wrap // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // ETHx address // [!code focus]
+  functionName: "upgradeByETH", // [!code focus]
+  value: parseEther("1") // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### transfer
+
+Transfer Super Tokens (standard ERC-20 transfer).
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteSuperToken } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { parseEther } from "viem"
+
+const { writeContract: transfer } = useWriteSuperToken({ // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "transfer", // [!code focus]
+  args: ["0x...", parseEther("10")] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: "0x...", // Super Token address // [!code focus]
+  abi: superTokenAbi, // [!code focus]
+  functionName: "transfer", // [!code focus]
+  args: ["0x...", parseEther("10")] // Recipient, amount // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeSuperToken } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeSuperToken(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  address: "0x...", // [!code focus]
+  functionName: "transfer", // [!code focus]
+  args: ["0x...", parseEther("10")] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+## Key Notes
+
+- **Decimals**: Super Tokens always use 18 decimals internally
+- **Approvals**: Required before upgrading wrapper Super Tokens
+- **Native Assets**: Use `upgradeByETH`/`downgradeByETH` for ETH/MATIC
+- **Real-time Balance**: Use `realtimeBalanceOfNow` for stream-aware balance

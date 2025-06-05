@@ -1,0 +1,170 @@
+---
+title: Flow Scheduler
+description: Schedule and automate Superfluid payment streams
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Flow Scheduler enables scheduling of Superfluid streams to start and stop at specific times. This is useful for recurring payments, time-based subscriptions, and automated payroll systems.
+
+## Overview
+
+Flow Scheduler provides:
+- Future-dated stream creation
+- Automatic stream termination
+- Recurring payment schedules
+- Batch scheduling operations
+- Gas-efficient automation
+
+## Read Functions
+
+### getFlowSchedule
+
+Returns details of a scheduled flow.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadFlowScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { data: schedule } = useReadFlowScheduler({
+  address: '0x...',
+  functionName: 'getFlowSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { flowScheduler } from '@superfluid-finance/sdk/abi/automation';
+
+const schedule = await client.readContract({
+  address: '0x...',
+  abi: flowScheduler,
+  functionName: 'getFlowSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readFlowScheduler } from '@superfluid-finance/sdk/actions/automation';
+
+const schedule = await readFlowScheduler(client, {
+  address: '0x...',
+  functionName: 'getFlowSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+</Tabs>
+
+### canExecuteSchedule
+
+Checks if a scheduled flow can be executed.
+
+### getScheduleInfo
+
+Returns comprehensive information about a flow schedule.
+
+## Write Functions
+
+### createFlowSchedule
+
+Creates a new scheduled flow with start and optional end time.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteFlowScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { writeContract } = useWriteFlowScheduler();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'createFlowSchedule',
+  args: [
+    superToken,
+    receiver,
+    flowRate,
+    startDate,
+    endDate,
+    userData
+  ],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { flowScheduler } from '@superfluid-finance/sdk/abi/automation';
+
+const hash = await client.writeContract({
+  address: '0x...',
+  abi: flowScheduler,
+  functionName: 'createFlowSchedule',
+  args: [
+    superToken,
+    receiver,
+    flowRate,
+    startDate,
+    endDate, // optional, use 0 for indefinite
+    userData
+  ],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { writeFlowScheduler } from '@superfluid-finance/sdk/actions/automation';
+
+const hash = await writeFlowScheduler(client, {
+  address: '0x...',
+  functionName: 'createFlowSchedule',
+  args: [
+    superToken,
+    receiver,
+    flowRate,
+    startDate,
+    endDate,
+    userData
+  ],
+});
+```
+</Tab>
+</Tabs>
+
+### deleteFlowSchedule
+
+Cancels a scheduled flow before it starts.
+
+### executeStartSchedule
+
+Triggers the start of a scheduled flow (can be called by anyone).
+
+### executeEndSchedule
+
+Triggers the end of a scheduled flow (can be called by anyone).
+
+### createScheduleFromAmountAndDuration
+
+Creates a schedule by specifying total amount and duration.
+
+## Schedule Parameters
+
+- **startDate**: Unix timestamp when the flow should start
+- **endDate**: Unix timestamp when the flow should end (0 for indefinite)
+- **flowRate**: Rate of the stream in wei per second
+- **userData**: Optional metadata for the schedule
+
+## Use Cases
+
+- **Payroll**: Schedule salary payments to start on specific dates
+- **Subscriptions**: Time-limited access with automatic termination
+- **Recurring Payments**: Weekly/monthly payment automation
+- **Trial Periods**: Free trials that convert to paid streams
+
+## Related
+
+- [Vesting Scheduler](/docs/api/automation/vesting-scheduler) - Complex vesting schedules
+- [CFA Forwarder](/docs/api/essential/cfa-forwarder) - Direct stream management
+- [Auto Wrap](/docs/api/automation/auto-wrap) - Maintain token balances

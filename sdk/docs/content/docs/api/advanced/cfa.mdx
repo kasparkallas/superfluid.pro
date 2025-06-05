@@ -1,0 +1,135 @@
+---
+title: Constant Flow Agreement (CFA)
+description: CFA contract API reference for managing continuous payment streams
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Constant Flow Agreement (CFA) is the core agreement for creating and managing continuous payment streams in Superfluid. It enables real-time, per-second token transfers between accounts.
+
+## Overview
+
+The CFA contract handles:
+- Creation, update, and deletion of payment streams
+- Flow rate calculations and accounting
+- ACL (Access Control List) permissions for operators
+- Real-time balance updates
+
+## Read Functions
+
+### getFlow
+
+Returns flow information between a sender and receiver.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadConstantFlowAgreementV1 } from '@superfluid-finance/sdk/wagmi';
+
+const { data: flow } = useReadConstantFlowAgreementV1({
+  address: '0x...',
+  functionName: 'getFlow',
+  args: [token, sender, receiver],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { constantFlowAgreementV1 } from '@superfluid-finance/sdk/abi';
+
+const flow = await client.readContract({
+  address: '0x...',
+  abi: constantFlowAgreementV1,
+  functionName: 'getFlow',
+  args: [token, sender, receiver],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readConstantFlowAgreementV1 } from '@superfluid-finance/sdk/actions';
+
+const flow = await readConstantFlowAgreementV1(client, {
+  address: '0x...',
+  functionName: 'getFlow',
+  args: [token, sender, receiver],
+});
+```
+</Tab>
+</Tabs>
+
+### getNetFlow
+
+Returns the net flow rate for an account (inflow - outflow).
+
+### getFlowByID
+
+Returns flow information by its unique ID.
+
+### getFlowOperatorData
+
+Returns operator permissions for a flow.
+
+## Write Functions
+
+### createFlow
+
+Creates a new payment stream through the Host contract.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteCfaForwarder } from '@superfluid-finance/sdk/wagmi';
+
+const { writeContract } = useWriteCfaForwarder();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'createFlow',
+  args: [token, sender, receiver, flowRate, userData],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { constantFlowAgreementV1 } from '@superfluid-finance/sdk/abi';
+
+// Note: CFA operations must be called through the Host contract
+const callData = encodeFunctionData({
+  abi: constantFlowAgreementV1,
+  functionName: 'createFlow',
+  args: [token, receiver, flowRate, '0x'],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+// Use the forwarder contract for direct calls
+import { writeCfaForwarder } from '@superfluid-finance/sdk/actions';
+
+const hash = await writeCfaForwarder(client, {
+  address: '0x...',
+  functionName: 'createFlow',
+  args: [token, sender, receiver, flowRate, userData],
+});
+```
+</Tab>
+</Tabs>
+
+### updateFlow
+
+Updates the flow rate of an existing stream.
+
+### deleteFlow
+
+Terminates a payment stream.
+
+### updateFlowOperatorPermissions
+
+Grants or revokes operator permissions for managing flows.
+
+## Related
+
+- [CFA Forwarder](/docs/api/essential/cfa-forwarder) - Simplified interface for CFA operations
+- [Host Contract](/docs/api/advanced/host) - Required for direct CFA calls
+- [Batch Calls](/docs/batch-calls) - Combine multiple operations

@@ -1,0 +1,369 @@
+---
+title: How to do batch calls
+description: Execute multiple Superfluid operations in a single transaction
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Superfluid Protocol supports batch calls, allowing you to execute multiple operations in a single transaction. This is useful for complex workflows and gas optimization.
+
+## Understanding Batch Calls
+
+Batch calls let you combine multiple Superfluid operations like:
+- Wrapping tokens and creating flows
+- Updating multiple flows at once
+- Creating pools and distributing tokens
+- Any combination of Superfluid operations
+
+## Operation Types
+
+Each operation in a batch call requires an operation type identifier:
+
+```ts twoslash
+import { OPERATION_TYPE } from "@superfluid-finance/sdk"
+
+// Available operation types:
+// OPERATION_TYPE.ERC20_APPROVE
+// OPERATION_TYPE.SUPERTOKEN_UPGRADE
+// OPERATION_TYPE.SUPERTOKEN_DOWNGRADE
+// OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT // For all agreement calls (createFlow, updateFlow, deleteFlow, createPool, distribute, etc.)
+// OPERATION_TYPE.CALL_APP_ACTION
+// OPERATION_TYPE.SIMPLE_FORWARD_CALL
+```
+
+## Example Without Helper
+
+Here's how to create a batch call manually:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteHost } from "@superfluid-finance/sdk/wagmi/protocol" // [!code focus]
+import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
+import { superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { encodeFunctionData } from "viem"
+import { useAccount } from "wagmi"
+
+function BatchOperations() {
+  const { address } = useAccount()
+  
+  const operations = [ // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE, // [!code focus]
+      target: "0x...", // Super Token address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: superTokenAbi, // [!code focus]
+        functionName: "upgrade", // [!code focus]
+        args: [1000000n] // [!code focus]
+      }) // [!code focus]
+    }, // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT, // [!code focus]
+      target: "0x...", // CFA Forwarder address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: cfaForwarderAbi, // [!code focus]
+        functionName: "createFlow", // [!code focus]
+        args: ["0x...", address!, "0x...", 1000n, "0x"] // [!code focus]
+      }) // [!code focus]
+    } // [!code focus]
+  ] // [!code focus]
+  
+  const { writeContract: batchCall } = useWriteHost({ // [!code focus]
+    functionName: "batchCall", // [!code focus]
+    args: [operations] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => batchCall?.()}>
+      Execute Batch Operations
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { hostAbi, hostAddress, superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol" // [!code focus]
+import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, encodeAbiParameters, encodeFunctionData } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+async function batchCall() {
+  const operations = [ // [!code focus]
+    // Operation 1: Upgrade tokens // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE, // [!code focus]
+      target: "0x...", // Super Token address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: superTokenAbi, // [!code focus]
+        functionName: "upgrade", // [!code focus]
+        args: [1000000n] // Amount to upgrade // [!code focus]
+      }) // [!code focus]
+    }, // [!code focus]
+    // Operation 2: Create flow // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT, // [!code focus]
+      target: "0x...", // CFA Forwarder address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: cfaForwarderAbi, // [!code focus]
+        functionName: "createFlow", // [!code focus]
+        args: ["0x...", account.address, "0x...", 1000n, "0x"] // [!code focus]
+      }) // [!code focus]
+    } // [!code focus]
+  ] // [!code focus]
+  
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: hostAddress[mainnet.id], // [!code focus]
+    abi: hostAbi, // [!code focus]
+    functionName: "batchCall", // [!code focus]
+    args: [operations] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeHost } from "@superfluid-finance/sdk/actions/protocol" // [!code focus]
+import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
+import { superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, encodeFunctionData } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+async function batchCall() {
+  const operations = [ // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE, // [!code focus]
+      target: "0x...", // Super Token address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: superTokenAbi, // [!code focus]
+        functionName: "upgrade", // [!code focus]
+        args: [1000000n] // [!code focus]
+      }) // [!code focus]
+    }, // [!code focus]
+    { // [!code focus]
+      operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT, // [!code focus]
+      target: "0x...", // CFA Forwarder address // [!code focus]
+      data: encodeFunctionData({ // [!code focus]
+        abi: cfaForwarderAbi, // [!code focus]
+        functionName: "createFlow", // [!code focus]
+        args: ["0x...", account.address, "0x...", 1000n, "0x"] // [!code focus]
+      }) // [!code focus]
+    } // [!code focus]
+  ] // [!code focus]
+  
+  const hash = await writeHost(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "batchCall", // [!code focus]
+    args: [operations] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Example With Helper
+
+The SDK provides a `prepareOperation` helper to simplify batch call creation:
+
+```ts twoslash
+import { 
+  prepareOperation,
+  OPERATION_TYPE,
+  hostAbi,
+  hostAddress,
+  superTokenAbi,
+  cfaForwarderAbi,
+  cfaForwarderAddress,
+  calculateFlowrate
+} from "@superfluid-finance/sdk"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+
+async function batchWithHelper() {
+  // Prepare operations using the helper
+  const operations = [ // [!code focus]
+    // Upgrade 100 tokens // [!code focus]
+    prepareOperation({ // [!code focus]
+      operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE, // [!code focus]
+      target: superToken, // [!code focus]
+      abi: superTokenAbi, // [!code focus]
+      functionName: "upgrade", // [!code focus]
+      args: [parseEther("100")] // [!code focus]
+    }), // [!code focus]
+     // [!code focus]
+    // Create a flow of 10 tokens per month // [!code focus]
+    prepareOperation({ // [!code focus]
+      operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT, // [!code focus]
+      target: cfaForwarderAddress[mainnet.id], // [!code focus]
+      abi: cfaForwarderAbi, // [!code focus]
+      functionName: "createFlow", // [!code focus]
+      args: [ // [!code focus]
+        superToken, // [!code focus]
+        account.address, // [!code focus]
+        receiver, // [!code focus]
+        calculateFlowrate({ amountWei: parseEther("10"), timeUnit: "month" }), // [!code focus]
+        "0x" // [!code focus]
+      ] // [!code focus]
+    }) // [!code focus]
+  ] // [!code focus]
+  
+  // Execute batch call
+  const hash = await walletClient.writeContract({
+    address: hostAddress[mainnet.id],
+    abi: hostAbi,
+    functionName: "batchCall",
+    args: [operations]
+  })
+  
+  return hash
+}
+```
+
+## Common Batch Patterns
+
+### Wrap and Stream
+
+Wrap tokens and immediately start streaming:
+
+<Callout type="warning">
+**Note**: The underlying token approval cannot be included in the batch call because `msg.sender` changes when operations go through the Superfluid Host. Approve the underlying token separately before executing the batch.
+</Callout>
+
+```ts twoslash
+import { prepareOperation, OPERATION_TYPE, calculateFlowrate, superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+const wrapAndStream = [ // [!code focus]
+  // 1. Upgrade to super token // [!code focus]
+  prepareOperation({ // [!code focus]
+    operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE, // [!code focus]
+    target: "0x...", // Super token // [!code focus]
+    abi: superTokenAbi, // [!code focus]
+    functionName: "upgrade", // [!code focus]
+    args: [parseEther("100")] // [!code focus]
+  }), // [!code focus]
+   // [!code focus]
+  // 2. Create flow // [!code focus]
+  prepareOperation({ // [!code focus]
+    operationType: OPERATION_TYPE.CFA_CREATE_FLOW, // [!code focus]
+    target: "0x...", // CFA Forwarder // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [ // [!code focus]
+      "0x...", // Super token // [!code focus]
+      "0x...", // Receiver // [!code focus]
+      calculateFlowrate({ amountWei: parseEther("10"), timeUnit: "month" }) // [!code focus]
+    ] // [!code focus]
+  }) // [!code focus]
+] // [!code focus]
+```
+
+### Multiple Flow Updates
+
+Update multiple flows in one transaction:
+
+```ts twoslash
+import { prepareOperation, OPERATION_TYPE, calculateFlowrate, cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+const receivers = [
+  { address: "0x...", flowrate: "100" },
+  { address: "0x...", flowrate: "200" },
+  { address: "0x...", flowrate: "150" }
+]
+
+const multipleFlowUpdates = receivers.map(receiver => // [!code focus]
+  prepareOperation({ // [!code focus]
+    operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT, // [!code focus]
+    target: "0x...", // CFA Forwarder // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [ // [!code focus]
+      "0x...", // Super token // [!code focus]
+      receiver.address, // [!code focus]
+      calculateFlowrate({ amountWei: parseEther(receiver.flowrate), timeUnit: "month" }) // [!code focus]
+    ] // [!code focus]
+  }) // [!code focus]
+) // [!code focus]
+```
+
+## Error Handling
+
+Batch calls are atomic - if any operation fails, the entire batch reverts:
+
+```ts twoslash
+import { hostAddress, hostAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { mainnet } from "viem/chains"
+// @noErrors
+const walletClient = {} as any
+const operations = [] as any[]
+// ---cut---
+try {
+  // Execute batch call
+  const hash = await walletClient.writeContract({
+    address: hostAddress[mainnet.id],
+    abi: hostAbi,
+    functionName: "batchCall",
+    args: [operations]
+  })
+  
+  // All operations succeeded
+  console.log("Batch successful:", hash)
+} catch (error) {
+  // One or more operations failed
+  console.error("Batch failed:", error)
+}
+```
+
+## Best Practices
+
+1. **Order matters**: Operations execute sequentially
+2. **Gas estimation**: Test batch calls to estimate gas costs
+3. **Error handling**: Handle failures gracefully
+4. **Atomic execution**: All succeed or all fail
+
+## Next Steps
+
+- Explore the [API reference](/docs/api/essential/super-token)
+- Learn about [advanced protocol features](/docs/api/advanced/host)
+- Check out [automation contracts](/docs/api/automation/auto-wrap)

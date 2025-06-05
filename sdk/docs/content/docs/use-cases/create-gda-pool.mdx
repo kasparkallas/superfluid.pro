@@ -1,0 +1,475 @@
+---
+title: How to create a GDA pool and distribute
+description: Set up one-to-many token distributions with GDA pools
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+The General Distribution Agreement (GDA) enables efficient one-to-many token distributions through pools. Pool members receive tokens proportionally based on their allocated units.
+
+## Create a Pool
+
+First, create a new GDA pool:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+
+const superToken = "0x..." // USDCx address
+
+function CreatePool() {
+  const { address } = useAccount()
+  const { writeContract: createPool } = useWriteGdaForwarder({ // [!code focus]
+    functionName: "createPool", // [!code focus]
+    args: [superToken, address!, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => createPool?.()}>
+      Create Distribution Pool
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const poolAdmin = account.address // Pool admin address
+
+async function createPool() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: gdaForwarderAddress[mainnet.id], // [!code focus]
+    abi: gdaForwarderAbi, // [!code focus]
+    functionName: "createPool", // [!code focus]
+    args: [superToken, poolAdmin, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const poolAdmin = account.address // Pool admin address
+
+async function createPool() {
+  const hash = await writeGdaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "createPool", // [!code focus]
+    args: [superToken, poolAdmin, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Get Pool Address
+
+After creating a pool, you need to get its address:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { keccak256, toHex } from "viem"
+
+const superToken = "0x..." // USDCx address
+const poolAdmin = "0x..." // Pool admin address
+const poolId = keccak256(toHex("mypool"))
+
+function PoolAddress() {
+  const { data: poolAddress } = useReadGdaForwarder({ // [!code focus]
+    functionName: "getPool", // [!code focus]
+    args: [superToken, poolAdmin, poolId] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <div>
+      Pool Address: {poolAddress}
+    </div>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const poolAdmin = "0x..." // Pool admin address
+const poolId = keccak256(toHex("mypool")) // Or use index like toHex(0)
+
+async function getPoolAddress() {
+  const poolAddress = await client.readContract({ // [!code focus]
+    address: gdaForwarderAddress[mainnet.id], // [!code focus]
+    abi: gdaForwarderAbi, // [!code focus]
+    functionName: "getPool", // [!code focus]
+    args: [superToken, poolAdmin, poolId] // [!code focus]
+  }) // [!code focus]
+  
+  return poolAddress
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http()
+  }
+})
+
+const superToken = "0x..." // USDCx address
+const poolAdmin = "0x..." // Pool admin address
+const poolId = keccak256(toHex("mypool"))
+
+async function getPoolAddress() {
+  const poolAddress = await readGdaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "getPool", // [!code focus]
+    args: [superToken, poolAdmin, poolId] // [!code focus]
+  }) // [!code focus]
+  
+  return poolAddress
+}
+```
+</Tab>
+</Tabs>
+
+## Give Units to Pool Members
+
+Allocate units to members to determine their share of distributions:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const poolAddress = "0x..." // Your pool address
+const member = "0x..." // Member address
+const units = 100n // Number of units
+
+function GiveUnits() {
+  const { writeContract: updateUnits } = useWriteGdaPool({ // [!code focus]
+    address: poolAddress, // [!code focus]
+    functionName: "updateMemberUnits", // [!code focus]
+    args: [member, units, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => updateUnits?.()}>
+      Give 100 units to member
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const poolAddress = "0x..." // Your pool address
+const member = "0x..." // Member address
+const units = 100n // Number of units
+
+async function giveUnits() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: poolAddress, // [!code focus]
+    abi: gdaPoolAbi, // [!code focus]
+    functionName: "updateMemberUnits", // [!code focus]
+    args: [member, units, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const poolAddress = "0x..." // Your pool address
+const member = "0x..." // Member address
+const units = 100n // Number of units
+
+async function giveUnits() {
+  const hash = await writeGdaPool(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    address: poolAddress, // [!code focus]
+    functionName: "updateMemberUnits", // [!code focus]
+    args: [member, units, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Distribute Tokens
+
+Once members have units, distribute tokens to all members proportionally:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+import { parseEther } from "viem"
+
+const superToken = "0x..." // USDCx address
+const poolAddress = "0x..." // Your pool address
+const amount = parseEther("1000") // 1000 tokens
+
+function DistributeTokens() {
+  const { address } = useAccount()
+  const { writeContract: distribute } = useWriteGdaForwarder({ // [!code focus]
+    functionName: "distribute", // [!code focus]
+    args: [superToken, address!, poolAddress, amount, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => distribute?.()}>
+      Distribute 1000 tokens to pool
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const poolAddress = "0x..." // Your pool address
+const amount = parseEther("1000") // 1000 tokens to distribute
+
+async function distributeToPool() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: gdaForwarderAddress[mainnet.id], // [!code focus]
+    abi: gdaForwarderAbi, // [!code focus]
+    functionName: "distribute", // [!code focus]
+    args: [superToken, account.address, poolAddress, amount, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const poolAddress = "0x..." // Your pool address
+const amount = parseEther("1000") // 1000 tokens
+
+async function distributeToPool() {
+  const hash = await writeGdaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "distribute", // [!code focus]
+    args: [superToken, account.address, poolAddress, amount, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Complete Example
+
+Here's a complete workflow for creating and using a GDA pool:
+
+```ts twoslash
+import { 
+  gdaForwarderAbi, 
+  gdaForwarderAddress,
+  gdaPoolAbi,
+  superTokenAbi
+} from "@superfluid-finance/sdk"
+import { createWalletClient, createPublicClient, http, parseEther, toHex } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+async function setupDistributionPool() {
+  const superToken = "0x..." // USDCx address
+  const poolId = toHex(1) // Simple pool ID
+  
+  // 1. Create pool
+  await walletClient.writeContract({
+    address: gdaForwarderAddress[mainnet.id],
+    abi: gdaForwarderAbi,
+    functionName: "createPool",
+    args: [superToken, account.address, poolId]
+  })
+  
+  // 2. Get pool address
+  const poolAddress = await publicClient.readContract({
+    address: gdaForwarderAddress[mainnet.id],
+    abi: gdaForwarderAbi,
+    functionName: "getPool",
+    args: [superToken, account.address, poolId]
+  })
+  
+  // 3. Add members with units
+  const members = [
+    { address: "0x...", units: 50n },  // 50% share
+    { address: "0x...", units: 30n },  // 30% share
+    { address: "0x...", units: 20n },  // 20% share
+  ]
+  
+  for (const member of members) {
+    await walletClient.writeContract({
+      address: poolAddress,
+      abi: gdaPoolAbi,
+      functionName: "updateMemberUnits",
+      args: [member.address, member.units, "0x"]
+    })
+  }
+  
+  // 4. Distribute tokens
+  const distributionAmount = parseEther("1000")
+  await walletClient.writeContract({
+    address: gdaForwarderAddress[mainnet.id],
+    abi: gdaForwarderAbi,
+    functionName: "distribute",
+    args: [superToken, account.address, poolAddress, distributionAmount, "0x"]
+  })
+  
+  return poolAddress
+}
+```
+
+## Key Concepts
+
+1. **Pool Creation**: Each pool is unique per (superToken, admin, poolId) combination
+2. **Units**: Determine proportional share (e.g., 100 units out of 1000 total = 10% share)
+3. **Distribution**: Instantly distributes to all members based on their unit share
+4. **Gas Efficiency**: More efficient than sending individual transfers
+
+## Next Steps
+
+- Learn to [connect to GDA pools](/docs/use-cases/connect-gda-pool) as a member
+- Explore [batch operations](/docs/use-cases/batch-calls)
+- Check the [GDA API reference](/docs/api/essential/gda-forwarder)

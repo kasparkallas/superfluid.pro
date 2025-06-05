@@ -1,0 +1,560 @@
+---
+title: How to manage a CFA flow
+description: Create, update, and delete continuous token streams
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Mermaid } from '@/components/mdx/mermaid';
+
+Constant Flow Agreement (CFA) enables continuous token streams between accounts. When we talk about "streams" in Superfluid, we're referring to CFA flows.
+
+## Understanding Flowrates
+
+Flowrates are measured in tokens per second. The SDK provides a utility to calculate flowrates:
+
+```ts twoslash
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+// Stream 100 tokens per month
+const monthlyFlowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+// Stream 1 token per day
+const dailyFlowrate = calculateFlowrate({
+  amountWei: parseEther("1"),
+  timeUnit: "day"
+})
+
+// Stream 0.1 tokens per hour
+const hourlyFlowrate = calculateFlowrate({
+  amountWei: parseEther("0.1"),
+  timeUnit: "hour"
+})
+```
+
+## Create a Flow
+
+There are two ways to create a flow: `setFlowrate` (recommended) and `createFlow`.
+
+### Using setFlowrate (Recommended)
+
+`setFlowrate` is more versatile - it creates a new flow or updates an existing one:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+function CreateFlow() {
+  const { writeContract: setFlowrate } = useWriteCfaForwarder({ // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [superToken, receiver, flowrate] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => setFlowrate?.()}>
+      Stream 100 tokens/month to {receiver}
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+async function createFlow() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [superToken, receiver, flowrate] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+async function createFlow() {
+  const hash = await writeCfaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [superToken, receiver, flowrate] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+### Using createFlow
+
+`createFlow` explicitly creates a new flow (fails if flow already exists):
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+import { useAccount } from "wagmi"
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+function CreateNewFlow() {
+  const { address } = useAccount()
+  const { writeContract: createFlow } = useWriteCfaForwarder({ // [!code focus]
+    functionName: "createFlow", // [!code focus]
+    args: [superToken, address!, receiver, flowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => createFlow?.()}>
+      Create new flow
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+async function createNewFlow() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "createFlow", // [!code focus]
+    args: [superToken, account.address, receiver, flowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+async function createNewFlow() {
+  const hash = await writeCfaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "createFlow", // [!code focus]
+    args: [superToken, account.address, receiver, flowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Update a Flow
+
+To change the flowrate of an existing flow:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+import { useAccount } from "wagmi"
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const newFlowrate = calculateFlowrate({
+  amountWei: parseEther("200"),
+  timeUnit: "month"
+})
+
+function UpdateFlow() {
+  const { address } = useAccount()
+  const { writeContract: updateFlow } = useWriteCfaForwarder({ // [!code focus]
+    functionName: "updateFlow", // [!code focus]
+    args: [superToken, address!, receiver, newFlowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => updateFlow?.()}>
+      Update flow to 200 tokens/month
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const newFlowrate = calculateFlowrate({
+  amountWei: parseEther("200"), // Increased to 200 tokens/month
+  timeUnit: "month"
+})
+
+async function updateFlow() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "updateFlow", // [!code focus]
+    args: [superToken, account.address, receiver, newFlowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+const newFlowrate = calculateFlowrate({
+  amountWei: parseEther("200"),
+  timeUnit: "month"
+})
+
+async function updateFlow() {
+  const hash = await writeCfaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "updateFlow", // [!code focus]
+    args: [superToken, account.address, receiver, newFlowrate, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Delete a Flow
+
+To stop a flow completely:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+
+function DeleteFlow() {
+  const { address } = useAccount()
+  const { writeContract: deleteFlow } = useWriteCfaForwarder({ // [!code focus]
+    functionName: "deleteFlow", // [!code focus]
+    args: [superToken, address!, receiver, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <button onClick={() => deleteFlow?.()}>
+      Stop streaming
+    </button>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+
+async function deleteFlow() {
+  const hash = await walletClient.writeContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "deleteFlow", // [!code focus]
+    args: [superToken, account.address, receiver, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({
+      account,
+      chain,
+      transport: http(),
+    })
+  },
+})
+
+const superToken = "0x..." // USDCx address
+const receiver = "0x..." // Recipient address
+
+async function deleteFlow() {
+  const hash = await writeCfaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "deleteFlow", // [!code focus]
+    args: [superToken, account.address, receiver, "0x"] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+</Tab>
+</Tabs>
+
+## Reading Flow Information
+
+Check the current flowrate between accounts:
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const superToken = "0x..." // USDCx address
+const sender = "0x..." // Sender address
+const receiver = "0x..." // Receiver address
+
+function FlowInfo() {
+  const { data: flowrate } = useReadCfaForwarder({ // [!code focus]
+    functionName: "getFlowrate", // [!code focus]
+    args: [superToken, sender, receiver] // [!code focus]
+  }) // [!code focus]
+  
+  return (
+    <div>
+      Current flowrate: {flowrate?.toString()} tokens/second
+    </div>
+  )
+}
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const superToken = "0x..." // USDCx address
+const sender = "0x..." // Sender address
+const receiver = "0x..." // Receiver address
+
+async function getFlowInfo() {
+  const flowrate = await client.readContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "getFlowrate", // [!code focus]
+    args: [superToken, sender, receiver] // [!code focus]
+  }) // [!code focus]
+  
+  return flowrate
+}
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http()
+  }
+})
+
+const superToken = "0x..." // USDCx address
+const sender = "0x..." // Sender address
+const receiver = "0x..." // Receiver address
+
+async function getFlowInfo() {
+  const flowrate = await readCfaForwarder(wagmiConfig, { // [!code focus]
+    chainId: mainnet.id, // [!code focus]
+    functionName: "getFlowrate", // [!code focus]
+    args: [superToken, sender, receiver] // [!code focus]
+  }) // [!code focus]
+  
+  return flowrate
+}
+```
+</Tab>
+</Tabs>
+
+## Best Practices
+
+1. **Use setFlowrate** for most cases - it handles both create and update
+2. **Check balance** before creating flows to ensure sufficient funds
+3. **Monitor flows** to avoid liquidation
+4. **Handle errors** appropriately in your UI
+
+## Next Steps
+
+- Create [GDA pools](/docs/use-cases/create-gda-pool) for one-to-many distributions
+- Learn about [batch operations](/docs/use-cases/batch-calls)
+- Explore the [CFA Forwarder API](/docs/api/essential/cfa-forwarder)

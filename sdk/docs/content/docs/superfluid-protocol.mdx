@@ -1,0 +1,123 @@
+---
+title: Superfluid Protocol
+description: Core concepts of the Superfluid Protocol
+---
+
+import { Mermaid } from '@/components/mdx/mermaid';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## What is Superfluid?
+
+Superfluid is a revolutionary asset streaming protocol that enables real-time finance on Ethereum and EVM-compatible blockchains. Instead of discrete transactions, Superfluid allows money to flow continuously between accounts, enabling new financial primitives and use cases.
+
+## Core Concepts
+
+### Super Tokens
+
+Super Tokens are the fundamental unit of value in Superfluid. They are ERC-20 compatible tokens with additional capabilities for streaming, distributions and composable apps.
+
+There are two types of Super Tokens:
+
+#### Wrapper Super Tokens
+- Created by wrapping existing ERC-20 tokens
+- Can be unwrapped back to the underlying token
+- Most common type (e.g., USDCx, DAIx)
+
+#### Native Asset Super Tokens
+- Wrap the native blockchain asset (ETH, MATIC, etc.)
+- Use special `upgradeByETH` and `downgradeByETH` functions
+- Note: Native Asset and Wrapper Super Token ABIs are merged in the SDK
+
+```ts twoslash
+import { superTokenAbi } from "@superfluid-finance/sdk"
+
+// Both wrapper and native super tokens use the same ABI
+const abi = superTokenAbi
+```
+
+**Important**: All Super Token amounts use 18 decimals internally, regardless of the underlying token's decimals.
+
+### Flows (CFA - Constant Flow Agreement)
+
+Flows are continuous streams of tokens from one account to another. Key characteristics:
+
+- Measured in tokens per second (flowrate)
+- Can be created, updated, or deleted
+- Sender must maintain sufficient balance
+- Automatic liquidation if balance runs out
+
+```ts twoslash
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+// Stream 100 tokens per month
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"), // Amount in wei units
+  timeUnit: "month"
+})
+```
+
+### Distributions (GDA - General Distribution Agreement)
+
+The GDA enables one-to-many token distributions through pools:
+
+- Create pools to distribute tokens to multiple recipients
+- Members receive tokens proportional to their "units"
+- Instant distributions to all members
+- More efficient than multiple flows
+
+### Key Protocol Components
+
+- **Forwarders**: Simplified interfaces for common operations (**recommended approach**)
+  - CFA Forwarder: For managing flows
+  - GDA Forwarder: For managing distributions
+- **Host**: Core protocol contract managing agreements (advanced usage)
+- **TOGA**: Trust-less liquidation system for insolvent flows
+
+## Protocol Architecture
+
+The Superfluid Protocol uses a modular architecture:
+
+1. **Super Token contracts** handle token logic
+2. **Agreement contracts** (CFA, GDA) manage distribution rules  
+3. **Host contract** coordinates all components
+4. **Forwarder contracts** provide user-friendly interfaces
+
+<Mermaid
+  chart={`graph TB
+    subgraph "User Layer"
+        User[User/DApp]
+    end
+    
+    subgraph "Forwarder Layer"
+        CFAF[CFA Forwarder]
+        GDAF[GDA Forwarder]
+    end
+    
+    subgraph "Core Protocol"
+        Host[Host Contract]
+        CFA[CFA Agreement]
+        GDA[GDA Agreement]
+        IDA[IDA Agreement]
+    end
+    
+    User -->|Simple calls| CFAF
+    User -->|Simple calls| GDAF
+    User -.->|Complex calls| Host
+    CFAF -->|Encoded calls| Host
+    GDAF -->|Encoded calls| Host
+    Host -->|Routes to| CFA
+    Host -->|Routes to| GDA
+    Host -->|Routes to| IDA
+    `}
+/>
+
+<Callout type="warning">
+**Important**: Agreement contracts (CFA, GDA, IDA) cannot be called directly. All operations must go through the Host contract using encoded calls. **This is why forwarders are recommended** - they handle this complexity automatically.
+</Callout>
+
+## Next Steps
+
+- Learn about [wagmi & viem integration](/docs/wagmi-viem)
+- Understand the [SDK architecture](/docs/architecture)
+- Start with [wrapping tokens](/docs/use-cases/wrap-unwrap)

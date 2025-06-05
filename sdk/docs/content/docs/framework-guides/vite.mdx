@@ -1,0 +1,552 @@
+---
+title: Vite
+description: Fast development with Vite and Superfluid SDK
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Vite is a blazing fast build tool for modern web applications. This guide shows how to integrate the Superfluid SDK with Vite for React applications.
+
+## Quick Start
+
+Create a new Vite project with Superfluid SDK:
+
+```bash
+npm create vite@latest my-superfluid-app -- --template react-ts
+cd my-superfluid-app
+npm install @superfluid-finance/sdk wagmi viem @tanstack/react-query
+```
+
+## Configuration
+
+Set up wagmi configuration and providers:
+
+```tsx title="src/wagmi.ts"
+import { createConfig, http } from "wagmi"
+import { mainnet, polygon, optimism, arbitrum } from "viem/chains"
+import { injected, walletConnect } from "wagmi/connectors"
+
+export const config = createConfig({
+  chains: [mainnet, polygon, optimism, arbitrum],
+  connectors: [
+    injected(),
+    walletConnect({ 
+      projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID 
+    }),
+  ],
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+    [optimism.id]: http(),
+    [arbitrum.id]: http(),
+  },
+})
+```
+
+```tsx title="src/main.tsx"
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { config } from './wagmi'
+import App from './App'
+import './index.css'
+
+const queryClient = new QueryClient()
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </WagmiProvider>
+  </React.StrictMode>,
+)
+```
+
+## Basic Components
+
+### Wallet Connection
+
+Create a simple wallet connection component:
+
+```tsx title="src/components/ConnectWallet.tsx"
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
+
+export function ConnectWallet() {
+  const { address, isConnected } = useAccount()
+  const { connect, connectors } = useConnect()
+  const { disconnect } = useDisconnect()
+
+  if (isConnected) {
+    return (
+      <div>
+        <p>Connected: {address?.slice(0, 6)}...{address?.slice(-4)}</p>
+        <button onClick={() => disconnect()}>Disconnect</button>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      {connectors.map((connector) => (
+        <button
+          key={connector.id}
+          onClick={() => connect({ connector })}
+        >
+          Connect with {connector.name}
+        </button>
+      ))}
+    </div>
+  )
+}
+```
+
+### SuperToken Balance Display
+
+```tsx title="src/components/TokenBalance.tsx"
+import { useReadSuperToken } from '@superfluid-finance/sdk/wagmi'
+import { useAccount } from 'wagmi'
+import { formatUnits } from 'viem'
+
+interface TokenBalanceProps {
+  tokenAddress: `0x${string}`
+  symbol: string
+  decimals?: number
+}
+
+export function TokenBalance({ 
+  tokenAddress, 
+  symbol, 
+  decimals = 18 
+}: TokenBalanceProps) {
+  const { address } = useAccount()
+  
+  const { data: balance, isLoading, isError } = useReadSuperToken({
+    address: tokenAddress,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    enabled: !!address,
+    watch: true, // Auto-refresh balance
+  })
+
+  if (!address) return null
+  if (isLoading) return <div>Loading {symbol} balance...</div>
+  if (isError) return <div>Error loading balance</div>
+
+  return (
+    <div className="token-balance">
+      <span>{symbol}:</span>
+      <span>{balance ? formatUnits(balance, decimals) : '0'}</span>
+    </div>
+  )
+}
+```
+
+## Building Features
+
+### Token Wrapper Component
+
+Create a component for wrapping/unwrapping tokens:
+
+```tsx title="src/components/TokenWrapper.tsx"
+import { useState } from 'react'
+import { 
+  useWriteSuperToken, 
+  useReadSuperToken,
+  useSimulateSuperToken 
+} from '@superfluid-finance/sdk/wagmi'
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
+import { parseUnits, formatUnits } from 'viem'
+import { erc20Abi } from 'viem'
+
+export function TokenWrapper({ 
+  superToken,
+  underlyingToken,
+  symbol,
+  decimals = 18
+}: {
+  superToken: `0x${string}`
+  underlyingToken: `0x${string}`
+  symbol: string
+  decimals?: number
+}) {
+  const { address } = useAccount()
+  const [amount, setAmount] = useState('')
+  const [isWrapping, setIsWrapping] = useState(true)
+  
+  // Read balances
+  const { data: superBalance } = useReadSuperToken({
+    address: superToken,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+  })
+  
+  const { data: underlyingBalance } = useReadContract({
+    address: underlyingToken,
+    abi: erc20Abi,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+  })
+  
+  // Simulate transaction
+  const { data: simulateData } = useSimulateSuperToken({
+    address: superToken,
+    functionName: isWrapping ? 'upgrade' : 'downgrade',
+    args: amount ? [parseUnits(amount, decimals)] : undefined,
+    enabled: !!amount && Number(amount) > 0,
+  })
+  
+  // Execute transaction
+  const { writeContract, data: hash } = useWriteSuperToken()
+  const { isLoading: isConfirming } = useWaitForTransactionReceipt({ hash })
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (simulateData?.request) {
+      writeContract(simulateData.request)
+    }
+  }
+  
+  return (
+    <form onSubmit={handleSubmit} className="token-wrapper">
+      <div className="balances">
+        <p>{symbol}: {underlyingBalance ? formatUnits(underlyingBalance, decimals) : '0'}</p>
+        <p>{symbol}x: {superBalance ? formatUnits(superBalance, decimals) : '0'}</p>
+      </div>
+      
+      <div className="toggle">
+        <button 
+          type="button"
+          className={isWrapping ? 'active' : ''}
+          onClick={() => setIsWrapping(true)}
+        >
+          Wrap
+        </button>
+        <button 
+          type="button"
+          className={!isWrapping ? 'active' : ''}
+          onClick={() => setIsWrapping(false)}
+        >
+          Unwrap
+        </button>
+      </div>
+      
+      <input
+        type="number"
+        placeholder="Amount"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+        step="0.000001"
+      />
+      
+      <button 
+        type="submit" 
+        disabled={!simulateData?.request || isConfirming}
+      >
+        {isConfirming ? 'Processing...' : isWrapping ? 'Wrap' : 'Unwrap'}
+      </button>
+    </form>
+  )
+}
+```
+
+### Flow Management Dashboard
+
+```tsx title="src/components/FlowDashboard.tsx"
+import { useReadCfaForwarder } from '@superfluid-finance/sdk/wagmi'
+import { useAccount } from 'wagmi'
+import { formatUnits } from 'viem'
+
+export function FlowDashboard() {
+  const { address } = useAccount()
+  const [activeFlows, setActiveFlows] = useState([])
+  
+  // In a real app, you'd fetch this from an indexer
+  // This is a simplified example
+  
+  const FlowCard = ({ flow }: { flow: any }) => {
+    const { data: flowRate } = useReadCfaForwarder({
+      functionName: 'getFlowrate',
+      args: [flow.token, flow.sender, flow.receiver],
+    })
+    
+    const monthlyAmount = flowRate 
+      ? flowRate * BigInt(30 * 24 * 60 * 60)
+      : 0n
+    
+    return (
+      <div className="flow-card">
+        <h3>{flow.type === 'inflow' ? 'Receiving' : 'Sending'}</h3>
+        <p>Token: {flow.tokenSymbol}</p>
+        <p>
+          {flow.type === 'inflow' ? 'From' : 'To'}: 
+          {flow.type === 'inflow' ? flow.sender : flow.receiver}
+        </p>
+        <p>Rate: {formatUnits(monthlyAmount, 18)} / month</p>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="flow-dashboard">
+      <h2>Your Flows</h2>
+      {activeFlows.length === 0 ? (
+        <p>No active flows</p>
+      ) : (
+        activeFlows.map((flow, i) => <FlowCard key={i} flow={flow} />)
+      )}
+    </div>
+  )
+}
+```
+
+## Styling with CSS
+
+Vite works great with CSS modules and PostCSS:
+
+```css title="src/components/TokenWrapper.module.css"
+.wrapper {
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  max-width: 400px;
+}
+
+.balances {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.toggle button {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle button.active {
+  background: #3182ce;
+  color: white;
+  border-color: #3182ce;
+}
+```
+
+## Environment Variables
+
+Create a `.env` file for development:
+
+```bash title=".env"
+VITE_WALLETCONNECT_PROJECT_ID=your_project_id_here
+VITE_ALCHEMY_API_KEY=your_alchemy_key_here
+```
+
+Access in your code:
+
+```ts
+const projectId = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID
+```
+
+<Callout type="info">
+Vite requires environment variables to be prefixed with `VITE_` to be exposed to your app.
+</Callout>
+
+## Optimizations
+
+### Code Splitting
+
+Vite automatically handles code splitting. For manual chunks:
+
+```ts title="vite.config.ts"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor': ['react', 'react-dom'],
+          'wagmi': ['wagmi', 'viem'],
+          'superfluid': ['@superfluid-finance/sdk'],
+        },
+      },
+    },
+  },
+})
+```
+
+### Performance Tips
+
+1. **Lazy Loading**: Import heavy components dynamically
+   ```tsx
+   const FlowDashboard = lazy(() => import('./components/FlowDashboard'))
+   ```
+
+2. **Optimize Re-renders**: Use React DevTools Profiler
+   ```tsx
+   const MemoizedBalance = memo(TokenBalance)
+   ```
+
+3. **Bundle Analysis**: 
+   ```bash
+   npm run build -- --report
+   ```
+
+## Testing
+
+Set up Vitest for testing:
+
+```bash
+npm install -D vitest @testing-library/react @testing-library/jest-dom
+```
+
+```ts title="vitest.config.ts"
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+  },
+})
+```
+
+```tsx title="src/components/__tests__/TokenBalance.test.tsx"
+import { render, screen } from '@testing-library/react'
+import { TokenBalance } from '../TokenBalance'
+import { vi } from 'vitest'
+
+// Mock the wagmi hooks
+vi.mock('wagmi', () => ({
+  useAccount: () => ({ address: '0x123...' }),
+}))
+
+vi.mock('@superfluid-finance/sdk/wagmi', () => ({
+  useReadSuperToken: () => ({
+    data: 1000000000000000000n, // 1 token
+    isLoading: false,
+  }),
+}))
+
+test('displays token balance', () => {
+  render(
+    <TokenBalance 
+      tokenAddress="0x..." 
+      symbol="USDCx" 
+    />
+  )
+  
+  expect(screen.getByText(/USDCx:/)).toBeInTheDocument()
+  expect(screen.getByText('1')).toBeInTheDocument()
+})
+```
+
+## Deployment
+
+### Build for Production
+
+```bash
+npm run build
+npm run preview # Test production build locally
+```
+
+### Deploy to Vercel
+
+```bash
+npm i -g vercel
+vercel
+```
+
+### Deploy to Netlify
+
+```bash
+# netlify.toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+```
+
+## Common Patterns
+
+### Error Boundaries
+
+```tsx title="src/components/ErrorBoundary.tsx"
+import { Component, ReactNode } from 'react'
+
+interface Props {
+  children: ReactNode
+  fallback?: ReactNode
+}
+
+interface State {
+  hasError: boolean
+}
+
+export class ErrorBoundary extends Component<Props, State> {
+  state = { hasError: false }
+  
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  
+  componentDidCatch(error: Error) {
+    console.error('Blockchain error:', error)
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback || <div>Something went wrong</div>
+    }
+    
+    return this.props.children
+  }
+}
+```
+
+### Transaction Notifications
+
+```tsx
+import { toast, Toaster } from 'react-hot-toast'
+
+// In your transaction component
+const { writeContract } = useWriteCfaForwarder({
+  onSuccess: (data) => {
+    toast.success(`Transaction sent: ${data.hash.slice(0, 10)}...`)
+  },
+  onError: (error) => {
+    toast.error(error.message)
+  },
+})
+
+// In your App.tsx
+<>
+  <YourApp />
+  <Toaster position="bottom-right" />
+</>
+```
+
+## Next Steps
+
+- Check out the [API Reference](/docs/api-reference) for all available hooks and functions
+- Learn about [Batch Calls](/docs/use-cases/batch-calls) for complex operations  
+- Explore [Real-world Examples](https://github.com/superfluid-finance/examples) on GitHub
+- Join the [Superfluid Discord](https://discord.gg/superfluid) for support

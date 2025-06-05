@@ -1,0 +1,256 @@
+---
+title: Architecture
+description: Understanding how the Superfluid SDK is structured
+---
+
+import { Mermaid } from '@/components/mdx/mermaid';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## SDK Structure
+
+The Superfluid SDK is organized into three main import paths, each serving a specific purpose.
+
+<Callout type="info">
+**Important**: The SDK primarily exposes **Forwarder contracts** (CFA Forwarder, GDA Forwarder) which are the **recommended way** to interact with Superfluid. These contracts handle the complexity of encoding calls and routing them through the Host contract.
+</Callout>
+
+<Mermaid
+  chart={`
+graph LR
+    SDK[Superfluid SDK]
+
+    subgraph CoreExports [SDK Exports]
+        direction LR
+        ABIs["ABIs (/)"]
+        Hooks["Hooks (/hooks)"]
+        Actions["Actions (/actions)"]
+    end
+
+    SDK --> CoreExports
+
+    CoreExports --> Essentials["Essentials (/)"]
+    CoreExports --> Advanced["Advanced (/advanced)"]
+    CoreExports --> Automation["Automation (/automation)"]
+`}
+/>
+
+### 1. ABIs (`@superfluid-finance/sdk`)
+
+Raw contract ABIs with enhanced type information:
+
+```ts twoslash
+import { 
+  superTokenAbi,
+  cfaForwarderAbi,
+  gdaForwarderAbi,
+  cfaForwarderAddress
+} from "@superfluid-finance/sdk"
+```
+
+Use ABIs when:
+- Working directly with viem
+- Building custom abstractions
+- Need maximum flexibility
+
+### 2. Actions (`@superfluid-finance/sdk/actions`)
+
+Core functions for non-React environments:
+
+```ts twoslash
+import { 
+  readSuperToken,
+  writeSuperToken,
+  readCfaForwarder,
+  writeCfaForwarder
+} from "@superfluid-finance/sdk/actions"
+```
+
+Use actions when:
+- Building server-side applications
+- Working in non-React frameworks
+- Need wagmi's conveniences without React
+
+### 3. Hooks (`@superfluid-finance/sdk/wagmi`)
+
+React hooks for seamless integration:
+
+```ts twoslash
+import { 
+  useReadSuperToken,
+  useWriteSuperToken,
+  useReadCfaForwarder,
+  useWriteCfaForwarder
+} from "@superfluid-finance/sdk/wagmi"
+```
+
+Use hooks when:
+- Building React applications
+- Need reactive data updates
+- Want built-in loading/error states
+
+## Import Path Organization
+
+Each import path has sub-paths for different contract categories:
+
+### Root Imports (Essential)
+Default imports contain the most commonly used contracts:
+- Super Token operations
+- **CFA Forwarder** (streaming) - *Recommended for flow management*
+- **GDA Forwarder** (distributions) - *Recommended for pool management*
+
+These forwarders are the simplest and safest way to interact with Superfluid.
+
+### Advanced Imports
+```ts
+import { hostAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { readHost } from "@superfluid-finance/sdk/actions/protocol"
+import { useReadHost } from "@superfluid-finance/sdk/wagmi/protocol"
+```
+
+Protocol-level contracts for advanced use cases:
+- Host (core protocol)
+- CFA/GDA/IDA (agreement contracts - *use forwarders instead when possible*)
+- TOGA (liquidations)
+
+<Callout type="note">
+**Note**: Direct interaction with agreement contracts (CFA, GDA, IDA) requires encoding calls through the Host. Use the forwarders instead for a simpler interface.
+</Callout>
+
+### Automation Imports
+```ts
+import { vestingSchedulerAbi } from "@superfluid-finance/sdk/abi/automation"
+import { readVestingScheduler } from "@superfluid-finance/sdk/actions/automation"
+import { useReadVestingScheduler } from "@superfluid-finance/sdk/wagmi/automation"
+```
+
+Automation contracts for scheduled operations:
+- AutoWrap (automatic token wrapping)
+- VestingScheduler (token vesting)
+- FlowScheduler (scheduled streams)
+
+## Why Forwarders?
+
+Superfluid's architecture requires all agreement operations to go through the Host contract. This means:
+
+1. **Direct calls don't work**: You cannot call CFA/GDA/IDA contracts directly
+2. **Complex encoding**: Operations must be encoded and sent via `Host.callAgreement()`
+3. **Changed msg.sender**: The Host becomes the msg.sender for operations
+
+Forwarders solve these complexities by:
+- Handling all encoding automatically
+- Being trusted by the protocol (can use `forwardBatchCall`)
+- Providing a simple, direct interface
+- Maintaining the correct msg.sender context
+
+## Contract Naming Convention
+
+Contract names are transformed for consistency:
+- `CFAv1Forwarder` → `cfaForwarder`
+- `GeneralDistributionAgreementV1` → `gda`
+- `ISuperToken` → `superToken`
+
+## Contract Interaction Patterns
+
+<Mermaid
+  chart={`sequenceDiagram
+    participant User
+    participant Forwarder
+    participant Host
+    participant Agreement
+    
+    Note over User,Agreement: Recommended Pattern (Using Forwarder)
+    User->>Forwarder: setFlowrate(token, receiver, rate)
+    Forwarder->>Forwarder: Encode agreement call
+    Forwarder->>Host: callAgreement(encoded)
+    Host->>Agreement: createFlow/updateFlow/deleteFlow
+    Agreement-->>Host: Success
+    Host-->>Forwarder: Success
+    Forwarder-->>User: Transaction complete
+`}
+/>
+
+### Recommended Pattern: Use Forwarders
+
+```ts twoslash
+// Simple and direct - handles all complexity
+import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk"
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+// @noErrors
+const walletClient = {} as any
+// ---cut---
+
+// Direct call to forwarder - recommended!
+await walletClient.writeContract({
+  address: cfaForwarderAddress[mainnet.id],
+  abi: cfaForwarderAbi,
+  functionName: "setFlowrate",
+  args: ["0x...", "0x...", 1000n]
+})
+```
+
+### Advanced Pattern: Direct Host Interaction
+
+<Mermaid
+  chart={`sequenceDiagram
+    participant User
+    participant Host
+    participant Agreement
+    
+    Note over User,Agreement: Advanced Pattern (Direct Host - Avoid)
+    User->>User: Manually encode agreement call
+    User->>Host: callAgreement(agreement, encoded, context)
+    Host->>Agreement: createFlow/updateFlow/deleteFlow
+    Agreement-->>Host: Success  
+    Host-->>User: Transaction complete
+    `}
+/>
+
+```ts twoslash  
+// Complex and error-prone - avoid unless necessary
+import { hostAbi } from "@superfluid-finance/sdk/abi/protocol"
+// @noErrors
+const encodedCall = "0x..." // Complex encoding required
+const walletClient = {} as any
+// ---cut---
+
+// Must encode agreement call data first
+await walletClient.writeContract({
+  address: "0x...", // Host address
+  abi: hostAbi,
+  functionName: "callAgreement",
+  args: ["0x...", encodedCall, "0x"] // Agreement, encoded data, context
+})
+```
+
+## Best Practices
+
+1. **Always use forwarders when possible**:
+   - CFA Forwarder for flows
+   - GDA Forwarder for distributions
+   - Only use Host/agreements for advanced cases
+
+2. **Choose the right import path**:
+   - ABIs for direct viem usage
+   - Actions for server/non-React
+   - Hooks for React apps
+
+3. **Use specific imports**:
+   ```ts
+   // Good
+   import { cfaForwarderAbi } from "@superfluid-finance/sdk"
+   
+   // Avoid
+   import * as sdk from "@superfluid-finance/sdk"
+   ```
+
+4. **Leverage type safety**:
+   - Let TypeScript guide your implementation
+   - Use autocomplete for function names
+   - Trust the type errors
+
+## Next Steps
+
+- Review the [glossary](/docs/glossary) for terminology
+- Start building with [use-case guides](/docs/use-cases/wrap-unwrap)
+- Explore the [API reference](/docs/api/essential/super-token)

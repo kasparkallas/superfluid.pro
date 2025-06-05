@@ -1,0 +1,175 @@
+---
+title: Vesting Scheduler
+description: Automated vesting schedule management for Super Tokens
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Vesting Scheduler enables creation and management of token vesting schedules using Superfluid streams. It automates the complex task of implementing cliff periods, vesting durations, and automatic stream management.
+
+## Overview
+
+Vesting Scheduler provides:
+- Cliff and vesting period configuration
+- Automatic stream creation and termination
+- Early termination with unvested token clawback
+- Batch vesting schedule creation
+- Integration with existing Superfluid infrastructure
+
+## Read Functions
+
+### getVestingSchedule
+
+Returns details of a vesting schedule.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadVestingScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { data: schedule } = useReadVestingScheduler({
+  address: '0x...',
+  functionName: 'getVestingSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { vestingScheduler } from '@superfluid-finance/sdk/abi/automation';
+
+const schedule = await client.readContract({
+  address: '0x...',
+  abi: vestingScheduler,
+  functionName: 'getVestingSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readVestingScheduler } from '@superfluid-finance/sdk/actions/automation';
+
+const schedule = await readVestingScheduler(client, {
+  address: '0x...',
+  functionName: 'getVestingSchedule',
+  args: [superToken, sender, receiver],
+});
+```
+</Tab>
+</Tabs>
+
+### getMaxVestingDuration
+
+Returns the maximum allowed vesting duration.
+
+### getRemainingVestingAmount
+
+Calculates the remaining amount to be vested.
+
+## Write Functions
+
+### createVestingSchedule
+
+Creates a new vesting schedule with cliff and vesting periods.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteVestingScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { writeContract } = useWriteVestingScheduler();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'createVestingSchedule',
+  args: [
+    superToken,
+    receiver,
+    startDate,
+    cliffDate,
+    flowRate,
+    cliffAmount,
+    endDate,
+    userData
+  ],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { vestingScheduler } from '@superfluid-finance/sdk/abi/automation';
+
+const hash = await client.writeContract({
+  address: '0x...',
+  abi: vestingScheduler,
+  functionName: 'createVestingSchedule',
+  args: [
+    superToken,
+    receiver,
+    startDate,
+    cliffDate,
+    flowRate,
+    cliffAmount,
+    endDate,
+    userData
+  ],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { writeVestingScheduler } from '@superfluid-finance/sdk/actions/automation';
+
+const hash = await writeVestingScheduler(client, {
+  address: '0x...',
+  functionName: 'createVestingSchedule',
+  args: [
+    superToken,
+    receiver,
+    startDate,
+    cliffDate,
+    flowRate,
+    cliffAmount,
+    endDate,
+    userData
+  ],
+});
+```
+</Tab>
+</Tabs>
+
+### createVestingScheduleFromAmountAndDuration
+
+Creates a vesting schedule by specifying total amount and duration.
+
+### updateVestingSchedule
+
+Updates an existing vesting schedule (admin only).
+
+### deleteVestingSchedule
+
+Terminates a vesting schedule early and returns unvested tokens.
+
+### executeCliff
+
+Triggers the cliff payment for a vesting schedule.
+
+### executeEndVesting
+
+Ends the vesting stream when the schedule completes.
+
+## Vesting Parameters
+
+- **startDate**: When the vesting begins
+- **cliffDate**: When the cliff period ends
+- **cliffAmount**: Lump sum paid at cliff
+- **flowRate**: Rate of vesting after cliff
+- **endDate**: When vesting completes
+- **remainderAmount**: Final payment at end
+
+## Related
+
+- [Flow Scheduler](/docs/api/automation/flow-scheduler) - Schedule regular streams
+- [CFA](/docs/api/advanced/cfa) - Underlying streaming mechanism
+- [Super Token](/docs/api/essential/super-token) - Tokens being vested

@@ -1,0 +1,1 @@
+- Do not look at `generated.ts` files in the SDK package. The files are too big!

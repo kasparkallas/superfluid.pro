@@ -1,0 +1,119 @@
+---
+title: Getting Started
+description: Start building with the Superfluid SDK in minutes
+---
+
+The Superfluid SDK provides TypeScript/JavaScript bindings for interacting with the Superfluid Protocol, enabling real-time finance applications with continuous money streams.
+
+## Requirements
+
+Before you begin, ensure you have:
+
+- Node.js 18+ installed
+- A package manager (npm, yarn, pnpm, or bun)
+- Basic knowledge of TypeScript/JavaScript
+- Understanding of Ethereum and smart contracts
+
+## Installation
+
+Install the Superfluid SDK using your preferred package manager:
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
+  <Tab value="npm">
+```bash
+npm install @superfluid-finance/sdk viem wagmi
+```
+  </Tab>
+  <Tab value="pnpm">
+```bash
+pnpm add @superfluid-finance/sdk viem wagmi
+```
+  </Tab>
+  <Tab value="yarn">
+```bash
+yarn add @superfluid-finance/sdk viem wagmi
+```
+  </Tab>
+  <Tab value="bun">
+```bash
+bun add @superfluid-finance/sdk viem wagmi
+```
+  </Tab>
+</Tabs>
+
+The SDK has peer dependencies on `viem` and `wagmi` which provide the underlying Ethereum interaction capabilities.
+
+## Quick Start
+
+Here's a minimal example to get you started with Superfluid. This example uses the **CFA Forwarder** (recommended approach) to create a token stream:
+
+```ts twoslash
+import { 
+  cfaForwarderAbi, 
+  cfaForwarderAddress,
+  calculateFlowrate 
+} from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount("0x..." as `0x${string}`)
+const client = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+async function startStream() {
+  // Calculate flowrate: 100 tokens per month
+  const flowrate = calculateFlowrate({ // [!code focus]
+    amountWei: parseEther("100"), // [!code focus]
+    timeUnit: "month" // [!code focus]
+  }) // [!code focus]
+
+  // Create stream using CFA Forwarder (recommended!)
+  const hash = await client.writeContract({ // [!code focus]
+    address: cfaForwarderAddress[mainnet.id], // [!code focus]
+    abi: cfaForwarderAbi, // [!code focus]
+    functionName: "setFlowrate", // [!code focus]
+    args: [ // [!code focus]
+      "0x...", // Super Token address // [!code focus]
+      "0x...", // Receiver address // [!code focus]
+      flowrate // Tokens per second // [!code focus]
+    ] // [!code focus]
+  }) // [!code focus]
+  
+  return hash
+}
+```
+
+<Callout type="info">
+**Why Forwarders?** The CFA and GDA Forwarders are the recommended way to interact with Superfluid. They handle the complexity of encoding agreement calls and routing them through the Host contract.
+</Callout>
+
+## Package Structure
+
+The SDK is organized into three main import paths:
+
+- **`@superfluid-finance/sdk`** - Core ABIs and addresses (includes forwarders)
+- **`@superfluid-finance/sdk/actions`** - wagmi core actions for non-React usage  
+- **`@superfluid-finance/sdk/wagmi`** - React hooks for wagmi integration
+
+### Key Contracts
+
+The SDK primarily exposes these contracts:
+
+- **CFA Forwarder** - Manage continuous flows (recommended for streaming)
+- **GDA Forwarder** - Manage distributions (recommended for pools)
+- **Super Token** - Wrap/unwrap tokens and check balances
+- **Host** - Core protocol contract (advanced usage only)
+
+## Next Steps
+
+- Learn about [Superfluid Protocol concepts](/docs/superfluid-protocol)
+- Understand [wagmi & viem integration](/docs/wagmi-viem)
+- Explore the [SDK architecture](/docs/architecture)
+- Try the [use-case guides](/docs/use-cases/wrap-unwrap)

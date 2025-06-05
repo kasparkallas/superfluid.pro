@@ -1,34 +1,35 @@
 {
-  "name": "superfluid-pro",
-  "version": "1.0.0",
-  "description": "The monorepo for Superfluid Pro suite of products",
-  "scripts": {
-    "build": "turbo build",
-    "prepare": "husky",
-    "format": "biome format --write ."
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.6.2",
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0",
-    "@commitlint/types": "^19.8.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.5.0",
-    "turbo": "^2.5.0"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --files-ignore-unknown=true",
-      "biome check --write --no-errors-on-unmatched",
-      "biome check --write --organize-imports-enabled=false --no-errors-on-unmatched",
-      "biome check --write --unsafe --no-errors-on-unmatched",
-      "biome format --write --no-errors-on-unmatched",
-      "biome lint --write --no-errors-on-unmatched"
-    ],
-    "*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
-  }
+	"name": "superfluid-pro",
+	"version": "1.0.0",
+	"description": "The monorepo for Superfluid Pro suite of products",
+	"scripts": {
+		"build": "turbo build",
+		"prepare": "husky",
+		"format": "biome format --write .",
+		"check": "biome check --write ."
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.6.2",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@commitlint/cli": "^19.8.0",
+		"@commitlint/config-conventional": "^19.8.0",
+		"@commitlint/types": "^19.8.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^15.5.0",
+		"turbo": "^2.5.0"
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome check --files-ignore-unknown=true",
+			"biome check --write --no-errors-on-unmatched",
+			"biome check --write --organize-imports-enabled=false --no-errors-on-unmatched",
+			"biome check --write --unsafe --no-errors-on-unmatched",
+			"biome format --write --no-errors-on-unmatched",
+			"biome lint --write --no-errors-on-unmatched"
+		],
+		"*": ["biome check --no-errors-on-unmatched --files-ignore-unknown=true"]
+	}
 }

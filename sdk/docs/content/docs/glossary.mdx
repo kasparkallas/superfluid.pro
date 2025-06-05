@@ -1,0 +1,126 @@
+---
+title: Glossary
+description: Key terms and concepts in the Superfluid ecosystem
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+## Core Protocol Terms
+
+### CFA (Constant Flow Agreement)
+The agreement type that enables continuous token streams between accounts. Flows are measured in tokens per second and continue until explicitly stopped or liquidation occurs.
+
+### GDA (General Distribution Agreement)
+An agreement type for one-to-many token distributions. Enables efficient distribution to multiple recipients through pools with proportional unit-based allocations.
+
+### IDA (Instant Distribution Agreement)
+Legacy distribution agreement superseded by GDA. Still supported for backward compatibility but new implementations should use GDA.
+
+### Host
+The core Superfluid contract that manages all agreements and protocol operations. Acts as the central coordinator for all Superfluid functionality. All agreement functions (CFA, GDA, IDA) must be called through the Host using `callAgreement` or `batchCall` functions.
+
+<Callout type="warning">
+**Important**: Agreement contracts (CFA, GDA, IDA) cannot be called directly. All agreement operations must go through the Host contract using encoded calls. For simpler interactions, use the Forwarder contracts (CFA Forwarder for flows, GDA Forwarder for distributions) which handle the encoding and Host interactions automatically.
+</Callout>
+
+### Forwarder
+Simplified contract interfaces that make common Superfluid operations easier. These are the **recommended way** to interact with Superfluid as they handle the encoding and Host interactions automatically. The SDK primarily uses:
+- **CFA Forwarder**: For managing flows
+- **GDA Forwarder**: For managing distributions
+
+Forwarders are trusted by the protocol and use `forwardBatchCall` to execute operations through the Host.
+
+### TOGA (Transparent Ongoing Governance Agreement)
+The protocol's trustless liquidation system that handles insolvent flows. Ensures senders maintain sufficient balance for active streams.
+
+## Token Terms
+
+### Super Token
+An ERC-20 compatible token enhanced with streaming capabilities. All Superfluid operations use Super Tokens.
+
+### Wrapper Super Token
+A Super Token created by wrapping an existing ERC-20 token. Can be unwrapped back to the original token.
+
+### Native Asset Super Token
+A Super Token that wraps the blockchain's native asset (ETH, MATIC, etc.). Uses special upgrade/downgrade functions.
+
+### Underlying Token
+The original ERC-20 token that gets wrapped to create a Wrapper Super Token.
+
+## Flow Terms
+
+### Flowrate
+The rate at which tokens stream, measured in wei per second (10^-18 tokens per second).
+
+### Critical Balance
+The minimum balance required to keep a flow active. Falls below this triggers liquidation.
+
+### Liquidation
+The process of closing an insolvent flow when the sender's balance is insufficient.
+
+## Distribution Terms
+
+### Pool
+A GDA construct that enables one-to-many distributions. Pool admins can distribute tokens to all members instantly.
+
+### Units
+The proportional share a pool member has. Members receive distributions based on their units relative to total pool units.
+
+### Pool Admin
+The account that can distribute tokens to a pool and manage member units.
+
+### Pool Member
+An account that receives distributions from a pool based on their unit allocation.
+
+## Technical Terms
+
+### ABI (Application Binary Interface)
+The interface definition that specifies how to interact with a smart contract. The SDK provides typed ABIs for all Superfluid contracts.
+
+### Batch Call
+A Superfluid feature allowing multiple operations in a single transaction. Batch calls are executed through the Host contract, which changes the `msg.sender` for the operations. This means:
+- Direct ERC-20 approvals cannot be included in batch calls
+- All perations must either be protocol-aware (Super Tokens, agreements, etc.) or ERC-2771 aware for correct `msg.sender` resolution
+- Use operation type identifiers to specify each operation
+
+### Operation Type
+Identifiers used in batch calls to specify the type of operation (e.g., ERC20_APPROVE, SUPERTOKEN_UPGRADE, CFA_CREATE).
+
+### Agreement State
+The data structure storing information about active agreements (flows, distributions).
+
+## SDK Terms
+
+### Action
+A wagmi core function for interacting with contracts outside of React components.
+
+### Hook
+A React hook that provides contract interaction with built-in state management.
+
+### Wagmi Config
+Configuration object required for actions, containing chain and transport settings.
+
+### Transport
+The connection method to the blockchain (HTTP, WebSocket, etc.).
+
+## Common Patterns
+
+### Upgrade/Downgrade
+- **Upgrade**: Converting regular tokens to Super Tokens
+- **Downgrade**: Converting Super Tokens back to regular tokens
+
+### Flow Lifecycle
+1. **Create**: Start a new flow with initial flowrate
+2. **Update**: Change the flowrate of existing flow
+3. **Delete**: Stop the flow completely
+
+### Distribution Pattern
+1. **Create Pool**: Initialize a new GDA pool
+2. **Update Units**: Allocate units to members
+3. **Distribute**: Send tokens to all members proportionally
+
+## Next Steps
+
+- Start building with [use-case guides](/docs/use-cases/wrap-unwrap)
+- Explore the [API reference](/docs/api/essential/super-token)
+- Learn about [batch operations](/docs/use-cases/batch-calls)

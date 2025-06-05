@@ -1,0 +1,167 @@
+---
+title: Transparent Ongoing Governance Agreement (TOGA)
+description: TOGA contract API reference for Superfluid protocol governance
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Transparent Ongoing Governance Agreement (TOGA) is a governance mechanism that allows token holders to become the "Patrician In Charge" (PIC) by posting a bond. The PIC can set exit rates for the Super Token.
+
+## Overview
+
+TOGA provides:
+- Bond-based governance for Super Tokens
+- PIC (Patrician In Charge) system
+- Exit rate management
+- Minimum bond duration requirements
+
+## Read Functions
+
+### getCurrentPIC
+
+Returns the current Patrician In Charge for a Super Token.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadToga } from '@superfluid-finance/sdk/wagmi/protocol';
+
+const { data: pic } = useReadToga({
+  address: '0x...',
+  functionName: 'getCurrentPIC',
+  args: [superToken],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { toga } from '@superfluid-finance/sdk/abi/protocol';
+
+const pic = await client.readContract({
+  address: '0x...',
+  abi: toga,
+  functionName: 'getCurrentPIC',
+  args: [superToken],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readToga } from '@superfluid-finance/sdk/actions/protocol';
+
+const pic = await readToga(client, {
+  address: '0x...',
+  functionName: 'getCurrentPIC',
+  args: [superToken],
+});
+```
+</Tab>
+</Tabs>
+
+### getCurrentPICInfo
+
+Returns detailed information about the current PIC including their bond and exit rate.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadToga } from '@superfluid-finance/sdk/wagmi/protocol';
+
+const { data } = useReadToga({
+  address: '0x...',
+  functionName: 'getCurrentPICInfo',
+  args: [superToken],
+});
+// data = { pic, bond, exitRate }
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { toga } from '@superfluid-finance/sdk/abi/protocol';
+
+const { pic, bond, exitRate } = await client.readContract({
+  address: '0x...',
+  abi: toga,
+  functionName: 'getCurrentPICInfo',
+  args: [superToken],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readToga } from '@superfluid-finance/sdk/actions/protocol';
+
+const { pic, bond, exitRate } = await readToga(client, {
+  address: '0x...',
+  functionName: 'getCurrentPICInfo',
+  args: [superToken],
+});
+```
+</Tab>
+</Tabs>
+
+### getDefaultExitRateFor
+
+Calculates the default exit rate for a given bond amount.
+
+### getMaxExitRateFor
+
+Calculates the maximum allowed exit rate for a given bond amount.
+
+### minBondDuration
+
+Returns the minimum bond duration in seconds.
+
+## Write Functions
+
+### changeExitRate
+
+Allows the current PIC to change the exit rate of the Super Token.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteToga } from '@superfluid-finance/sdk/wagmi/protocol';
+
+const { writeContract } = useWriteToga();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'changeExitRate',
+  args: [superToken, newExitRate],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { toga } from '@superfluid-finance/sdk/abi/protocol';
+
+const hash = await client.writeContract({
+  address: '0x...',
+  abi: toga,
+  functionName: 'changeExitRate',
+  args: [superToken, newExitRate],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { writeToga } from '@superfluid-finance/sdk/actions/protocol';
+
+const hash = await writeToga(client, {
+  address: '0x...',
+  functionName: 'changeExitRate',
+  args: [superToken, newExitRate],
+});
+```
+</Tab>
+</Tabs>
+
+### tokensReceived
+
+ERC777 token receiver hook that handles bond deposits to become the new PIC.
+
+## Related
+
+- [Super Token](/docs/api/essential/super-token) - The tokens governed by TOGA
+- [Host](/docs/api/advanced/host) - Core Superfluid protocol contract

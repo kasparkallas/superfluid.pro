@@ -1,0 +1,520 @@
+---
+title: GDA Forwarder
+description: API reference for General Distribution Agreement Forwarder
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+The GDA Forwarder provides a simplified interface for creating and managing distribution pools. It enables one-to-many token distributions with proportional allocations.
+
+## Contract Addresses
+
+```ts twoslash
+import { gdaForwarderAddress } from "@superfluid-finance/sdk"
+import { mainnet } from "viem/chains"
+
+// Get GDA Forwarder address for a specific chain
+const forwarderAddress = gdaForwarderAddress[mainnet.id]
+```
+
+## Read Functions
+
+### getPool
+
+Get the address of a pool based on its parameters.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { keccak256, toHex } from "viem"
+
+const { data: poolAddress } = useReadGdaForwarder({ // [!code focus]
+  functionName: "getPool", // [!code focus]
+  args: ["0x...", "0x...", keccak256(toHex("pool1"))] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const poolAddress = await client.readContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "getPool", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Super Token address // [!code focus]
+    "0x...", // Admin address // [!code focus]
+    keccak256(toHex("pool1")) // Pool ID // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() }
+})
+
+const poolAddress = await readGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "getPool", // [!code focus]
+  args: ["0x...", "0x...", keccak256(toHex("pool1"))] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### isPool
+
+Check if an address is a valid GDA pool.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { data: isValidPool } = useReadGdaForwarder({ // [!code focus]
+  functionName: "isPool", // [!code focus]
+  args: ["0x...", "0x..."] // Token, pool address // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createPublicClient, http } from "viem"
+import { mainnet } from "viem/chains"
+
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http()
+})
+
+const isValidPool = await client.readContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "isPool", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Super Token address // [!code focus]
+    "0x..."  // Pool address to check // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() }
+})
+
+const isValidPool = await readGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "isPool", // [!code focus]
+  args: ["0x...", "0x..."] // Token, pool address // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+## Write Functions
+
+### createPool
+
+Create a new distribution pool.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+import { keccak256, toHex } from "viem"
+
+const { address } = useAccount()
+
+const { writeContract: createPool } = useWriteGdaForwarder({ // [!code focus]
+  functionName: "createPool", // [!code focus]
+  args: ["0x...", address!, keccak256(toHex("pool1"))] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "createPool", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Super Token address // [!code focus]
+    account.address, // Admin address // [!code focus]
+    keccak256(toHex("pool1")) // Pool ID // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, keccak256, toHex } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "createPool", // [!code focus]
+  args: ["0x...", account.address, keccak256(toHex("pool1"))] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### distribute
+
+Distribute tokens to all pool members proportionally.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+import { parseEther } from "viem"
+
+const { address } = useAccount()
+
+const { writeContract: distribute } = useWriteGdaForwarder({ // [!code focus]
+  functionName: "distribute", // [!code focus]
+  args: ["0x...", address!, "0x...", parseEther("100"), "0x"] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "distribute", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Super Token address // [!code focus]
+    account.address, // From address // [!code focus]
+    "0x...", // Pool address // [!code focus]
+    parseEther("100"), // Amount to distribute // [!code focus]
+    "0x"     // User data // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "distribute", // [!code focus]
+  args: ["0x...", account.address, "0x...", parseEther("100"), "0x"] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### distributeFlow
+
+Create a continuous distribution flow to a pool.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useAccount } from "wagmi"
+import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { parseEther } from "viem"
+
+const { address } = useAccount()
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+const { writeContract: distributeFlow } = useWriteGdaForwarder({ // [!code focus]
+  functionName: "distributeFlow", // [!code focus]
+  args: ["0x...", address!, "0x...", flowrate, "0x"] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "distributeFlow", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Super Token address // [!code focus]
+    account.address, // From address // [!code focus]
+    "0x...", // Pool address // [!code focus]
+    flowrate, // Flowrate to pool // [!code focus]
+    "0x"     // User data // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http, parseEther } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const flowrate = calculateFlowrate({
+  amountWei: parseEther("100"),
+  timeUnit: "month"
+})
+
+const hash = await writeGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "distributeFlow", // [!code focus]
+  args: ["0x...", account.address, "0x...", flowrate, "0x"] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### connectPool
+
+Connect to a pool as a member to receive distributions.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { writeContract: connectPool } = useWriteGdaForwarder({ // [!code focus]
+  functionName: "connectPool", // [!code focus]
+  args: ["0x...", "0x"] // Pool address, user data // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "connectPool", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Pool address // [!code focus]
+    "0x"     // User data // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "connectPool", // [!code focus]
+  args: ["0x...", "0x"] // Pool address, user data // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+### disconnectPool
+
+Disconnect from a pool to stop receiving distributions.
+
+<Tabs items={["Hooks", "ABI", "Actions"]}>
+<Tab value="Hooks">
+```tsx twoslash
+import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+
+const { writeContract: disconnectPool } = useWriteGdaForwarder({ // [!code focus]
+  functionName: "disconnectPool", // [!code focus]
+  args: ["0x...", "0x"] // Pool address, user data // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="ABI">
+```ts twoslash
+import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const walletClient = createWalletClient({
+  account,
+  chain: mainnet,
+  transport: http()
+})
+
+const hash = await walletClient.writeContract({ // [!code focus]
+  address: gdaForwarderAddress[mainnet.id], // [!code focus]
+  abi: gdaForwarderAbi, // [!code focus]
+  functionName: "disconnectPool", // [!code focus]
+  args: [ // [!code focus]
+    "0x...", // Pool address // [!code focus]
+    "0x"     // User data // [!code focus]
+  ] // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+
+<Tab value="Actions">
+```ts twoslash
+import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { createConfig } from "@wagmi/core"
+import { createWalletClient, http } from "viem"
+import { mainnet } from "viem/chains"
+import { privateKeyToAccount } from "viem/accounts"
+
+const account = privateKeyToAccount(process.env.PRIVATE_KEY as `0x${string}`)
+const config = createConfig({
+  chains: [mainnet],
+  client({ chain }) {
+    return createWalletClient({ account, chain, transport: http() })
+  },
+})
+
+const hash = await writeGdaForwarder(config, { // [!code focus]
+  chainId: mainnet.id, // [!code focus]
+  functionName: "disconnectPool", // [!code focus]
+  args: ["0x...", "0x"] // Pool address, user data // [!code focus]
+}) // [!code focus]
+```
+</Tab>
+</Tabs>
+
+## Key Notes
+
+- **Pool Creation**: Pools are deterministic based on (token, admin, poolId)
+- **Distribution**: Instantly distributes to all connected members
+- **Flow Distribution**: Create continuous flows to pools
+- **Member Connection**: Members must connect to receive distributions

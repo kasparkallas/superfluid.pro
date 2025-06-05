@@ -1,0 +1,48 @@
+---
+title: Overview
+# description: A Superfluid TypeScript SDK
+---
+
+## Introduction
+
+`@superfluid-finance/sdk` is a compact TypeScript developer toolkit for building on the **Superfluid Protocol**.
+
+It bundles the on-chain ABIs, typed actions, and ready-made React hooks generated with **wagmi CLI** — all split into independent ESM exports so you only ship what you use.
+
+---
+
+## Characteristics
+
+|                | Detail |
+|----------------|--------|
+| **Lightweight** | Zero runtime dependencies in the core; only peer-install what your code path needs. |
+| **Type-safe**  | Fully-typed ABIs and actions for autocompletion and compile-time checks. |
+| **Tree-shakeable** | Each export (`./abi`, `./actions`, `./wagmi`, `./utils`) is side-effect-free and independent. |
+| **wagmi / viem powered** | Uses the same primitives you already know — no custom wrapper abstractions. |
+| **React hooks (optional)** | Consume plain ABIs, viem actions, or rich wagmi hooks depending on your stack. |
+| **ESM-only** | Modern build tooling out of the box; no CJS shims. |
+
+
+## Package layout
+
+```txt
+@superfluid-finance/sdk/
+├── abi            # Pure typesafe JSON ABIs
+├── actions        # viem & @wagmi/core actions
+├── hooks          # wagmi React hooks
+└── utils          # Common utilities
+```
+
+## Import examples
+
+| You need... | Install... | Import from... |
+|-------------|------------|----------------|
+| Only ABIs   | @superfluid-finance/sdk | `import { cfaForwarderAbi } from "@superfluid-finance/sdk/abi"` |
+| Actions     | @superfluid-finance/sdk + viem or @wagmi/core | `import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/actions"` |
+| React hooks | @superfluid-finance/sdk + wagmi | `import { useCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/wagmi"` |
+
+## LLM Support
+
+This documentation provides LLM-friendly text endpoints:
+- `/llms.txt` - All documentation pages in plain text
+- `/{page-slug}.mdx` - Individual pages in plain text (e.g., `/getting-started.mdx`)

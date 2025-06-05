@@ -1,0 +1,46 @@
+---
+title: FAQ
+---
+
+## Why a new SDK?
+
+Previous Superfluid packages focused on completeness and abstraction. Over time that led to larger bundles, harder maintenance, tight coupling to outdated specific libraries (e.g. ethers v5), and limited tree-shaking.  
+
+This SDK takes a different approach:
+* **Zero abstractions** beyond wagmi/viem primitives — no hidden magic.
+* **Code-generated** at publish time; ABI changes propagate instantly.
+* **Framework-agnostic** — drop into serverless backends, CLI tools, or React front-ends with equal ease.
+
+## What contracts are supported?
+* Host
+* ConstantFlowAgreementV1 + CFAv1Forwarder
+* GeneralDistributionAgreementV1 + GDAv1Forwarder
+* InstantDistributionAgreementV1
+* SuperToken + PureSuperToken + NativeAssetSuperToken
+* SuperTokenFactory
+* Governance
+* TOGA
+* BatchLiquidator
+
+
+## Why *viem & wagmi*?
+
+`@superfluid-finance/sdk` sits on top of **viem** (low-level) and **wagmi v2** (React) because this combo hits all our requirements better than any alternative:
+
+| Goal | viem + wagmi | What it gives the SDK |
+|------|-------------|------------------------|
+| **Maximum type-safety** | Both libraries are written *in* TypeScript and use advanced meta-typing to infer return values directly from ABIs. No codegen step, no `any` escape hatches.  | Generated actions/hooks inherit those exact types, so your editor auto-completes every field and the compiler blocks bad params. |
+| **Minimal bundle size** | viem core is < 15 kB min+gzip and fully tree-shakable; wagmi v2 slimmed itself down by delegating heavy work to viem and TanStack Query. |
+| **Functional, composable API** | Everything is a pure function. No hidden state, no giant base classes. Easier to test, mock, and compose in both frontend and backend code. | Lets the SDK expose plain functions (actions) and thin hooks without forcing a particular runtime model. |
+| **Active, professional development** | The viem & wagmi maintainers release weekly, triage issues fast, and design APIs with clear taste — backed by a fast-growing community. | We can depend on a moving target without becoming maintainers of our own Ethereum client. |
+
+### What about **ethers v6**?
+
+Ethers v6 is a solid library but its architecture differs:
+
+* **Class-centric**: `Contract` instances are ES6 proxies whose methods are generated at runtime, and typechain emits *factory classes* for stronger typing.
+* **Heavier mental (and bundle) model**: class hierarchies + runtime proxies; more code to tree-shake.  
+* **Less composable** in back-end jobs or functional code that prefers stateless helpers.
+
+**TL;DR**  
+*viem + wagmi* give us the strongest types with the smallest payload and an API style that maps 1-to-1 onto the SDK’s code-generated functions — all under an actively maintained, community-loved umbrella. That’s why we built on them.

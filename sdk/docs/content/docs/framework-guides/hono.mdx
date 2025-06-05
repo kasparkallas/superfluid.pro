@@ -1,0 +1,308 @@
+---
+title: Hono (back-end)
+description: Use Superfluid SDK with Hono server applications
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Hono is a lightweight web framework for building fast server applications. This guide shows how to integrate the Superfluid SDK with Hono for server-side operations.
+
+## Installation
+
+Install the required packages:
+
+```bash
+npm install @superfluid-finance/sdk @wagmi/core viem hono
+```
+
+## Configuration
+
+Set up a wagmi config for server-side usage:
+
+```ts title="config.ts"
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet, polygon, optimism } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet, polygon, optimism],
+  transports: {
+    [mainnet.id]: http(),
+    [polygon.id]: http(),
+    [optimism.id]: http(),
+  },
+})
+```
+
+## Basic Usage
+
+Create API endpoints using Superfluid actions:
+
+```ts title="app.ts"
+import { Hono } from 'hono'
+import { readSuperToken, readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { config } from './config'
+
+const app = new Hono()
+
+// Get SuperToken balance
+app.get('/balance/:token/:account', async (c) => {
+  const { token, account } = c.req.param()
+  
+  const balance = await readSuperToken(config, {
+    chainId: 1, // mainnet
+    address: token as `0x${string}`,
+    functionName: "balanceOf",
+    args: [account as `0x${string}`]
+  })
+  
+  return c.json({ balance: balance.toString() })
+})
+
+// Get flow info
+app.get('/flow/:token/:sender/:receiver', async (c) => {
+  const { token, sender, receiver } = c.req.param()
+  
+  const flowInfo = await readCfaForwarder(config, {
+    chainId: 1,
+    functionName: "getFlowrate",
+    args: [
+      token as `0x${string}`,
+      sender as `0x${string}`,
+      receiver as `0x${string}`
+    ]
+  })
+  
+  return c.json({ flowRate: flowInfo.toString() })
+})
+
+export default app
+```
+
+## Advanced Example
+
+Create a more complex API with multiple endpoints:
+
+<Tabs items={["Flow Management", "Pool Operations", "Batch Calls"]}>
+<Tab value="Flow Management">
+```ts title="flows.ts"
+import { Hono } from 'hono'
+import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { parseUnits } from "viem"
+
+const flowsApp = new Hono()
+
+// Get all flows for an account
+flowsApp.get('/account/:address', async (c) => {
+  const address = c.req.param('address')
+  
+  // This would typically query an indexer or subgraph
+  // For now, return a placeholder
+  return c.json({
+    address,
+    inflows: [],
+    outflows: []
+  })
+})
+
+// Calculate monthly flow amount
+flowsApp.get('/calculate/:flowRate', async (c) => {
+  const flowRate = c.req.param('flowRate')
+  const monthlyAmount = BigInt(flowRate) * BigInt(30 * 24 * 60 * 60)
+  
+  return c.json({
+    flowRate,
+    monthly: monthlyAmount.toString(),
+    daily: (BigInt(flowRate) * BigInt(24 * 60 * 60)).toString()
+  })
+})
+
+export { flowsApp }
+```
+</Tab>
+
+<Tab value="Pool Operations">
+```ts title="pools.ts"
+import { Hono } from 'hono'
+import { readGdaPool, readGdaForwarder } from "@superfluid-finance/sdk/actions"
+
+const poolsApp = new Hono()
+
+// Get pool information
+poolsApp.get('/info/:pool', async (c) => {
+  const pool = c.req.param('pool')
+  
+  const [totalUnits, totalMembers] = await Promise.all([
+    readGdaPool(config, {
+      chainId: 1,
+      address: pool as `0x${string}`,
+      functionName: "getTotalUnits"
+    }),
+    readGdaPool(config, {
+      chainId: 1,
+      address: pool as `0x${string}`,
+      functionName: "getMemberCount"
+    })
+  ])
+  
+  return c.json({
+    pool,
+    totalUnits: totalUnits.toString(),
+    totalMembers: totalMembers.toString()
+  })
+})
+
+export { poolsApp }
+```
+</Tab>
+
+<Tab value="Batch Calls">
+```ts title="batch.ts"
+import { Hono } from 'hono'
+import { encodeFunctionData } from "viem"
+import { cfaForwarderAbi } from "@superfluid-finance/sdk"
+
+const batchApp = new Hono()
+
+// Prepare batch operations
+batchApp.post('/prepare', async (c) => {
+  const operations = await c.req.json()
+  
+  const encodedOps = operations.map((op: any) => {
+    if (op.type === 'createFlow') {
+      return {
+        operationType: 201, // SUPERFLUID_CALL_AGREEMENT
+        target: op.forwarder,
+        data: encodeFunctionData({
+          abi: cfaForwarderAbi,
+          functionName: "createFlow",
+          args: [op.token, op.sender, op.receiver, op.flowRate, "0x"]
+        })
+      }
+    }
+    // Handle other operation types...
+  })
+  
+  return c.json({ operations: encodedOps })
+})
+
+export { batchApp }
+```
+</Tab>
+</Tabs>
+
+## Error Handling
+
+Implement proper error handling for blockchain operations:
+
+```ts
+import { Hono } from 'hono'
+import { readSuperToken } from "@superfluid-finance/sdk/actions"
+
+const app = new Hono()
+
+app.get('/balance/:token/:account', async (c) => {
+  try {
+    const { token, account } = c.req.param()
+    
+    const balance = await readSuperToken(config, {
+      chainId: 1,
+      address: token as `0x${string}`,
+      functionName: "balanceOf",
+      args: [account as `0x${string}`]
+    })
+    
+    return c.json({ 
+      success: true,
+      balance: balance.toString() 
+    })
+  } catch (error) {
+    console.error('Error fetching balance:', error)
+    return c.json({ 
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, 500)
+  }
+})
+```
+
+## Middleware
+
+Add middleware for common functionality:
+
+```ts
+import { Hono } from 'hono'
+import { cors } from 'hono/cors'
+import { logger } from 'hono/logger'
+
+const app = new Hono()
+
+// Enable CORS
+app.use('*', cors())
+
+// Add logging
+app.use('*', logger())
+
+// Chain validation middleware
+app.use('/api/*', async (c, next) => {
+  const chainId = c.req.header('X-Chain-ID')
+  if (!chainId || !["1", "137", "10"].includes(chainId)) {
+    return c.json({ error: 'Invalid or missing chain ID' }, 400)
+  }
+  c.set('chainId', parseInt(chainId))
+  await next()
+})
+```
+
+## Environment Variables
+
+Manage RPC URLs and other configuration:
+
+```ts title="config.ts"
+import { createConfig } from "@wagmi/core"
+import { http } from "viem"
+import { mainnet, polygon, optimism } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet, polygon, optimism],
+  transports: {
+    [mainnet.id]: http(process.env.MAINNET_RPC_URL),
+    [polygon.id]: http(process.env.POLYGON_RPC_URL),
+    [optimism.id]: http(process.env.OPTIMISM_RPC_URL),
+  },
+})
+```
+
+<Callout type="info">
+For production deployments, use dedicated RPC providers like Alchemy, Infura, or QuickNode for better reliability and performance.
+</Callout>
+
+## Deployment
+
+Deploy your Hono application:
+
+```bash
+# Build
+npm run build
+
+# Run locally
+npm start
+
+# Deploy to Cloudflare Workers
+npm run deploy
+```
+
+## Best Practices
+
+1. **Cache frequently accessed data** - Use Redis or in-memory caching for balance queries
+2. **Rate limiting** - Implement rate limits to prevent RPC overuse
+3. **Error monitoring** - Use services like Sentry for production error tracking
+4. **Type safety** - Use TypeScript and validate all inputs
+5. **Indexer integration** - For complex queries, integrate with The Graph or other indexers
+
+## Next Steps
+
+- Explore the [API Reference](/docs/api-reference) for all available functions
+- Learn about [Batch Operations](/docs/use-cases/batch-calls) for complex transactions
+- Set up [Auto Wrap](/docs/api/automation/auto-wrap) for automated token management

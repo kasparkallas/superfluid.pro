@@ -1,0 +1,498 @@
+---
+title: Next.js
+description: Build Superfluid-powered applications with Next.js and React
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Next.js is a popular React framework for building full-stack web applications. This guide shows how to integrate the Superfluid SDK with Next.js.
+
+## Installation
+
+Install the required packages:
+
+```bash
+npm install @superfluid-finance/sdk wagmi viem @tanstack/react-query
+```
+
+## Configuration
+
+Set up wagmi and the wallet connection:
+
+<Tabs items={["App Router", "Pages Router"]}>
+<Tab value="App Router">
+```tsx title="app/providers.tsx"
+"use client"
+
+import { WagmiProvider, createConfig } from "wagmi"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ConnectKitProvider, getDefaultConfig } from "connectkit"
+import { mainnet, polygon, optimism } from "viem/chains"
+
+const config = createConfig(
+  getDefaultConfig({
+    appName: "My Superfluid App",
+    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+    chains: [mainnet, polygon, optimism],
+  })
+)
+
+const queryClient = new QueryClient()
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <ConnectKitProvider>
+          {children}
+        </ConnectKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
+```
+
+```tsx title="app/layout.tsx"
+import { Providers } from "./providers"
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  )
+}
+```
+</Tab>
+
+<Tab value="Pages Router">
+```tsx title="pages/_app.tsx"
+import { WagmiProvider, createConfig } from "wagmi"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ConnectKitProvider, getDefaultConfig } from "connectkit"
+import { mainnet, polygon, optimism } from "viem/chains"
+import type { AppProps } from "next/app"
+
+const config = createConfig(
+  getDefaultConfig({
+    appName: "My Superfluid App",
+    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+    chains: [mainnet, polygon, optimism],
+  })
+)
+
+const queryClient = new QueryClient()
+
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <ConnectKitProvider>
+          <Component {...pageProps} />
+        </ConnectKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
+
+export default MyApp
+```
+</Tab>
+</Tabs>
+
+## Basic Usage
+
+Create a component to display SuperToken balance:
+
+```tsx title="components/TokenBalance.tsx"
+"use client"
+
+import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi"
+import { useAccount } from "wagmi"
+import { formatUnits } from "viem"
+
+interface TokenBalanceProps {
+  tokenAddress: `0x${string}`
+  decimals?: number
+}
+
+export function TokenBalance({ tokenAddress, decimals = 18 }: TokenBalanceProps) {
+  const { address } = useAccount()
+  
+  const { data: balance, isLoading } = useReadSuperToken({
+    address: tokenAddress,
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    enabled: !!address,
+  })
+  
+  if (!address) return <div>Connect wallet to see balance</div>
+  if (isLoading) return <div>Loading...</div>
+  
+  return (
+    <div>
+      Balance: {balance ? formatUnits(balance, decimals) : "0"}
+    </div>
+  )
+}
+```
+
+## Creating Flows
+
+Build a form to create payment streams:
+
+```tsx title="components/CreateFlow.tsx"
+"use client"
+
+import { useState } from "react"
+import { useWriteCfaForwarder, useSimulateCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { parseUnits } from "viem"
+import { useAccount, useWaitForTransactionReceipt } from "wagmi"
+
+export function CreateFlow() {
+  const { address } = useAccount()
+  const [receiver, setReceiver] = useState("")
+  const [flowRate, setFlowRate] = useState("")
+  const [token, setToken] = useState("")
+  
+  // Calculate flow rate from monthly amount
+  const monthlyToFlowRate = (monthlyAmount: string) => {
+    const monthly = parseUnits(monthlyAmount, 18)
+    return monthly / BigInt(30 * 24 * 60 * 60) // Convert to per-second
+  }
+  
+  // Simulate the transaction
+  const { data: simulateData } = useSimulateCfaForwarder({
+    functionName: "createFlow",
+    args: address && receiver && flowRate ? [
+      token as `0x${string}`,
+      address,
+      receiver as `0x${string}`,
+      monthlyToFlowRate(flowRate),
+      "0x"
+    ] : undefined,
+    enabled: !!address && !!receiver && !!flowRate && !!token
+  })
+  
+  // Execute the transaction
+  const { writeContract, data: hash } = useWriteCfaForwarder()
+  
+  // Wait for confirmation
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  })
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (simulateData?.request) {
+      writeContract(simulateData.request)
+    }
+  }
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Token Address"
+        value={token}
+        onChange={(e) => setToken(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Receiver Address"
+        value={receiver}
+        onChange={(e) => setReceiver(e.target.value)}
+      />
+      <input
+        type="text"
+        placeholder="Monthly Amount"
+        value={flowRate}
+        onChange={(e) => setFlowRate(e.target.value)}
+      />
+      <button 
+        type="submit" 
+        disabled={!simulateData?.request || isConfirming}
+      >
+        {isConfirming ? "Creating..." : "Create Flow"}
+      </button>
+      {isSuccess && <p>Flow created successfully!</p>}
+    </form>
+  )
+}
+```
+
+## Server-Side Operations
+
+Use the SDK in API routes:
+
+<Tabs items={["App Router", "Pages Router"]}>
+<Tab value="App Router">
+```ts title="app/api/flows/route.ts"
+import { NextRequest, NextResponse } from "next/server"
+import { createConfig } from "@wagmi/core"
+import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(process.env.RPC_URL),
+  },
+})
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+  const token = searchParams.get("token")
+  const sender = searchParams.get("sender")
+  const receiver = searchParams.get("receiver")
+  
+  if (!token || !sender || !receiver) {
+    return NextResponse.json(
+      { error: "Missing parameters" },
+      { status: 400 }
+    )
+  }
+  
+  try {
+    const flowRate = await readCfaForwarder(config, {
+      chainId: mainnet.id,
+      functionName: "getFlowrate",
+      args: [
+        token as `0x${string}`,
+        sender as `0x${string}`,
+        receiver as `0x${string}`
+      ]
+    })
+    
+    return NextResponse.json({ flowRate: flowRate.toString() })
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch flow" },
+      { status: 500 }
+    )
+  }
+}
+```
+</Tab>
+
+<Tab value="Pages Router">
+```ts title="pages/api/flows.ts"
+import type { NextApiRequest, NextApiResponse } from "next"
+import { createConfig } from "@wagmi/core"
+import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { http } from "viem"
+import { mainnet } from "viem/chains"
+
+const config = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(process.env.RPC_URL),
+  },
+})
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { token, sender, receiver } = req.query
+  
+  if (!token || !sender || !receiver) {
+    return res.status(400).json({ error: "Missing parameters" })
+  }
+  
+  try {
+    const flowRate = await readCfaForwarder(config, {
+      chainId: mainnet.id,
+      functionName: "getFlowrate",
+      args: [
+        token as `0x${string}`,
+        sender as `0x${string}`,
+        receiver as `0x${string}`
+      ]
+    })
+    
+    res.status(200).json({ flowRate: flowRate.toString() })
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch flow" })
+  }
+}
+```
+</Tab>
+</Tabs>
+
+## Advanced Patterns
+
+### Real-time Balance Updates
+
+Show live-updating SuperToken balances:
+
+```tsx title="components/RealtimeBalance.tsx"
+"use client"
+
+import { useEffect, useState } from "react"
+import { useReadSuperToken, useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { useAccount } from "wagmi"
+import { formatUnits } from "viem"
+
+export function RealtimeBalance({ token }: { token: `0x${string}` }) {
+  const { address } = useAccount()
+  const [realtimeBalance, setRealtimeBalance] = useState<bigint>(0n)
+  
+  // Get static balance
+  const { data: balance } = useReadSuperToken({
+    address: token,
+    functionName: "balanceOf",
+    args: address ? [address] : undefined,
+    enabled: !!address,
+  })
+  
+  // Get net flow rate
+  const { data: netFlowRate } = useReadCfaForwarder({
+    functionName: "getNetFlowRate",
+    args: address ? [token, address] : undefined,
+    enabled: !!address,
+  })
+  
+  useEffect(() => {
+    if (!balance || !netFlowRate) return
+    
+    const startTime = Date.now()
+    const startBalance = balance
+    
+    const interval = setInterval(() => {
+      const elapsed = BigInt(Date.now() - startTime) / 1000n
+      const flowAmount = netFlowRate * elapsed
+      setRealtimeBalance(startBalance + flowAmount)
+    }, 100) // Update every 100ms
+    
+    return () => clearInterval(interval)
+  }, [balance, netFlowRate])
+  
+  return (
+    <div>
+      <p>Balance: {formatUnits(realtimeBalance, 18)}</p>
+      <p>Flow Rate: {netFlowRate ? formatUnits(netFlowRate * 86400n, 18) : "0"} / day</p>
+    </div>
+  )
+}
+```
+
+### Batch Operations Component
+
+```tsx title="components/BatchOperations.tsx"
+"use client"
+
+import { useWriteHost } from "@superfluid-finance/sdk/wagmi"
+import { encodeFunctionData, parseUnits } from "viem"
+import { cfaForwarderAbi, cfaForwarderAddress, superTokenAbi, OPERATION_TYPE } from "@superfluid-finance/sdk"
+
+export function BatchOperations() {
+  const { writeContract } = useWriteHost()
+  
+  const executeBatch = () => {
+    const superToken = "0x..." // Super Token address - replace with actual address
+    const token = "0x..." // Token address for flow
+    const sender = "0x..." // Sender address
+    const receiver = "0x..." // Receiver address
+    const flowRate = 1000n // Flow rate in wei/second
+    
+    const operations = [
+      // Wrap 100 tokens
+      {
+        operationType: OPERATION_TYPE.SUPERTOKEN_UPGRADE,
+        target: superToken,
+        data: encodeFunctionData({
+          abi: superTokenAbi,
+          functionName: "upgrade",
+          args: [parseUnits("100", 18)]
+        })
+      },
+      // Create a flow
+      {
+        operationType: OPERATION_TYPE.SUPERFLUID_CALL_AGREEMENT,
+        target: cfaForwarderAddress,
+        data: encodeFunctionData({
+          abi: cfaForwarderAbi,
+          functionName: "createFlow",
+          args: [token, sender, receiver, flowRate, "0x"]
+        })
+      }
+    ]
+    
+    writeContract({
+      functionName: "batchCall",
+      args: [operations]
+    })
+  }
+  
+  return <button onClick={executeBatch}>Execute Batch</button>
+}
+```
+
+<Callout type="warning">
+Remember that token approvals cannot be included in batch calls. Always approve tokens separately before executing batch operations.
+</Callout>
+
+## Environment Setup
+
+Create a `.env.local` file:
+
+```bash title=".env.local"
+# Public variables (exposed to browser)
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+
+# Server-only variables
+RPC_URL=https://eth-mainnet.g.alchemy.com/v2/your_key
+POLYGON_RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/your_key
+```
+
+## TypeScript Configuration
+
+Ensure proper TypeScript setup:
+
+```json title="tsconfig.json"
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  }
+}
+```
+
+## Deployment Considerations
+
+1. **Environment Variables**: Ensure all required environment variables are set in your deployment platform
+2. **RPC Endpoints**: Use reliable RPC providers for production
+3. **Error Boundaries**: Implement error boundaries for blockchain interaction failures
+4. **Loading States**: Always show appropriate loading states during transactions
+5. **Network Switching**: Handle network switching gracefully
+
+## Best Practices
+
+1. **Optimize Re-renders**: Use React.memo and useMemo for expensive computations
+2. **Error Handling**: Always handle transaction errors gracefully
+3. **Gas Estimation**: Show gas estimates before transactions
+4. **Transaction Status**: Provide clear feedback during transaction lifecycle
+5. **Mobile Responsiveness**: Ensure wallet connection works on mobile
+
+## Next Steps
+
+- Explore [Use Cases](/docs/use-cases) for more examples
+- Learn about [Batch Calls](/docs/use-cases/batch-calls) for complex operations
+- Check the [API Reference](/docs/api-reference) for all available functions
+- Review [Framework Comparisons](/docs/comparisons) for alternative approaches

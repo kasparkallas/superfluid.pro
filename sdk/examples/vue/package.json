@@ -1,0 +1,26 @@
+{
+	"name": "vue",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vue-tsc && vite build",
+		"lint": "biome check .",
+		"preview": "vite preview",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@tanstack/vue-query": "^5.79.0",
+		"@wagmi/vue": "^0.1.20",
+		"@sfpro/sdk": "workspace:*",
+		"viem": "^2.30.5",
+		"vue": "^3.5.16"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.2.4",
+		"buffer": "^6.0.3",
+		"vite": "^5.4.19",
+		"vue-tsc": "^2.0.6"
+	}
+}

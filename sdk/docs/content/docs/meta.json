@@ -1,0 +1,33 @@
+{
+	"title": "Superfluid SDK",
+	"pages": [
+		"---Introduction---",
+		"getting-started",
+		"superfluid-protocol",
+		"wagmi-viem",
+		"architecture",
+		"glossary",
+		"---Use-case guides---",
+		"use-cases/wrap-unwrap",
+		"use-cases/manage-cfa-flow",
+		"use-cases/create-gda-pool",
+		"use-cases/connect-gda-pool",
+		"use-cases/batch-calls",
+		"---API Reference: Essential---",
+		"api/essential/super-token",
+		"api/essential/cfa-forwarder",
+		"api/essential/gda-forwarder",
+		"api/essential/gda-pool",
+		"---API Reference: Advanced---",
+		"api/advanced/host",
+		"api/advanced/cfa",
+		"api/advanced/gda",
+		"api/advanced/ida",
+		"api/advanced/toga",
+		"---API Reference: Automation---",
+		"api/automation/auto-wrap",
+		"api/automation/vesting-scheduler",
+		"api/automation/flow-scheduler"
+	],
+	"defaultOpen": true
+}

@@ -1,0 +1,154 @@
+---
+title: Getting started
+# description:
+---
+
+## 1 · Prerequisites
+
+| Tool | Recommended version |
+|------|---------------------|
+| **Node.js** | ≥ 18 (ESM support & fetch) |
+| **TypeScript** | ≥ 5.0.4 |
+| **Package manager** | npm / pnpm / yarn / bun |
+| **Ethereum client (optional)** | **viem 2+** for action functions |
+| **wagmi (optional)** | **wagmi 2+** for React hooks |
+
+The SDK itself has **no** hard runtime deps; viem / wagmi are peer-only and needed **only** if you call the parts that rely on them.
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
+
+## 2 · Install the SDK
+
+<Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
+  <Tab value="npm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>npm install @superfluid-finance/sdk</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="pnpm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>pnpm add @superfluid-finance/sdk</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="yarn">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>yarn add @superfluid-finance/sdk</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="bun">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>bun add @superfluid-finance/sdk</Pre>
+    </CodeBlock>
+  </Tab>
+</Tabs>
+
+## 3 · Pick your flavour
+
+### A. Pure ABIs (no extra deps)
+
+```ts
+import { cfaV1ForwarderAbi } from "@superfluid-finance/sdk/abi"; // [!code focus]
+```
+
+### B. Typed viem or @wagmi/core actions
+
+<Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
+  <Tab value="npm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>npm install viem</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="pnpm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>pnpm add viem</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="yarn">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>yarn add viem</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="bun">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>bun add viem</Pre>
+    </CodeBlock>
+  </Tab>
+</Tabs>
+
+```ts
+import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/actions"; // [!code focus]
+import { createPublicClient, http, mainnet } from "viem";
+
+const publicClient = createPublicClient({
+  chain:  mainnet,
+  transport: http(),
+});
+
+const { flowrate } = await readCfaForwarderGetFlowInfo(publicClient, { // [!code focus]
+  token:      "0xSUPER", // [!code focus]
+  sender:     "0xSENDER", // [!code focus]
+  receiver:   "0xRECEIVER" // [!code focus]
+}); // [!code focus]
+```
+
+### C. wagmi React hooks
+
+<Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
+  <Tab value="npm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>npm install wagmi viem @tanstack/react-query</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="pnpm">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>pnpm add wagmi viem @tanstack/react-query</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="yarn">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>yarn add wagmi viem @tanstack/react-query</Pre>
+    </CodeBlock>
+  </Tab>
+  <Tab value="bun">
+    <CodeBlock lang="bash" keepBackground>
+      <Pre>bun add wagmi viem @tanstack/react-query</Pre>
+    </CodeBlock>
+  </Tab>
+</Tabs>
+
+```tsx
+import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/wagmi"; // [!code focus]
+import { WagmiProvider, http, createConfig, mainnet } from "wagmi";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  transports: { [mainnet.id]: http() },
+});
+
+const queryClient = new QueryClient()
+
+function App() {
+  return (
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <FlowInfo />
+      </QueryClientProvider>
+    </WagmiProvider>
+  );
+}
+
+function FlowInfo() {
+  const { data, isLoading } = readCfaForwarderGetFlowInfo({ // [!code focus]
+    superToken: "0xSUPER", // [!code focus]
+    sender:     "0xSENDER", // [!code focus]
+    receiver:   "0xRECEIVER", // [!code focus]
+  }); // [!code focus]
+
+  if (isLoading) return <>Loading…</>;
+  return <>Flow rate: {data?.flowRate.toString()}</>;
+}
+```
+
+Vite quirk: add `resolve: { dedupe: ['wagmi'] }` to `vite.config.ts` to avoid “WagmiProviderNotFoundError”.

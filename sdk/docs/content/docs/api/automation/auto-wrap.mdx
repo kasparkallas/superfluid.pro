@@ -1,0 +1,160 @@
+---
+title: Auto Wrap
+description: Automatic wrapping strategy for Super Tokens
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+
+The Auto Wrap contract enables automatic wrapping of underlying tokens to Super Tokens based on configurable strategies. This helps maintain optimal Super Token balances without manual intervention.
+
+## Overview
+
+Auto Wrap provides:
+- Automatic wrapping based on balance thresholds
+- Configurable trigger strategies
+- Gas-efficient batch operations
+- Integration with existing Superfluid streams
+
+## Read Functions
+
+### getStrategy
+
+Returns the auto-wrap strategy for an account.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useReadAutoWrap } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { data: strategy } = useReadAutoWrap({
+  address: '0x...',
+  functionName: 'getStrategy',
+  args: [account, superToken],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { autoWrap } from '@superfluid-finance/sdk/abi/automation';
+
+const strategy = await client.readContract({
+  address: '0x...',
+  abi: autoWrap,
+  functionName: 'getStrategy',
+  args: [account, superToken],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { readAutoWrap } from '@superfluid-finance/sdk/actions/automation';
+
+const strategy = await readAutoWrap(client, {
+  address: '0x...',
+  functionName: 'getStrategy',
+  args: [account, superToken],
+});
+```
+</Tab>
+</Tabs>
+
+### canWrap
+
+Checks if an auto-wrap can be triggered for an account.
+
+### getWrapAmount
+
+Calculates the amount to be wrapped based on the strategy.
+
+## Write Functions
+
+### setStrategy
+
+Configures the auto-wrap strategy for your account.
+
+<Tabs items={['ABI', 'Actions', 'Hooks']}>
+<Tab value="Hooks">
+```ts
+import { useWriteAutoWrap } from '@superfluid-finance/sdk/wagmi/automation';
+
+const { writeContract } = useWriteAutoWrap();
+
+await writeContract({
+  address: '0x...',
+  functionName: 'setStrategy',
+  args: [
+    superToken,
+    {
+      lowerThreshold: parseEther('10'),
+      upperThreshold: parseEther('100'),
+      expiry: BigInt(Math.floor(Date.now() / 1000) + 86400 * 30)
+    }
+  ],
+});
+```
+</Tab>
+<Tab value="ABI">
+```ts
+import { autoWrap } from '@superfluid-finance/sdk/abi/automation';
+
+const hash = await client.writeContract({
+  address: '0x...',
+  abi: autoWrap,
+  functionName: 'setStrategy',
+  args: [
+    superToken,
+    {
+      lowerThreshold: parseEther('10'),
+      upperThreshold: parseEther('100'),
+      expiry: BigInt(Math.floor(Date.now() / 1000) + 86400 * 30)
+    }
+  ],
+});
+```
+</Tab>
+<Tab value="Actions">
+```ts
+import { writeAutoWrap } from '@superfluid-finance/sdk/actions/automation';
+
+const hash = await writeAutoWrap(client, {
+  address: '0x...',
+  functionName: 'setStrategy',
+  args: [
+    superToken,
+    {
+      lowerThreshold: parseEther('10'),
+      upperThreshold: parseEther('100'),
+      expiry: BigInt(Math.floor(Date.now() / 1000) + 86400 * 30)
+    }
+  ],
+});
+```
+</Tab>
+</Tabs>
+
+### wrap
+
+Triggers auto-wrap for an account (can be called by anyone).
+
+### removeStrategy
+
+Removes the auto-wrap strategy for your account.
+
+### wrapMultiple
+
+Triggers auto-wrap for multiple accounts in a single transaction.
+
+## Strategy Configuration
+
+The auto-wrap strategy consists of:
+- **lowerThreshold**: Minimum Super Token balance to maintain
+- **upperThreshold**: Target balance after wrapping
+- **expiry**: Strategy expiration timestamp
+
+When the Super Token balance falls below the lower threshold, anyone can trigger a wrap that brings the balance up to the upper threshold.
+
+## Related
+
+- [Super Token](/docs/api/essential/super-token) - Tokens being wrapped
+- [Flow Scheduler](/docs/api/automation/flow-scheduler) - Schedule streams
+- [Vesting Scheduler](/docs/api/automation/vesting-scheduler) - Vesting automation
