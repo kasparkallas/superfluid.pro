@@ -1,6 +1,11 @@
 import { createMcpHandler } from "@vercel/mcp-adapter";
 import { createGetSuperfluidContractAbiTool, createListSuperfluidContractsTool } from "./(tools)/abi-tools";
 import {
+	createIntrospectSubgraphSchemaTool,
+	createListSuperfluidSubgraphEndpointsTool,
+	createQuerySubgraphTool,
+} from "./(tools)/graphql-tools";
+import {
 	createGetSuperfluidNetworkMetadataTool,
 	createListSuperfluidMetadataNetworksTool,
 } from "./(tools)/metadata-tools";
@@ -12,6 +17,11 @@ const handler = createMcpHandler(
 		// ABI tools
 		createListSuperfluidContractsTool(server);
 		createGetSuperfluidContractAbiTool(server);
+
+		// GraphQL tools
+		createListSuperfluidSubgraphEndpointsTool(server);
+		createIntrospectSubgraphSchemaTool(server);
+		createQuerySubgraphTool(server);
 
 		// Metadata tools
 		createListSuperfluidMetadataNetworksTool(server);

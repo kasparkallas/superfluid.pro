@@ -258,3 +258,5 @@ $RECYCLE.BIN/
 # Environment variables
 .env.local
 .env.production.local
+
+.archive

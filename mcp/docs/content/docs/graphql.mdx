@@ -1,0 +1,212 @@
+---
+title: GraphQL Tools
+description: Query Superfluid subgraphs using GraphQL tools with automatic endpoint resolution
+---
+
+## Overview
+
+The Superfluid MCP server provides powerful GraphQL tools that enable you to interact with Superfluid subgraphs across all supported networks. These tools automatically resolve subgraph endpoints using the official Superfluid metadata package, eliminating the need to manage URLs or API keys.
+
+## Supported Subgraph Types
+
+The server supports four types of Superfluid subgraphs:
+
+- **`protocol`** - Core Superfluid protocol data (streams, tokens, accounts)
+- **`vesting`** - Vesting scheduler data
+- **`flowScheduler`** - Flow scheduler automation data  
+- **`autoWrap`** - Auto-wrap manager data
+
+Not all networks have all subgraph types. Use `list-superfluid-subgraph-endpoints` to see what's available.
+
+## Available Tools
+
+### list-superfluid-subgraph-endpoints
+
+Lists Superfluid subgraph endpoints for all or specific networks.
+
+**Parameters:**
+- `chainIds` (optional): Array of chain IDs to filter by
+- `includeTestnets` (optional): Whether to include testnet endpoints (default: true)
+- `subgraphTypes` (optional): Array of subgraph types to include
+
+**Example:**
+```json
+{
+  "chainIds": [1, 137, 10],
+  "includeTestnets": false,
+  "subgraphTypes": ["protocol", "vesting"]
+}
+```
+
+**Response:**
+```json
+[
+  {
+    "chainId": 1,
+    "networkName": "Ethereum",
+    "subgraphs": {
+      "protocol": "https://subgraph-endpoints.superfluid.dev/eth-mainnet/protocol-v1",
+      "vesting": "https://subgraph-endpoints.superfluid.dev/eth-mainnet/vesting-scheduler"
+    }
+  }
+]
+```
+
+### introspect-subgraph-schema
+
+Introspects a Superfluid subgraph schema and returns the GraphQL schema definition.
+
+**Parameters:**
+- `chainId`: Network chain ID (required)
+- `subgraphType`: Type of subgraph (default: "protocol")
+- `skipCache` (optional): Skip cache and fetch fresh schema
+
+**Example:**
+```json
+{
+  "chainId": 1,
+  "subgraphType": "protocol"
+}
+```
+
+**Response:**
+Returns the complete GraphQL schema in SDL format, showing all available types, fields, and operations.
+
+### query-subgraph
+
+Executes a GraphQL query against a Superfluid subgraph.
+
+**Parameters:**
+- `query`: GraphQL query string (required)
+- `chainId`: Network chain ID (required)
+- `subgraphType`: Type of subgraph (default: "protocol")
+- `variables` (optional): Query variables
+- `operationName` (optional): Specific operation name
+
+**Example:**
+```json
+{
+  "query": "query GetStreams($first: Int!) { streams(first: $first) { id token { symbol } sender receiver currentFlowRate } }",
+  "chainId": 1,
+  "subgraphType": "protocol",
+  "variables": { "first": 10 }
+}
+```
+
+## Common Query Examples
+
+### Get Active Streams
+```graphql
+query GetActiveStreams($first: Int!) {
+  streams(first: $first, where: { currentFlowRate_gt: "0" }) {
+    id
+    token {
+      symbol
+      name
+    }
+    sender
+    receiver
+    currentFlowRate
+    createdAtTimestamp
+    updatedAtTimestamp
+  }
+}
+```
+
+### Get Account Information
+```graphql
+query GetAccount($address: String!) {
+  account(id: $address) {
+    id
+    createdAtTimestamp
+    updatedAtTimestamp
+    totalNetFlowRate
+    totalOutflowRate
+    totalInflowRate
+    accountTokenSnapshots {
+      token {
+        symbol
+      }
+      totalNetFlowRate
+      totalOutflowRate
+      totalInflowRate
+      balanceUntilUpdatedAt
+    }
+  }
+}
+```
+
+### Get Token Information
+```graphql
+query GetSuperToken($address: String!) {
+  token(id: $address) {
+    id
+    symbol
+    name
+    decimals
+    totalSupply
+    underlyingAddress
+    createdAtTimestamp
+    updatedAtTimestamp
+  }
+}
+```
+
+### Get Flow Events
+```graphql
+query GetFlowEvents($first: Int!, $token: String!) {
+  flowUpdatedEvents(
+    first: $first
+    where: { token: $token }
+    orderBy: timestamp
+    orderDirection: desc
+  ) {
+    id
+    timestamp
+    sender
+    receiver
+    flowRate
+    totalSenderFlowRate
+    totalReceiverFlowRate
+    token {
+      symbol
+    }
+  }
+}
+```
+
+## Network Chain IDs
+
+Common Superfluid network chain IDs:
+
+- **Ethereum Mainnet**: 1
+- **Polygon**: 137
+- **Optimism**: 10
+- **Arbitrum One**: 42161
+- **Base**: 8453
+- **Gnosis Chain**: 100
+- **BNB Smart Chain**: 56
+- **Avalanche**: 43114
+
+Use `list-superfluid-metadata-networks` to get the complete list with testnet options.
+
+## Caching
+
+Schema introspection results are automatically cached for 1 hour to improve performance. You can bypass the cache using the `skipCache` parameter in `introspect-subgraph-schema`.
+
+## Error Handling
+
+The tools provide clear error messages for common issues:
+
+- **Network not found**: "No [subgraphType] subgraph found for network [chainId]"
+- **Invalid query**: GraphQL syntax errors with specific details
+- **Network errors**: HTTP status codes and response details
+- **GraphQL errors**: Server-side GraphQL execution errors
+
+## Tips
+
+1. **Start with introspection**: Use `introspect-subgraph-schema` to explore available fields before writing queries
+2. **Use variables**: Parameterize your queries for better reusability
+3. **Filter effectively**: Use GraphQL `where` clauses to get specific data
+4. **Paginate results**: Use `first` and `skip` for large datasets
+5. **Check network support**: Not all networks have all subgraph types available

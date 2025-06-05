@@ -3,6 +3,18 @@ title: Available Tools
 description: Complete list of tools provided by the Superfluid MCP server
 ---
 
+## Quick Overview
+
+The Superfluid MCP server provides **10 tools** across 5 categories:
+
+- **Contract ABIs** (2 tools) - Get Superfluid contract information
+- **Network Metadata** (2 tools) - Access network configuration data  
+- **Token Information** (2 tools) - Search and retrieve token details
+- **GraphQL Tools** (3 tools) - Query Superfluid subgraphs with automatic endpoint resolution
+- **Ecosystem Resources** (1 tool) - Find community resources and documentation
+
+For detailed GraphQL documentation, see the [GraphQL Tools guide](/docs/graphql).
+
 ## Contract ABIs (2 tools)
 
 ### list-superfluid-contracts
@@ -26,6 +38,23 @@ Gets specific token details by address and chain ID, including underlying token 
 
 ### find-superfluid-tokens
 Searches tokens by symbol or name with fuzzy matching and chain filtering
+
+## GraphQL Tools (3 tools)
+
+Query Superfluid subgraphs with automatic endpoint resolution. No API keys required.
+
+### list-superfluid-subgraph-endpoints
+Lists available subgraph endpoints for protocol, vesting, flow scheduler, and auto-wrap data across all networks.
+
+### introspect-subgraph-schema  
+Introspects GraphQL schemas with 1-hour caching. Returns complete schema definition for any supported subgraph.
+
+### query-subgraph
+Executes GraphQL queries against Superfluid subgraphs. Supports variables, operations, and all subgraph types.
+
+**Supported subgraph types**: `protocol`, `vesting`, `flowScheduler`, `autoWrap`
+
+**See the [complete GraphQL documentation](/docs/graphql) for detailed usage examples, common queries, and network information.**
 
 ## Ecosystem Resources (1 tool)
 
