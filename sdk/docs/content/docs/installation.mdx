@@ -22,36 +22,36 @@ import { Pre, CodeBlock } from 'fumadocs-ui/components/codeblock';
 
 <Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
   <Tab value="npm">
-    <CodeBlock lang="bash" keepBackground>
-      <Pre>npm install @superfluid-finance/sdk</Pre>
+    <CodeBlock lang="zsh" keepBackground>
+      npm install @sfpro/sdk
     </CodeBlock>
   </Tab>
   <Tab value="pnpm">
-    <CodeBlock lang="bash" keepBackground>
-      <Pre>pnpm add @superfluid-finance/sdk</Pre>
+    <CodeBlock lang="zsh" keepBackground>
+      pnpm add @sfpro/sdk
     </CodeBlock>
   </Tab>
   <Tab value="yarn">
-    <CodeBlock lang="bash" keepBackground>
-      <Pre>yarn add @superfluid-finance/sdk</Pre>
+    <CodeBlock lang="zsh" keepBackground>
+      yarn add @sfpro/sdk
     </CodeBlock>
   </Tab>
   <Tab value="bun">
-    <CodeBlock lang="bash" keepBackground>
-      <Pre>bun add @superfluid-finance/sdk</Pre>
+    <CodeBlock lang="zsh" keepBackground>
+      bun add @sfpro/sdk
     </CodeBlock>
   </Tab>
 </Tabs>
 
 ## 3 · Pick your flavour
 
-### A. Pure ABIs (no extra deps)
+### A. Pure ABIs & addresses (`/abi` - no extra deps)
 
 ```ts
-import { cfaV1ForwarderAbi } from "@superfluid-finance/sdk/abi"; // [!code focus]
+import { cfaV1ForwarderAbi } from "@sfpro/sdk/abi"; // [!code focus]
 ```
 
-### B. Typed viem or @wagmi/core actions
+### B. Typed viem or @wagmi/core actions (`/action`)
 
 <Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
   <Tab value="npm">
@@ -77,7 +77,7 @@ import { cfaV1ForwarderAbi } from "@superfluid-finance/sdk/abi"; // [!code focus
 </Tabs>
 
 ```ts
-import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/actions"; // [!code focus]
+import { readCfaForwarderGetFlowInfo } from "@sfpro/sdk/action"; // [!code focus]
 import { createPublicClient, http, mainnet } from "viem";
 
 const publicClient = createPublicClient({
@@ -92,7 +92,7 @@ const { flowrate } = await readCfaForwarderGetFlowInfo(publicClient, { // [!code
 }); // [!code focus]
 ```
 
-### C. wagmi React hooks
+### C. wagmi React hooks (`/hook`)
 
 <Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
   <Tab value="npm">
@@ -118,7 +118,7 @@ const { flowrate } = await readCfaForwarderGetFlowInfo(publicClient, { // [!code
 </Tabs>
 
 ```tsx
-import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/wagmi"; // [!code focus]
+import { readCfaForwarderGetFlowInfo } from "@sfpro/sdk/hook"; // [!code focus]
 import { WagmiProvider, http, createConfig, mainnet } from "wagmi";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 

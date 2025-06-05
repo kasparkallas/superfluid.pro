@@ -1,5 +1,5 @@
 ---
-title: Instant Distribution Agreement (IDA)
+title: IDA
 description: IDA contract API reference for instant token distributions
 ---
 
@@ -26,35 +26,35 @@ The IDA contract provides:
 
 Returns information about a distribution index.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadInstantDistributionAgreementV1 } from '@superfluid-finance/sdk/wagmi';
+import { useReadIda } from '@sfpro/sdk/hook/core';
 
-const { data: index } = useReadInstantDistributionAgreementV1({
+const { data: index } = useReadIda({
   address: '0x...',
   functionName: 'getIndex',
   args: [token, publisher, indexId],
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { instantDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+import { idaAbi } from '@sfpro/sdk/abi/core';
 
 const index = await client.readContract({
   address: '0x...',
-  abi: instantDistributionAgreementV1,
+  abi: idaAbi,
   functionName: 'getIndex',
   args: [token, publisher, indexId],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readInstantDistributionAgreementV1 } from '@superfluid-finance/sdk/actions';
+import { readIda } from '@sfpro/sdk/action/core';
 
-const index = await readInstantDistributionAgreementV1(client, {
+const index = await readIda(client, {
   address: '0x...',
   functionName: 'getIndex',
   args: [token, publisher, indexId],
@@ -81,12 +81,12 @@ Returns all subscriptions for a subscriber.
 
 Creates a new distribution index through the Host contract.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteIdaForwarder } from '@superfluid-finance/sdk/wagmi';
+import { useWriteIda } from '@sfpro/sdk/hook/core';
 
-const { writeContract } = useWriteIdaForwarder();
+const { writeContract } = useWriteIda();
 
 await writeContract({
   address: '0x...',
@@ -95,24 +95,24 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { instantDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+import { idaAbi } from '@sfpro/sdk/abi/core';
 
 // Note: IDA operations must be called through the Host contract
 const callData = encodeFunctionData({
-  abi: instantDistributionAgreementV1,
+  abi: idaAbi,
   functionName: 'createIndex',
   args: [token, indexId, userData],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
 // Use the forwarder contract for direct calls
-import { writeIdaForwarder } from '@superfluid-finance/sdk/actions';
+import { writeIda } from '@sfpro/sdk/action/core';
 
-const hash = await writeIdaForwarder(client, {
+const hash = await writeIda(client, {
   address: '0x...',
   functionName: 'createIndex',
   args: [token, indexId],
@@ -143,6 +143,6 @@ Claims pending distributions for a subscriber.
 
 ## Related
 
-- [IDA Forwarder](/docs/api/essential/ida-forwarder) - Simplified interface for IDA operations
-- [GDA](/docs/api/advanced/gda) - Next-generation distribution agreement with streaming support
-- [Host Contract](/docs/api/advanced/host) - Required for direct IDA calls
+- [IDA Forwarder](/docs/api/main/ida-forwarder) - Simplified interface for IDA operations
+- [GDA](/docs/api/core/gda) - Next-generation distribution agreement with streaming support
+- [Host Contract](/docs/api/core/host) - Required for direct IDA calls

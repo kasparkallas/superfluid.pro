@@ -107,12 +107,12 @@ const out = (function (): string {
 	switch (type) {
 		case "abi":
 			return `src/abi${category ? `/${category}` : ""}/generated.ts`;
-		case "wagmi":
-			return `src/wagmi${category ? `/${category}` : ""}/generated.ts`;
-		case "actions":
-			return `src/actions${category ? `/${category}` : ""}/generated.ts`;
+		case "hook":
+			return `src/hook${category ? `/${category}` : ""}/generated.ts`;
+		case "action":
+			return `src/action${category ? `/${category}` : ""}/generated.ts`;
 		default:
-			throw new Error(`Invalid type [${type}], use "abi", "wagmi" or "actions".`);
+			throw new Error(`Invalid type [${type}], use "abi", "hook" or "action".`);
 	}
 })();
 
@@ -120,7 +120,7 @@ const plugins = (function (): Plugins {
 	switch (type) {
 		case "abi":
 			return [];
-		case "wagmi":
+		case "hook":
 			return [
 				react({
 					getHookName: ({ contractName, type, itemName }) => {
@@ -129,7 +129,7 @@ const plugins = (function (): Plugins {
 					},
 				}),
 			];
-		case "actions":
+		case "action":
 			return [
 				actions({
 					overridePackageName: "@wagmi/core",
@@ -137,7 +137,7 @@ const plugins = (function (): Plugins {
 				}),
 			];
 		default:
-			throw new Error(`Invalid type [${type}], use "abi", "wagmi" or "actions".`);
+			throw new Error(`Invalid type [${type}], use "abi", "hook" or "action".`);
 	}
 })();
 
@@ -167,7 +167,7 @@ export default defineConfig({
 					},
 				]
 			: []),
-		...(category === "protocol"
+		...(category === "core"
 			? [
 					{
 						abi: HostWithAllErrors,

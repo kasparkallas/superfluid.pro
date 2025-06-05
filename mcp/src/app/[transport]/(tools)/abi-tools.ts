@@ -4,7 +4,7 @@ import {
 	gdaForwarderAbi,
 	gdaPoolAbi,
 	superTokenAbi,
-} from "@sfpro/sdk";
+} from "@sfpro/sdk/abi";
 import type { Abi } from "viem";
 import { z } from "zod";
 
@@ -18,7 +18,7 @@ import {
 	idaAbi,
 	superTokenFactoryAbi,
 	togaAbi,
-} from "@sfpro/sdk/protocol";
+} from "@sfpro/sdk/abi/core";
 
 import type { McpServer } from "@/types";
 import {
@@ -29,7 +29,7 @@ import {
 	legacyVestingSchedulerV1Abi,
 	legacyVestingSchedulerV2Abi,
 	vestingSchedulerV3Abi,
-} from "@sfpro/sdk/automation";
+} from "@sfpro/sdk/abi/automation";
 
 type ContractInfo = {
 	abi: Abi;

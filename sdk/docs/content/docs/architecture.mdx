@@ -21,20 +21,20 @@ graph LR
 
     subgraph CoreExports [SDK Exports]
         direction LR
-        ABIs["ABIs (/)"]
-        Hooks["Hooks (/hooks)"]
-        Actions["Actions (/actions)"]
+        ABIs["ABIs & addresses (/abi)"]
+        Hooks["React hooks (/hook)"]
+        Actions["Actions (/action)"]
     end
 
     SDK --> CoreExports
 
-    CoreExports --> Essentials["Essentials (/)"]
-    CoreExports --> Advanced["Advanced (/advanced)"]
+    CoreExports --> Main["Main (/)"]
+    CoreExports --> Core["Core (/core)"]
     CoreExports --> Automation["Automation (/automation)"]
 `}
 />
 
-### 1. ABIs (`@superfluid-finance/sdk`)
+### 1. ABIs (`@sfpro/sdk/abi`)
 
 Raw contract ABIs with enhanced type information:
 
@@ -44,7 +44,7 @@ import {
   cfaForwarderAbi,
   gdaForwarderAbi,
   cfaForwarderAddress
-} from "@superfluid-finance/sdk"
+} from "@sfpro/sdk/abi"
 ```
 
 Use ABIs when:
@@ -52,7 +52,7 @@ Use ABIs when:
 - Building custom abstractions
 - Need maximum flexibility
 
-### 2. Actions (`@superfluid-finance/sdk/actions`)
+### 2. Actions (`@sfpro/sdk/action`)
 
 Core functions for non-React environments:
 
@@ -62,7 +62,7 @@ import {
   writeSuperToken,
   readCfaForwarder,
   writeCfaForwarder
-} from "@superfluid-finance/sdk/actions"
+} from "@sfpro/sdk/action"
 ```
 
 Use actions when:
@@ -70,7 +70,7 @@ Use actions when:
 - Working in non-React frameworks
 - Need wagmi's conveniences without React
 
-### 3. Hooks (`@superfluid-finance/sdk/wagmi`)
+### 3. Hooks (`@sfpro/sdk/hook`)
 
 React hooks for seamless integration:
 
@@ -80,7 +80,7 @@ import {
   useWriteSuperToken,
   useReadCfaForwarder,
   useWriteCfaForwarder
-} from "@superfluid-finance/sdk/wagmi"
+} from "@sfpro/sdk/hook"
 ```
 
 Use hooks when:
@@ -92,7 +92,11 @@ Use hooks when:
 
 Each import path has sub-paths for different contract categories:
 
-### Root Imports (Essential)
+<Callout type="tip">
+**Remember:** All SDK exports use singular names (`action` not `actions`, `hook` not `hooks`, `util` not `utils`). This consistent naming makes imports predictable!
+</Callout>
+
+### Root Imports (Main)
 Default imports contain the most commonly used contracts:
 - Super Token operations
 - **CFA Forwarder** (streaming) - *Recommended for flow management*
@@ -100,11 +104,11 @@ Default imports contain the most commonly used contracts:
 
 These forwarders are the simplest and safest way to interact with Superfluid.
 
-### Advanced Imports
+### Core Imports
 ```ts
-import { hostAbi } from "@superfluid-finance/sdk/abi/protocol"
-import { readHost } from "@superfluid-finance/sdk/actions/protocol"
-import { useReadHost } from "@superfluid-finance/sdk/wagmi/protocol"
+import { hostAbi } from "@sfpro/sdk/abi/core"
+import { readHost } from "@sfpro/sdk/action/core"
+import { useReadHost } from "@sfpro/sdk/hook/core"
 ```
 
 Protocol-level contracts for advanced use cases:
@@ -118,9 +122,9 @@ Protocol-level contracts for advanced use cases:
 
 ### Automation Imports
 ```ts
-import { vestingSchedulerAbi } from "@superfluid-finance/sdk/abi/automation"
-import { readVestingScheduler } from "@superfluid-finance/sdk/actions/automation"
-import { useReadVestingScheduler } from "@superfluid-finance/sdk/wagmi/automation"
+import { vestingSchedulerAbi } from "@sfpro/sdk/abi/automation"
+import { readVestingScheduler } from "@sfpro/sdk/action/automation"
+import { useReadVestingScheduler } from "@sfpro/sdk/hook/automation"
 ```
 
 Automation contracts for scheduled operations:
@@ -173,7 +177,7 @@ Contract names are transformed for consistency:
 
 ```ts twoslash
 // Simple and direct - handles all complexity
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk"
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 // @noErrors
@@ -208,7 +212,7 @@ await walletClient.writeContract({
 
 ```ts twoslash  
 // Complex and error-prone - avoid unless necessary
-import { hostAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { hostAbi } from "@sfpro/sdk/abi/core"
 // @noErrors
 const encodedCall = "0x..." // Complex encoding required
 const walletClient = {} as any
@@ -238,10 +242,10 @@ await walletClient.writeContract({
 3. **Use specific imports**:
    ```ts
    // Good
-   import { cfaForwarderAbi } from "@superfluid-finance/sdk"
+   import { cfaForwarderAbi } from "@sfpro/sdk/abi"
    
    // Avoid
-   import * as sdk from "@superfluid-finance/sdk"
+   import * as sdk from "@sfpro/sdk"
    ```
 
 4. **Leverage type safety**:
@@ -253,4 +257,4 @@ await walletClient.writeContract({
 
 - Review the [glossary](/docs/glossary) for terminology
 - Start building with [use-case guides](/docs/use-cases/wrap-unwrap)
-- Explore the [API reference](/docs/api/essential/super-token)
+- Explore the [API reference](/docs/api/main/super-token)

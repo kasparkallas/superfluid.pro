@@ -1,5 +1,5 @@
 ---
-title: General Distribution Agreement (GDA)
+title: GDA
 description: GDA contract API reference for distributing tokens to multiple recipients
 ---
 
@@ -21,35 +21,35 @@ The GDA contract provides:
 
 Returns information about a distribution pool.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadGeneralDistributionAgreementV1 } from '@superfluid-finance/sdk/wagmi';
+import { useReadGda } from '@sfpro/sdk/hook/core';
 
-const { data: pool } = useReadGeneralDistributionAgreementV1({
+const { data: pool } = useReadGda({
   address: '0x...',
   functionName: 'getPool',
   args: [token, poolAddress],
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { generalDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+import { gdaAbi } from '@sfpro/sdk/abi/core';
 
 const pool = await client.readContract({
   address: '0x...',
-  abi: generalDistributionAgreementV1,
+  abi: gdaAbi,
   functionName: 'getPool',
   args: [token, poolAddress],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readGeneralDistributionAgreementV1 } from '@superfluid-finance/sdk/actions';
+import { readGda } from '@sfpro/sdk/action/core';
 
-const pool = await readGeneralDistributionAgreementV1(client, {
+const pool = await readGda(client, {
   address: '0x...',
   functionName: 'getPool',
   args: [token, poolAddress],
@@ -76,12 +76,12 @@ Checks if an address is a registered pool.
 
 Creates a new distribution pool through the Host contract.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteGdaForwarder } from '@superfluid-finance/sdk/wagmi';
+import { useWriteGda } from '@sfpro/sdk/hook/core';
 
-const { writeContract } = useWriteGdaForwarder();
+const { writeContract } = useWriteGda();
 
 await writeContract({
   address: '0x...',
@@ -90,24 +90,24 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { generalDistributionAgreementV1 } from '@superfluid-finance/sdk/abi';
+import { gdaAbi } from '@sfpro/sdk/abi/core';
 
 // Note: GDA operations must be called through the Host contract
 const callData = encodeFunctionData({
-  abi: generalDistributionAgreementV1,
+  abi: gdaAbi,
   functionName: 'createPool',
   args: [token, admin, poolConfig],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
 // Use the forwarder contract for direct calls
-import { writeGdaForwarder } from '@superfluid-finance/sdk/actions';
+import { writeGda } from '@sfpro/sdk/action/core';
 
-const hash = await writeGdaForwarder(client, {
+const hash = await writeGda(client, {
   address: '0x...',
   functionName: 'createPool',
   args: [token, admin, poolConfig],
@@ -138,6 +138,6 @@ Disconnects a member from a pool.
 
 ## Related
 
-- [GDA Forwarder](/docs/api/essential/gda-forwarder) - Simplified interface for GDA operations
-- [Host Contract](/docs/api/advanced/host) - Required for direct GDA calls
-- [Super Token](/docs/api/essential/super-token) - Tokens used in distributions
+- [GDA Forwarder](/docs/api/main/gda-forwarder) - Simplified interface for GDA operations
+- [Host Contract](/docs/api/core/host) - Required for direct GDA calls
+- [Super Token](/docs/api/main/super-token) - Tokens used in distributions

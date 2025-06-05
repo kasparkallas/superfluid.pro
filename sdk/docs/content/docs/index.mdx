@@ -5,7 +5,7 @@ title: Overview
 
 ## Introduction
 
-`@superfluid-finance/sdk` is a compact TypeScript developer toolkit for building on the **Superfluid Protocol**.
+`@sfpro/sdk` is a compact TypeScript developer toolkit for building on the **Superfluid Protocol**.
 
 It bundles the on-chain ABIs, typed actions, and ready-made React hooks generated with **wagmi CLI** — all split into independent ESM exports so you only ship what you use.
 
@@ -17,7 +17,7 @@ It bundles the on-chain ABIs, typed actions, and ready-made React hooks generate
 |----------------|--------|
 | **Lightweight** | Zero runtime dependencies in the core; only peer-install what your code path needs. |
 | **Type-safe**  | Fully-typed ABIs and actions for autocompletion and compile-time checks. |
-| **Tree-shakeable** | Each export (`./abi`, `./actions`, `./wagmi`, `./utils`) is side-effect-free and independent. |
+| **Tree-shakeable** | Each export (`./abi`, `./action`, `./hook`, `./util`) is side-effect-free and independent. |
 | **wagmi / viem powered** | Uses the same primitives you already know — no custom wrapper abstractions. |
 | **React hooks (optional)** | Consume plain ABIs, viem actions, or rich wagmi hooks depending on your stack. |
 | **ESM-only** | Modern build tooling out of the box; no CJS shims. |
@@ -26,20 +26,24 @@ It bundles the on-chain ABIs, typed actions, and ready-made React hooks generate
 ## Package layout
 
 ```txt
-@superfluid-finance/sdk/
+@sfpro/sdk/
 ├── abi            # Pure typesafe JSON ABIs
-├── actions        # viem & @wagmi/core actions
-├── hooks          # wagmi React hooks
-└── utils          # Common utilities
+├── action         # viem & @wagmi/core actions
+├── hook           # wagmi React hooks
+└── util           # Common utilities
 ```
+
+<Callout type="tip">
+**Remember:** All SDK exports use singular names (`action` not `actions`, `hook` not `hooks`, `util` not `utils`). This keeps imports clean and consistent!
+</Callout>
 
 ## Import examples
 
 | You need... | Install... | Import from... |
 |-------------|------------|----------------|
-| Only ABIs   | @superfluid-finance/sdk | `import { cfaForwarderAbi } from "@superfluid-finance/sdk/abi"` |
-| Actions     | @superfluid-finance/sdk + viem or @wagmi/core | `import { readCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/actions"` |
-| React hooks | @superfluid-finance/sdk + wagmi | `import { useCfaForwarderGetFlowInfo } from "@superfluid-finance/sdk/wagmi"` |
+| Only ABIs   | @sfpro/sdk | `import { cfaForwarderAbi } from "@sfpro/sdk/abi"` |
+| Actions     | @sfpro/sdk + viem or @wagmi/core | `import { readCfaForwarderGetFlowInfo } from "@sfpro/sdk/action"` |
+| React hooks | @sfpro/sdk + wagmi | `import { useCfaForwarderGetFlowInfo } from "@sfpro/sdk/hook"` |
 
 ## LLM Support
 

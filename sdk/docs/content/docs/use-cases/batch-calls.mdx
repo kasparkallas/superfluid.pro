@@ -21,7 +21,7 @@ Batch calls let you combine multiple Superfluid operations like:
 Each operation in a batch call requires an operation type identifier:
 
 ```ts twoslash
-import { OPERATION_TYPE } from "@superfluid-finance/sdk"
+import { OPERATION_TYPE } from "@sfpro/sdk/util"
 
 // Available operation types:
 // OPERATION_TYPE.ERC20_APPROVE
@@ -36,12 +36,12 @@ import { OPERATION_TYPE } from "@superfluid-finance/sdk"
 
 Here's how to create a batch call manually:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteHost } from "@superfluid-finance/sdk/wagmi/protocol" // [!code focus]
-import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
-import { superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { useWriteHost } from "@sfpro/sdk/hook/core" // [!code focus]
+import { OPERATION_TYPE } from "@sfpro/sdk/util" // [!code focus]
+import { superTokenAbi, cfaForwarderAbi } from "@sfpro/sdk/abi/core"
 import { encodeFunctionData } from "viem"
 import { useAccount } from "wagmi"
 
@@ -83,10 +83,10 @@ function BatchOperations() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { hostAbi, hostAddress, superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol" // [!code focus]
-import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
+import { hostAbi, hostAddress, superTokenAbi, cfaForwarderAbi } from "@sfpro/sdk/abi/core" // [!code focus]
+import { OPERATION_TYPE } from "@sfpro/sdk/util" // [!code focus]
 import { createWalletClient, http, encodeAbiParameters, encodeFunctionData } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -134,11 +134,11 @@ async function batchCall() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeHost } from "@superfluid-finance/sdk/actions/protocol" // [!code focus]
-import { OPERATION_TYPE } from "@superfluid-finance/sdk" // [!code focus]
-import { superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { writeHost } from "@sfpro/sdk/action/core" // [!code focus]
+import { OPERATION_TYPE } from "@sfpro/sdk/util" // [!code focus]
+import { superTokenAbi, cfaForwarderAbi } from "@sfpro/sdk/abi/core"
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, encodeFunctionData } from "viem"
 import { mainnet } from "viem/chains"
@@ -196,15 +196,17 @@ The SDK provides a `prepareOperation` helper to simplify batch call creation:
 
 ```ts twoslash
 import { 
-  prepareOperation,
-  OPERATION_TYPE,
   hostAbi,
   hostAddress,
   superTokenAbi,
   cfaForwarderAbi,
-  cfaForwarderAddress,
+  cfaForwarderAddress
+} from "@sfpro/sdk/abi"
+import {
+  prepareOperation,
+  OPERATION_TYPE,
   calculateFlowrate
-} from "@superfluid-finance/sdk"
+} from "@sfpro/sdk/util"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -270,7 +272,8 @@ Wrap tokens and immediately start streaming:
 </Callout>
 
 ```ts twoslash
-import { prepareOperation, OPERATION_TYPE, calculateFlowrate, superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { superTokenAbi, cfaForwarderAbi } from "@sfpro/sdk/abi"
+import { prepareOperation, OPERATION_TYPE, calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 const wrapAndStream = [ // [!code focus]
@@ -303,7 +306,8 @@ const wrapAndStream = [ // [!code focus]
 Update multiple flows in one transaction:
 
 ```ts twoslash
-import { prepareOperation, OPERATION_TYPE, calculateFlowrate, cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { cfaForwarderAbi } from "@sfpro/sdk/abi"
+import { prepareOperation, OPERATION_TYPE, calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 const receivers = [
@@ -332,7 +336,7 @@ const multipleFlowUpdates = receivers.map(receiver => // [!code focus]
 Batch calls are atomic - if any operation fails, the entire batch reverts:
 
 ```ts twoslash
-import { hostAddress, hostAbi } from "@superfluid-finance/sdk/abi/protocol"
+import { hostAddress, hostAbi } from "@sfpro/sdk/abi/core"
 import { mainnet } from "viem/chains"
 // @noErrors
 const walletClient = {} as any
@@ -364,6 +368,6 @@ try {
 
 ## Next Steps
 
-- Explore the [API reference](/docs/api/essential/super-token)
-- Learn about [advanced protocol features](/docs/api/advanced/host)
+- Explore the [API reference](/docs/api/main/super-token)
+- Learn about [advanced protocol features](/docs/api/core/host)
 - Check out [automation contracts](/docs/api/automation/auto-wrap)

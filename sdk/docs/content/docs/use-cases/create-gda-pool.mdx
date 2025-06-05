@@ -11,10 +11,10 @@ The General Distribution Agreement (GDA) enables efficient one-to-many token dis
 
 First, create a new GDA pool:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 
 const superToken = "0x..." // USDCx address
@@ -35,9 +35,9 @@ function CreatePool() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -65,9 +65,9 @@ async function createPool() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -105,10 +105,10 @@ async function createPool() {
 
 After creating a pool, you need to get its address:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { keccak256, toHex } from "viem"
 
 const superToken = "0x..." // USDCx address
@@ -130,9 +130,9 @@ function PoolAddress() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -158,9 +158,9 @@ async function getPoolAddress() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
@@ -193,10 +193,10 @@ async function getPoolAddress() {
 
 Allocate units to members to determine their share of distributions:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const poolAddress = "0x..." // Your pool address
 const member = "0x..." // Member address
@@ -218,9 +218,9 @@ function GiveUnits() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -249,9 +249,9 @@ async function giveUnits() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -291,10 +291,10 @@ async function giveUnits() {
 
 Once members have units, distribute tokens to all members proportionally:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 import { parseEther } from "viem"
 
@@ -318,9 +318,9 @@ function DistributeTokens() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -349,9 +349,9 @@ async function distributeToPool() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -396,7 +396,7 @@ import {
   gdaForwarderAddress,
   gdaPoolAbi,
   superTokenAbi
-} from "@superfluid-finance/sdk"
+} from "@sfpro/sdk/abi"
 import { createWalletClient, createPublicClient, http, parseEther, toHex } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -472,4 +472,4 @@ async function setupDistributionPool() {
 
 - Learn to [connect to GDA pools](/docs/use-cases/connect-gda-pool) as a member
 - Explore [batch operations](/docs/use-cases/batch-calls)
-- Check the [GDA API reference](/docs/api/essential/gda-forwarder)
+- Check the [GDA API reference](/docs/api/main/gda-forwarder)

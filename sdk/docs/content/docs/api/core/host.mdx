@@ -21,10 +21,10 @@ The Host contract serves as:
 
 Returns the current governance address.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadHost } from '@superfluid-finance/sdk/wagmi';
+import { useReadHost } from '@sfpro/sdk/hook/core';
 
 const { data: governance } = useReadHost({
   address: '0x...',
@@ -32,20 +32,20 @@ const { data: governance } = useReadHost({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { host } from '@superfluid-finance/sdk/abi';
+import { hostAbi } from '@sfpro/sdk/abi/core';
 
 const governance = await client.readContract({
   address: '0x...',
-  abi: host,
+  abi: hostAbi,
   functionName: 'getGovernance',
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readHost } from '@superfluid-finance/sdk/actions';
+import { readHost } from '@sfpro/sdk/action/core';
 
 const governance = await readHost(client, {
   address: '0x...',
@@ -69,10 +69,10 @@ Returns the address of a registered agreement by type.
 
 Executes an agreement operation through the host.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteHost } from '@superfluid-finance/sdk/wagmi';
+import { useWriteHost } from '@sfpro/sdk/hook/core';
 
 const { writeContract } = useWriteHost();
 
@@ -83,21 +83,21 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { host } from '@superfluid-finance/sdk/abi';
+import { hostAbi } from '@sfpro/sdk/abi/core';
 
 const hash = await client.writeContract({
   address: '0x...',
-  abi: host,
+  abi: hostAbi,
   functionName: 'callAgreement',
   args: [agreementAddress, callData, userData],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { writeHost } from '@superfluid-finance/sdk/actions';
+import { writeHost } from '@sfpro/sdk/action/core';
 
 const hash = await writeHost(client, {
   address: '0x...',
@@ -119,5 +119,5 @@ Registers a Super App with the protocol.
 ## Related
 
 - [Batch Calls Guide](/docs/batch-calls)
-- [CFA Agreement](/docs/api/advanced/cfa)
-- [Super Token Factory](/docs/api/essential/super-token-factory)
+- [CFA Agreement](/docs/api/core/cfa)
+- [Super Token Factory](/docs/api/main/super-token-factory)

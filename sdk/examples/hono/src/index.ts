@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server";
 
 import { app } from "./app.js";
 import "./abi.js";
-import "./actions.js";
+import "./action.js";
 
 serve(
 	{

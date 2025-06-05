@@ -1,6 +1,6 @@
 // TODO: add documentation
 
-import type { TimeUnit } from "./constants.js";
+import type { TimeUnit } from "./constant.js";
 
 export function calculateCurrentBalance({
 	flowRate,

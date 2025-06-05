@@ -10,7 +10,7 @@ The CFA Forwarder provides a simplified interface for managing token streams (fl
 ## Contract Addresses
 
 ```ts twoslash
-import { cfaForwarderAddress } from "@superfluid-finance/sdk"
+import { cfaForwarderAddress } from "@sfpro/sdk/abi"
 import { mainnet } from "viem/chains"
 
 // Get CFA Forwarder address for a specific chain
@@ -23,10 +23,10 @@ const forwarderAddress = cfaForwarderAddress[mainnet.id]
 
 Get the current flowrate between a sender and receiver.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: flowrate } = useReadCfaForwarder({ // [!code focus]
   functionName: "getFlowrate", // [!code focus]
@@ -35,9 +35,9 @@ const { data: flowrate } = useReadCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -59,9 +59,9 @@ const flowrate = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -84,10 +84,10 @@ const flowrate = await readCfaForwarder(config, { // [!code focus]
 
 Get the net flowrate for an account (total inflow - total outflow).
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: netFlowrate } = useReadCfaForwarder({ // [!code focus]
   functionName: "getAccountFlowrate", // [!code focus]
@@ -96,9 +96,9 @@ const { data: netFlowrate } = useReadCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -119,9 +119,9 @@ const netFlowrate = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -144,10 +144,10 @@ const netFlowrate = await readCfaForwarder(config, { // [!code focus]
 
 Calculate the required buffer (deposit) for a given flowrate.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: bufferAmount } = useReadCfaForwarder({ // [!code focus]
   functionName: "getBufferAmountByFlowrate", // [!code focus]
@@ -156,9 +156,9 @@ const { data: bufferAmount } = useReadCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -179,9 +179,9 @@ const bufferAmount = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -206,11 +206,11 @@ const bufferAmount = await readCfaForwarder(config, { // [!code focus]
 
 Create or update a flow. This is the recommended function for flow management.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 const flowrate = calculateFlowrate({
@@ -225,9 +225,10 @@ const { writeContract: setFlowrate } = useWriteCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -257,9 +258,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder, calculateFlowrate } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -291,10 +292,10 @@ const hash = await writeCfaForwarder(config, { // [!code focus]
 
 Create a new flow (fails if flow already exists).
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 
 const { address } = useAccount()
@@ -306,9 +307,9 @@ const { writeContract: createFlow } = useWriteCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -335,9 +336,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -364,10 +365,10 @@ const hash = await writeCfaForwarder(config, { // [!code focus]
 
 Update an existing flow's flowrate.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 
 const { address } = useAccount()
@@ -379,9 +380,9 @@ const { writeContract: updateFlow } = useWriteCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -408,9 +409,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -437,10 +438,10 @@ const hash = await writeCfaForwarder(config, { // [!code focus]
 
 Stop a flow completely.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 
 const { address } = useAccount()
@@ -452,9 +453,9 @@ const { writeContract: deleteFlow } = useWriteCfaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -480,9 +481,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -511,10 +512,10 @@ const hash = await writeCfaForwarder(config, { // [!code focus]
 
 Grant another account permission to manage your flows.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: grantPermissions } = useWriteCfaForwarder({ // [!code focus]
   functionName: "grantPermissions", // [!code focus]
@@ -523,9 +524,9 @@ const { writeContract: grantPermissions } = useWriteCfaForwarder({ // [!code foc
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -549,9 +550,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"

@@ -10,7 +10,7 @@ The GDA Forwarder provides a simplified interface for creating and managing dist
 ## Contract Addresses
 
 ```ts twoslash
-import { gdaForwarderAddress } from "@superfluid-finance/sdk"
+import { gdaForwarderAddress } from "@sfpro/sdk/abi"
 import { mainnet } from "viem/chains"
 
 // Get GDA Forwarder address for a specific chain
@@ -23,10 +23,10 @@ const forwarderAddress = gdaForwarderAddress[mainnet.id]
 
 Get the address of a pool based on its parameters.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { keccak256, toHex } from "viem"
 
 const { data: poolAddress } = useReadGdaForwarder({ // [!code focus]
@@ -36,9 +36,9 @@ const { data: poolAddress } = useReadGdaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -60,9 +60,9 @@ const poolAddress = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
@@ -85,10 +85,10 @@ const poolAddress = await readGdaForwarder(config, { // [!code focus]
 
 Check if an address is a valid GDA pool.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: isValidPool } = useReadGdaForwarder({ // [!code focus]
   functionName: "isPool", // [!code focus]
@@ -97,9 +97,9 @@ const { data: isValidPool } = useReadGdaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -120,9 +120,9 @@ const isValidPool = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -147,10 +147,10 @@ const isValidPool = await readGdaForwarder(config, { // [!code focus]
 
 Create a new distribution pool.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 import { keccak256, toHex } from "viem"
 
@@ -163,9 +163,9 @@ const { writeContract: createPool } = useWriteGdaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -190,9 +190,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, keccak256, toHex } from "viem"
 import { mainnet } from "viem/chains"
@@ -219,10 +219,10 @@ const hash = await writeGdaForwarder(config, { // [!code focus]
 
 Distribute tokens to all pool members proportionally.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 import { parseEther } from "viem"
 
@@ -235,9 +235,9 @@ const { writeContract: distribute } = useWriteGdaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -264,9 +264,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -293,12 +293,12 @@ const hash = await writeGdaForwarder(config, { // [!code focus]
 
 Create a continuous distribution flow to a pool.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 const { address } = useAccount()
@@ -314,9 +314,10 @@ const { writeContract: distributeFlow } = useWriteGdaForwarder({ // [!code focus
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -348,9 +349,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder, calculateFlowrate } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -382,10 +383,10 @@ const hash = await writeGdaForwarder(config, { // [!code focus]
 
 Connect to a pool as a member to receive distributions.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: connectPool } = useWriteGdaForwarder({ // [!code focus]
   functionName: "connectPool", // [!code focus]
@@ -394,9 +395,9 @@ const { writeContract: connectPool } = useWriteGdaForwarder({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -420,9 +421,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -449,10 +450,10 @@ const hash = await writeGdaForwarder(config, { // [!code focus]
 
 Disconnect from a pool to stop receiving distributions.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: disconnectPool } = useWriteGdaForwarder({ // [!code focus]
   functionName: "disconnectPool", // [!code focus]
@@ -461,9 +462,9 @@ const { writeContract: disconnectPool } = useWriteGdaForwarder({ // [!code focus
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaForwarderAbi, gdaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaForwarderAbi, gdaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -487,9 +488,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"

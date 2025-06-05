@@ -1,4 +1,4 @@
-import { cfaAbi, cfaAddress } from "@sfpro/sdk/protocol";
+import { cfaAbi, cfaAddress } from "@sfpro/sdk/abi/core";
 import { createPublicClient } from "viem";
 import { mainnet } from "viem/chains";
 

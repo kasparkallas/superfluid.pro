@@ -15,7 +15,7 @@ Create a new Vite project with Superfluid SDK:
 ```bash
 npm create vite@latest my-superfluid-app -- --template react-ts
 cd my-superfluid-app
-npm install @superfluid-finance/sdk wagmi viem @tanstack/react-query
+npm install @sfpro/sdk wagmi viem @tanstack/react-query
 ```
 
 ## Configuration
@@ -107,7 +107,7 @@ export function ConnectWallet() {
 ### SuperToken Balance Display
 
 ```tsx title="src/components/TokenBalance.tsx"
-import { useReadSuperToken } from '@superfluid-finance/sdk/wagmi'
+import { useReadSuperToken } from '@sfpro/sdk/hook'
 import { useAccount } from 'wagmi'
 import { formatUnits } from 'viem'
 
@@ -157,7 +157,7 @@ import {
   useWriteSuperToken, 
   useReadSuperToken,
   useSimulateSuperToken 
-} from '@superfluid-finance/sdk/wagmi'
+} from '@sfpro/sdk/hook'
 import { useAccount, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits, formatUnits } from 'viem'
 import { erc20Abi } from 'viem'
@@ -256,7 +256,7 @@ export function TokenWrapper({
 ### Flow Management Dashboard
 
 ```tsx title="src/components/FlowDashboard.tsx"
-import { useReadCfaForwarder } from '@superfluid-finance/sdk/wagmi'
+import { useReadCfaForwarder } from '@sfpro/sdk/hook'
 import { useAccount } from 'wagmi'
 import { formatUnits } from 'viem'
 
@@ -381,7 +381,7 @@ export default defineConfig({
         manualChunks: {
           'vendor': ['react', 'react-dom'],
           'wagmi': ['wagmi', 'viem'],
-          'superfluid': ['@superfluid-finance/sdk'],
+          'superfluid': ['@sfpro/sdk'],
         },
       },
     },
@@ -437,7 +437,7 @@ vi.mock('wagmi', () => ({
   useAccount: () => ({ address: '0x123...' }),
 }))
 
-vi.mock('@superfluid-finance/sdk/wagmi', () => ({
+vi.mock('@sfpro/sdk/hook', () => ({
   useReadSuperToken: () => ({
     data: 1000000000000000000n, // 1 token
     isLoading: false,

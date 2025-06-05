@@ -1,5 +1,6 @@
 import type { McpServer } from "@/types";
-import metadata, { type NetworkMetadata } from "@superfluid-finance/metadata";
+import metadata from "@superfluid-finance/metadata";
+import type { NetworkMetaData } from "@superfluid-finance/metadata/module/networks/list";
 import { z } from "zod";
 
 export const createListSuperfluidMetadataNetworksTool = (server: McpServer) => {
@@ -40,7 +41,7 @@ export const createGetSuperfluidNetworkMetadataTool = (server: McpServer) => {
 			chainIds: z.array(z.number().int().positive()).min(1),
 		},
 		async (args: { chainIds: number[] }) => {
-			const metadataResults: Record<number, NetworkMetadata> = {};
+			const metadataResults: Record<number, NetworkMetaData | null> = {};
 
 			for (const chainId of args.chainIds) {
 				const network = metadata.getNetworkByChainId(chainId);

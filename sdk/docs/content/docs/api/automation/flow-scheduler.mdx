@@ -22,10 +22,10 @@ Flow Scheduler provides:
 
 Returns details of a scheduled flow.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadFlowScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+import { useReadFlowScheduler } from '@sfpro/sdk/hook/automation';
 
 const { data: schedule } = useReadFlowScheduler({
   address: '0x...',
@@ -34,9 +34,9 @@ const { data: schedule } = useReadFlowScheduler({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { flowScheduler } from '@superfluid-finance/sdk/abi/automation';
+import { flowScheduler } from '@sfpro/sdk/abi/automation';
 
 const schedule = await client.readContract({
   address: '0x...',
@@ -46,9 +46,9 @@ const schedule = await client.readContract({
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readFlowScheduler } from '@superfluid-finance/sdk/actions/automation';
+import { readFlowScheduler } from '@sfpro/sdk/action/automation';
 
 const schedule = await readFlowScheduler(client, {
   address: '0x...',
@@ -73,10 +73,10 @@ Returns comprehensive information about a flow schedule.
 
 Creates a new scheduled flow with start and optional end time.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteFlowScheduler } from '@superfluid-finance/sdk/wagmi/automation';
+import { useWriteFlowScheduler } from '@sfpro/sdk/hook/automation';
 
 const { writeContract } = useWriteFlowScheduler();
 
@@ -94,9 +94,9 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { flowScheduler } from '@superfluid-finance/sdk/abi/automation';
+import { flowScheduler } from '@sfpro/sdk/abi/automation';
 
 const hash = await client.writeContract({
   address: '0x...',
@@ -113,9 +113,9 @@ const hash = await client.writeContract({
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { writeFlowScheduler } from '@superfluid-finance/sdk/actions/automation';
+import { writeFlowScheduler } from '@sfpro/sdk/action/automation';
 
 const hash = await writeFlowScheduler(client, {
   address: '0x...',
@@ -166,5 +166,5 @@ Creates a schedule by specifying total amount and duration.
 ## Related
 
 - [Vesting Scheduler](/docs/api/automation/vesting-scheduler) - Complex vesting schedules
-- [CFA Forwarder](/docs/api/essential/cfa-forwarder) - Direct stream management
+- [CFA Forwarder](/docs/api/main/cfa-forwarder) - Direct stream management
 - [Auto Wrap](/docs/api/automation/auto-wrap) - Maintain token balances

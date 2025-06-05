@@ -9,9 +9,9 @@ import {
 	vestingSchedulerV3Abi,
 	vestingSchedulerV3Address,
 } from "../src/abi/automation";
-import { cfaAbi, cfaAddress, hostAbi, hostAddress } from "../src/abi/protocol";
+import { cfaAbi, cfaAddress, hostAbi, hostAddress } from "../src/abi/core";
 import { superfluidTestnetTransports } from "../src/config";
-import { OPERATION_TYPE, type Operation, prepareOperation, stripFunctionSelector } from "../src/constants";
+import { OPERATION_TYPE, type Operation, prepareOperation, stripFunctionSelector } from "../src/constant";
 
 describe("Superfluid batch call tests", () => {
 	test("should be able to simulate a transaction with all the operation types (raw)", async () => {

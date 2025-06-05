@@ -13,7 +13,7 @@ Hono is a lightweight web framework for building fast server applications. This 
 Install the required packages:
 
 ```bash
-npm install @superfluid-finance/sdk @wagmi/core viem hono
+npm install @sfpro/sdk @wagmi/core viem hono
 ```
 
 ## Configuration
@@ -41,7 +41,7 @@ Create API endpoints using Superfluid actions:
 
 ```ts title="app.ts"
 import { Hono } from 'hono'
-import { readSuperToken, readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { readSuperToken, readCfaForwarder } from "@sfpro/sdk/action"
 import { config } from './config'
 
 const app = new Hono()
@@ -88,7 +88,7 @@ Create a more complex API with multiple endpoints:
 <Tab value="Flow Management">
 ```ts title="flows.ts"
 import { Hono } from 'hono'
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { readCfaForwarder } from "@sfpro/sdk/action"
 import { parseUnits } from "viem"
 
 const flowsApp = new Hono()
@@ -125,7 +125,7 @@ export { flowsApp }
 <Tab value="Pool Operations">
 ```ts title="pools.ts"
 import { Hono } from 'hono'
-import { readGdaPool, readGdaForwarder } from "@superfluid-finance/sdk/actions"
+import { readGdaPool, readGdaForwarder } from "@sfpro/sdk/action"
 
 const poolsApp = new Hono()
 
@@ -161,7 +161,7 @@ export { poolsApp }
 ```ts title="batch.ts"
 import { Hono } from 'hono'
 import { encodeFunctionData } from "viem"
-import { cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { cfaForwarderAbi } from "@sfpro/sdk/abi"
 
 const batchApp = new Hono()
 
@@ -198,7 +198,7 @@ Implement proper error handling for blockchain operations:
 
 ```ts
 import { Hono } from 'hono'
-import { readSuperToken } from "@superfluid-finance/sdk/actions"
+import { readSuperToken } from "@sfpro/sdk/action"
 
 const app = new Hono()
 

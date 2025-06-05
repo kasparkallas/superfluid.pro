@@ -4,66 +4,66 @@
 	"version": "1.0.0",
 	"description": "",
 	"exports": {
-		".": {
+		"./abi": {
 			"types": "./dist/abi/index.d.ts",
 			"default": "./dist/abi/index.js"
 		},
-		"./protocol": {
-			"types": "./dist/abi/protocol/index.d.ts",
-			"default": "./dist/abi/protocol/index.js"
+		"./abi/core": {
+			"types": "./dist/abi/core/index.d.ts",
+			"default": "./dist/abi/core/index.js"
 		},
-		"./automation": {
+		"./abi/automation": {
 			"types": "./dist/abi/automation/index.d.ts",
 			"default": "./dist/abi/automation/index.js"
 		},
-		"./wagmi": {
-			"types": "./dist/wagmi/index.d.ts",
-			"default": "./dist/wagmi/index.js"
+		"./hook": {
+			"types": "./dist/hook/index.d.ts",
+			"default": "./dist/hook/index.js"
 		},
-		"./wagmi/protocol": {
-			"types": "./dist/wagmi/protocol/index.d.ts",
-			"default": "./dist/wagmi/protocol/index.js"
+		"./hook/core": {
+			"types": "./dist/hook/core/index.d.ts",
+			"default": "./dist/hook/core/index.js"
 		},
-		"./wagmi/automation": {
-			"types": "./dist/wagmi/automation/index.d.ts",
-			"default": "./dist/wagmi/automation/index.js"
+		"./hook/automation": {
+			"types": "./dist/hook/automation/index.d.ts",
+			"default": "./dist/hook/automation/index.js"
 		},
-		"./actions": {
-			"types": "./dist/actions/index.d.ts",
-			"default": "./dist/actions/index.js"
+		"./action": {
+			"types": "./dist/action/index.d.ts",
+			"default": "./dist/action/index.js"
 		},
-		"./actions/protocol": {
-			"types": "./dist/actions/protocol/index.d.ts",
-			"default": "./dist/actions/protocol/index.js"
+		"./action/core": {
+			"types": "./dist/action/core/index.d.ts",
+			"default": "./dist/action/core/index.js"
 		},
-		"./actions/automation": {
-			"types": "./dist/actions/automation/index.d.ts",
-			"default": "./dist/actions/automation/index.js"
+		"./action/automation": {
+			"types": "./dist/action/automation/index.d.ts",
+			"default": "./dist/action/automation/index.js"
 		},
-		"./utils": {
-			"types": "./dist/utils.d.ts",
-			"default": "./dist/utils.js"
+		"./util": {
+			"types": "./dist/util.d.ts",
+			"default": "./dist/util.js"
 		},
 		"./config": {
 			"types": "./dist/config.d.ts",
 			"default": "./dist/config.js"
 		},
-		"./constants": {
-			"types": "./dist/constants.d.ts",
-			"default": "./dist/constants.js"
+		"./constant": {
+			"types": "./dist/constant.d.ts",
+			"default": "./dist/constant.js"
 		}
 	},
 	"scripts": {
 		"generate": "run-p generate:*",
 		"generate:abi": "TYPE=abi wagmi generate",
-		"generate:abi-protocol": "TYPE=abi CATEGORY=protocol wagmi generate",
+		"generate:abi-core": "TYPE=abi CATEGORY=core wagmi generate",
 		"generate:abi-automation": "TYPE=abi CATEGORY=automation wagmi generate",
-		"generate:wagmi": "TYPE=wagmi wagmi generate",
-		"generate:wagmi-protocol": "TYPE=wagmi CATEGORY=protocol wagmi generate",
-		"generate:wagmi-automation": "TYPE=wagmi CATEGORY=automation wagmi generate",
-		"generate:actions": "TYPE=actions wagmi generate",
-		"generate:actions-protocol": "TYPE=actions CATEGORY=protocol wagmi generate",
-		"generate:actions-automation": "TYPE=actions CATEGORY=automation wagmi generate",
+		"generate:hook": "TYPE=hook wagmi generate",
+		"generate:hook-core": "TYPE=hook CATEGORY=core wagmi generate",
+		"generate:hook-automation": "TYPE=hook CATEGORY=automation wagmi generate",
+		"generate:action": "TYPE=action wagmi generate",
+		"generate:action-core": "TYPE=action CATEGORY=core wagmi generate",
+		"generate:action-automation": "TYPE=action CATEGORY=automation wagmi generate",
 		"typecheck": "tsc --noEmit",
 		"build": "rimraf dist && tsc --removeComments --declaration false && tsc --emitDeclarationOnly",
 		"test": "vitest"

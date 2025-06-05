@@ -1,6 +1,6 @@
 "use client";
 
-import { useReadCfa } from "@sfpro/sdk/wagmi/protocol";
+import { useReadCfa } from "@sfpro/sdk/hook/core";
 import { mainnet } from "wagmi/chains";
 
 export function Superfluid() {

@@ -13,7 +13,7 @@ Constant Flow Agreement (CFA) enables continuous token streams between accounts.
 Flowrates are measured in tokens per second. The SDK provides a utility to calculate flowrates:
 
 ```ts twoslash
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 // Stream 100 tokens per month
@@ -43,11 +43,11 @@ There are two ways to create a flow: `setFlowrate` (recommended) and `createFlow
 
 `setFlowrate` is more versatile - it creates a new flow or updates an existing one:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 const superToken = "0x..." // USDCx address
@@ -72,9 +72,10 @@ function CreateFlow() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -106,9 +107,10 @@ async function createFlow() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -150,11 +152,11 @@ async function createFlow() {
 
 `createFlow` explicitly creates a new flow (fails if flow already exists):
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 import { useAccount } from "wagmi"
 
@@ -181,9 +183,10 @@ function CreateNewFlow() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -215,9 +218,10 @@ async function createNewFlow() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -259,11 +263,11 @@ async function createNewFlow() {
 
 To change the flowrate of an existing flow:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 import { useAccount } from "wagmi"
 
@@ -290,9 +294,10 @@ function UpdateFlow() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress, calculateFlowrate } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -324,9 +329,10 @@ async function updateFlow() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder, calculateFlowrate } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -368,10 +374,10 @@ async function updateFlow() {
 
 To stop a flow completely:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 import { useAccount } from "wagmi"
 
 const superToken = "0x..." // USDCx address
@@ -393,9 +399,9 @@ function DeleteFlow() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -423,9 +429,9 @@ async function deleteFlow() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
@@ -463,10 +469,10 @@ async function deleteFlow() {
 
 Check the current flowrate between accounts:
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadCfaForwarder } from "@sfpro/sdk/hook" // [!code focus]
 
 const superToken = "0x..." // USDCx address
 const sender = "0x..." // Sender address
@@ -487,9 +493,9 @@ function FlowInfo() {
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { cfaForwarderAbi, cfaForwarderAddress } from "@superfluid-finance/sdk" // [!code focus]
+import { cfaForwarderAbi, cfaForwarderAddress } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -515,9 +521,9 @@ async function getFlowInfo() {
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readCfaForwarder } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -557,4 +563,4 @@ async function getFlowInfo() {
 
 - Create [GDA pools](/docs/use-cases/create-gda-pool) for one-to-many distributions
 - Learn about [batch operations](/docs/use-cases/batch-calls)
-- Explore the [CFA Forwarder API](/docs/api/essential/cfa-forwarder)
+- Explore the [CFA Forwarder API](/docs/api/main/cfa-forwarder)

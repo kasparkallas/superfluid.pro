@@ -13,10 +13,10 @@ The GDA Pool contract represents a distribution pool where tokens can be distrib
 
 Get the number of units allocated to a specific member.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: units } = useReadGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -26,9 +26,9 @@ const { data: units } = useReadGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -46,9 +46,9 @@ const units = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -72,10 +72,10 @@ const units = await readGdaPool(config, { // [!code focus]
 
 Get the total number of units in the pool.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: totalUnits } = useReadGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -84,9 +84,9 @@ const { data: totalUnits } = useReadGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -103,9 +103,9 @@ const totalUnits = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -128,10 +128,10 @@ const totalUnits = await readGdaPool(config, { // [!code focus]
 
 Get the amount of tokens claimable by a member at the current moment.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: claimable } = useReadGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -141,9 +141,9 @@ const { data: claimable } = useReadGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -161,9 +161,9 @@ const claimable = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -187,10 +187,10 @@ const claimable = await readGdaPool(config, { // [!code focus]
 
 Get the admin address of the pool.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useReadGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useReadGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { data: admin } = useReadGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -199,9 +199,9 @@ const { data: admin } = useReadGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createPublicClient, http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -218,9 +218,9 @@ const admin = await client.readContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { readGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { readGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
@@ -245,10 +245,10 @@ const admin = await readGdaPool(config, { // [!code focus]
 
 Update the units allocated to a pool member (admin only).
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: updateUnits } = useWriteGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -258,9 +258,9 @@ const { writeContract: updateUnits } = useWriteGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -285,9 +285,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -315,10 +315,10 @@ const hash = await writeGdaPool(config, { // [!code focus]
 
 Claim all available tokens for the calling member.
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: claimAll } = useWriteGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -327,9 +327,9 @@ const { writeContract: claimAll } = useWriteGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -349,9 +349,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
@@ -378,10 +378,10 @@ const hash = await writeGdaPool(config, { // [!code focus]
 
 Transfer admin rights to another address (admin only).
 
-<Tabs items={["Hooks", "ABI", "Actions"]}>
-<Tab value="Hooks">
+<Tabs items={["/hook", "/abi", "/action"]}>
+<Tab value="/hook">
 ```tsx twoslash
-import { useWriteGdaPool } from "@superfluid-finance/sdk/wagmi" // [!code focus]
+import { useWriteGdaPool } from "@sfpro/sdk/hook" // [!code focus]
 
 const { writeContract: transferAdmin } = useWriteGdaPool({ // [!code focus]
   address: "0x...", // Pool address // [!code focus]
@@ -391,9 +391,9 @@ const { writeContract: transferAdmin } = useWriteGdaPool({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts twoslash
-import { gdaPoolAbi } from "@superfluid-finance/sdk" // [!code focus]
+import { gdaPoolAbi } from "@sfpro/sdk/abi" // [!code focus]
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -414,9 +414,9 @@ const hash = await walletClient.writeContract({ // [!code focus]
 ```
 </Tab>
 
-<Tab value="Actions">
+<Tab value="/action">
 ```ts twoslash
-import { writeGdaPool } from "@superfluid-finance/sdk/actions" // [!code focus]
+import { writeGdaPool } from "@sfpro/sdk/action" // [!code focus]
 import { createConfig } from "@wagmi/core"
 import { createWalletClient, http } from "viem"
 import { mainnet } from "viem/chains"

@@ -21,10 +21,10 @@ Auto Wrap provides:
 
 Returns the auto-wrap strategy for an account.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadAutoWrap } from '@superfluid-finance/sdk/wagmi/automation';
+import { useReadAutoWrap } from '@sfpro/sdk/hook/automation';
 
 const { data: strategy } = useReadAutoWrap({
   address: '0x...',
@@ -33,9 +33,9 @@ const { data: strategy } = useReadAutoWrap({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { autoWrap } from '@superfluid-finance/sdk/abi/automation';
+import { autoWrap } from '@sfpro/sdk/abi/automation';
 
 const strategy = await client.readContract({
   address: '0x...',
@@ -45,9 +45,9 @@ const strategy = await client.readContract({
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readAutoWrap } from '@superfluid-finance/sdk/actions/automation';
+import { readAutoWrap } from '@sfpro/sdk/action/automation';
 
 const strategy = await readAutoWrap(client, {
   address: '0x...',
@@ -72,10 +72,10 @@ Calculates the amount to be wrapped based on the strategy.
 
 Configures the auto-wrap strategy for your account.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteAutoWrap } from '@superfluid-finance/sdk/wagmi/automation';
+import { useWriteAutoWrap } from '@sfpro/sdk/hook/automation';
 
 const { writeContract } = useWriteAutoWrap();
 
@@ -93,9 +93,9 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { autoWrap } from '@superfluid-finance/sdk/abi/automation';
+import { autoWrap } from '@sfpro/sdk/abi/automation';
 
 const hash = await client.writeContract({
   address: '0x...',
@@ -112,9 +112,9 @@ const hash = await client.writeContract({
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { writeAutoWrap } from '@superfluid-finance/sdk/actions/automation';
+import { writeAutoWrap } from '@sfpro/sdk/action/automation';
 
 const hash = await writeAutoWrap(client, {
   address: '0x...',
@@ -155,6 +155,6 @@ When the Super Token balance falls below the lower threshold, anyone can trigger
 
 ## Related
 
-- [Super Token](/docs/api/essential/super-token) - Tokens being wrapped
+- [Super Token](/docs/api/main/super-token) - Tokens being wrapped
 - [Flow Scheduler](/docs/api/automation/flow-scheduler) - Schedule streams
 - [Vesting Scheduler](/docs/api/automation/vesting-scheduler) - Vesting automation

@@ -13,7 +13,7 @@ Next.js is a popular React framework for building full-stack web applications. T
 Install the required packages:
 
 ```bash
-npm install @superfluid-finance/sdk wagmi viem @tanstack/react-query
+npm install @sfpro/sdk wagmi viem @tanstack/react-query
 ```
 
 ## Configuration
@@ -114,7 +114,7 @@ Create a component to display SuperToken balance:
 ```tsx title="components/TokenBalance.tsx"
 "use client"
 
-import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi"
+import { useReadSuperToken } from "@sfpro/sdk/hook"
 import { useAccount } from "wagmi"
 import { formatUnits } from "viem"
 
@@ -152,7 +152,7 @@ Build a form to create payment streams:
 "use client"
 
 import { useState } from "react"
-import { useWriteCfaForwarder, useSimulateCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { useWriteCfaForwarder, useSimulateCfaForwarder } from "@sfpro/sdk/hook"
 import { parseUnits } from "viem"
 import { useAccount, useWaitForTransactionReceipt } from "wagmi"
 
@@ -237,7 +237,7 @@ Use the SDK in API routes:
 ```ts title="app/api/flows/route.ts"
 import { NextRequest, NextResponse } from "next/server"
 import { createConfig } from "@wagmi/core"
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { readCfaForwarder } from "@sfpro/sdk/action"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -287,7 +287,7 @@ export async function GET(request: NextRequest) {
 ```ts title="pages/api/flows.ts"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { createConfig } from "@wagmi/core"
-import { readCfaForwarder } from "@superfluid-finance/sdk/actions"
+import { readCfaForwarder } from "@sfpro/sdk/action"
 import { http } from "viem"
 import { mainnet } from "viem/chains"
 
@@ -338,7 +338,7 @@ Show live-updating SuperToken balances:
 "use client"
 
 import { useEffect, useState } from "react"
-import { useReadSuperToken, useReadCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { useReadSuperToken, useReadCfaForwarder } from "@sfpro/sdk/hook"
 import { useAccount } from "wagmi"
 import { formatUnits } from "viem"
 
@@ -390,9 +390,10 @@ export function RealtimeBalance({ token }: { token: `0x${string}` }) {
 ```tsx title="components/BatchOperations.tsx"
 "use client"
 
-import { useWriteHost } from "@superfluid-finance/sdk/wagmi"
+import { useWriteHost } from "@sfpro/sdk/hook"
 import { encodeFunctionData, parseUnits } from "viem"
-import { cfaForwarderAbi, cfaForwarderAddress, superTokenAbi, OPERATION_TYPE } from "@superfluid-finance/sdk"
+import { cfaForwarderAbi, cfaForwarderAddress, superTokenAbi } from "@sfpro/sdk/abi"
+import { OPERATION_TYPE } from "@sfpro/sdk/util"
 
 export function BatchOperations() {
   const { writeContract } = useWriteHost()

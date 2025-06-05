@@ -1,5 +1,5 @@
 ---
-title: Transparent Ongoing Governance Agreement (TOGA)
+title: TOGA
 description: TOGA contract API reference for Superfluid protocol governance
 ---
 
@@ -21,10 +21,10 @@ TOGA provides:
 
 Returns the current Patrician In Charge for a Super Token.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadToga } from '@superfluid-finance/sdk/wagmi/protocol';
+import { useReadToga } from '@sfpro/sdk/hook/core';
 
 const { data: pic } = useReadToga({
   address: '0x...',
@@ -33,21 +33,21 @@ const { data: pic } = useReadToga({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { toga } from '@superfluid-finance/sdk/abi/protocol';
+import { togaAbi } from '@sfpro/sdk/abi/core';
 
 const pic = await client.readContract({
   address: '0x...',
-  abi: toga,
+  abi: togaAbi,
   functionName: 'getCurrentPIC',
   args: [superToken],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readToga } from '@superfluid-finance/sdk/actions/protocol';
+import { readToga } from '@sfpro/sdk/action/core';
 
 const pic = await readToga(client, {
   address: '0x...',
@@ -62,10 +62,10 @@ const pic = await readToga(client, {
 
 Returns detailed information about the current PIC including their bond and exit rate.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useReadToga } from '@superfluid-finance/sdk/wagmi/protocol';
+import { useReadToga } from '@sfpro/sdk/hook/core';
 
 const { data } = useReadToga({
   address: '0x...',
@@ -75,21 +75,21 @@ const { data } = useReadToga({
 // data = { pic, bond, exitRate }
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { toga } from '@superfluid-finance/sdk/abi/protocol';
+import { togaAbi } from '@sfpro/sdk/abi/core';
 
 const { pic, bond, exitRate } = await client.readContract({
   address: '0x...',
-  abi: toga,
+  abi: togaAbi,
   functionName: 'getCurrentPICInfo',
   args: [superToken],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { readToga } from '@superfluid-finance/sdk/actions/protocol';
+import { readToga } from '@sfpro/sdk/action/core';
 
 const { pic, bond, exitRate } = await readToga(client, {
   address: '0x...',
@@ -118,10 +118,10 @@ Returns the minimum bond duration in seconds.
 
 Allows the current PIC to change the exit rate of the Super Token.
 
-<Tabs items={['ABI', 'Actions', 'Hooks']}>
-<Tab value="Hooks">
+<Tabs items={['/hook', '/abi', '/action']}>
+<Tab value="/hook">
 ```ts
-import { useWriteToga } from '@superfluid-finance/sdk/wagmi/protocol';
+import { useWriteToga } from '@sfpro/sdk/hook/core';
 
 const { writeContract } = useWriteToga();
 
@@ -132,21 +132,21 @@ await writeContract({
 });
 ```
 </Tab>
-<Tab value="ABI">
+<Tab value="/abi">
 ```ts
-import { toga } from '@superfluid-finance/sdk/abi/protocol';
+import { togaAbi } from '@sfpro/sdk/abi/core';
 
 const hash = await client.writeContract({
   address: '0x...',
-  abi: toga,
+  abi: togaAbi,
   functionName: 'changeExitRate',
   args: [superToken, newExitRate],
 });
 ```
 </Tab>
-<Tab value="Actions">
+<Tab value="/action">
 ```ts
-import { writeToga } from '@superfluid-finance/sdk/actions/protocol';
+import { writeToga } from '@sfpro/sdk/action/core';
 
 const hash = await writeToga(client, {
   address: '0x...',
@@ -163,5 +163,5 @@ ERC777 token receiver hook that handles bond deposits to become the new PIC.
 
 ## Related
 
-- [Super Token](/docs/api/essential/super-token) - The tokens governed by TOGA
-- [Host](/docs/api/advanced/host) - Core Superfluid protocol contract
+- [Super Token](/docs/api/main/super-token) - The tokens governed by TOGA
+- [Host](/docs/api/core/host) - Core Superfluid protocol contract

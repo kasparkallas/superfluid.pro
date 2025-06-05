@@ -19,7 +19,7 @@ The SDK uses wagmi-cli to generate TypeScript bindings from Solidity ABIs, ensur
 ABIs (Application Binary Interfaces) define how to interact with smart contracts:
 
 ```ts twoslash
-import { superTokenAbi } from "@superfluid-finance/sdk"
+import { superTokenAbi } from "@sfpro/sdk/abi"
 
 // The ABI is a typed array of function and event definitions
 const abi = superTokenAbi
@@ -52,7 +52,7 @@ Key benefits:
 Actions are wagmi core functions for non-React environments:
 
 ```ts twoslash
-import { readSuperToken } from "@superfluid-finance/sdk/actions"
+import { readSuperToken } from "@sfpro/sdk/action"
 import { createConfig } from "@wagmi/core"
 import { mainnet } from "viem/chains"
 import { http } from "viem"
@@ -84,7 +84,7 @@ Benefits of actions:
 Hooks provide React integration with built-in state management:
 
 ```tsx twoslash
-import { useReadSuperToken } from "@superfluid-finance/sdk/wagmi"
+import { useReadSuperToken } from "@sfpro/sdk/hook"
 
 function BalanceDisplay({ address }: { address: `0x${string}` }) {
   const { data: balance, isLoading, error } = useReadSuperToken({
@@ -113,7 +113,7 @@ The SDK's type generation ensures you can't make common mistakes:
 
 ```ts twoslash
 // @errors: 2345
-import { cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { cfaForwarderAbi } from "@sfpro/sdk/abi"
 import { createPublicClient, http } from "viem"
 
 const client = createPublicClient({

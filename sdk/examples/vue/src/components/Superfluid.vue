@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { cfaAbi, cfaAddress } from "@sfpro/sdk/abi/core";
 import { useAccount, useReadContract } from "@wagmi/vue";
-import { cfaAbi, cfaAddress } from "sdk/protocol";
 import { computed } from "vue";
 
 const { chainId, isConnected } = useAccount();

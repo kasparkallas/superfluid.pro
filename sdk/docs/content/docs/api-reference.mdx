@@ -9,60 +9,60 @@ The Superfluid SDK provides a comprehensive set of tools for interacting with th
 
 ## Contract Categories
 
-### Essential Contracts
+### Main Contracts
 
 Core contracts that most applications will use for basic Superfluid functionality.
 
 <Cards>
   <Card
-    href="/docs/api/essential/super-token"
+    href="/docs/api/main/super-token"
     title="SuperToken"
     description="ERC-20 tokens with streaming capabilities. Wrap/unwrap tokens and manage balances."
   />
   <Card
-    href="/docs/api/essential/cfa-forwarder"
+    href="/docs/api/main/cfa-forwarder"
     title="CFA Forwarder"
     description="Simplified interface for creating and managing constant flow agreements (streams)."
   />
   <Card
-    href="/docs/api/essential/gda-forwarder"
+    href="/docs/api/main/gda-forwarder"
     title="GDA Forwarder"
     description="Simplified interface for creating and managing general distribution agreements (instant distributions)."
   />
   <Card
-    href="/docs/api/essential/gda-pool"
+    href="/docs/api/main/gda-pool"
     title="GDA Pool"
     description="Pools for distributing tokens to multiple recipients simultaneously."
   />
 </Cards>
 
-### Advanced Contracts
+### Core Contracts
 
 Protocol-level contracts for advanced use cases and direct interactions.
 
 <Cards>
   <Card
-    href="/docs/api/advanced/host"
+    href="/docs/api/core/host"
     title="Host"
     description="The core Superfluid contract that manages all protocol operations and agreements."
   />
   <Card
-    href="/docs/api/advanced/cfa"
+    href="/docs/api/core/cfa"
     title="CFA (Constant Flow Agreement)"
     description="Low-level interface for continuous token streams. Use CFA Forwarder for simpler interactions."
   />
   <Card
-    href="/docs/api/advanced/gda"
+    href="/docs/api/core/gda"
     title="GDA (General Distribution Agreement)"
     description="Low-level interface for instant distributions. Use GDA Forwarder for simpler interactions."
   />
   <Card
-    href="/docs/api/advanced/ida"
+    href="/docs/api/core/ida"
     title="IDA (Instant Distribution Agreement)"
     description="Legacy distribution mechanism. New projects should use GDA instead."
   />
   <Card
-    href="/docs/api/advanced/toga"
+    href="/docs/api/core/toga"
     title="TOGA (Token Governance Agreement)"
     description="Governance token distribution mechanism for protocol participants."
   />
@@ -99,7 +99,7 @@ The SDK provides three ways to interact with each contract:
 Best for React applications using wagmi.
 
 ```ts
-import { useReadSuperToken, useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { useReadSuperToken, useWriteCfaForwarder } from "@sfpro/sdk/hook"
 ```
 
 ### 2. Core Actions
@@ -107,7 +107,7 @@ import { useReadSuperToken, useWriteCfaForwarder } from "@superfluid-finance/sdk
 Best for non-React applications or server-side code.
 
 ```ts
-import { readSuperToken, createFlow } from "@superfluid-finance/sdk/actions"
+import { readSuperToken, createFlow } from "@sfpro/sdk/action"
 ```
 
 ### 3. Contract ABIs
@@ -115,23 +115,23 @@ import { readSuperToken, createFlow } from "@superfluid-finance/sdk/actions"
 For direct contract interactions with viem or ethers.
 
 ```ts
-import { superTokenAbi, cfaForwarderAbi } from "@superfluid-finance/sdk"
+import { superTokenAbi, cfaForwarderAbi } from "@sfpro/sdk/abi"
 ```
 
 ## Getting Started
 
-1. **New to Superfluid?** Start with the [Essential Contracts](#essential-contracts), particularly [SuperToken](/docs/api/essential/super-token) and [CFA Forwarder](/docs/api/essential/cfa-forwarder).
+1. **New to Superfluid?** Start with the [Main Contracts](#main-contracts), particularly [SuperToken](/docs/api/main/super-token) and [CFA Forwarder](/docs/api/main/cfa-forwarder).
 
 2. **Building automation?** Check out the [Automation Contracts](#automation-contracts) for scheduled operations.
 
-3. **Need advanced features?** Explore the [Advanced Contracts](#advanced-contracts) for direct protocol access.
+3. **Need advanced features?** Explore the [Core Contracts](#core-contracts) for direct protocol access.
 
 ## Common Patterns
 
 ### Creating a Stream
 ```ts
 // Using CFA Forwarder (recommended)
-import { useWriteCfaForwarder } from "@superfluid-finance/sdk/wagmi"
+import { useWriteCfaForwarder } from "@sfpro/sdk/hook"
 
 const { writeContract } = useWriteCfaForwarder()
 
@@ -156,7 +156,7 @@ writeContract({
 ### Batch Operations
 ```ts
 // Combine multiple operations in one transaction
-import { useWriteHost } from "@superfluid-finance/sdk/wagmi"
+import { useWriteHost } from "@sfpro/sdk/hook"
 
 const { writeContract } = useWriteHost()
 

@@ -24,22 +24,22 @@ import { Callout } from 'fumadocs-ui/components/callout';
 <Tabs groupId="pkg-mgr" items={['npm', 'pnpm', 'yarn', 'bun']} persist>
   <Tab value="npm">
 ```bash
-npm install @superfluid-finance/sdk viem wagmi
+npm install @sfpro/sdk viem wagmi
 ```
   </Tab>
   <Tab value="pnpm">
 ```bash
-pnpm add @superfluid-finance/sdk viem wagmi
+pnpm add @sfpro/sdk viem wagmi
 ```
   </Tab>
   <Tab value="yarn">
 ```bash
-yarn add @superfluid-finance/sdk viem wagmi
+yarn add @sfpro/sdk viem wagmi
 ```
   </Tab>
   <Tab value="bun">
 ```bash
-bun add @superfluid-finance/sdk viem wagmi
+bun add @sfpro/sdk viem wagmi
 ```
   </Tab>
 </Tabs>
@@ -53,9 +53,9 @@ Here's a minimal example to get you started with Superfluid. This example uses t
 ```ts twoslash
 import { 
   cfaForwarderAbi, 
-  cfaForwarderAddress,
-  calculateFlowrate 
-} from "@superfluid-finance/sdk" // [!code focus]
+  cfaForwarderAddress
+} from "@sfpro/sdk/abi" // [!code focus]
+import { calculateFlowrate } from "@sfpro/sdk/util" // [!code focus]
 import { createWalletClient, http, parseEther } from "viem"
 import { mainnet } from "viem/chains"
 import { privateKeyToAccount } from "viem/accounts"
@@ -98,9 +98,10 @@ async function startStream() {
 
 The SDK is organized into three main import paths:
 
-- **`@superfluid-finance/sdk`** - Core ABIs and addresses (includes forwarders)
-- **`@superfluid-finance/sdk/actions`** - wagmi core actions for non-React usage  
-- **`@superfluid-finance/sdk/wagmi`** - React hooks for wagmi integration
+- **`@sfpro/sdk/abi`** - Core ABIs and addresses (includes forwarders)
+- **`@sfpro/sdk/util`** - Utility functions (calculateFlowrate, OPERATION_TYPE, prepareOperation)
+- **`@sfpro/sdk/action`** - wagmi core actions for non-React usage  
+- **`@sfpro/sdk/hook`** - React hooks for wagmi integration
 
 ### Key Contracts
 

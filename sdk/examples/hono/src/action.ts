@@ -1,4 +1,4 @@
-import { readCfa } from "@sfpro/sdk/actions/protocol";
+import { readCfa } from "@sfpro/sdk/action/core";
 import { createConfig } from "@wagmi/core";
 
 import {
@@ -17,7 +17,7 @@ const config = createConfig({
 	} as any,
 });
 
-app.get("/actions", async (c) => {
+app.get("/action", async (c) => {
 	const maximumFlowRate = await readCfa(config, {
 		chainId: 1,
 		functionName: "MAXIMUM_FLOW_RATE",

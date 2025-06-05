@@ -29,7 +29,7 @@ There are two types of Super Tokens:
 - Note: Native Asset and Wrapper Super Token ABIs are merged in the SDK
 
 ```ts twoslash
-import { superTokenAbi } from "@superfluid-finance/sdk"
+import { superTokenAbi } from "@sfpro/sdk/abi"
 
 // Both wrapper and native super tokens use the same ABI
 const abi = superTokenAbi
@@ -47,7 +47,7 @@ Flows are continuous streams of tokens from one account to another. Key characte
 - Automatic liquidation if balance runs out
 
 ```ts twoslash
-import { calculateFlowrate } from "@superfluid-finance/sdk"
+import { calculateFlowrate } from "@sfpro/sdk/util"
 import { parseEther } from "viem"
 
 // Stream 100 tokens per month
