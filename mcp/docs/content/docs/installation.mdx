@@ -1,0 +1,76 @@
+---
+title: Installation
+description: How to set up the Superfluid MCP server
+---
+
+## Prerequisites
+
+- Node.js 18+
+- pnpm
+
+## Local Setup
+
+```bash
+git clone https://github.com/superfluid-finance/superfluid-pro
+cd superfluid-pro/mcp/package
+pnpm install
+pnpm dev
+```
+
+The server will start on `http://localhost:3000` with MCP endpoints at:
+- SSE: `http://localhost:3000/api/sse`
+- HTTP: `http://localhost:3000/api/http`
+
+## MCP Client Configuration
+
+### Claude Desktop
+
+Add to your Claude Desktop configuration file:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "superfluid": {
+      "command": "node",
+      "args": [
+        "/path/to/superfluid-pro/mcp/package/scripts/test-client.mjs",
+        "http://localhost:3000/api"
+      ]
+    }
+  }
+}
+```
+
+### Continue.dev
+
+Add to your Continue configuration (`.continue/config.json`):
+
+```json
+{
+  "mcpServers": [
+    {
+      "name": "superfluid",
+      "serverUrl": "http://localhost:3000/api/sse"
+    }
+  ]
+}
+```
+
+### Cursor
+
+[Add to Cursor](cursor://settings/addMCPServer?name=superfluid&command=node&args=/path/to/superfluid-pro/mcp/package/scripts/test-client.mjs,http://localhost:3000/api)
+
+Or manually configure in Cursor settings. See [Cursor MCP docs](https://docs.cursor.com/deeplinks) for details.
+
+### Other MCP Clients
+
+For other MCP clients, use:
+- **SSE endpoint**: `http://localhost:3000/api/sse`
+- **HTTP endpoint**: `http://localhost:3000/api/http`
+
+## Production Deployment
+
+The server is designed to work with Vercel's MCP adapter and can be deployed to Vercel or other Next.js hosting platforms. Set environment variables as needed for your deployment.
