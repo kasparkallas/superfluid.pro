@@ -8,14 +8,13 @@
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
 	"ignore": [
-		"superfluid-pro",
 		"website",
 		"@sfpro/mcp-server",
 		"@sfpro/mcp-docs",
 		"@sfpro/sdk-docs",
-		"vue",
-		"hono",
-		"vite",
-		"nextjs"
+		"@sfpro/example-streaming-api",
+		"@sfpro/example-nextjs-app",
+		"@sfpro/example-react-app",
+		"@sfpro/example-vue-app"
 	]
 }

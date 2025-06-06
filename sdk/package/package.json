@@ -2,7 +2,16 @@
 	"name": "@sfpro/sdk",
 	"type": "module",
 	"version": "1.0.0",
-	"description": "",
+	"description": "TypeScript SDK for Superfluid Protocol - stream money every second",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/superfluid-org/superfluid.pro",
+		"directory": "sdk/package"
+	},
+	"homepage": "https://github.com/superfluid-org/superfluid.pro/tree/main/sdk/package",
+	"bugs": {
+		"url": "https://github.com/superfluid-org/superfluid.pro/issues"
+	},
 	"exports": {
 		"./abi": {
 			"types": "./dist/abi/index.d.ts",
@@ -68,9 +77,9 @@
 		"build": "rimraf dist && tsc --removeComments --declaration false && tsc --emitDeclarationOnly",
 		"test": "vitest"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"keywords": ["superfluid", "ethereum", "web3", "defi", "streaming", "money", "wagmi", "viem"],
+	"author": "Superfluid Foundation",
+	"license": "MIT",
 	"packageManager": "pnpm@10.6.2",
 	"devDependencies": {
 		"@superfluid-finance/ethereum-contracts": "^1.12.0",
