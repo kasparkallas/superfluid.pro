@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.12.1",
+		"@sfpro/sdk": "workspace:*",
 		"@superfluid-finance/metadata": "^1.6.0",
 		"@superfluid-finance/tokenlist": "^5.25.0",
 		"@vercel/mcp-adapter": "^0.7.3",
@@ -23,14 +24,13 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"redis": "^5.1.1",
-		"@sfpro/sdk": "workspace:*",
 		"viem": "^2.30.5",
-		"zod": "^3.25.46"
+		"zod": "^3.25.53"
 	},
 	"devDependencies": {
-		"@types/node": "^20",
+		"@types/node": "^20.19.0",
 		"@types/react": "^19",
-		"@types/react-dom": "^19",
+		"@types/react-dom": "^19.1.6",
 		"typescript": "^5"
 	}
 }

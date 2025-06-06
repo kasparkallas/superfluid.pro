@@ -24,13 +24,13 @@
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.29.4",
-		"@commitlint/cli": "^19.8.0",
-		"@commitlint/config-conventional": "^19.8.0",
-		"@commitlint/types": "^19.8.0",
+		"@commitlint/cli": "^19.8.1",
+		"@commitlint/config-conventional": "^19.8.1",
+		"@commitlint/types": "^19.8.1",
 		"@playwright/test": "^1.52.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.5.0",
-		"turbo": "^2.5.0"
+		"lint-staged": "^15.5.2",
+		"turbo": "^2.5.4"
 	},
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [

@@ -8,13 +8,13 @@
 	},
 	"dependencies": {
 		"@hono/node-server": "^1.14.3",
-		"@wagmi/core": "^2.17.2",
-		"hono": "^undefined",
 		"@sfpro/sdk": "workspace:*",
+		"@wagmi/core": "^2.17.2",
+		"hono": "^4.7.11",
 		"viem": "^2.30.5"
 	},
 	"devDependencies": {
-		"@types/node": "^20.17.52",
+		"@types/node": "^20.19.0",
 		"tsx": "^4.19.4"
 	}
 }
