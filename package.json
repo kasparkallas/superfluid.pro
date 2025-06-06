@@ -2,6 +2,7 @@
 	"name": "superfluid-pro",
 	"version": "1.0.0",
 	"description": "The monorepo for Superfluid Pro suite of products",
+	"private": true,
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev --parallel --filter=website --filter=@sfpro/sdk-docs --filter=@sfpro/mcp-docs",
@@ -10,7 +11,11 @@
 		"dev:mcp-docs": "pnpm --filter @sfpro/mcp-docs dev",
 		"prepare": "husky",
 		"format": "biome format --write .",
-		"check": "biome check --write ."
+		"check": "biome check --write .",
+		"changeset": "changeset",
+		"changeset:version": "changeset version",
+		"changeset:publish": "pnpm build --filter=@sfpro/sdk && changeset publish",
+		"release": "pnpm changeset:version && pnpm changeset:publish"
 	},
 	"keywords": [],
 	"author": "",
@@ -18,6 +23,7 @@
 	"packageManager": "pnpm@10.6.2",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
+		"@changesets/cli": "^2.29.4",
 		"@commitlint/cli": "^19.8.0",
 		"@commitlint/config-conventional": "^19.8.0",
 		"@commitlint/types": "^19.8.0",
