@@ -1,14 +1,12 @@
 {
 	"name": "superfluid-pro",
-	"version": "1.0.0",
+	"version": "0.0.1",
 	"description": "The monorepo for Superfluid Pro suite of products",
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
 		"dev": "turbo dev --parallel --filter=website --filter=@sfpro/sdk-docs --filter=@sfpro/mcp-docs",
-		"dev:website": "pnpm --filter website dev",
-		"dev:sdk-docs": "pnpm --filter @sfpro/sdk-docs dev",
-		"dev:mcp-docs": "pnpm --filter @sfpro/mcp-docs dev",
+		"typecheck": "turbo typecheck",
 		"prepare": "husky",
 		"format": "biome format --write .",
 		"check": "biome check --write .",

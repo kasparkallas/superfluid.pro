@@ -1,5 +1,5 @@
 {
-	"name": "@sfpro/example-streaming-api",
+	"name": "@sfpro/example-hono-app",
 	"type": "module",
 	"private": true,
 	"scripts": {

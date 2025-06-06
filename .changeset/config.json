@@ -7,6 +7,10 @@
 	"access": "public",
 	"baseBranch": "main",
 	"updateInternalDependencies": "patch",
+	"privatePackages": {
+		"version": false,
+		"tag": false
+	},
 	"ignore": [
 		"website",
 		"@sfpro/mcp-server",

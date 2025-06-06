@@ -9,6 +9,10 @@
 			"persistent": true,
 			"cache": false,
 			"env": ["PORT"]
+		},
+		"typecheck": {
+			"dependsOn": ["^build"],
+			"inputs": ["**/*.ts", "**/*.tsx", "**/tsconfig.json"]
 		}
 	}
 }
