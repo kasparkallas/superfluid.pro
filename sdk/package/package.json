@@ -1,6 +1,6 @@
 {
 	"name": "@sfpro/sdk",
-	"version": "0.1.0",
+	"version": "0.0.0",
 	"description": "TypeScript SDK for Superfluid Protocol - stream money every second",
 	"keywords": ["superfluid", "ethereum", "web3", "defi", "streaming", "money", "wagmi", "viem"],
 	"homepage": "https://github.com/superfluid-org/superfluid.pro/tree/main/sdk/package",
