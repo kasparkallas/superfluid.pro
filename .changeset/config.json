@@ -16,7 +16,7 @@
 		"@sfpro/mcp-server",
 		"@sfpro/mcp-docs",
 		"@sfpro/sdk-docs",
-		"@sfpro/example-streaming-api",
+		"@sfpro/example-hono-app",
 		"@sfpro/example-nextjs-app",
 		"@sfpro/example-react-app",
 		"@sfpro/example-vue-app"
