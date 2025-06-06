@@ -17,9 +17,9 @@ pnpm install
 pnpm dev
 ```
 
-The server will start on `http://localhost:3000` with MCP endpoints at:
-- SSE: `http://localhost:3000/api/sse`
-- HTTP: `http://localhost:3000/api/http`
+The server will start on `https://mcp.superfluid.pro` with MCP endpoints at:
+- SSE: `https://mcp.superfluid.pro/sse`
+- HTTP stream: `https://mcp.superfluid.pro/message`
 
 ## MCP Client Configuration
 
@@ -37,7 +37,7 @@ Add to your Claude Desktop configuration file:
       "command": "node",
       "args": [
         "/path/to/superfluid-pro/mcp/server/scripts/test-client.mjs",
-        "http://localhost:3000/api"
+        "https://mcp.superfluid.pro/sse"
       ]
     }
   }
@@ -53,7 +53,7 @@ Add to your Continue configuration (`.continue/config.json`):
   "mcpServers": [
     {
       "name": "superfluid",
-      "serverUrl": "http://localhost:3000/api/sse"
+      "serverUrl": "https://mcp.superfluid.pro/sse"
     }
   ]
 }
@@ -61,15 +61,24 @@ Add to your Continue configuration (`.continue/config.json`):
 
 ### Cursor
 
-[Add to Cursor](cursor://settings/addMCPServer?name=superfluid&command=node&args=/path/to/superfluid-pro/mcp/server/scripts/test-client.mjs,http://localhost:3000/api)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=superfluid-protocol&config=eyJ1cmwiOiJodHRwczovL21jcC5zdXBlcmZsdWlkLnByby9tZXNzYWdlIn0%3D)
 
-Or manually configure in Cursor settings. See [Cursor MCP docs](https://docs.cursor.com/deeplinks) for details.
+Or configure manually in `mcp.json`:
+```json
+{
+  "mcpServers": [
+    "superfluid-protocol": {
+      "url": "https://mcp.superfluid.pro/message"
+    }
+  ]
+}
+```
 
 ### Other MCP Clients
 
 For other MCP clients, use:
-- **SSE endpoint**: `http://localhost:3000/api/sse`
-- **HTTP endpoint**: `http://localhost:3000/api/http`
+- **SSE endpoint**: `https://mcp.superfluid.pro/sse`
+- **HTTP stream endpoint**: `https://mcp.superfluid.pro/message`
 
 ## Production Deployment
 

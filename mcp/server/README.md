@@ -23,9 +23,9 @@ pnpm dev
 ```
 
 The server will be available at:
-- Main server: `http://localhost:3000`
-- SSE endpoint: `http://localhost:3000/api/sse`
-- HTTP endpoint: `http://localhost:3000/api/http`
+- Main server: `https://mcp.superfluid.pro`
+- SSE endpoint: `https://mcp.superfluid.pro/sse`
+- HTTP stream endpoint: `https://mcp.superfluid.pro/message`
 
 ## MCP Client Setup
 
@@ -38,7 +38,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "superfluid": {
       "command": "node",
-      "args": ["path/to/scripts/test-client.mjs", "http://localhost:3000/api"]
+      "args": ["path/to/scripts/test-client.mjs", "https://mcp.superfluid.pro/sse"]
     }
   }
 }
@@ -46,7 +46,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ### Continue.dev / Cursor
 
-Configure in your MCP settings to use: `http://localhost:3000/api/sse`
+Configure in your MCP settings to use: `https://mcp.superfluid.pro/sse`
 
 ## Available Tools
 

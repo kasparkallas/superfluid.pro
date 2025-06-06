@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
 		return [
 			{
 				source: "/",
-				destination: "/mcp",
-				permanent: true,
+				destination: "/message",
+				permanent: false,
 			},
 		];
 	},

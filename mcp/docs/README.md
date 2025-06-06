@@ -27,7 +27,7 @@ pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the documentation.
+Open [https://mcp.superfluid.pro](https://mcp.superfluid.pro) to view the documentation.
 
 ## Project Structure
 
