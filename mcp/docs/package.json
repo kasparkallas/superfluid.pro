@@ -5,8 +5,8 @@
 	"scripts": {
 		"build": "next build",
 		"dev": "next dev --turbo --port 3002",
-		"start": "next start",
-		"postinstall": "fumadocs-mdx"
+		"postinstall": "fumadocs-mdx",
+		"start": "next start"
 	},
 	"dependencies": {
 		"fumadocs-core": "15.5.0",

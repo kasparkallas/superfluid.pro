@@ -1,12 +1,11 @@
 {
 	"name": "@sfpro/sdk-docs",
-	"tyoe": "module",
 	"private": true,
 	"scripts": {
 		"build": "next build",
 		"dev": "next dev --turbo --port 3001",
-		"start": "next start",
 		"postinstall": "fumadocs-mdx",
+		"start": "next start",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -32,5 +31,6 @@
 		"remark-mdx": "^3.1.0",
 		"tailwindcss": "^4.1.8",
 		"typescript": "^5.8.3"
-	}
+	},
+	"tyoe": "module"
 }

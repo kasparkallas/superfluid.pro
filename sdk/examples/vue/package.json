@@ -1,11 +1,11 @@
 {
 	"name": "@sfpro/example-vue-app",
-	"private": true,
 	"version": "0.0.1",
+	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
 		"build": "vue-tsc && vite build",
+		"dev": "vite",
 		"lint": "biome check .",
 		"preview": "vite preview",
 		"typecheck": "tsc --noEmit"

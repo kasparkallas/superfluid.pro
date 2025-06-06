@@ -1,25 +1,30 @@
 {
 	"name": "superfluid-pro",
 	"version": "0.0.1",
-	"description": "The monorepo for Superfluid Pro suite of products",
 	"private": true,
+	"description": "The monorepo for Superfluid Pro suite of products",
+	"keywords": [],
+	"license": "ISC",
+	"author": "",
 	"scripts": {
 		"build": "turbo build",
-		"dev": "turbo dev --parallel --filter=website --filter=@sfpro/sdk-docs --filter=@sfpro/mcp-docs",
-		"typecheck": "turbo typecheck",
-		"prepare": "husky",
-		"format": "biome format --write .",
+		"changeset": "changeset",
+		"changeset:publish": "pnpm build --filter=@sfpro/sdk && changeset publish",
+		"changeset:version": "changeset version",
 		"check": "biome check --write .",
 		"check:ci": "biome check --write --no-errors-on-unmatched .",
-		"changeset": "changeset",
-		"changeset:version": "changeset version",
-		"changeset:publish": "pnpm build --filter=@sfpro/sdk && changeset publish",
-		"release": "pnpm changeset:version && pnpm changeset:publish"
+		"dev": "turbo dev --parallel --filter=website --filter=@sfpro/sdk-docs --filter=@sfpro/mcp-docs",
+		"format": "biome format --write .",
+		"prepare": "husky",
+		"release": "pnpm changeset:version && pnpm changeset:publish",
+		"typecheck": "turbo typecheck"
 	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.6.2",
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		],
+		"*": ["biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"]
+	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@changesets/cli": "^2.29.4",
@@ -31,10 +36,5 @@
 		"lint-staged": "^15.5.2",
 		"turbo": "^2.5.4"
 	},
-	"lint-staged": {
-		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
-		],
-		"*": ["biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"]
-	}
+	"packageManager": "pnpm@10.6.2"
 }

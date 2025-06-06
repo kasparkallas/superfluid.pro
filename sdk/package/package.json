@@ -1,17 +1,21 @@
 {
 	"name": "@sfpro/sdk",
-	"type": "module",
 	"version": "0.1.0",
 	"description": "TypeScript SDK for Superfluid Protocol - stream money every second",
+	"keywords": ["superfluid", "ethereum", "web3", "defi", "streaming", "money", "wagmi", "viem"],
+	"homepage": "https://github.com/superfluid-org/superfluid.pro/tree/main/sdk/package",
+	"bugs": {
+		"url": "https://github.com/superfluid-org/superfluid.pro/issues"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/superfluid-org/superfluid.pro",
 		"directory": "sdk/package"
 	},
-	"homepage": "https://github.com/superfluid-org/superfluid.pro/tree/main/sdk/package",
-	"bugs": {
-		"url": "https://github.com/superfluid-org/superfluid.pro/issues"
-	},
+	"license": "MIT",
+	"author": "Superfluid Foundation",
+	"sideEffects": false,
+	"type": "module",
 	"exports": {
 		"./abi": {
 			"types": "./dist/abi/index.d.ts",
@@ -63,24 +67,20 @@
 		}
 	},
 	"scripts": {
+		"build": "rimraf dist && tsc --removeComments --declaration false && tsc --emitDeclarationOnly",
 		"generate": "run-p generate:*",
 		"generate:abi": "TYPE=abi wagmi generate",
-		"generate:abi-core": "TYPE=abi CATEGORY=core wagmi generate",
 		"generate:abi-automation": "TYPE=abi CATEGORY=automation wagmi generate",
-		"generate:hook": "TYPE=hook wagmi generate",
-		"generate:hook-core": "TYPE=hook CATEGORY=core wagmi generate",
-		"generate:hook-automation": "TYPE=hook CATEGORY=automation wagmi generate",
+		"generate:abi-core": "TYPE=abi CATEGORY=core wagmi generate",
 		"generate:action": "TYPE=action wagmi generate",
-		"generate:action-core": "TYPE=action CATEGORY=core wagmi generate",
 		"generate:action-automation": "TYPE=action CATEGORY=automation wagmi generate",
-		"typecheck": "tsc --noEmit",
-		"build": "rimraf dist && tsc --removeComments --declaration false && tsc --emitDeclarationOnly",
-		"test": "vitest"
+		"generate:action-core": "TYPE=action CATEGORY=core wagmi generate",
+		"generate:hook": "TYPE=hook wagmi generate",
+		"generate:hook-automation": "TYPE=hook CATEGORY=automation wagmi generate",
+		"generate:hook-core": "TYPE=hook CATEGORY=core wagmi generate",
+		"test": "vitest",
+		"typecheck": "tsc --noEmit"
 	},
-	"keywords": ["superfluid", "ethereum", "web3", "defi", "streaming", "money", "wagmi", "viem"],
-	"author": "Superfluid Foundation",
-	"license": "MIT",
-	"packageManager": "pnpm@10.6.2",
 	"devDependencies": {
 		"@superfluid-finance/ethereum-contracts": "^1.12.0",
 		"@superfluid-finance/metadata": "^1.6.0",
@@ -102,9 +102,6 @@
 		"wagmi": "^2"
 	},
 	"peerDependenciesMeta": {
-		"wagmi": {
-			"optional": true
-		},
 		"@wagmi/core": {
 			"optional": true
 		},
@@ -113,7 +110,10 @@
 		},
 		"viem": {
 			"optional": true
+		},
+		"wagmi": {
+			"optional": true
 		}
 	},
-	"sideEffects": false
+	"packageManager": "pnpm@10.6.2"
 }
