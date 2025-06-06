@@ -68,3 +68,7 @@ body {
 .mcp-card:hover {
 	box-shadow: 0 0 30px rgba(131, 48, 253, 0.2);
 }
+
+.chat-card:hover {
+	box-shadow: 0 0 30px rgba(10, 102, 67, 0.2);
+}

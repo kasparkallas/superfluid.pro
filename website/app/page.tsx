@@ -22,7 +22,7 @@ export default function Home() {
 					</p>
 				</div>
 
-				<div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+				<div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 					<a
 						href={process.env.NEXT_PUBLIC_SDK_DOCS_URL}
 						className="sdk-card group relative p-10 rounded-3xl border border-foreground/10 bg-gradient-to-br from-foreground/[0.02] to-transparent backdrop-blur-sm hover:border-foreground/20 transition-all duration-500 flex flex-col h-full"
@@ -58,6 +58,27 @@ export default function Home() {
 						</div>
 						<div className="mt-8 text-foreground/60 group-hover:text-foreground transition-colors font-medium flex items-center gap-2">
 							Learn more
+							<svg
+								className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+								fill="none"
+								stroke="currentColor"
+								viewBox="0 0 24 24"
+							>
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+							</svg>
+						</div>
+					</a>
+
+					<a
+						href="https://chat.superfluid.pro"
+						className="chat-card group relative p-10 rounded-3xl border border-foreground/10 bg-gradient-to-br from-foreground/[0.02] to-transparent backdrop-blur-sm hover:border-foreground/20 transition-all duration-500 flex flex-col h-full"
+					>
+						<div className="flex-1">
+							<h2 className="text-2xl font-semibold mb-3 font-[family-name:var(--font-gt-walsheim)]">Chat</h2>
+							<p className="text-foreground/60 leading-relaxed">Talk to a Superfluid assistant powered by AI.</p>
+						</div>
+						<div className="mt-8 text-foreground/60 group-hover:text-foreground transition-colors font-medium flex items-center gap-2">
+							Start chatting
 							<svg
 								className="w-5 h-5 group-hover:translate-x-1 transition-transform"
 								fill="none"
