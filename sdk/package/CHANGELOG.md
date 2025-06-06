@@ -2,6 +2,12 @@
 
 ## 0.1.0
 
+### Minor Changes
+
+- 00568c2: Initial release of Superfluid SDK with TypeScript bindings for Superfluid Protocol
+
+## 0.1.0
+
 ### Major Changes
 
 - Initial alpha release of @sfpro/sdk
