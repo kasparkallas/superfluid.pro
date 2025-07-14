@@ -22,7 +22,7 @@ export default function Home() {
 					</p>
 				</div>
 
-				<div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+				<div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 					<a
 						href={process.env.NEXT_PUBLIC_SDK_DOCS_URL}
 						className="sdk-card group relative p-10 rounded-3xl border border-foreground/10 bg-gradient-to-br from-foreground/[0.02] to-transparent backdrop-blur-sm hover:border-foreground/20 transition-all duration-500 flex flex-col h-full"
@@ -69,7 +69,7 @@ export default function Home() {
 						</div>
 					</a>
 
-					<a
+					{/* <a
 						href="https://chat.superfluid.pro"
 						className="chat-card group relative p-10 rounded-3xl border border-foreground/10 bg-gradient-to-br from-foreground/[0.02] to-transparent backdrop-blur-sm hover:border-foreground/20 transition-all duration-500 flex flex-col h-full"
 					>
@@ -88,7 +88,7 @@ export default function Home() {
 								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
 							</svg>
 						</div>
-					</a>
+					</a> */}
 				</div>
 			</main>
 		</div>
