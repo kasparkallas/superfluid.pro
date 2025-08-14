@@ -27,6 +27,7 @@
 		"@superfluid-finance/metadata": "^1.6.0",
 		"@superfluid-finance/tokenlist": "^5.28.0",
 		"@uniswap/token-lists": "1.0.0-beta.34",
+		"@vercel/blob": "^1.1.1",
 		"cross-env": "^10.0.0",
 		"dotenv": "^17.2.1",
 		"graphql": "^16.8.1",

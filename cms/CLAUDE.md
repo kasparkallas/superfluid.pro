@@ -66,12 +66,23 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - `getAllExistingTokens()` helper for efficient token retrieval
 
 ### API Endpoints (`src/app/(api)/`)
+
+**Data Sync Endpoints:**
 - `/sync-chains` - Admin-only chain data synchronization
 - `/sync-from-tokenlist` - Admin-only token sync from official tokenlist
 - `/sync-from-data-api` - Admin-only token sync from Superfluid data API
 - `/sync-from-streme` - Admin-only token sync from Streme.fun
 - `/get-as-tokenlist` - Public endpoint to export tokens in standard tokenlist format
-- All sync endpoints use `requireAdmin()` authentication from `src/utils/api-auth.ts`
+
+**Token API Endpoints:**
+- `GET /tokens` - List tokens with filtering and optional pricing
+  - Query params: `isListed`, `tokenType`, `tags`, `includePricing`, `sortBy`, `sortOrder`, `limit`, `page`
+  - Returns: Paginated token list with CMS data + optional pricing from Redis
+- `GET /tokens/{chainId}/{address}` - Get single token with optional pricing
+  - Query params: `includePricing=true` to include current price data
+  - Returns: Single token with CMS data + optional pricing from Redis
+
+All sync endpoints use `requireAdmin()` authentication from `src/utils/api-auth.ts`
 
 ### Validation & Utilities
 
