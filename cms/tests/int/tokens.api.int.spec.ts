@@ -1,6 +1,6 @@
 import { getPayload } from "payload";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { config } from "../../src/payload.config";
+import config from "../../src/payload.config";
 
 describe("Tokens API", () => {
 	let payload: any;
