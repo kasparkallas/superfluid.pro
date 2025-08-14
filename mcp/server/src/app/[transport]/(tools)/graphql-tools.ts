@@ -1,8 +1,8 @@
-import type { McpServer } from "@/types";
 import metadata from "@superfluid-finance/metadata";
 import { buildClientSchema, getIntrospectionQuery, parse, printSchema } from "graphql";
 import { unstable_cache } from "next/cache";
 import { z } from "zod";
+import type { McpServer } from "@/types";
 
 // Type definitions
 type SubgraphType = "protocol" | "vesting" | "flowScheduler" | "autoWrap";
@@ -135,11 +135,7 @@ export const createListSuperfluidSubgraphEndpointsTool = (server: McpServer) => 
 			includeTestnets: z.boolean().optional(),
 			subgraphTypes: z.array(z.enum(["protocol", "vesting", "flowScheduler", "autoWrap"])).optional(),
 		},
-		async (args: {
-			chainIds?: number[];
-			includeTestnets?: boolean;
-			subgraphTypes?: SubgraphType[];
-		}) => {
+		async (args: { chainIds?: number[]; includeTestnets?: boolean; subgraphTypes?: SubgraphType[] }) => {
 			const includeTestnets = args.includeTestnets ?? true;
 			const requestedChainIds = args.chainIds;
 			const requestedTypes = args.subgraphTypes || ["protocol", "vesting", "flowScheduler", "autoWrap"];
@@ -191,11 +187,7 @@ export const createIntrospectSubgraphSchemaTool = (server: McpServer) => {
 			subgraphType: z.enum(["protocol", "vesting", "flowScheduler", "autoWrap"]).default("protocol"),
 			skipCache: z.boolean().optional(),
 		},
-		async (args: {
-			chainId: number;
-			subgraphType: SubgraphType;
-			skipCache?: boolean;
-		}) => {
+		async (args: { chainId: number; subgraphType: SubgraphType; skipCache?: boolean }) => {
 			try {
 				let schema: string;
 

@@ -1,7 +1,7 @@
-import type { McpServer } from "@/types";
 import metadata from "@superfluid-finance/metadata";
 import type { NetworkMetaData } from "@superfluid-finance/metadata/module/networks/list";
 import { z } from "zod";
+import type { McpServer } from "@/types";
 
 export const createListSuperfluidMetadataNetworksTool = (server: McpServer) => {
 	server.tool(

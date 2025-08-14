@@ -5,9 +5,15 @@ import {
 	gdaPoolAbi,
 	superTokenAbi,
 } from "@sfpro/sdk/abi";
-import type { Abi } from "viem";
-import { z } from "zod";
-
+import {
+	// Automation ABIs
+	autoWrapManagerAbi,
+	autoWrapStrategyAbi,
+	flowSchedulerAbi,
+	legacyVestingSchedulerV1Abi,
+	legacyVestingSchedulerV2Abi,
+	vestingSchedulerV3Abi,
+} from "@sfpro/sdk/abi/automation";
 import {
 	// Protocol ABIs
 	batchLiquidatorAbi,
@@ -19,17 +25,9 @@ import {
 	superTokenFactoryAbi,
 	togaAbi,
 } from "@sfpro/sdk/abi/core";
-
+import type { Abi } from "viem";
+import { z } from "zod";
 import type { McpServer } from "@/types";
-import {
-	// Automation ABIs
-	autoWrapManagerAbi,
-	autoWrapStrategyAbi,
-	flowSchedulerAbi,
-	legacyVestingSchedulerV1Abi,
-	legacyVestingSchedulerV2Abi,
-	vestingSchedulerV3Abi,
-} from "@sfpro/sdk/abi/automation";
 
 type ContractInfo = {
 	abi: Abi;

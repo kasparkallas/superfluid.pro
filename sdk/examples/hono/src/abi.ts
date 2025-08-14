@@ -1,8 +1,7 @@
 import { cfaAbi, cfaAddress } from "@sfpro/sdk/abi/core";
+import { superfluidMainnetTransports } from "@sfpro/sdk/config";
 import { createPublicClient } from "viem";
 import { mainnet } from "viem/chains";
-
-import { superfluidMainnetTransports } from "@sfpro/sdk/config";
 import { app } from "./app.js"; // Does this have to be .js?
 
 const publicClient = createPublicClient({

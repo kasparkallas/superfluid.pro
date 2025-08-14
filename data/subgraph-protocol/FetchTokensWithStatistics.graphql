@@ -1,0 +1,19 @@
+query FetchTokensWithStatistics($id_gt: ID!) {
+  tokenStatistics(first: 1000, where: {id_gt: $id_gt, token_: {isSuperToken: true}}) {
+    id
+    token {
+      id
+      symbol
+      name
+      decimals
+      isListed
+      isNativeAssetSuperToken
+      underlyingToken {
+        id
+      }
+    }
+    totalNumberOfHolders
+    totalNumberOfClosedStreams
+    totalNumberOfActiveStreams
+  }
+}

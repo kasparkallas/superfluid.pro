@@ -1,13 +1,13 @@
 "use client";
 
 import {
-	superfluidMainnetTransports,
 	superfluidMainnets,
-	superfluidTestnetTransports,
+	superfluidMainnetTransports,
 	superfluidTestnets,
+	superfluidTestnetTransports,
 } from "@sfpro/sdk/config";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { http, WagmiProvider, createConfig } from "wagmi";
+import { createConfig, WagmiProvider } from "wagmi";
 
 export const config = createConfig({
 	chains: [...superfluidMainnets, ...superfluidTestnets],
@@ -19,9 +19,7 @@ export const config = createConfig({
 
 export const queryClient = new QueryClient();
 
-export function Wagmi(props: {
-	children: React.ReactNode;
-}) {
+export function Wagmi(props: { children: React.ReactNode }) {
 	const { children } = props;
 
 	return (

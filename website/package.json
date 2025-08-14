@@ -5,17 +5,17 @@
 	"scripts": {
 		"build": "next build",
 		"dev": "next dev --turbopack --port 3000",
-		"lint": "next lint",
+		"lint": "biome check .",
 		"start": "next start"
 	},
 	"dependencies": {
-		"next": "15.3.3",
+		"next": "15.4.6",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "^4.1.11",
-		"@types/node": "^20.19.10",
+		"@types/node": "^24.2.1",
 		"@types/react": "^19.1.10",
 		"@types/react-dom": "^19.1.7",
 		"tailwindcss": "^4.1.11",

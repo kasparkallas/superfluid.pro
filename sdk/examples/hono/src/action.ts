@@ -1,14 +1,12 @@
 import { readCfa } from "@sfpro/sdk/action/core";
-import { http, createConfig } from "@wagmi/core";
-
 import {
-	superfluidMainnetTransports,
 	superfluidMainnets,
-	superfluidTestnetTransports,
+	superfluidMainnetTransports,
 	superfluidTestnets,
+	superfluidTestnetTransports,
 } from "@sfpro/sdk/config";
-import { type Chain, type Transport, createClient } from "viem";
-import { mainnet } from "viem/chains";
+import { createConfig } from "@wagmi/core";
+import { type Chain, createClient, type Transport } from "viem";
 import { app } from "./app.js";
 
 const superfluidTransports: Record<number, Transport> = {

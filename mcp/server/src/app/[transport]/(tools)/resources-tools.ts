@@ -1,6 +1,6 @@
-import type { McpServer } from "@/types";
 import Fuse from "fuse.js";
 import { z } from "zod";
+import type { McpServer } from "@/types";
 
 type ResourceCategory = "documentation" | "sdk" | "app" | "community" | "code";
 

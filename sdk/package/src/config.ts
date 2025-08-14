@@ -1,12 +1,12 @@
-import { http, type Transport, fallback } from "viem";
+import { fallback, http, type Transport } from "viem";
 import {
-	type Chain as Chain_,
 	arbitrum,
 	avalanche,
 	avalancheFuji,
 	base,
 	baseSepolia,
 	bsc,
+	type Chain as Chain_,
 	celo,
 	degen,
 	gnosis,
