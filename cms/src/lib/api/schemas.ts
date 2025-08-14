@@ -210,9 +210,7 @@ export const TokenFilterQuerySchema = z
 			.openapi({
 				description: "Filter by listed status",
 			}),
-		tokenType: tokenTypeSchema.optional().openapi({
-			description: "Filter by token type",
-		}),
+		tokenType: tokenTypeSchema.optional(),
 		tags: z
 			.string()
 			.optional()
@@ -287,6 +285,32 @@ export const PricingQuerySchema = z
 	.openapi({
 		title: "PricingQuery",
 		description: "Query parameter for including pricing data",
+	});
+
+// Token List filter query parameters
+export const TokenListFilterQuerySchema = z
+	.object({
+		isListed: z.enum(["true", "false"]).optional().openapi({
+			description: "Filter by listed status",
+		}),
+		tokenType: z
+			.enum(["underlyingToken", "pureSuperToken", "nativeAssetSuperToken", "wrapperSuperToken"])
+			.optional()
+			.openapi({
+				description: "Filter by token type",
+			}),
+		tags: z.string().optional().openapi({
+			example: "supertoken,testnet",
+			description: "Comma-separated list of tags to filter by",
+		}),
+		chainId: z.string().optional().openapi({
+			example: "42161,10",
+			description: "Comma-separated list of chain IDs to filter by",
+		}),
+	})
+	.openapi({
+		title: "TokenListFilterQuery",
+		description: "Query parameters for filtering token list export",
 	});
 
 // API Error schema

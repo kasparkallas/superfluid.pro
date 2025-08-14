@@ -90,23 +90,72 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 	}
 }
 
-export const GET = async (_request: Request) => {
+export const GET = async (request: Request) => {
 	try {
-		// Get all tokens from the database (public endpoint)
+		const url = new URL(request.url);
+		const searchParams = url.searchParams;
+
+		// Parse query parameters for filtering
+		const isListed = searchParams.get("isListed");
+		const tokenType = searchParams.get("tokenType");
+		const tags = searchParams.get("tags");
+		const chainId = searchParams.get("chainId");
+
+		// Build where clause
+		const where: any = {};
+
+		if (isListed !== null) {
+			where.isListed = { equals: isListed === "true" };
+		}
+
+		if (tokenType) {
+			where.tokenType = { equals: tokenType };
+		}
+
+		if (tags) {
+			// Support comma-separated tags
+			const tagList = tags.split(",").filter(Boolean);
+			if (tagList.length > 0) {
+				where.tags = { contains: tagList[0] }; // Payload doesn't support multiple contains in one query
+			}
+		}
+
+		if (chainId) {
+			// Support comma-separated chain IDs
+			const chainIds = chainId.split(",").map(Number).filter(Number.isInteger);
+			if (chainIds.length === 1) {
+				where.chainId = { equals: chainIds[0] };
+			} else if (chainIds.length > 1) {
+				where.chainId = { in: chainIds };
+			}
+		}
+
+		// Get tokens from the database with filtering (public endpoint)
 		const { docs: tokens } = await payload.find({
 			collection: "tokens",
-			limit: 10000, // Get all tokens
-			where: {
-				// Optionally filter to only listed tokens
-				// isListed: { equals: true }
-			},
+			limit: 10000, // Get all matching tokens
+			where,
 			sort: "chainId,symbol", // Sort by chainId then symbol for consistent ordering
 		});
+
+		// Find the most recent update timestamp
+		let latestUpdate = new Date().toISOString();
+		if (tokens.length > 0) {
+			const timestamps = tokens
+				.map((token) => token.updatedAt)
+				.filter(Boolean)
+				.map((ts) => new Date(ts).getTime());
+
+			if (timestamps.length > 0) {
+				const maxTimestamp = Math.max(...timestamps);
+				latestUpdate = new Date(maxTimestamp).toISOString();
+			}
+		}
 
 		// Format as tokenlist with proper types
 		const tokenList: SuperTokenList = {
 			name: "Superfluid Token List",
-			timestamp: new Date().toISOString(),
+			timestamp: latestUpdate,
 			version: {
 				major: 5, // Match the version from @superfluid-finance/tokenlist
 				minor: 28,

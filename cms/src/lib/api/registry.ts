@@ -3,6 +3,7 @@ import {
 	ApiErrorSchema,
 	PricingQuerySchema,
 	TokenFilterQuerySchema,
+	TokenListFilterQuerySchema,
 	TokenListResponseSchema,
 	TokenListSchema,
 	TokenPathParamsSchema,
@@ -111,14 +112,26 @@ registry.registerPath({
 	method: "get",
 	path: "/get-as-tokenlist",
 	summary: "Export tokens as Uniswap Token List",
-	description: "Exports all tokens in Uniswap Token List format with Superfluid extensions",
+	description:
+		"Exports tokens in Uniswap Token List format with Superfluid extensions. Supports filtering by token properties. The timestamp field reflects the most recent update time of any token in the list.",
 	tags: ["Token List"],
+	request: {
+		query: TokenListFilterQuerySchema,
+	},
 	responses: {
 		200: {
 			description: "Token list with Superfluid extensions",
 			content: {
 				"application/json": {
 					schema: TokenListSchema,
+				},
+			},
+		},
+		400: {
+			description: "Invalid query parameters",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
 				},
 			},
 		},
