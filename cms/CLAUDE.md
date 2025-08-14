@@ -13,6 +13,7 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - `pnpm devsafe` - Clean build and start dev server (removes .next folder first)
 - `pnpm generate:types` - Generate Payload TypeScript types (run after collection changes)
 - `pnpm generate:importmap` - Generate Payload import map
+- `pnpm generate:openapi` - Generate OpenAPI specification for API documentation
 - `pnpm lint` - Run ESLint
 - `pnpm typecheck` - Run TypeScript type checking
 - `pnpm test` - Run all tests (integration + e2e)
@@ -87,6 +88,15 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
   - Extension types: Pure, Native Asset, Wrapper (with underlyingTokenAddress)
   - Includes all token metadata: name, symbol, decimals, logoURI, tags
   - Compatible with @uniswap/token-lists standard v5.28.0
+
+**API Documentation:**
+- `GET /api-docs` - Interactive Swagger UI documentation
+  - Browse and test all API endpoints
+  - View request/response schemas
+  - Try-it-out functionality
+- `GET /openapi.json` - OpenAPI 3.1 specification
+  - Machine-readable API documentation
+  - Used by Swagger UI and API clients
 
 All sync endpoints use `requireAdmin()` authentication from `src/utils/api-auth.ts`
 
