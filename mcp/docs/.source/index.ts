@@ -1,9 +1,9 @@
 import { _runtime } from "fumadocs-mdx";
-import * as docs_0 from "../content/docs/graphql.mdx?collection=docs&hash=1749122328298";
-import * as docs_1 from "../content/docs/index.mdx?collection=docs&hash=1749122328298";
-import * as docs_2 from "../content/docs/installation.mdx?collection=docs&hash=1749122328298";
+import * as docs_0 from "../content/docs/graphql.mdx?collection=docs&hash=1754471385094";
+import * as docs_1 from "../content/docs/index.mdx?collection=docs&hash=1754471385094";
+import * as docs_2 from "../content/docs/installation.mdx?collection=docs&hash=1754471385094";
 // @ts-nocheck -- skip type checking
-import * as docs_3 from "../content/docs/tools.mdx?collection=docs&hash=1749122328298";
+import * as docs_3 from "../content/docs/tools.mdx?collection=docs&hash=1754471385094";
 import type * as _source from "../source.config";
 export const docs = _runtime.docs<typeof _source.docs>(
 	[

@@ -12,15 +12,15 @@
 	},
 	"dependencies": {
 		"@sfpro/sdk": "workspace:*",
-		"@tanstack/vue-query": "^5.80.6",
-		"@wagmi/vue": "^0.1.20",
-		"viem": "^2.30.5",
-		"vue": "^3.5.13"
+		"@tanstack/vue-query": "^5.83.1",
+		"@wagmi/vue": "^0.1.27",
+		"viem": "^2.33.3",
+		"vue": "^3.5.18"
 	},
 	"devDependencies": {
 		"@vitejs/plugin-vue": "^5.2.4",
 		"buffer": "^6.0.3",
-		"vite": "^6.2.0",
-		"vue-tsc": "^2.0.6"
+		"vite": "^6.3.5",
+		"vue-tsc": "^2.2.12"
 	}
 }
