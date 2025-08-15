@@ -99,6 +99,7 @@ export const GET = async (request: Request) => {
 		const isListed = searchParams.get("isListed");
 		const tokenType = searchParams.get("tokenType");
 		const tags = searchParams.get("tags");
+		const excludeTags = searchParams.get("excludeTags");
 		const chainId = searchParams.get("chainId");
 
 		// Build where clause - when no filters are specified, include all tokens
@@ -117,6 +118,15 @@ export const GET = async (request: Request) => {
 			const tagList = tags.split(",").filter(Boolean);
 			if (tagList.length > 0) {
 				where.tags = { contains: tagList[0] }; // Payload doesn't support multiple contains in one query
+			}
+		}
+
+		if (excludeTags) {
+			// Support comma-separated tags to exclude
+			const excludeTagList = excludeTags.split(",").filter(Boolean);
+			if (excludeTagList.length > 0) {
+				// Use not_contains to exclude tokens with specific tags
+				where.tags = { ...where.tags, not_contains: excludeTagList[0] };
 			}
 		}
 
