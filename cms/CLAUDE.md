@@ -20,6 +20,9 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - `pnpm test:int` - Run integration tests with Vitest
 - `pnpm test:e2e` - Run Playwright e2e tests
 - `pnpm payload` - Access Payload CLI commands
+- `pnpm trigger:dev` - Run Trigger.dev development server
+- `pnpm trigger:login` - Authenticate with Trigger.dev
+- `pnpm trigger:deploy` - Deploy Trigger.dev tasks to production
 
 ## Core Architecture
 
@@ -65,6 +68,14 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - Smart tag merging without duplicates
 - `hasChanges()` function to avoid unnecessary database updates
 - `getAllExistingTokens()` helper for efficient token retrieval
+
+**Automated Sync via Trigger.dev** (`/trigger/`):
+- **Chains**: Daily at 02:00 UTC - sync blockchain networks from Superfluid metadata
+- **Tokenlist**: Daily at 02:30 UTC - sync official Superfluid tokenlist 
+- **Data API**: Daily at 03:00 UTC - sync from Superfluid data API with CoinGecko mappings
+- **Streme**: Daily at 03:30 UTC - sync community tokens from Streme.fun
+- All tasks configured with retry logic and error handling
+- Manual triggers available via API endpoints or Trigger.dev dashboard
 
 ### API Endpoints (`src/app/(api)/`)
 

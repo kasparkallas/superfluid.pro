@@ -62,6 +62,9 @@ importers:
       '@superfluid-finance/tokenlist':
         specifier: ^5.28.0
         version: 5.28.0
+      '@trigger.dev/sdk':
+        specifier: ^3.3.17
+        version: 3.3.17(bufferutil@4.0.9)(utf-8-validate@5.0.10)(zod@3.25.76)
       '@uniswap/token-lists':
         specifier: 1.0.0-beta.34
         version: 1.0.0-beta.34
@@ -105,6 +108,9 @@ importers:
       '@testing-library/react':
         specifier: ^16.3.0
         version: 16.3.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.7(@types/react@19.1.10))(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@trigger.dev/build':
+        specifier: ^3.3.17
+        version: 3.3.17(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)
       '@types/node':
         specifier: ^24.2.1
         version: 24.2.1

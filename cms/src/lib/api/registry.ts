@@ -107,10 +107,10 @@ registry.registerPath({
 	},
 });
 
-// GET /get-as-tokenlist - Export as token list
+// GET /tokenlist - Export as token list
 registry.registerPath({
 	method: "get",
-	path: "/get-as-tokenlist",
+	path: "/tokenlist",
 	summary: "Export tokens as Uniswap Token List",
 	description:
 		"Exports tokens in Uniswap Token List format with Superfluid extensions. Supports filtering by token properties. The timestamp field reflects the most recent update time of any token in the list.",

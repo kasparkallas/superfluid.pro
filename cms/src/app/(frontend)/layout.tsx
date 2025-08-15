@@ -2,8 +2,8 @@ import type React from "react";
 import "./styles.css";
 
 export const metadata = {
-	description: "A blank template using Payload in a Next.js app.",
-	title: "Payload Blank Template",
+	description: "A content management system for the Superfluid resources.",
+	title: "Superfluid CMS",
 };
 
 export default async function RootLayout(props: { children: React.ReactNode }) {

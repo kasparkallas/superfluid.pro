@@ -17,6 +17,9 @@
 		"test": "pnpm run test:int && pnpm run test:e2e",
 		"test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test",
 		"test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+		"trigger:dev": "pnpm dlx trigger.dev@latest dev",
+		"trigger:login": "pnpm dlx trigger.dev@latest login",
+		"trigger:deploy": "pnpm dlx trigger.dev@latest deploy",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -28,6 +31,7 @@
 		"@payloadcms/ui": "^3.50.0",
 		"@superfluid-finance/metadata": "^1.6.0",
 		"@superfluid-finance/tokenlist": "^5.28.0",
+		"@trigger.dev/sdk": "^3.3.17",
 		"@uniswap/token-lists": "1.0.0-beta.34",
 		"@vercel/blob": "^1.1.1",
 		"cross-env": "^10.0.0",
@@ -44,6 +48,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.54.2",
 		"@testing-library/react": "^16.3.0",
+		"@trigger.dev/build": "^3.3.17",
 		"@types/node": "^24.2.1",
 		"@types/react": "^19.1.9",
 		"@types/react-dom": "^19.1.7",

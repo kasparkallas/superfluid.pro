@@ -101,7 +101,7 @@ export const GET = async (request: Request) => {
 		const tags = searchParams.get("tags");
 		const chainId = searchParams.get("chainId");
 
-		// Build where clause
+		// Build where clause - when no filters are specified, include all tokens
 		const where: any = {};
 
 		if (isListed !== null) {
@@ -130,6 +130,8 @@ export const GET = async (request: Request) => {
 			}
 		}
 
+		// Note: Empty where object returns all tokens, which is the desired behavior
+
 		// Get tokens from the database with filtering (public endpoint)
 		const { docs: tokens } = await payload.find({
 			collection: "tokens",
@@ -138,10 +140,35 @@ export const GET = async (request: Request) => {
 			sort: "chainId,symbol", // Sort by chainId then symbol for consistent ordering
 		});
 
-		// Find the most recent update timestamp
+		// Collect underlying token addresses from wrapper super tokens
+		const underlyingAddresses = new Set<string>();
+		for (const token of tokens) {
+			if (token.tokenType === "wrapperSuperToken" && token.underlyingAddress) {
+				// Create composite ID for underlying token (chainId:address)
+				underlyingAddresses.add(`${token.chainId}:${token.underlyingAddress.toLowerCase()}`);
+			}
+		}
+
+		// Query for underlying tokens if any wrapper super tokens exist
+		let underlyingTokens: Token[] = [];
+		if (underlyingAddresses.size > 0) {
+			const { docs: foundUnderlyingTokens } = await payload.find({
+				collection: "tokens",
+				limit: 1000,
+				where: {
+					id: { in: Array.from(underlyingAddresses) },
+				},
+			});
+			underlyingTokens = foundUnderlyingTokens;
+		}
+
+		// Combine all tokens
+		const allTokens = [...tokens, ...underlyingTokens];
+
+		// Find the most recent update timestamp from all tokens
 		let latestUpdate = new Date().toISOString();
-		if (tokens.length > 0) {
-			const timestamps = tokens
+		if (allTokens.length > 0) {
+			const timestamps = allTokens
 				.map((token) => token.updatedAt)
 				.filter(Boolean)
 				.map((ts) => new Date(ts).getTime());
@@ -157,11 +184,11 @@ export const GET = async (request: Request) => {
 			name: "Superfluid Token List",
 			timestamp: latestUpdate,
 			version: {
-				major: 5, // Match the version from @superfluid-finance/tokenlist
-				minor: 28,
+				major: 1,
+				minor: 0,
 				patch: 0,
 			},
-			tokens: tokens.map(mapTokenToTokenListFormat),
+			tokens: allTokens.map(mapTokenToTokenListFormat),
 		};
 
 		return Response.json(tokenList);

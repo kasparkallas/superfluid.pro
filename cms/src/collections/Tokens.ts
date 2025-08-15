@@ -136,6 +136,7 @@ export const Tokens: CollectionConfig = {
 		},
 		{
 			name: "isListed",
+			label: "Is Listed on Resolver",
 			type: "checkbox",
 			required: false,
 			defaultValue: false,
