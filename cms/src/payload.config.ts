@@ -3,6 +3,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { buildConfig } from "payload";
@@ -14,6 +15,16 @@ import { Users } from "./collections/Users";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
+
+// Use Vercel Postgres in production, SQLite for local development
+const db = process.env.POSTGRES_URL
+	? vercelPostgresAdapter() // Production: automatically uses POSTGRES_URL
+	: sqliteAdapter({
+			// Local development: SQLite
+			client: {
+				url: process.env.DATABASE_URI || "file:./payload.db",
+			},
+		});
 
 export default buildConfig({
 	admin: {
@@ -28,11 +39,7 @@ export default buildConfig({
 	typescript: {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
 	},
-	db: sqliteAdapter({
-		client: {
-			url: process.env.DATABASE_URI || "",
-		},
-	}),
+	db,
 	sharp,
 	plugins: [
 		payloadCloudPlugin(),
