@@ -3,7 +3,8 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": ["dist/**", ".next/**"]
+			"outputs": ["dist/**", ".next/**"],
+			"env": ["PAYLOAD_SECRET", "DATABASE_URL"]
 		},
 		"dev": {
 			"persistent": true,
