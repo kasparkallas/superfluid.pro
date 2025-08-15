@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.4/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -7,17 +7,28 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["**/node_modules/**", "**/dist/**", "**/generated.ts", "**/.next/**", "wagmi.config.ts"],
-		"include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json", "**/*.yml", "**/*.yaml"]
+		"includes": [
+			"**/*.js",
+			"**/*.jsx",
+			"**/*.ts",
+			"**/*.tsx",
+			"**/*.json",
+			"**/*.yml",
+			"**/*.yaml",
+			"!**/node_modules/**",
+			"!**/dist/**",
+			"!**/generated.ts",
+			"!**/.next/**",
+			"!**/wagmi.config.ts",
+			"!**/data/subgraph-protocol/.graphclient/**"
+		]
 	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
 		"lineWidth": 120
 	},
-	"organizeImports": {
-		"enabled": true
-	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {

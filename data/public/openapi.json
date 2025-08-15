@@ -1,0 +1,1877 @@
+{
+	"openapi": "3.1.0",
+	"info": {
+		"title": "Superfluid Data API",
+		"version": "1.0.0",
+		"description": "API for accessing aggregated data about Superfluid Super Tokens, including statistics, price history, and CoinGecko mappings. Data is updated periodically by background automation jobs.",
+		"contact": {
+			"name": "Superfluid",
+			"url": "https://superfluid.finance"
+		}
+	},
+	"servers": [
+		{
+			"url": "",
+			"description": "Current server"
+		}
+	],
+	"tags": [
+		{
+			"name": "Tokens",
+			"description": "Super Token data and statistics"
+		},
+		{
+			"name": "Prices",
+			"description": "Historical price data"
+		},
+		{
+			"name": "Mappings",
+			"description": "Token to CoinGecko ID mappings"
+		}
+	],
+	"components": {
+		"schemas": {
+			"SuperToken": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Chain-prefixed token address",
+						"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+					},
+					"address": {
+						"type": "string",
+						"description": "Ethereum contract address",
+						"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+					},
+					"chainId": {
+						"type": "integer",
+						"exclusiveMinimum": 0,
+						"description": "Blockchain network ID",
+						"example": 42161
+					},
+					"symbol": {
+						"type": "string",
+						"description": "Token symbol",
+						"example": "ARBx"
+					},
+					"name": {
+						"type": "string",
+						"description": "Token name",
+						"example": "Super ARB"
+					},
+					"decimals": {
+						"type": "integer",
+						"minimum": 0,
+						"maximum": 18,
+						"description": "Number of token decimals",
+						"example": 18
+					},
+					"isListed": {
+						"type": "boolean",
+						"description": "Whether token is listed on official Superfluid token list"
+					},
+					"isNativeAssetSuperToken": {
+						"type": "boolean",
+						"description": "Whether this is a native asset Super Token"
+					},
+					"isPureSuperToken": {
+						"type": "boolean",
+						"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+					},
+					"isWrapperSuperToken": {
+						"type": "boolean",
+						"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+					},
+					"underlyingAddress": {
+						"type": ["string", "null"],
+						"description": "Address of underlying token, null for native asset Super Tokens",
+						"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+					},
+					"totalNumberOfHolders": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Total number of token holders"
+					},
+					"totalNumberOfActiveStreams": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of currently active streams"
+					},
+					"totalNumberOfClosedStreams": {
+						"type": "integer",
+						"minimum": 0,
+						"description": "Number of closed streams"
+					},
+					"lastUpdated": {
+						"type": "string",
+						"format": "date-time",
+						"description": "ISO 8601 timestamp of last data update"
+					}
+				},
+				"required": [
+					"id",
+					"address",
+					"chainId",
+					"symbol",
+					"name",
+					"decimals",
+					"isListed",
+					"isNativeAssetSuperToken",
+					"isPureSuperToken",
+					"isWrapperSuperToken",
+					"underlyingAddress",
+					"totalNumberOfHolders",
+					"totalNumberOfActiveStreams",
+					"totalNumberOfClosedStreams",
+					"lastUpdated"
+				],
+				"description": "A Superfluid Super Token with statistics and metadata",
+				"title": "SuperToken"
+			},
+			"TokensResponse": {
+				"type": "array",
+				"items": {
+					"type": "object",
+					"properties": {
+						"id": {
+							"type": "string",
+							"description": "Chain-prefixed token address",
+							"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"address": {
+							"type": "string",
+							"description": "Ethereum contract address",
+							"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"chainId": {
+							"type": "integer",
+							"exclusiveMinimum": 0,
+							"description": "Blockchain network ID",
+							"example": 42161
+						},
+						"symbol": {
+							"type": "string",
+							"description": "Token symbol",
+							"example": "ARBx"
+						},
+						"name": {
+							"type": "string",
+							"description": "Token name",
+							"example": "Super ARB"
+						},
+						"decimals": {
+							"type": "integer",
+							"minimum": 0,
+							"maximum": 18,
+							"description": "Number of token decimals",
+							"example": 18
+						},
+						"isListed": {
+							"type": "boolean",
+							"description": "Whether token is listed on official Superfluid token list"
+						},
+						"isNativeAssetSuperToken": {
+							"type": "boolean",
+							"description": "Whether this is a native asset Super Token"
+						},
+						"isPureSuperToken": {
+							"type": "boolean",
+							"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+						},
+						"isWrapperSuperToken": {
+							"type": "boolean",
+							"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+						},
+						"underlyingAddress": {
+							"type": ["string", "null"],
+							"description": "Address of underlying token, null for native asset Super Tokens",
+							"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"totalNumberOfHolders": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Total number of token holders"
+						},
+						"totalNumberOfActiveStreams": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of currently active streams"
+						},
+						"totalNumberOfClosedStreams": {
+							"type": "integer",
+							"minimum": 0,
+							"description": "Number of closed streams"
+						},
+						"lastUpdated": {
+							"type": "string",
+							"format": "date-time",
+							"description": "ISO 8601 timestamp of last data update"
+						}
+					},
+					"required": [
+						"id",
+						"address",
+						"chainId",
+						"symbol",
+						"name",
+						"decimals",
+						"isListed",
+						"isNativeAssetSuperToken",
+						"isPureSuperToken",
+						"isWrapperSuperToken",
+						"underlyingAddress",
+						"totalNumberOfHolders",
+						"totalNumberOfActiveStreams",
+						"totalNumberOfClosedStreams",
+						"lastUpdated"
+					],
+					"description": "A Superfluid Super Token with statistics and metadata",
+					"title": "SuperToken"
+				},
+				"description": "List of Super Tokens",
+				"title": "TokensResponse"
+			},
+			"TokenPriceHistory": {
+				"type": "object",
+				"properties": {
+					"version": {
+						"type": "string",
+						"example": "1.0.0"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"testRun": {
+						"type": "boolean"
+					},
+					"token": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "Chain-prefixed token address",
+								"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"address": {
+								"type": "string",
+								"description": "Ethereum contract address",
+								"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"chainId": {
+								"type": "integer",
+								"exclusiveMinimum": 0,
+								"description": "Blockchain network ID",
+								"example": 42161
+							},
+							"symbol": {
+								"type": "string",
+								"description": "Token symbol",
+								"example": "ARBx"
+							},
+							"name": {
+								"type": "string",
+								"description": "Token name",
+								"example": "Super ARB"
+							},
+							"decimals": {
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 18,
+								"description": "Number of token decimals",
+								"example": 18
+							},
+							"isListed": {
+								"type": "boolean",
+								"description": "Whether token is listed on official Superfluid token list"
+							},
+							"isNativeAssetSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a native asset Super Token"
+							},
+							"isPureSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+							},
+							"isWrapperSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+							},
+							"underlyingAddress": {
+								"type": ["string", "null"],
+								"description": "Address of underlying token, null for native asset Super Tokens",
+								"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"totalNumberOfHolders": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Total number of token holders"
+							},
+							"totalNumberOfActiveStreams": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Number of currently active streams"
+							},
+							"totalNumberOfClosedStreams": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Number of closed streams"
+							},
+							"lastUpdated": {
+								"type": "string",
+								"format": "date-time",
+								"description": "ISO 8601 timestamp of last data update"
+							}
+						},
+						"required": [
+							"id",
+							"address",
+							"chainId",
+							"symbol",
+							"name",
+							"decimals",
+							"isListed",
+							"isNativeAssetSuperToken",
+							"isPureSuperToken",
+							"isWrapperSuperToken",
+							"underlyingAddress",
+							"totalNumberOfHolders",
+							"totalNumberOfActiveStreams",
+							"totalNumberOfClosedStreams",
+							"lastUpdated"
+						],
+						"description": "A Superfluid Super Token with statistics and metadata",
+						"title": "SuperToken"
+					},
+					"coingeckoId": {
+						"type": ["string", "null"],
+						"description": "CoinGecko coin ID for price data",
+						"example": "arbitrum"
+					},
+					"fetchedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"pricesUsd": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"date": {
+									"type": "string",
+									"pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+									"description": "Date in YYYY-MM-DD format",
+									"example": "2025-06-22"
+								},
+								"price": {
+									"type": "string",
+									"description": "Price in USD as string to preserve precision",
+									"example": "0.00000022248603752704"
+								}
+							},
+							"required": ["date", "price"],
+							"description": "Daily price data for a token",
+							"title": "PriceDataPoint"
+						}
+					}
+				},
+				"required": ["version", "timestamp", "token", "coingeckoId", "fetchedAt", "pricesUsd"],
+				"description": "Complete price history for a Super Token",
+				"title": "TokenPriceHistory"
+			},
+			"CoinGeckoMappings": {
+				"type": "object",
+				"properties": {
+					"version": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"totalSuperTokens": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"mappedSuperTokens": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"chainCount": {
+						"type": "integer",
+						"minimum": 0
+					},
+					"mappings": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "object",
+							"additionalProperties": {
+								"type": "string"
+							}
+						},
+						"description": "Nested mapping: chainId -> tokenAddress -> coingeckoId"
+					},
+					"metadata": {
+						"type": "object",
+						"properties": {
+							"nativeAssetCoinIds": {
+								"type": "object",
+								"additionalProperties": {
+									"type": "string"
+								}
+							},
+							"chainIdToPlatformIds": {
+								"type": "object",
+								"additionalProperties": {
+									"type": "string"
+								}
+							}
+						},
+						"required": ["nativeAssetCoinIds", "chainIdToPlatformIds"]
+					}
+				},
+				"required": [
+					"version",
+					"timestamp",
+					"totalSuperTokens",
+					"mappedSuperTokens",
+					"chainCount",
+					"mappings",
+					"metadata"
+				],
+				"description": "Mapping of Super Tokens to CoinGecko coin IDs",
+				"title": "CoinGeckoMappings"
+			},
+			"CurrentPrice": {
+				"type": "object",
+				"properties": {
+					"token": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "Chain-prefixed token address",
+								"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"address": {
+								"type": "string",
+								"description": "Ethereum contract address",
+								"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"chainId": {
+								"type": "integer",
+								"exclusiveMinimum": 0,
+								"description": "Blockchain network ID",
+								"example": 42161
+							},
+							"symbol": {
+								"type": "string",
+								"description": "Token symbol",
+								"example": "ARBx"
+							},
+							"name": {
+								"type": "string",
+								"description": "Token name",
+								"example": "Super ARB"
+							},
+							"decimals": {
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 18,
+								"description": "Number of token decimals",
+								"example": 18
+							},
+							"isListed": {
+								"type": "boolean",
+								"description": "Whether token is listed on official Superfluid token list"
+							},
+							"isNativeAssetSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a native asset Super Token"
+							},
+							"isPureSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+							},
+							"isWrapperSuperToken": {
+								"type": "boolean",
+								"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+							},
+							"underlyingAddress": {
+								"type": ["string", "null"],
+								"description": "Address of underlying token, null for native asset Super Tokens",
+								"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+							},
+							"totalNumberOfHolders": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Total number of token holders"
+							},
+							"totalNumberOfActiveStreams": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Number of currently active streams"
+							},
+							"totalNumberOfClosedStreams": {
+								"type": "integer",
+								"minimum": 0,
+								"description": "Number of closed streams"
+							},
+							"lastUpdated": {
+								"type": "string",
+								"format": "date-time",
+								"description": "ISO 8601 timestamp of last data update"
+							}
+						},
+						"required": [
+							"id",
+							"address",
+							"chainId",
+							"symbol",
+							"name",
+							"decimals",
+							"isListed",
+							"isNativeAssetSuperToken",
+							"isPureSuperToken",
+							"isWrapperSuperToken",
+							"underlyingAddress",
+							"totalNumberOfHolders",
+							"totalNumberOfActiveStreams",
+							"totalNumberOfClosedStreams",
+							"lastUpdated"
+						],
+						"description": "A Superfluid Super Token with statistics and metadata",
+						"title": "SuperToken"
+					},
+					"priceUsd": {
+						"type": ["string", "null"],
+						"description": "Current price in USD as string to preserve precision",
+						"example": "2.34567890123456789"
+					},
+					"timestamp": {
+						"type": "string",
+						"format": "date-time",
+						"description": "ISO 8601 timestamp of price fetch"
+					},
+					"method": {
+						"type": "string",
+						"enum": ["classic", "onchain", "none"],
+						"description": "Method used to fetch price: classic (CoinGecko), onchain (GeckoTerminal), none (no price available)"
+					},
+					"coingeckoId": {
+						"type": "string",
+						"description": "CoinGecko coin ID if available",
+						"example": "arbitrum"
+					}
+				},
+				"required": ["token", "priceUsd", "timestamp", "method"],
+				"description": "Current price data for a Super Token",
+				"title": "CurrentPrice"
+			},
+			"ApiError": {
+				"type": "object",
+				"properties": {
+					"message": {
+						"type": "string"
+					},
+					"code": {
+						"type": "string"
+					}
+				},
+				"required": ["message"],
+				"description": "Standard API error response",
+				"title": "ApiError"
+			}
+		},
+		"parameters": {}
+	},
+	"paths": {
+		"/api/v1/tokens": {
+			"get": {
+				"summary": "Get all Super Tokens",
+				"description": "Retrieves all Super Tokens across all networks",
+				"tags": ["Tokens"],
+				"parameters": [
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by whether token is officially listed"
+						},
+						"required": false,
+						"name": "isListed",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by native asset Super Tokens"
+						},
+						"required": false,
+						"name": "isNativeAssetSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by Pure Super Tokens (no underlying asset)"
+						},
+						"required": false,
+						"name": "isPureSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by Wrapper Super Tokens (wraps another ERC20 token)"
+						},
+						"required": false,
+						"name": "isWrapperSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"enum": [
+								"totalNumberOfHolders",
+								"totalNumberOfActiveStreams",
+								"totalNumberOfClosedStreams",
+								"name",
+								"symbol"
+							],
+							"default": "totalNumberOfHolders",
+							"description": "Field to sort results by"
+						},
+						"required": false,
+						"name": "sortBy",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"enum": ["asc", "desc"],
+							"default": "desc",
+							"description": "Sort order"
+						},
+						"required": false,
+						"name": "sortOrder",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of all Super Tokens",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"id": {
+												"type": "string",
+												"description": "Chain-prefixed token address",
+												"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"address": {
+												"type": "string",
+												"description": "Ethereum contract address",
+												"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"chainId": {
+												"type": "integer",
+												"exclusiveMinimum": 0,
+												"description": "Blockchain network ID",
+												"example": 42161
+											},
+											"symbol": {
+												"type": "string",
+												"description": "Token symbol",
+												"example": "ARBx"
+											},
+											"name": {
+												"type": "string",
+												"description": "Token name",
+												"example": "Super ARB"
+											},
+											"decimals": {
+												"type": "integer",
+												"minimum": 0,
+												"maximum": 18,
+												"description": "Number of token decimals",
+												"example": 18
+											},
+											"isListed": {
+												"type": "boolean",
+												"description": "Whether token is listed on official Superfluid token list"
+											},
+											"isNativeAssetSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a native asset Super Token"
+											},
+											"isPureSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+											},
+											"isWrapperSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+											},
+											"underlyingAddress": {
+												"type": ["string", "null"],
+												"description": "Address of underlying token, null for native asset Super Tokens",
+												"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"totalNumberOfHolders": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Total number of token holders"
+											},
+											"totalNumberOfActiveStreams": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Number of currently active streams"
+											},
+											"totalNumberOfClosedStreams": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Number of closed streams"
+											},
+											"lastUpdated": {
+												"type": "string",
+												"format": "date-time",
+												"description": "ISO 8601 timestamp of last data update"
+											}
+										},
+										"required": [
+											"id",
+											"address",
+											"chainId",
+											"symbol",
+											"name",
+											"decimals",
+											"isListed",
+											"isNativeAssetSuperToken",
+											"isPureSuperToken",
+											"isWrapperSuperToken",
+											"underlyingAddress",
+											"totalNumberOfHolders",
+											"totalNumberOfActiveStreams",
+											"totalNumberOfClosedStreams",
+											"lastUpdated"
+										],
+										"description": "A Superfluid Super Token with statistics and metadata",
+										"title": "SuperToken"
+									},
+									"description": "List of Super Tokens",
+									"title": "TokensResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid query parameters",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/tokens/{networkName}": {
+			"get": {
+				"summary": "Get Super Tokens by network",
+				"description": "Retrieves all Super Tokens for a specific network",
+				"tags": ["Tokens"],
+				"parameters": [
+					{
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"description": "Network identifier (e.g., optimism, arbitrum-one, base-mainnet)",
+							"example": "arbitrum-one"
+						},
+						"required": true,
+						"name": "networkName",
+						"in": "path"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by whether token is officially listed"
+						},
+						"required": false,
+						"name": "isListed",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by native asset Super Tokens"
+						},
+						"required": false,
+						"name": "isNativeAssetSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by Pure Super Tokens (no underlying asset)"
+						},
+						"required": false,
+						"name": "isPureSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": ["boolean", "null"],
+							"description": "Filter by Wrapper Super Tokens (wraps another ERC20 token)"
+						},
+						"required": false,
+						"name": "isWrapperSuperToken",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"enum": [
+								"totalNumberOfHolders",
+								"totalNumberOfActiveStreams",
+								"totalNumberOfClosedStreams",
+								"name",
+								"symbol"
+							],
+							"default": "totalNumberOfHolders",
+							"description": "Field to sort results by"
+						},
+						"required": false,
+						"name": "sortBy",
+						"in": "query"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"enum": ["asc", "desc"],
+							"default": "desc",
+							"description": "Sort order"
+						},
+						"required": false,
+						"name": "sortOrder",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of Super Tokens for the network",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"id": {
+												"type": "string",
+												"description": "Chain-prefixed token address",
+												"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"address": {
+												"type": "string",
+												"description": "Ethereum contract address",
+												"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"chainId": {
+												"type": "integer",
+												"exclusiveMinimum": 0,
+												"description": "Blockchain network ID",
+												"example": 42161
+											},
+											"symbol": {
+												"type": "string",
+												"description": "Token symbol",
+												"example": "ARBx"
+											},
+											"name": {
+												"type": "string",
+												"description": "Token name",
+												"example": "Super ARB"
+											},
+											"decimals": {
+												"type": "integer",
+												"minimum": 0,
+												"maximum": 18,
+												"description": "Number of token decimals",
+												"example": 18
+											},
+											"isListed": {
+												"type": "boolean",
+												"description": "Whether token is listed on official Superfluid token list"
+											},
+											"isNativeAssetSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a native asset Super Token"
+											},
+											"isPureSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+											},
+											"isWrapperSuperToken": {
+												"type": "boolean",
+												"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+											},
+											"underlyingAddress": {
+												"type": ["string", "null"],
+												"description": "Address of underlying token, null for native asset Super Tokens",
+												"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+											},
+											"totalNumberOfHolders": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Total number of token holders"
+											},
+											"totalNumberOfActiveStreams": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Number of currently active streams"
+											},
+											"totalNumberOfClosedStreams": {
+												"type": "integer",
+												"minimum": 0,
+												"description": "Number of closed streams"
+											},
+											"lastUpdated": {
+												"type": "string",
+												"format": "date-time",
+												"description": "ISO 8601 timestamp of last data update"
+											}
+										},
+										"required": [
+											"id",
+											"address",
+											"chainId",
+											"symbol",
+											"name",
+											"decimals",
+											"isListed",
+											"isNativeAssetSuperToken",
+											"isPureSuperToken",
+											"isWrapperSuperToken",
+											"underlyingAddress",
+											"totalNumberOfHolders",
+											"totalNumberOfActiveStreams",
+											"totalNumberOfClosedStreams",
+											"lastUpdated"
+										],
+										"description": "A Superfluid Super Token with statistics and metadata",
+										"title": "SuperToken"
+									},
+									"description": "List of Super Tokens",
+									"title": "TokensResponse"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid parameters",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Network not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/tokens/{networkName}/{tokenAddress}": {
+			"get": {
+				"summary": "Get a specific Super Token",
+				"description": "Retrieves detailed information for a single Super Token",
+				"tags": ["Tokens"],
+				"parameters": [
+					{
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"description": "Network identifier (e.g., optimism, arbitrum-one, base-mainnet)",
+							"example": "arbitrum-one"
+						},
+						"required": true,
+						"name": "networkName",
+						"in": "path"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"description": "Ethereum contract address",
+							"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"required": true,
+						"name": "tokenAddress",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Super Token details",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"id": {
+											"type": "string",
+											"description": "Chain-prefixed token address",
+											"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+										},
+										"address": {
+											"type": "string",
+											"description": "Ethereum contract address",
+											"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+										},
+										"chainId": {
+											"type": "integer",
+											"exclusiveMinimum": 0,
+											"description": "Blockchain network ID",
+											"example": 42161
+										},
+										"symbol": {
+											"type": "string",
+											"description": "Token symbol",
+											"example": "ARBx"
+										},
+										"name": {
+											"type": "string",
+											"description": "Token name",
+											"example": "Super ARB"
+										},
+										"decimals": {
+											"type": "integer",
+											"minimum": 0,
+											"maximum": 18,
+											"description": "Number of token decimals",
+											"example": 18
+										},
+										"isListed": {
+											"type": "boolean",
+											"description": "Whether token is listed on official Superfluid token list"
+										},
+										"isNativeAssetSuperToken": {
+											"type": "boolean",
+											"description": "Whether this is a native asset Super Token"
+										},
+										"isPureSuperToken": {
+											"type": "boolean",
+											"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+										},
+										"isWrapperSuperToken": {
+											"type": "boolean",
+											"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+										},
+										"underlyingAddress": {
+											"type": ["string", "null"],
+											"description": "Address of underlying token, null for native asset Super Tokens",
+											"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+										},
+										"totalNumberOfHolders": {
+											"type": "integer",
+											"minimum": 0,
+											"description": "Total number of token holders"
+										},
+										"totalNumberOfActiveStreams": {
+											"type": "integer",
+											"minimum": 0,
+											"description": "Number of currently active streams"
+										},
+										"totalNumberOfClosedStreams": {
+											"type": "integer",
+											"minimum": 0,
+											"description": "Number of closed streams"
+										},
+										"lastUpdated": {
+											"type": "string",
+											"format": "date-time",
+											"description": "ISO 8601 timestamp of last data update"
+										}
+									},
+									"required": [
+										"id",
+										"address",
+										"chainId",
+										"symbol",
+										"name",
+										"decimals",
+										"isListed",
+										"isNativeAssetSuperToken",
+										"isPureSuperToken",
+										"isWrapperSuperToken",
+										"underlyingAddress",
+										"totalNumberOfHolders",
+										"totalNumberOfActiveStreams",
+										"totalNumberOfClosedStreams",
+										"lastUpdated"
+									],
+									"description": "A Superfluid Super Token with statistics and metadata",
+									"title": "SuperToken"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid parameters",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Token not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/prices/{networkName}/{tokenAddress}": {
+			"get": {
+				"summary": "Get token price history",
+				"description": "Retrieves daily price history for a specific Super Token",
+				"tags": ["Prices"],
+				"parameters": [
+					{
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"description": "Network identifier (e.g., optimism, arbitrum-one, base-mainnet)",
+							"example": "arbitrum-one"
+						},
+						"required": true,
+						"name": "networkName",
+						"in": "path"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"description": "Ethereum contract address",
+							"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"required": true,
+						"name": "tokenAddress",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Token price history",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"version": {
+											"type": "string",
+											"example": "1.0.0"
+										},
+										"timestamp": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"testRun": {
+											"type": "boolean"
+										},
+										"token": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string",
+													"description": "Chain-prefixed token address",
+													"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"address": {
+													"type": "string",
+													"description": "Ethereum contract address",
+													"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"chainId": {
+													"type": "integer",
+													"exclusiveMinimum": 0,
+													"description": "Blockchain network ID",
+													"example": 42161
+												},
+												"symbol": {
+													"type": "string",
+													"description": "Token symbol",
+													"example": "ARBx"
+												},
+												"name": {
+													"type": "string",
+													"description": "Token name",
+													"example": "Super ARB"
+												},
+												"decimals": {
+													"type": "integer",
+													"minimum": 0,
+													"maximum": 18,
+													"description": "Number of token decimals",
+													"example": 18
+												},
+												"isListed": {
+													"type": "boolean",
+													"description": "Whether token is listed on official Superfluid token list"
+												},
+												"isNativeAssetSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a native asset Super Token"
+												},
+												"isPureSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+												},
+												"isWrapperSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+												},
+												"underlyingAddress": {
+													"type": ["string", "null"],
+													"description": "Address of underlying token, null for native asset Super Tokens",
+													"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"totalNumberOfHolders": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Total number of token holders"
+												},
+												"totalNumberOfActiveStreams": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Number of currently active streams"
+												},
+												"totalNumberOfClosedStreams": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Number of closed streams"
+												},
+												"lastUpdated": {
+													"type": "string",
+													"format": "date-time",
+													"description": "ISO 8601 timestamp of last data update"
+												}
+											},
+											"required": [
+												"id",
+												"address",
+												"chainId",
+												"symbol",
+												"name",
+												"decimals",
+												"isListed",
+												"isNativeAssetSuperToken",
+												"isPureSuperToken",
+												"isWrapperSuperToken",
+												"underlyingAddress",
+												"totalNumberOfHolders",
+												"totalNumberOfActiveStreams",
+												"totalNumberOfClosedStreams",
+												"lastUpdated"
+											],
+											"description": "A Superfluid Super Token with statistics and metadata",
+											"title": "SuperToken"
+										},
+										"coingeckoId": {
+											"type": ["string", "null"],
+											"description": "CoinGecko coin ID for price data",
+											"example": "arbitrum"
+										},
+										"fetchedAt": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"pricesUsd": {
+											"type": "array",
+											"items": {
+												"type": "object",
+												"properties": {
+													"date": {
+														"type": "string",
+														"pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+														"description": "Date in YYYY-MM-DD format",
+														"example": "2025-06-22"
+													},
+													"price": {
+														"type": "string",
+														"description": "Price in USD as string to preserve precision",
+														"example": "0.00000022248603752704"
+													}
+												},
+												"required": ["date", "price"],
+												"description": "Daily price data for a token",
+												"title": "PriceDataPoint"
+											}
+										}
+									},
+									"required": ["version", "timestamp", "token", "coingeckoId", "fetchedAt", "pricesUsd"],
+									"description": "Complete price history for a Super Token",
+									"title": "TokenPriceHistory"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid parameters",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Price data not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/mappings": {
+			"get": {
+				"summary": "Get CoinGecko mappings",
+				"description": "Retrieves CoinGecko ID mappings for all Super Tokens",
+				"tags": ["Mappings"],
+				"responses": {
+					"200": {
+						"description": "CoinGecko mappings",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"version": {
+											"type": "string"
+										},
+										"timestamp": {
+											"type": "string",
+											"format": "date-time"
+										},
+										"totalSuperTokens": {
+											"type": "integer",
+											"minimum": 0
+										},
+										"mappedSuperTokens": {
+											"type": "integer",
+											"minimum": 0
+										},
+										"chainCount": {
+											"type": "integer",
+											"minimum": 0
+										},
+										"mappings": {
+											"type": "object",
+											"additionalProperties": {
+												"type": "object",
+												"additionalProperties": {
+													"type": "string"
+												}
+											},
+											"description": "Nested mapping: chainId -> tokenAddress -> coingeckoId"
+										},
+										"metadata": {
+											"type": "object",
+											"properties": {
+												"nativeAssetCoinIds": {
+													"type": "object",
+													"additionalProperties": {
+														"type": "string"
+													}
+												},
+												"chainIdToPlatformIds": {
+													"type": "object",
+													"additionalProperties": {
+														"type": "string"
+													}
+												}
+											},
+											"required": ["nativeAssetCoinIds", "chainIdToPlatformIds"]
+										}
+									},
+									"required": [
+										"version",
+										"timestamp",
+										"totalSuperTokens",
+										"mappedSuperTokens",
+										"chainCount",
+										"mappings",
+										"metadata"
+									],
+									"description": "Mapping of Super Tokens to CoinGecko coin IDs",
+									"title": "CoinGeckoMappings"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/prices/{networkName}/{tokenAddress}/current": {
+			"get": {
+				"summary": "Get current token price",
+				"description": "Retrieves the current price for a specific Super Token. Uses CoinGecko API for tokens with CoinGecko IDs, or GeckoTerminal on-chain API for others.",
+				"tags": ["Prices"],
+				"parameters": [
+					{
+						"schema": {
+							"type": "string",
+							"minLength": 1,
+							"description": "Network identifier (e.g., optimism, arbitrum-one, base-mainnet)",
+							"example": "arbitrum-one"
+						},
+						"required": true,
+						"name": "networkName",
+						"in": "path"
+					},
+					{
+						"schema": {
+							"type": "string",
+							"description": "Ethereum contract address",
+							"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+						},
+						"required": true,
+						"name": "tokenAddress",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Current token price",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"token": {
+											"type": "object",
+											"properties": {
+												"id": {
+													"type": "string",
+													"description": "Chain-prefixed token address",
+													"example": "42161-0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"address": {
+													"type": "string",
+													"description": "Ethereum contract address",
+													"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"chainId": {
+													"type": "integer",
+													"exclusiveMinimum": 0,
+													"description": "Blockchain network ID",
+													"example": 42161
+												},
+												"symbol": {
+													"type": "string",
+													"description": "Token symbol",
+													"example": "ARBx"
+												},
+												"name": {
+													"type": "string",
+													"description": "Token name",
+													"example": "Super ARB"
+												},
+												"decimals": {
+													"type": "integer",
+													"minimum": 0,
+													"maximum": 18,
+													"description": "Number of token decimals",
+													"example": 18
+												},
+												"isListed": {
+													"type": "boolean",
+													"description": "Whether token is listed on official Superfluid token list"
+												},
+												"isNativeAssetSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a native asset Super Token"
+												},
+												"isPureSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a Pure Super Token (no underlying asset, zero address)"
+												},
+												"isWrapperSuperToken": {
+													"type": "boolean",
+													"description": "Whether this is a Wrapper Super Token (wraps another ERC20 token)"
+												},
+												"underlyingAddress": {
+													"type": ["string", "null"],
+													"description": "Address of underlying token, null for native asset Super Tokens",
+													"example": "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04"
+												},
+												"totalNumberOfHolders": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Total number of token holders"
+												},
+												"totalNumberOfActiveStreams": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Number of currently active streams"
+												},
+												"totalNumberOfClosedStreams": {
+													"type": "integer",
+													"minimum": 0,
+													"description": "Number of closed streams"
+												},
+												"lastUpdated": {
+													"type": "string",
+													"format": "date-time",
+													"description": "ISO 8601 timestamp of last data update"
+												}
+											},
+											"required": [
+												"id",
+												"address",
+												"chainId",
+												"symbol",
+												"name",
+												"decimals",
+												"isListed",
+												"isNativeAssetSuperToken",
+												"isPureSuperToken",
+												"isWrapperSuperToken",
+												"underlyingAddress",
+												"totalNumberOfHolders",
+												"totalNumberOfActiveStreams",
+												"totalNumberOfClosedStreams",
+												"lastUpdated"
+											],
+											"description": "A Superfluid Super Token with statistics and metadata",
+											"title": "SuperToken"
+										},
+										"priceUsd": {
+											"type": ["string", "null"],
+											"description": "Current price in USD as string to preserve precision",
+											"example": "2.34567890123456789"
+										},
+										"timestamp": {
+											"type": "string",
+											"format": "date-time",
+											"description": "ISO 8601 timestamp of price fetch"
+										},
+										"method": {
+											"type": "string",
+											"enum": ["classic", "onchain", "none"],
+											"description": "Method used to fetch price: classic (CoinGecko), onchain (GeckoTerminal), none (no price available)"
+										},
+										"coingeckoId": {
+											"type": "string",
+											"description": "CoinGecko coin ID if available",
+											"example": "arbitrum"
+										}
+									},
+									"required": ["token", "priceUsd", "timestamp", "method"],
+									"description": "Current price data for a Super Token",
+									"title": "CurrentPrice"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid parameters",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Token not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal server error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					},
+					"503": {
+						"description": "Service unavailable (CoinGecko mappings not available)",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string"
+										},
+										"code": {
+											"type": "string"
+										}
+									},
+									"required": ["message"],
+									"description": "Standard API error response",
+									"title": "ApiError"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"webhooks": {}
+}

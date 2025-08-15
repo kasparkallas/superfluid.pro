@@ -2,7 +2,16 @@
 	"name": "@sfpro/sdk",
 	"version": "0.1.0",
 	"description": "TypeScript SDK for Superfluid Protocol - stream money every second",
-	"keywords": ["superfluid", "ethereum", "web3", "defi", "streaming", "money", "wagmi", "viem"],
+	"keywords": [
+		"superfluid",
+		"ethereum",
+		"web3",
+		"defi",
+		"streaming",
+		"money",
+		"wagmi",
+		"viem"
+	],
 	"homepage": "https://github.com/superfluid-org/superfluid.pro/tree/main/sdk/package",
 	"bugs": {
 		"url": "https://github.com/superfluid-org/superfluid.pro/issues"
@@ -82,18 +91,18 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
-		"@superfluid-finance/ethereum-contracts": "^1.12.0",
+		"@superfluid-finance/ethereum-contracts": "^1.13.0",
 		"@superfluid-finance/metadata": "^1.6.0",
-		"@types/node": "^22.15.30",
-		"@wagmi/cli": "^2.3.1",
-		"dotenv": "^16.5.0",
+		"@types/node": "^24.2.1",
+		"@wagmi/cli": "^2.4.0",
+		"dotenv": "^17.2.1",
 		"npm-run-all": "^4.1.5",
 		"rimraf": "^6.0.1",
-		"typedoc": "^0.28.5",
-		"typescript": "^5.8.3",
-		"viem": "^2.30.5",
-		"vitest": "^3.2.2",
-		"wagmi": "^2.15.4"
+		"typedoc": "^0.28.10",
+		"typescript": "^5.9.2",
+		"viem": "^2.33.3",
+		"vitest": "^3.2.4",
+		"wagmi": "^2.16.3"
 	},
 	"peerDependencies": {
 		"@wagmi/core": "^2",

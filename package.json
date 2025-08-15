@@ -23,18 +23,20 @@
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
 			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
 		],
-		"*": ["biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"]
+		"*": [
+			"biome check --write --no-errors-on-unmatched --files-ignore-unknown=true"
+		]
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@changesets/cli": "^2.29.4",
+		"@biomejs/biome": "2.1.4",
+		"@changesets/cli": "^2.29.5",
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
 		"@commitlint/types": "^19.8.1",
-		"@playwright/test": "^1.52.0",
+		"@playwright/test": "^1.54.2",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.5.2",
-		"turbo": "^2.5.4"
+		"lint-staged": "^16.1.5",
+		"turbo": "^2.5.5"
 	},
 	"packageManager": "pnpm@10.6.2"
 }

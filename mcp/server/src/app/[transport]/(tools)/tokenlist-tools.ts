@@ -1,8 +1,8 @@
-import type { McpServer } from "@/types";
-import { type SuperTokenInfo, type TokenInfo, extendedSuperTokenList } from "@superfluid-finance/tokenlist";
+import { extendedSuperTokenList, type SuperTokenInfo, type TokenInfo } from "@superfluid-finance/tokenlist";
 import Fuse from "fuse.js";
 import { isAddress } from "viem";
 import { z } from "zod";
+import type { McpServer } from "@/types";
 
 type TokenResult = {
 	token: SuperTokenInfo | TokenInfo;

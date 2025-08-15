@@ -1,0 +1,15 @@
+sources:
+  - name: protocol
+    handler:
+      graphql:
+        endpoint: '{context.url:https://subgraph-endpoints.superfluid.dev/base-mainnet/protocol-v1}'
+    transforms:
+      - autoPagination:
+          validateSchema: true
+documents:
+  - './**/*.graphql'
+codegen:
+  scalars:
+    BigInt: string
+    Bytes: string
+    BigDecimal: string

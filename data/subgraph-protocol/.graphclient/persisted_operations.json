@@ -1,0 +1,3 @@
+{
+	"fde1a01e39ee6adb82388a0dbffbec0e910c24464d62d2936146126b22f5511e": "query FetchTokensWithStatistics($id_gt: ID!) {\n  tokenStatistics(\n    first: 1000\n    where: {id_gt: $id_gt, token_: {isSuperToken: true}}\n  ) {\n    id\n    token {\n      id\n      symbol\n      name\n      decimals\n      isListed\n      isNativeAssetSuperToken\n      underlyingToken {\n        id\n      }\n    }\n    totalNumberOfHolders\n    totalNumberOfClosedStreams\n    totalNumberOfActiveStreams\n  }\n}"
+}

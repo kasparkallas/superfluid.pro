@@ -1,8 +1,8 @@
 import {
-	superfluidMainnetTransports,
 	superfluidMainnets,
-	superfluidTestnetTransports,
+	superfluidMainnetTransports,
 	superfluidTestnets,
+	superfluidTestnetTransports,
 } from "@sfpro/sdk/config";
 import { createConfig, createStorage } from "@wagmi/vue";
 import { coinbaseWallet, walletConnect } from "@wagmi/vue/connectors";

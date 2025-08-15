@@ -6,7 +6,7 @@ export function calculateCurrentBalance({
 	flowRate,
 	balance,
 	balanceTimestamp, // Unix timestamp
-	currentTimestamp = new Date().getTime(),
+	currentTimestamp = Date.now(),
 }: {
 	flowRate: bigint;
 	balance: bigint;
@@ -18,12 +18,6 @@ export function calculateCurrentBalance({
 	return balance + amountFlowed;
 }
 
-export function calculateFlowratePerSecond({
-	amountWei,
-	timeUnit,
-}: {
-	amountWei: bigint;
-	timeUnit: TimeUnit;
-}) {
+export function calculateFlowratePerSecond({ amountWei, timeUnit }: { amountWei: bigint; timeUnit: TimeUnit }) {
 	return amountWei / BigInt(timeUnit);
 }

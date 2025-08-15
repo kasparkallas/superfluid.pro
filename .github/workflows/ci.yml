@@ -38,6 +38,9 @@ jobs:
 
       - name: Build All Packages
         run: pnpm build
+        env:
+          DATABASE_URI: file:./superfluid-cms.db
+          PAYLOAD_SECRET: 66fa5bb4549644545ae3f069 # Not production secret
 
       - name: Run Tests
         run: pnpm test --filter=@sfpro/sdk

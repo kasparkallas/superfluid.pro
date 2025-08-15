@@ -1,0 +1,77 @@
+{
+	"name": "superfluid-cms",
+	"version": "1.0.0",
+	"description": "A blank template to get started with Payload 3.0",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+		"dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+		"devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+		"generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+		"generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+		"generate:openapi": "tsx scripts/generate-openapi.ts",
+		"lint": "cross-env NODE_OPTIONS=--no-deprecation biome check .",
+		"payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+		"start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+		"test": "pnpm run test:int && pnpm run test:e2e",
+		"test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test",
+		"test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+		"trigger:dev": "pnpm dlx trigger.dev@latest dev",
+		"trigger:login": "pnpm dlx trigger.dev@latest login",
+		"trigger:deploy": "pnpm dlx trigger.dev@latest deploy",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@asteasolutions/zod-to-openapi": "^7.0.0",
+		"@payloadcms/db-sqlite": "^3.50.0",
+		"@payloadcms/db-vercel-postgres": "^3.50.0",
+		"@payloadcms/next": "^3.50.0",
+		"@payloadcms/payload-cloud": "^3.50.0",
+		"@payloadcms/richtext-lexical": "^3.50.0",
+		"@payloadcms/ui": "^3.50.0",
+		"@superfluid-finance/metadata": "^1.6.0",
+		"@superfluid-finance/tokenlist": "^5.28.0",
+		"@trigger.dev/sdk": "^3.3.17",
+		"@uniswap/token-lists": "1.0.0-beta.34",
+		"@vercel/blob": "^1.1.1",
+		"cross-env": "^10.0.0",
+		"dotenv": "^17.2.1",
+		"graphql": "^16.8.1",
+		"next": "^15.4.6",
+		"payload": "^3.50.0",
+		"react": "^19.1.1",
+		"sharp": "^0.34.3",
+		"swagger-ui-react": "5.27.1",
+		"viem": "^2.33.3",
+		"zod": "^3.23.8"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.54.2",
+		"@testing-library/react": "^16.3.0",
+		"@trigger.dev/build": "^3.3.17",
+		"@types/node": "^24.2.1",
+		"@types/react": "^19.1.9",
+		"@types/react-dom": "^19.1.7",
+		"@types/swagger-ui-react": "^5.18.0",
+		"@vitejs/plugin-react": "^5.0.0",
+		"jsdom": "^26.1.0",
+		"playwright": "^1.54.2",
+		"playwright-core": "^1.54.2",
+		"tsx": "^4.20.4",
+		"typescript": "^5.9.2",
+		"vite-tsconfig-paths": "^5.1.4",
+		"vitest": "^3.2.4"
+	},
+	"engines": {
+		"node": "^18.20.2 || >=20.9.0",
+		"pnpm": "^9 || ^10"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"sharp",
+			"esbuild",
+			"unrs-resolver"
+		]
+	}
+}
