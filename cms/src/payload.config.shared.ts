@@ -27,8 +27,5 @@ export const sharedConfig = {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
 	},
 	sharp,
-	plugins: [
-		payloadCloudPlugin(),
-		// storage-adapter-placeholder
-	],
+	plugins: [payloadCloudPlugin()],
 };
