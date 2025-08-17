@@ -4,7 +4,7 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"outputs": ["dist/**", ".next/**"],
-			"env": ["PAYLOAD_SECRET", "DATABASE_URL"]
+			"env": ["PAYLOAD_SECRET", "POSTGRES_URL", "DATABASE_URI"]
 		},
 		"dev": {
 			"persistent": true,
