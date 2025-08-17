@@ -24,8 +24,6 @@
 	},
 	"dependencies": {
 		"@asteasolutions/zod-to-openapi": "^7.0.0",
-		"@libsql/client": "^0.15.11",
-		"@payloadcms/db-sqlite": "^3.52.0",
 		"@payloadcms/db-vercel-postgres": "^3.52.0",
 		"@payloadcms/next": "^3.52.0",
 		"@payloadcms/payload-cloud": "^3.52.0",
@@ -39,7 +37,6 @@
 		"cross-env": "^10.0.0",
 		"dotenv": "^17.2.1",
 		"graphql": "^16.8.1",
-		"libsql": "^0.5.17",
 		"next": "^15.4.6",
 		"payload": "^3.52.0",
 		"react": "^19.1.1",
@@ -63,7 +60,10 @@
 		"tsx": "^4.20.4",
 		"typescript": "^5.9.2",
 		"vite-tsconfig-paths": "^5.1.4",
-		"vitest": "^3.2.4"
+		"vitest": "^3.2.4",
+		"@payloadcms/db-sqlite": "^3.52.0",
+		"@libsql/client": "^0.15.11",
+		"libsql": "^0.5.17"
 	},
 	"optionalDependencies": {
 		"@libsql/darwin-arm64": "^0.5.17",
