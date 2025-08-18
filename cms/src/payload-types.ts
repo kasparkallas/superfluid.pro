@@ -187,10 +187,6 @@ export interface Token {
 	 * The blockchain network ID for this token (legacy field, will be migrated)
 	 */
 	chainId: number;
-	/**
-	 * The blockchain network this token belongs to
-	 */
-	chain?: (number | null) | Chain;
 	address: string;
 	name: string;
 	decimals: number;
@@ -409,7 +405,6 @@ export interface UsersSelect<T extends boolean = true> {
 export interface TokensSelect<T extends boolean = true> {
 	id?: T;
 	chainId?: T;
-	chain?: T;
 	address?: T;
 	name?: T;
 	decimals?: T;

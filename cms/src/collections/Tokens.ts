@@ -24,28 +24,6 @@ export const Tokens: CollectionConfig = {
 		delete: AccessControl.tokenAccess,
 		admin: AccessControl.editorOrAdmin,
 	},
-	hooks: {
-		beforeChange: [
-			async ({ data, req, operation: _operation }) => {
-				// Auto-set chain relationship based on chainId
-				if (data?.chainId && !data?.chain) {
-					try {
-						// Find the chain with matching id
-						const chain = await req.payload.findByID({
-							collection: "chains",
-							id: data.chainId,
-						});
-						if (chain) {
-							data.chain = data.chainId;
-						}
-					} catch (_error) {
-						// Chain not found, that's ok - validation will catch it
-					}
-				}
-				return data;
-			},
-		],
-	},
 	fields: [
 		{
 			name: "id",
@@ -84,15 +62,6 @@ export const Tokens: CollectionConfig = {
 					return `Invalid chain ID. Must be one of: ${validChainIds.join(", ")}`;
 				}
 				return true;
-			},
-		},
-		{
-			name: "chain",
-			type: "relationship",
-			relationTo: "chains",
-			required: false,
-			admin: {
-				description: "The blockchain network this token belongs to",
 			},
 		},
 		{

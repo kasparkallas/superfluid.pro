@@ -59,7 +59,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "tokens" (
   	"id" varchar PRIMARY KEY NOT NULL,
-  	"chain_id" numeric,
+  	"chain_id" numeric NOT NULL,
   	"address" varchar NOT NULL,
   	"name" varchar NOT NULL,
   	"decimals" numeric NOT NULL,
@@ -178,7 +178,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "users_token_permissions_allowed_chain_ids" ADD CONSTRAINT "users_token_permissions_allowed_chain_ids_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "tokens_tags" ADD CONSTRAINT "tokens_tags_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."tokens"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "tokens" ADD CONSTRAINT "tokens_chain_id_chains_id_fk" FOREIGN KEY ("chain_id") REFERENCES "public"."chains"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "chains_public_r_p_cs" ADD CONSTRAINT "chains_public_r_p_cs_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."chains"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "chains_trusted_forwarders" ADD CONSTRAINT "chains_trusted_forwarders_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."chains"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."payload_locked_documents"("id") ON DELETE cascade ON UPDATE no action;
@@ -200,7 +199,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE UNIQUE INDEX "users_email_idx" ON "users" USING btree ("email");
   CREATE INDEX "tokens_tags_order_idx" ON "tokens_tags" USING btree ("order");
   CREATE INDEX "tokens_tags_parent_idx" ON "tokens_tags" USING btree ("parent_id");
-  CREATE INDEX "tokens_chain_idx" ON "tokens" USING btree ("chain_id");
   CREATE INDEX "tokens_updated_at_idx" ON "tokens" USING btree ("updated_at");
   CREATE INDEX "tokens_created_at_idx" ON "tokens" USING btree ("created_at");
   CREATE INDEX "chains_public_r_p_cs_order_idx" ON "chains_public_r_p_cs" USING btree ("_order");

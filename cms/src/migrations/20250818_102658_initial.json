@@ -1,5 +1,5 @@
 {
-	"id": "240a3e73-0ff7-4849-8592-ab2c327dcde4",
+	"id": "dd4bcb1e-6d5e-49b8-8f38-6cdb925552d6",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "7",
 	"dialect": "postgresql",
@@ -558,7 +558,7 @@
 					"name": "chain_id",
 					"type": "numeric",
 					"primaryKey": false,
-					"notNull": false
+					"notNull": true
 				},
 				"address": {
 					"name": "address",
@@ -638,21 +638,6 @@
 				}
 			},
 			"indexes": {
-				"tokens_chain_idx": {
-					"name": "tokens_chain_idx",
-					"columns": [
-						{
-							"expression": "chain_id",
-							"isExpression": false,
-							"asc": true,
-							"nulls": "last"
-						}
-					],
-					"isUnique": false,
-					"concurrently": false,
-					"method": "btree",
-					"with": {}
-				},
 				"tokens_updated_at_idx": {
 					"name": "tokens_updated_at_idx",
 					"columns": [
@@ -684,17 +669,7 @@
 					"with": {}
 				}
 			},
-			"foreignKeys": {
-				"tokens_chain_id_chains_id_fk": {
-					"name": "tokens_chain_id_chains_id_fk",
-					"tableFrom": "tokens",
-					"tableTo": "chains",
-					"columnsFrom": ["chain_id"],
-					"columnsTo": ["id"],
-					"onDelete": "set null",
-					"onUpdate": "no action"
-				}
-			},
+			"foreignKeys": {},
 			"compositePrimaryKeys": {},
 			"uniqueConstraints": {},
 			"policies": {},
