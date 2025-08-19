@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import sharp from "sharp";
 import { Chains } from "./collections/Chains";
 // import { Media } from './collections/Media'
@@ -28,7 +29,14 @@ export const sharedConfig = {
 		outputFile: path.resolve(dirname, "payload-types.ts"),
 	},
 	sharp,
-	plugins: [payloadCloudPlugin()],
+	plugins: [
+		payloadCloudPlugin(),
+		vercelBlobStorage({
+			enabled: true,
+			collections: {},
+			token: process.env.BLOB_READ_WRITE_TOKEN,
+		}),
+	],
 	email: nodemailerAdapter({
 		defaultFromAddress: "cms@superfluid.pro",
 		defaultFromName: "Superfluid CMS",

@@ -31,6 +31,7 @@
 		"@payloadcms/next": "^3.52.0",
 		"@payloadcms/payload-cloud": "^3.52.0",
 		"@payloadcms/richtext-lexical": "^3.52.0",
+		"@payloadcms/storage-vercel-blob": "^3.52.0",
 		"@payloadcms/ui": "^3.52.0",
 		"@scalar/api-reference-react": "^0.7.38",
 		"@superfluid-finance/metadata": "^1.6.0",

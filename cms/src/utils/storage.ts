@@ -67,6 +67,6 @@ export function getStorageConfig(): StorageConfig {
 	return {
 		type: isProduction ? "blob" : "local",
 		localPath: process.env.LOCAL_STORAGE_PATH || "./data",
-		blobReadWriteToken: process.env.BLOB_READ_WRITE_TOKEN,
+		blobReadWriteToken: process.env.SUPERFLUID_DATA_BLOB_READ_WRITE_TOKEN,
 	};
 }
