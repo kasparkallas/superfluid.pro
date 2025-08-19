@@ -1,4 +1,5 @@
-import type { TokenInfo as OriginalTokenInfo, Tags, TokenList, Version } from "@uniswap/token-lists";
+import superfluidMetadata from "@superfluid-finance/metadata";
+import type { TokenInfo as OriginalTokenInfo, TokenList } from "@uniswap/token-lists";
 import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 
@@ -177,6 +178,28 @@ export const GET = async (request: Request) => {
 		// Combine all tokens
 		const allTokens = [...tokens, ...underlyingTokens];
 
+		// Get testnet chain IDs programmatically from Superfluid metadata
+		const testnetChainIds = new Set(superfluidMetadata.testnets.map((network) => network.chainId));
+
+		// Sort tokens: mainnets first (by chainId), then testnets (by chainId), within each chain by symbol
+		allTokens.sort((a, b) => {
+			const aIsTestnet = testnetChainIds.has(a.chainId);
+			const bIsTestnet = testnetChainIds.has(b.chainId);
+
+			// If one is testnet and the other isn't, mainnet comes first
+			if (aIsTestnet !== bIsTestnet) {
+				return aIsTestnet ? 1 : -1;
+			}
+
+			// If both are the same type (both mainnet or both testnet), sort by chainId
+			if (a.chainId !== b.chainId) {
+				return a.chainId - b.chainId;
+			}
+
+			// Same chain, sort by symbol
+			return a.symbol.localeCompare(b.symbol);
+		});
+
 		// Find the most recent update timestamp from all tokens
 		let latestUpdate = new Date().toISOString();
 		if (allTokens.length > 0) {
@@ -191,14 +214,14 @@ export const GET = async (request: Request) => {
 			}
 		}
 
-		// Format as tokenlist with proper types
+		// Format as tokenlist with proper types (allTokens is already sorted)
 		const tokenList: SuperTokenList = {
 			name: "Superfluid Token List",
 			timestamp: latestUpdate,
 			version: {
-				major: 1,
-				minor: 0,
-				patch: 0,
+				major: 5,
+				minor: allTokens.length,
+				patch: new Date(latestUpdate).getTime() - new Date("2025-01-01").getTime(),
 			},
 			tokens: allTokens.map(mapTokenToTokenListFormat),
 		};
