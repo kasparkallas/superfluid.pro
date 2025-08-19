@@ -36,6 +36,7 @@
 		"@scalar/api-reference-react": "^0.7.38",
 		"@superfluid-finance/metadata": "^1.6.0",
 		"@superfluid-finance/tokenlist": "^5.28.0",
+		"@tailwindcss/postcss": "^4.1.12",
 		"@trigger.dev/sdk": "^4.0.0",
 		"@uniswap/token-lists": "1.0.0-beta.34",
 		"@vercel/blob": "^1.1.1",
@@ -45,8 +46,10 @@
 		"libsql": "^0.5.17",
 		"next": "^15.4.7",
 		"payload": "^3.52.0",
+		"postcss": "^8.5.6",
 		"react": "^19.1.1",
 		"sharp": "^0.34.3",
+		"tailwindcss": "^4.1.12",
 		"viem": "^2.34.0",
 		"zod": "^3.23.8"
 	},

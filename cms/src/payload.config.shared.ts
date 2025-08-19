@@ -15,6 +15,8 @@ import { Users } from "./collections/Users";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const isEmailEnabled = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
+
 export const sharedConfig = {
 	admin: {
 		user: Users.slug,
@@ -37,21 +39,23 @@ export const sharedConfig = {
 			token: process.env.BLOB_READ_WRITE_TOKEN,
 		}),
 	],
-	email: nodemailerAdapter({
-		defaultFromAddress: "cms@superfluid.pro",
-		defaultFromName: "Superfluid CMS",
-		transportOptions: {
-			host: process.env.SMTP_HOST,
-			port: 587,
-			secure: false,
-			auth: {
-				user: process.env.SMTP_USER,
-				pass: process.env.SMTP_PASS,
-			},
-			tls: {
-				rejectUnauthorized: true,
-				ciphers: "SSLv3",
-			},
-		},
-	}),
+	email: isEmailEnabled
+		? nodemailerAdapter({
+				defaultFromAddress: "cms@superfluid.pro",
+				defaultFromName: "Superfluid CMS",
+				transportOptions: {
+					host: process.env.SMTP_HOST,
+					port: 587,
+					secure: false,
+					auth: {
+						user: process.env.SMTP_USER,
+						pass: process.env.SMTP_PASS,
+					},
+					tls: {
+						rejectUnauthorized: true,
+						ciphers: "SSLv3",
+					},
+				},
+			})
+		: undefined,
 };

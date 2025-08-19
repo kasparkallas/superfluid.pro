@@ -74,6 +74,9 @@ importers:
       '@superfluid-finance/tokenlist':
         specifier: ^5.28.0
         version: 5.28.0
+      '@tailwindcss/postcss':
+        specifier: ^4.1.12
+        version: 4.1.12
       '@trigger.dev/sdk':
         specifier: ^4.0.0
         version: 4.0.0(bufferutil@4.0.9)(utf-8-validate@6.0.5)(zod@3.25.76)
@@ -101,12 +104,18 @@ importers:
       payload:
         specifier: ^3.52.0
         version: 3.52.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.9.2)(utf-8-validate@6.0.5)
+      postcss:
+        specifier: ^8.5.6
+        version: 8.5.6
       react:
         specifier: ^19.1.1
         version: 19.1.1
       sharp:
         specifier: ^0.34.3
         version: 0.34.3
+      tailwindcss:
+        specifier: ^4.1.12
+        version: 4.1.12
       viem:
         specifier: ^2.34.0
         version: 2.34.0(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@6.0.5)(zod@3.25.76)
