@@ -175,8 +175,24 @@ export const GET = async (request: Request) => {
 			underlyingTokens = foundUnderlyingTokens;
 		}
 
-		// Combine all tokens
-		const allTokens = [...tokens, ...underlyingTokens];
+		// Combine all tokens and deduplicate by composite ID (chainId:address)
+		const tokenMap = new Map<string, Token>();
+
+		// Add initial tokens
+		for (const token of tokens) {
+			const key = `${token.chainId}:${token.address.toLowerCase()}`;
+			tokenMap.set(key, token);
+		}
+
+		// Add underlying tokens (will not overwrite existing ones)
+		for (const token of underlyingTokens) {
+			const key = `${token.chainId}:${token.address.toLowerCase()}`;
+			if (!tokenMap.has(key)) {
+				tokenMap.set(key, token);
+			}
+		}
+
+		const allTokens = Array.from(tokenMap.values());
 
 		// Get testnet chain IDs programmatically from Superfluid metadata
 		const testnetChainIds = new Set(superfluidMetadata.testnets.map((network) => network.chainId));
