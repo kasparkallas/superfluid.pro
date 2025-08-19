@@ -1,11 +1,12 @@
 import { fileURLToPath } from "node:url";
-import { headers as getHeaders } from "next/headers.js";
+import { headers as getHeaders } from "next/headers";
 import Image from "next/image";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import "./styles.css";
 
 export default async function HomePage() {
 	const headers = await getHeaders();
+	const payload = await getPayloadInstance();
 	const { user } = await payload.auth({ headers });
 	const payloadConfig = payload.config;
 

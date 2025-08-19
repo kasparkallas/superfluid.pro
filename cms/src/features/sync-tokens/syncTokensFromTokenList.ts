@@ -1,5 +1,5 @@
 import { fetchLatestExtendedSuperTokenList } from "@superfluid-finance/tokenlist";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { getAllExistingTokens, hasChanges, type TokenTag, type TokenType, type TokenTypeInfo } from ".";
 
@@ -13,6 +13,8 @@ export interface SuperTokenInfo {
 export async function syncTokensFromTokenList() {
 	const tokenList = await fetchLatestExtendedSuperTokenList();
 	const existingTokensMap = await getAllExistingTokens();
+
+	const payload = await getPayloadInstance();
 
 	for (const token of tokenList.tokens) {
 		const superTokenInfo = token.extensions?.superTokenInfo;

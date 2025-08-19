@@ -1,4 +1,4 @@
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { getAllExistingTokens, hasChanges } from ".";
 
@@ -99,6 +99,8 @@ export async function syncFromStreme() {
 
 	const stremeTokens = allStremeTokens;
 	const existingTokensMap = await getAllExistingTokens();
+
+	const payload = await getPayloadInstance();
 
 	for (const stremeToken of stremeTokens) {
 		const key = `${stremeToken.contract_address}-${stremeToken.chain_id}`;

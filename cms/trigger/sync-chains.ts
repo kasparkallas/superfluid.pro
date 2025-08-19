@@ -1,4 +1,4 @@
-import { schedules } from "@trigger.dev/sdk/v3";
+import { schedules } from "@trigger.dev/sdk";
 import { syncChains } from "@/features/sync-chains";
 
 // Task definition - sync chains from Superfluid metadata

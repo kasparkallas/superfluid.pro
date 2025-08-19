@@ -1,5 +1,5 @@
 import superfluidMetadata from "@superfluid-finance/metadata";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { getAllExistingTokens, hasChanges, type TokenTag, type TokenType, type TokenTypeInfo } from ".";
 
@@ -61,6 +61,8 @@ export async function syncTokensFromDataApi() {
 	}
 
 	const existingTokensMap = await getAllExistingTokens();
+
+	const payload = await getPayloadInstance();
 
 	for (const dataApiToken of dataApiTokens) {
 		const { tokenType, underlyingAddress } = getTokenTypeFromDataApi(dataApiToken);

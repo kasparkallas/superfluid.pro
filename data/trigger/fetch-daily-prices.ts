@@ -1,4 +1,4 @@
-import { schedules } from "@trigger.dev/sdk/v3";
+import { schedules } from "@trigger.dev/sdk";
 import { fetchDailyPrices } from "@/features/fetch-daily-prices";
 
 // Task definition - can be triggered manually via UI or scheduled

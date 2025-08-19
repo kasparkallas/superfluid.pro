@@ -1,5 +1,5 @@
 import type { TokenInfo as OriginalTokenInfo, Tags, TokenList, Version } from "@uniswap/token-lists";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 
 // SuperToken extension types
@@ -141,6 +141,8 @@ export const GET = async (request: Request) => {
 		}
 
 		// Note: Empty where object returns all tokens, which is the desired behavior
+
+		const payload = await getPayloadInstance();
 
 		// Get tokens from the database with filtering (public endpoint)
 		const { docs: tokens } = await payload.find({

@@ -1,4 +1,4 @@
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { fetchTokenPrice, type TokenPrice } from "@/utils/pricing";
 
@@ -48,6 +48,8 @@ export async function GET(request: Request) {
 		if (tags) {
 			where.tags = { contains: tags };
 		}
+
+		const payload = await getPayloadInstance();
 
 		// Fetch tokens from CMS
 		const {

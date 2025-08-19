@@ -1,5 +1,5 @@
 import { headers as getHeaders } from "next/headers";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { User } from "@/payload-types";
 
 /**
@@ -18,6 +18,7 @@ import type { User } from "@/payload-types";
  */
 export async function requireAdmin() {
 	const headers = await getHeaders();
+	const payload = await getPayloadInstance();
 	const { user } = await payload.auth({ headers });
 
 	if (!user) {
@@ -53,6 +54,7 @@ export async function requireAdmin() {
  */
 export async function requireRoles(...roles: Array<"admin" | "editor" | "viewer">) {
 	const headers = await getHeaders();
+	const payload = await getPayloadInstance();
 	const { user } = await payload.auth({ headers });
 
 	if (!user) {
@@ -86,6 +88,7 @@ export async function requireRoles(...roles: Array<"admin" | "editor" | "viewer"
  */
 export async function getCurrentUser(): Promise<User | null> {
 	const headers = await getHeaders();
+	const payload = await getPayloadInstance();
 	const { user } = await payload.auth({ headers });
 
 	return user as User | null;

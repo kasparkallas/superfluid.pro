@@ -1,4 +1,4 @@
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 
 // # Types
@@ -15,6 +15,8 @@ export async function getAllExistingTokens(): Promise<Map<string, Token>> {
 	const existingTokens: Token[] = [];
 	let page = 1;
 	const limit = 100;
+
+	const payload = await getPayloadInstance();
 
 	while (true) {
 		const result = await payload.find({

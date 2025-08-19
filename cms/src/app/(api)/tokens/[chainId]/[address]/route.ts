@@ -1,4 +1,4 @@
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { fetchTokenPrice, type TokenPrice } from "@/utils/pricing";
 
@@ -42,6 +42,8 @@ export async function GET(request: Request, context: { params: Promise<{ chainId
 
 		// Create composite ID (chainId:address)
 		const tokenId = `${chainIdNum}:${address.toLowerCase()}`;
+
+		const payload = await getPayloadInstance();
 
 		// Fetch token from CMS
 		const token = await payload.findByID({

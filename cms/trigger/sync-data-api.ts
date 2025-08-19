@@ -1,4 +1,4 @@
-import { schedules } from "@trigger.dev/sdk/v3";
+import { schedules } from "@trigger.dev/sdk";
 import { syncTokensFromDataApi } from "@/features/sync-tokens";
 
 // Task definition - sync tokens from Superfluid data API (includes CoinGecko mappings)

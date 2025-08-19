@@ -1,5 +1,5 @@
 import superfluidMetadata from "@superfluid-finance/metadata";
-import { payload } from "@/payload";
+import { getPayloadInstance } from "@/payload";
 import type { Chain } from "@/payload-types";
 
 type ChainData = Omit<Chain, "createdAt" | "updatedAt" | "sizes" | "deletedAt">;
@@ -11,6 +11,8 @@ export async function syncChains() {
 		failed: [] as { name: string; error: string }[],
 		total: networks.length,
 	};
+
+	const payload = await getPayloadInstance();
 
 	for (const network of networks) {
 		// Transform the metadata structure to match Chain collection schema
