@@ -2,6 +2,7 @@
 
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
@@ -28,4 +29,16 @@ export const sharedConfig = {
 	},
 	sharp,
 	plugins: [payloadCloudPlugin()],
+	email: nodemailerAdapter({
+		defaultFromAddress: "cms@superfluid.pro",
+		defaultFromName: "Superfluid CMS",
+		transportOptions: {
+			host: process.env.SMTP_HOST,
+			port: 587,
+			auth: {
+				user: process.env.SMTP_USER,
+				pass: process.env.SMTP_PASS,
+			},
+		},
+	}),
 };
