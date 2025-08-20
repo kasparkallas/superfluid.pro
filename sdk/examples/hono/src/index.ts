@@ -1,8 +1,8 @@
-import { serve } from "@hono/node-server";
+import { serve } from "@hono/node-server"
 
-import { app } from "./app.js";
-import "./abi.js";
-import "./action.js";
+import { app } from "./app.js"
+import "./abi.js"
+import "./action.js"
 
 serve(
 	{
@@ -10,6 +10,6 @@ serve(
 		port: 3000,
 	},
 	(info) => {
-		console.log(`Server is running on http://localhost:${info.port}`);
+		console.log(`Server is running on http://localhost:${info.port}`)
 	},
-);
+)

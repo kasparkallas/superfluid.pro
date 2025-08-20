@@ -1,5 +1,5 @@
-import Papa from "papaparse";
-import type { SuperTokenData } from "./types";
+import Papa from "papaparse"
+import type { SuperTokenData } from "./types"
 
 export const generateCSV = (tokens: SuperTokenData[]): string => {
 	const data = tokens.map((token) => ({
@@ -18,7 +18,7 @@ export const generateCSV = (tokens: SuperTokenData[]): string => {
 		totalNumberOfActiveStreams: token.totalNumberOfActiveStreams,
 		totalNumberOfClosedStreams: token.totalNumberOfClosedStreams,
 		lastUpdated: token.lastUpdated,
-	}));
+	}))
 
 	return Papa.unparse(data, {
 		header: true,
@@ -27,5 +27,5 @@ export const generateCSV = (tokens: SuperTokenData[]): string => {
 		escapeChar: '"',
 		delimiter: ",",
 		newline: "\n",
-	});
-};
+	})
+}

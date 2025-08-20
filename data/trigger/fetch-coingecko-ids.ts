@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { fetchCoingeckoIds } from "@/features/fetch-coingecko-ids";
+import { schedules } from "@trigger.dev/sdk"
+import { fetchCoingeckoIds } from "@/features/fetch-coingecko-ids"
 
 // Task definition - can be triggered manually via UI or scheduled
 export const fetchCoingeckoIdsScheduled = schedules.task({
@@ -9,6 +9,6 @@ export const fetchCoingeckoIdsScheduled = schedules.task({
 		maxAttempts: 2,
 	},
 	run: async () => {
-		return await fetchCoingeckoIds("blob"); // Use blob storage in production
+		return await fetchCoingeckoIds("blob") // Use blob storage in production
 	},
-});
+})

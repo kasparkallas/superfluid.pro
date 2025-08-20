@@ -1,4 +1,4 @@
-import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi";
+import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
 import {
 	ApiErrorSchema,
 	CoinGeckoMappingsSchema,
@@ -9,17 +9,17 @@ import {
 	TokenParamSchema,
 	TokenPriceHistorySchema,
 	TokensResponseSchema,
-} from "./schemas";
+} from "./schemas"
 
-export const registry = new OpenAPIRegistry();
+export const registry = new OpenAPIRegistry()
 
 // Register reusable components
-registry.register("SuperToken", SuperTokenSchema);
-registry.register("TokensResponse", TokensResponseSchema);
-registry.register("TokenPriceHistory", TokenPriceHistorySchema);
-registry.register("CoinGeckoMappings", CoinGeckoMappingsSchema);
-registry.register("CurrentPrice", CurrentPriceSchema);
-registry.register("ApiError", ApiErrorSchema);
+registry.register("SuperToken", SuperTokenSchema)
+registry.register("TokensResponse", TokensResponseSchema)
+registry.register("TokenPriceHistory", TokenPriceHistorySchema)
+registry.register("CoinGeckoMappings", CoinGeckoMappingsSchema)
+registry.register("CurrentPrice", CurrentPriceSchema)
+registry.register("ApiError", ApiErrorSchema)
 
 // Register API paths
 registry.registerPath({
@@ -57,7 +57,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 registry.registerPath({
 	method: "get",
@@ -103,7 +103,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 registry.registerPath({
 	method: "get",
@@ -148,7 +148,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 registry.registerPath({
 	method: "get",
@@ -193,7 +193,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 registry.registerPath({
 	method: "get",
@@ -219,7 +219,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 registry.registerPath({
 	method: "get",
@@ -273,11 +273,11 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 // Generate OpenAPI document
 export function generateOpenApiDocument() {
-	const generator = new OpenApiGeneratorV31(registry.definitions);
+	const generator = new OpenApiGeneratorV31(registry.definitions)
 
 	return generator.generateDocument({
 		openapi: "3.1.0",
@@ -311,5 +311,5 @@ export function generateOpenApiDocument() {
 				description: "Token to CoinGecko ID mappings",
 			},
 		],
-	});
+	})
 }

@@ -59,70 +59,70 @@ export type SupportedTimezones =
 	| "Pacific/Guam"
 	| "Pacific/Noumea"
 	| "Pacific/Auckland"
-	| "Pacific/Fiji";
+	| "Pacific/Fiji"
 
 export interface Config {
 	auth: {
-		users: UserAuthOperations;
-	};
-	blocks: {};
+		users: UserAuthOperations
+	}
+	blocks: {}
 	collections: {
-		users: User;
-		tokens: Token;
-		chains: Chain;
-		"payload-locked-documents": PayloadLockedDocument;
-		"payload-preferences": PayloadPreference;
-		"payload-migrations": PayloadMigration;
-	};
-	collectionsJoins: {};
+		users: User
+		tokens: Token
+		chains: Chain
+		"payload-locked-documents": PayloadLockedDocument
+		"payload-preferences": PayloadPreference
+		"payload-migrations": PayloadMigration
+	}
+	collectionsJoins: {}
 	collectionsSelect: {
-		users: UsersSelect<false> | UsersSelect<true>;
-		tokens: TokensSelect<false> | TokensSelect<true>;
-		chains: ChainsSelect<false> | ChainsSelect<true>;
-		"payload-locked-documents": PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-		"payload-preferences": PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-		"payload-migrations": PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-	};
+		users: UsersSelect<false> | UsersSelect<true>
+		tokens: TokensSelect<false> | TokensSelect<true>
+		chains: ChainsSelect<false> | ChainsSelect<true>
+		"payload-locked-documents": PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>
+		"payload-preferences": PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
+		"payload-migrations": PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
+	}
 	db: {
-		defaultIDType: number;
-	};
-	globals: {};
-	globalsSelect: {};
-	locale: null;
+		defaultIDType: number
+	}
+	globals: {}
+	globalsSelect: {}
+	locale: null
 	user: User & {
-		collection: "users";
-	};
+		collection: "users"
+	}
 	jobs: {
-		tasks: unknown;
-		workflows: unknown;
-	};
+		tasks: unknown
+		workflows: unknown
+	}
 }
 export interface UserAuthOperations {
 	forgotPassword: {
-		email: string;
-		password: string;
-	};
+		email: string
+		password: string
+	}
 	login: {
-		email: string;
-		password: string;
-	};
+		email: string
+		password: string
+	}
 	registerFirstUser: {
-		email: string;
-		password: string;
-	};
+		email: string
+		password: string
+	}
 	unlock: {
-		email: string;
-		password: string;
-	};
+		email: string
+		password: string
+	}
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-	id: number;
-	name?: string | null;
-	role: "admin" | "editor" | "viewer";
+	id: number
+	name?: string | null
+	role: "admin" | "editor" | "viewer"
 	/**
 	 * Configure token editing permissions for editors
 	 */
@@ -130,404 +130,404 @@ export interface User {
 		/**
 		 * If checked, user can edit all tokens. If unchecked, restrictions below apply.
 		 */
-		canEditAllTokens?: boolean | null;
+		canEditAllTokens?: boolean | null
 		/**
 		 * User can edit tokens with ANY of these tags
 		 */
 		allowedTags?:
 			| {
-					tag: string;
-					id?: string | null;
+					tag: string
+					id?: string | null
 			  }[]
-			| null;
+			| null
 		/**
 		 * User can edit tokens from ANY of these addresses
 		 */
 		allowedAddresses?:
 			| {
-					address: string;
-					id?: string | null;
+					address: string
+					id?: string | null
 			  }[]
-			| null;
+			| null
 		/**
 		 * User can edit tokens on ANY of these chains
 		 */
 		allowedChainIds?:
 			| {
-					chainId: number;
-					id?: string | null;
+					chainId: number
+					id?: string | null
 			  }[]
-			| null;
-	};
-	updatedAt: string;
-	createdAt: string;
-	email: string;
-	resetPasswordToken?: string | null;
-	resetPasswordExpiration?: string | null;
-	salt?: string | null;
-	hash?: string | null;
-	loginAttempts?: number | null;
-	lockUntil?: string | null;
+			| null
+	}
+	updatedAt: string
+	createdAt: string
+	email: string
+	resetPasswordToken?: string | null
+	resetPasswordExpiration?: string | null
+	salt?: string | null
+	hash?: string | null
+	loginAttempts?: number | null
+	lockUntil?: string | null
 	sessions?:
 		| {
-				id: string;
-				createdAt?: string | null;
-				expiresAt: string;
+				id: string
+				createdAt?: string | null
+				expiresAt: string
 		  }[]
-		| null;
-	password?: string | null;
+		| null
+	password?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tokens".
  */
 export interface Token {
-	id: string;
+	id: string
 	/**
 	 * The blockchain network ID for this token (legacy field, will be migrated)
 	 */
-	chainId: number;
-	address: string;
-	name: string;
-	decimals: number;
-	symbol: string;
+	chainId: number
+	address: string
+	name: string
+	decimals: number
+	symbol: string
 	/**
 	 * URL of the token logo image
 	 */
-	logoUri?: string | null;
+	logoUri?: string | null
 	/**
 	 * Whether the token is listed on the Resolver
 	 */
-	isListed?: boolean | null;
-	coingeckoId?: string | null;
+	isListed?: boolean | null
+	coingeckoId?: string | null
 	/**
 	 * Select tags to categorize this token
 	 */
-	tags?: ("streme" | "testnet" | "underlying" | "supertoken")[] | null;
-	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken";
+	tags?: ("streme" | "testnet" | "underlying" | "supertoken")[] | null
+	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken"
 	/**
 	 * Required for Wrapper Super Tokens, optional for Native Asset Super Tokens, forbidden for Pure Super Tokens and Underlying Tokens
 	 */
-	underlyingAddress?: string | null;
+	underlyingAddress?: string | null
 	/**
 	 * Any additional notes about the token
 	 */
-	note?: string | null;
-	updatedAt: string;
-	createdAt: string;
+	note?: string | null
+	updatedAt: string
+	createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "chains".
  */
 export interface Chain {
-	id: number;
-	humanReadableName: string;
+	id: number
+	humanReadableName: string
 	/**
 	 * Superfluid canonical network name
 	 */
-	canonicalName: string;
-	shortName: string;
-	uppercaseName: string;
-	isDeprecated: boolean;
-	isTestnet: boolean;
-	nativeTokenSymbol: string;
-	nativeTokenWrapper: string;
+	canonicalName: string
+	shortName: string
+	uppercaseName: string
+	isDeprecated: boolean
+	isTestnet: boolean
+	nativeTokenSymbol: string
+	nativeTokenWrapper: string
 	contractsV1: {
-		resolver: string;
-		host: string;
-		governance?: string | null;
-		cfaV1: string;
-		cfaV1Forwarder: string;
-		idaV1: string;
-		gdaV1?: string | null;
-		gdaV1Forwarder?: string | null;
-		superTokenFactory: string;
-		superfluidLoader: string;
-		toga?: string | null;
-		batchLiquidator?: string | null;
-		superSpreader?: string | null;
-		existentialNFTCloneFactory?: string | null;
-		macroForwarder?: string | null;
-	};
-	startBlockV1: number;
-	logsQueryRange: number;
+		resolver: string
+		host: string
+		governance?: string | null
+		cfaV1: string
+		cfaV1Forwarder: string
+		idaV1: string
+		gdaV1?: string | null
+		gdaV1Forwarder?: string | null
+		superTokenFactory: string
+		superfluidLoader: string
+		toga?: string | null
+		batchLiquidator?: string | null
+		superSpreader?: string | null
+		existentialNFTCloneFactory?: string | null
+		macroForwarder?: string | null
+	}
+	startBlockV1: number
+	logsQueryRange: number
 	/**
 	 * Block explorer URL
 	 */
-	explorer: string;
+	explorer: string
 	subgraphV1?: {
-		cliName?: string | null;
-		hostedEndpoint?: string | null;
-	};
+		cliName?: string | null
+		hostedEndpoint?: string | null
+	}
 	automations?: {
-		vestingScheduler?: string | null;
-		vestingSchedulerV2?: string | null;
-		vestingSchedulerV3?: string | null;
-		flowScheduler?: string | null;
-		manager?: string | null;
-		wrapStrategy?: string | null;
-		subgraphVestingEndpoint?: string | null;
-		subgraphFlowSchedulerEndpoint?: string | null;
-		subgraphAutoWrapEndpoint?: string | null;
-	};
+		vestingScheduler?: string | null
+		vestingSchedulerV2?: string | null
+		vestingSchedulerV3?: string | null
+		flowScheduler?: string | null
+		manager?: string | null
+		wrapStrategy?: string | null
+		subgraphVestingEndpoint?: string | null
+		subgraphFlowSchedulerEndpoint?: string | null
+		subgraphAutoWrapEndpoint?: string | null
+	}
 	publicRPCs?:
 		| {
-				url: string;
-				id?: string | null;
+				url: string
+				id?: string | null
 		  }[]
-		| null;
-	coinGeckoId?: string | null;
+		| null
+	coinGeckoId?: string | null
 	/**
 	 * List of additional trusted forwarders
 	 */
 	trustedForwarders?:
 		| {
-				address: string;
-				id?: string | null;
+				address: string
+				id?: string | null
 		  }[]
-		| null;
-	updatedAt: string;
-	createdAt: string;
+		| null
+	updatedAt: string
+	createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-	id: number;
+	id: number
 	document?:
 		| ({
-				relationTo: "users";
-				value: number | User;
+				relationTo: "users"
+				value: number | User
 		  } | null)
 		| ({
-				relationTo: "tokens";
-				value: string | Token;
+				relationTo: "tokens"
+				value: string | Token
 		  } | null)
 		| ({
-				relationTo: "chains";
-				value: number | Chain;
-		  } | null);
-	globalSlug?: string | null;
+				relationTo: "chains"
+				value: number | Chain
+		  } | null)
+	globalSlug?: string | null
 	user: {
-		relationTo: "users";
-		value: number | User;
-	};
-	updatedAt: string;
-	createdAt: string;
+		relationTo: "users"
+		value: number | User
+	}
+	updatedAt: string
+	createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-	id: number;
+	id: number
 	user: {
-		relationTo: "users";
-		value: number | User;
-	};
-	key?: string | null;
+		relationTo: "users"
+		value: number | User
+	}
+	key?: string | null
 	value?:
 		| {
-				[k: string]: unknown;
+				[k: string]: unknown
 		  }
 		| unknown[]
 		| string
 		| number
 		| boolean
-		| null;
-	updatedAt: string;
-	createdAt: string;
+		| null
+	updatedAt: string
+	createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-	id: number;
-	name?: string | null;
-	batch?: number | null;
-	updatedAt: string;
-	createdAt: string;
+	id: number
+	name?: string | null
+	batch?: number | null
+	updatedAt: string
+	createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-	name?: T;
-	role?: T;
+	name?: T
+	role?: T
 	tokenPermissions?:
 		| T
 		| {
-				canEditAllTokens?: T;
+				canEditAllTokens?: T
 				allowedTags?:
 					| T
 					| {
-							tag?: T;
-							id?: T;
-					  };
+							tag?: T
+							id?: T
+					  }
 				allowedAddresses?:
 					| T
 					| {
-							address?: T;
-							id?: T;
-					  };
+							address?: T
+							id?: T
+					  }
 				allowedChainIds?:
 					| T
 					| {
-							chainId?: T;
-							id?: T;
-					  };
-		  };
-	updatedAt?: T;
-	createdAt?: T;
-	email?: T;
-	resetPasswordToken?: T;
-	resetPasswordExpiration?: T;
-	salt?: T;
-	hash?: T;
-	loginAttempts?: T;
-	lockUntil?: T;
+							chainId?: T
+							id?: T
+					  }
+		  }
+	updatedAt?: T
+	createdAt?: T
+	email?: T
+	resetPasswordToken?: T
+	resetPasswordExpiration?: T
+	salt?: T
+	hash?: T
+	loginAttempts?: T
+	lockUntil?: T
 	sessions?:
 		| T
 		| {
-				id?: T;
-				createdAt?: T;
-				expiresAt?: T;
-		  };
+				id?: T
+				createdAt?: T
+				expiresAt?: T
+		  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tokens_select".
  */
 export interface TokensSelect<T extends boolean = true> {
-	id?: T;
-	chainId?: T;
-	address?: T;
-	name?: T;
-	decimals?: T;
-	symbol?: T;
-	logoUri?: T;
-	isListed?: T;
-	coingeckoId?: T;
-	tags?: T;
-	tokenType?: T;
-	underlyingAddress?: T;
-	note?: T;
-	updatedAt?: T;
-	createdAt?: T;
+	id?: T
+	chainId?: T
+	address?: T
+	name?: T
+	decimals?: T
+	symbol?: T
+	logoUri?: T
+	isListed?: T
+	coingeckoId?: T
+	tags?: T
+	tokenType?: T
+	underlyingAddress?: T
+	note?: T
+	updatedAt?: T
+	createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "chains_select".
  */
 export interface ChainsSelect<T extends boolean = true> {
-	id?: T;
-	humanReadableName?: T;
-	canonicalName?: T;
-	shortName?: T;
-	uppercaseName?: T;
-	isDeprecated?: T;
-	isTestnet?: T;
-	nativeTokenSymbol?: T;
-	nativeTokenWrapper?: T;
+	id?: T
+	humanReadableName?: T
+	canonicalName?: T
+	shortName?: T
+	uppercaseName?: T
+	isDeprecated?: T
+	isTestnet?: T
+	nativeTokenSymbol?: T
+	nativeTokenWrapper?: T
 	contractsV1?:
 		| T
 		| {
-				resolver?: T;
-				host?: T;
-				governance?: T;
-				cfaV1?: T;
-				cfaV1Forwarder?: T;
-				idaV1?: T;
-				gdaV1?: T;
-				gdaV1Forwarder?: T;
-				superTokenFactory?: T;
-				superfluidLoader?: T;
-				toga?: T;
-				batchLiquidator?: T;
-				superSpreader?: T;
-				existentialNFTCloneFactory?: T;
-				macroForwarder?: T;
-		  };
-	startBlockV1?: T;
-	logsQueryRange?: T;
-	explorer?: T;
+				resolver?: T
+				host?: T
+				governance?: T
+				cfaV1?: T
+				cfaV1Forwarder?: T
+				idaV1?: T
+				gdaV1?: T
+				gdaV1Forwarder?: T
+				superTokenFactory?: T
+				superfluidLoader?: T
+				toga?: T
+				batchLiquidator?: T
+				superSpreader?: T
+				existentialNFTCloneFactory?: T
+				macroForwarder?: T
+		  }
+	startBlockV1?: T
+	logsQueryRange?: T
+	explorer?: T
 	subgraphV1?:
 		| T
 		| {
-				cliName?: T;
-				hostedEndpoint?: T;
-		  };
+				cliName?: T
+				hostedEndpoint?: T
+		  }
 	automations?:
 		| T
 		| {
-				vestingScheduler?: T;
-				vestingSchedulerV2?: T;
-				vestingSchedulerV3?: T;
-				flowScheduler?: T;
-				manager?: T;
-				wrapStrategy?: T;
-				subgraphVestingEndpoint?: T;
-				subgraphFlowSchedulerEndpoint?: T;
-				subgraphAutoWrapEndpoint?: T;
-		  };
+				vestingScheduler?: T
+				vestingSchedulerV2?: T
+				vestingSchedulerV3?: T
+				flowScheduler?: T
+				manager?: T
+				wrapStrategy?: T
+				subgraphVestingEndpoint?: T
+				subgraphFlowSchedulerEndpoint?: T
+				subgraphAutoWrapEndpoint?: T
+		  }
 	publicRPCs?:
 		| T
 		| {
-				url?: T;
-				id?: T;
-		  };
-	coinGeckoId?: T;
+				url?: T
+				id?: T
+		  }
+	coinGeckoId?: T
 	trustedForwarders?:
 		| T
 		| {
-				address?: T;
-				id?: T;
-		  };
-	updatedAt?: T;
-	createdAt?: T;
+				address?: T
+				id?: T
+		  }
+	updatedAt?: T
+	createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-	document?: T;
-	globalSlug?: T;
-	user?: T;
-	updatedAt?: T;
-	createdAt?: T;
+	document?: T
+	globalSlug?: T
+	user?: T
+	updatedAt?: T
+	createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-	user?: T;
-	key?: T;
-	value?: T;
-	updatedAt?: T;
-	createdAt?: T;
+	user?: T
+	key?: T
+	value?: T
+	updatedAt?: T
+	createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-	name?: T;
-	batch?: T;
-	updatedAt?: T;
-	createdAt?: T;
+	name?: T
+	batch?: T
+	updatedAt?: T
+	createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-	[k: string]: unknown;
+	[k: string]: unknown
 }
 
 declare module "payload" {

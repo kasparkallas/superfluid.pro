@@ -1,1 +1,1 @@
-export { fetchCurrentPrice } from "./fetchCurrentPrice";
+export { fetchCurrentPrice } from "./fetchCurrentPrice"

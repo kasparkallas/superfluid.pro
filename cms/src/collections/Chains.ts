@@ -1,12 +1,12 @@
-import type { CollectionConfig } from "payload";
-import { AccessControl } from "../utils/AccessControl";
+import type { CollectionConfig } from "payload"
+import { AccessControl } from "../utils/AccessControl"
 import {
 	addressSchema,
 	optionalAddressSchema,
 	optionalUrlSchema,
 	transformAddress,
 	validateWithZod,
-} from "../utils/validation";
+} from "../utils/validation"
 
 export const Chains: CollectionConfig = {
 	slug: "chains",
@@ -413,4 +413,4 @@ export const Chains: CollectionConfig = {
 			],
 		},
 	],
-};
+}

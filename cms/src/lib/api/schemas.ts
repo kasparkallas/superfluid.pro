@@ -1,15 +1,15 @@
-import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import { isAddress } from "viem";
-import { z } from "zod";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi"
+import { isAddress } from "viem"
+import { z } from "zod"
 
 // Extend Zod with OpenAPI functionality
-extendZodWithOpenApi(z);
+extendZodWithOpenApi(z)
 
 // Ethereum address pattern
 const ethereumAddressSchema = z.string().refine(isAddress, "Must be a valid Ethereum address").openapi({
 	example: "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04",
 	description: "Ethereum contract address",
-});
+})
 
 // Token type enum
 const tokenTypeSchema = z
@@ -17,13 +17,13 @@ const tokenTypeSchema = z
 	.openapi({
 		example: "wrapperSuperToken",
 		description: "Type of token in the Superfluid ecosystem",
-	});
+	})
 
 // Token tags
 const tokenTagSchema = z.enum(["streme", "testnet", "underlying", "supertoken"]).openapi({
 	example: "supertoken",
 	description: "Token categorization tags",
-});
+})
 
 // Token pricing schema
 export const TokenPriceSchema = z
@@ -44,7 +44,7 @@ export const TokenPriceSchema = z
 	.openapi({
 		title: "TokenPrice",
 		description: "Current token price information from CoinGecko",
-	});
+	})
 
 // CMS Token schema
 export const TokenSchema = z
@@ -98,7 +98,7 @@ export const TokenSchema = z
 	.openapi({
 		title: "Token",
 		description: "A token in the Superfluid ecosystem with metadata and optional pricing",
-	});
+	})
 
 // Token list response
 export const TokenListResponseSchema = z
@@ -126,7 +126,7 @@ export const TokenListResponseSchema = z
 	.openapi({
 		title: "TokenListResponse",
 		description: "Paginated list of tokens",
-	});
+	})
 
 // Token list extension for super tokens
 export const SuperTokenExtensionSchema = z
@@ -153,7 +153,7 @@ export const SuperTokenExtensionSchema = z
 	.openapi({
 		title: "SuperTokenExtension",
 		description: "Superfluid extensions for token list",
-	});
+	})
 
 // Token info for token list
 export const TokenInfoSchema = z
@@ -169,13 +169,13 @@ export const TokenInfoSchema = z
 	.openapi({
 		title: "TokenInfo",
 		description: "Standard token information for token list",
-	});
+	})
 
 // Super token info (token info + extensions)
 export const SuperTokenInfoSchema = TokenInfoSchema.merge(SuperTokenExtensionSchema).openapi({
 	title: "SuperTokenInfo",
 	description: "Token information with Superfluid extensions",
-});
+})
 
 // Token list schema
 export const TokenListSchema = z
@@ -198,7 +198,7 @@ export const TokenListSchema = z
 	.openapi({
 		title: "TokenList",
 		description: "Uniswap Token List format with Superfluid extensions",
-	});
+	})
 
 // Query parameters
 export const TokenFilterQuerySchema = z
@@ -252,7 +252,7 @@ export const TokenFilterQuerySchema = z
 	.openapi({
 		title: "TokenFilterQuery",
 		description: "Query parameters for filtering tokens",
-	});
+	})
 
 // Path parameters
 export const TokenPathParamsSchema = z
@@ -269,7 +269,7 @@ export const TokenPathParamsSchema = z
 	.openapi({
 		title: "TokenPathParams",
 		description: "Path parameters for single token endpoint",
-	});
+	})
 
 // Pricing query parameter
 export const PricingQuerySchema = z
@@ -285,7 +285,7 @@ export const PricingQuerySchema = z
 	.openapi({
 		title: "PricingQuery",
 		description: "Query parameter for including pricing data",
-	});
+	})
 
 // Token List filter query parameters
 export const TokenListFilterQuerySchema = z
@@ -311,7 +311,7 @@ export const TokenListFilterQuerySchema = z
 	.openapi({
 		title: "TokenListFilterQuery",
 		description: "Query parameters for filtering token list export",
-	});
+	})
 
 // API Error schema
 export const ApiErrorSchema = z
@@ -328,4 +328,4 @@ export const ApiErrorSchema = z
 	.openapi({
 		title: "ApiError",
 		description: "API error response",
-	});
+	})

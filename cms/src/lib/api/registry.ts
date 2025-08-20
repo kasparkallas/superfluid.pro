@@ -1,4 +1,4 @@
-import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi";
+import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
 import {
 	ApiErrorSchema,
 	PricingQuerySchema,
@@ -9,16 +9,16 @@ import {
 	TokenPathParamsSchema,
 	TokenPriceSchema,
 	TokenSchema,
-} from "./schemas";
+} from "./schemas"
 
-export const registry = new OpenAPIRegistry();
+export const registry = new OpenAPIRegistry()
 
 // Register reusable components
-registry.register("Token", TokenSchema);
-registry.register("TokenListResponse", TokenListResponseSchema);
-registry.register("TokenList", TokenListSchema);
-registry.register("TokenPrice", TokenPriceSchema);
-registry.register("ApiError", ApiErrorSchema);
+registry.register("Token", TokenSchema)
+registry.register("TokenListResponse", TokenListResponseSchema)
+registry.register("TokenList", TokenListSchema)
+registry.register("TokenPrice", TokenPriceSchema)
+registry.register("ApiError", ApiErrorSchema)
 
 // Register API paths
 
@@ -58,7 +58,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 // GET /tokens/{chainId}/{address} - Get single token
 registry.registerPath({
@@ -105,7 +105,7 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 // GET /tokenlist - Export as token list
 registry.registerPath({
@@ -144,11 +144,11 @@ registry.registerPath({
 			},
 		},
 	},
-});
+})
 
 // Generate OpenAPI document
 export function generateOpenApiDocument() {
-	const generator = new OpenApiGeneratorV31(registry.definitions);
+	const generator = new OpenApiGeneratorV31(registry.definitions)
 
 	return generator.generateDocument({
 		openapi: "3.1.0",
@@ -178,5 +178,5 @@ export function generateOpenApiDocument() {
 				description: "Export tokens in standard formats",
 			},
 		],
-	});
+	})
 }

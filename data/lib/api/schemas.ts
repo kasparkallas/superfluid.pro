@@ -1,21 +1,21 @@
-import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi";
-import { isAddress } from "viem";
-import { z } from "zod";
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi"
+import { isAddress } from "viem"
+import { z } from "zod"
 
 // Extend Zod with OpenAPI functionality
-extendZodWithOpenApi(z);
+extendZodWithOpenApi(z)
 
 // Ethereum address pattern
 const ethereumAddressSchema = z.string().refine(isAddress, "Must be a valid Ethereum address").openapi({
 	example: "0xb3edb2f90fec1bf1f872a9ef143cfd614773ad04",
 	description: "Ethereum contract address",
-});
+})
 
 // Network name validation
 const networkNameSchema = z.string().min(1).openapi({
 	example: "arbitrum-one",
 	description: "Network identifier (e.g., optimism, arbitrum-one, base-mainnet)",
-});
+})
 
 // Super Token schema based on existing types
 export const SuperTokenSchema = z
@@ -72,7 +72,7 @@ export const SuperTokenSchema = z
 	.openapi({
 		title: "SuperToken",
 		description: "A Superfluid Super Token with statistics and metadata",
-	});
+	})
 
 // Price data point
 export const PriceDataPointSchema = z
@@ -92,7 +92,7 @@ export const PriceDataPointSchema = z
 	.openapi({
 		title: "PriceDataPoint",
 		description: "Daily price data for a token",
-	});
+	})
 
 // Lenient schema for reading stored price data (backward compatibility)
 export const StoredPriceDataSchema = z.object({
@@ -120,7 +120,7 @@ export const StoredPriceDataSchema = z.object({
 	coingeckoId: z.union([z.string(), z.null(), z.undefined()]).optional(),
 	fetchedAt: z.string().datetime(),
 	pricesUsd: z.array(PriceDataPointSchema),
-});
+})
 
 // Token price history (strict schema for API responses)
 export const TokenPriceHistorySchema = z
@@ -139,7 +139,7 @@ export const TokenPriceHistorySchema = z
 	.openapi({
 		title: "TokenPriceHistory",
 		description: "Complete price history for a Super Token",
-	});
+	})
 
 // Query parameter schemas
 export const TokenFilterQuerySchema = z.object({
@@ -164,23 +164,23 @@ export const TokenFilterQuerySchema = z.object({
 	sortOrder: z.enum(["asc", "desc"]).default("desc").openapi({
 		description: "Sort order",
 	}),
-});
+})
 
 // Response schemas
 export const TokensResponseSchema = z.array(SuperTokenSchema).openapi({
 	title: "TokensResponse",
 	description: "List of Super Tokens",
-});
+})
 
 // Path parameter schemas
 export const NetworkParamSchema = z.object({
 	networkName: networkNameSchema,
-});
+})
 
 export const TokenParamSchema = z.object({
 	networkName: networkNameSchema,
 	tokenAddress: ethereumAddressSchema,
-});
+})
 
 // Error response
 export const ApiErrorSchema = z
@@ -191,7 +191,7 @@ export const ApiErrorSchema = z
 	.openapi({
 		title: "ApiError",
 		description: "Standard API error response",
-	});
+	})
 
 // CoinGecko mappings (based on existing data structure)
 export const CoinGeckoMappingsSchema = z
@@ -212,7 +212,7 @@ export const CoinGeckoMappingsSchema = z
 	.openapi({
 		title: "CoinGeckoMappings",
 		description: "Mapping of Super Tokens to CoinGecko coin IDs",
-	});
+	})
 
 // Current price response
 export const CurrentPriceSchema = z
@@ -237,16 +237,16 @@ export const CurrentPriceSchema = z
 	.openapi({
 		title: "CurrentPrice",
 		description: "Current price data for a Super Token",
-	});
+	})
 
 // Export types for use in route handlers
-export type SuperToken = z.infer<typeof SuperTokenSchema>;
-export type TokenFilterQuery = z.infer<typeof TokenFilterQuerySchema>;
-export type TokensResponse = z.infer<typeof TokensResponseSchema>;
-export type NetworkParam = z.infer<typeof NetworkParamSchema>;
-export type TokenParam = z.infer<typeof TokenParamSchema>;
-export type ApiError = z.infer<typeof ApiErrorSchema>;
-export type TokenPriceHistory = z.infer<typeof TokenPriceHistorySchema>;
-export type StoredPriceData = z.infer<typeof StoredPriceDataSchema>;
-export type CoinGeckoMappings = z.infer<typeof CoinGeckoMappingsSchema>;
-export type CurrentPrice = z.infer<typeof CurrentPriceSchema>;
+export type SuperToken = z.infer<typeof SuperTokenSchema>
+export type TokenFilterQuery = z.infer<typeof TokenFilterQuerySchema>
+export type TokensResponse = z.infer<typeof TokensResponseSchema>
+export type NetworkParam = z.infer<typeof NetworkParamSchema>
+export type TokenParam = z.infer<typeof TokenParamSchema>
+export type ApiError = z.infer<typeof ApiErrorSchema>
+export type TokenPriceHistory = z.infer<typeof TokenPriceHistorySchema>
+export type StoredPriceData = z.infer<typeof StoredPriceDataSchema>
+export type CoinGeckoMappings = z.infer<typeof CoinGeckoMappingsSchema>
+export type CurrentPrice = z.infer<typeof CurrentPriceSchema>

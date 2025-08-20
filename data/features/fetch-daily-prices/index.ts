@@ -1,1 +1,1 @@
-export { fetchDailyPrices } from "./fetchDailyPrices";
+export { fetchDailyPrices } from "./fetchDailyPrices"

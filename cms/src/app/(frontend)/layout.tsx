@@ -1,9 +1,9 @@
-import type React from "react";
-import "./styles.css";
-import { Providers } from "./providers";
+import type React from "react"
+import "./styles.css"
+import { Providers } from "./providers"
 
 export default function RootLayout(props: { children: React.ReactNode }) {
-	const { children } = props;
+	const { children } = props
 
 	return (
 		<html lang="en" suppressHydrationWarning>
@@ -13,5 +13,5 @@ export default function RootLayout(props: { children: React.ReactNode }) {
 				</Providers>
 			</body>
 		</html>
-	);
+	)
 }

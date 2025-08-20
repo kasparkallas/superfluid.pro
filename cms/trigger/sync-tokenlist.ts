@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { syncTokensFromTokenList } from "@/features/sync-tokens";
+import { schedules } from "@trigger.dev/sdk"
+import { syncTokensFromTokenList } from "@/features/sync-tokens"
 
 // Task definition - sync tokens from official Superfluid tokenlist
 export const syncTokenlistScheduled = schedules.task({
@@ -9,15 +9,15 @@ export const syncTokenlistScheduled = schedules.task({
 		maxAttempts: 3,
 	},
 	run: async () => {
-		console.log("Starting scheduled tokenlist sync...");
+		console.log("Starting scheduled tokenlist sync...")
 
-		await syncTokensFromTokenList();
+		await syncTokensFromTokenList()
 
-		console.log("Tokenlist sync completed successfully");
+		console.log("Tokenlist sync completed successfully")
 
 		return {
 			message: "Tokens synced successfully from tokenlist",
 			syncedAt: new Date().toISOString(),
-		};
+		}
 	},
-});
+})

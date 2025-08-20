@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { useReadCfa } from "@sfpro/sdk/hook/core";
-import dynamic from "next/dynamic";
-import { mainnet } from "wagmi/chains";
+import { useReadCfa } from "@sfpro/sdk/hook/core"
+import dynamic from "next/dynamic"
+import { mainnet } from "wagmi/chains"
 
 function HomeContent() {
 	const { data, isLoading, isError } = useReadCfa({
 		chainId: mainnet.id,
 		functionName: "MAXIMUM_FLOW_RATE",
-	});
+	})
 
 	return (
 		<div>
@@ -21,11 +21,11 @@ function HomeContent() {
 				</div>
 			)}
 		</div>
-	);
+	)
 }
 
 const Home = dynamic(() => Promise.resolve(HomeContent), {
 	ssr: false,
-});
+})
 
-export default Home;
+export default Home

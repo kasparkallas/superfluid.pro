@@ -1,21 +1,21 @@
 // storage-adapter-import-placeholder
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
-import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
-import sharp from "sharp";
-import { Chains } from "./collections/Chains";
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
+import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
+import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob"
+import sharp from "sharp"
+import { Chains } from "./collections/Chains"
 // import { Media } from './collections/Media'
-import { Tokens } from "./collections/Tokens";
-import { Users } from "./collections/Users";
+import { Tokens } from "./collections/Tokens"
+import { Users } from "./collections/Users"
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
-const isEmailEnabled = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
+const isEmailEnabled = process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS
 
 export const sharedConfig = {
 	admin: {
@@ -58,4 +58,4 @@ export const sharedConfig = {
 				},
 			})
 		: undefined,
-};
+}

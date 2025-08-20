@@ -1,20 +1,20 @@
-import { syncFromStreme } from "@/features/sync-tokens/syncFromStreme";
-import { requireAdmin } from "@/utils/api-auth";
+import { syncFromStreme } from "@/features/sync-tokens/syncFromStreme"
+import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request) => {
 	// Require admin authentication
-	const auth = await requireAdmin();
-	if ("error" in auth) return auth.error;
+	const auth = await requireAdmin()
+	if ("error" in auth) return auth.error
 
 	try {
-		await syncFromStreme();
+		await syncFromStreme()
 
 		return Response.json({
 			message: "Tokens synced successfully from Streme API.",
 			syncedBy: auth.user.email,
-		});
+		})
 	} catch (error) {
-		console.error("Streme token sync failed:", error);
+		console.error("Streme token sync failed:", error)
 
 		return Response.json(
 			{
@@ -22,6 +22,6 @@ export const GET = async (_request: Request) => {
 				message: error instanceof Error ? error.message : "Unknown error",
 			},
 			{ status: 500 },
-		);
+		)
 	}
-};
+}

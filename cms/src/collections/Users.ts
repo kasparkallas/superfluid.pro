@@ -1,5 +1,5 @@
-import type { CollectionConfig } from "payload";
-import { AccessControl } from "../utils/AccessControl";
+import type { CollectionConfig } from "payload"
+import { AccessControl } from "../utils/AccessControl"
 
 export const Users: CollectionConfig = {
 	slug: "users",
@@ -23,11 +23,11 @@ export const Users: CollectionConfig = {
 						collection: "users",
 						limit: 1,
 						depth: 0,
-					});
+					})
 
 					// If no users exist, make this user an admin
 					if (existingUsers.totalDocs === 0) {
-						data.role = "admin";
+						data.role = "admin"
 					}
 				}
 
@@ -38,7 +38,7 @@ export const Users: CollectionConfig = {
 							...item,
 							tag: item.tag?.toLowerCase(),
 						}),
-					);
+					)
 				}
 
 				// Lowercase allowed addresses
@@ -48,10 +48,10 @@ export const Users: CollectionConfig = {
 							...item,
 							address: item.address?.toLowerCase(),
 						}),
-					);
+					)
 				}
 
-				return data;
+				return data
 			},
 		],
 	},
@@ -142,4 +142,4 @@ export const Users: CollectionConfig = {
 			],
 		},
 	],
-};
+}

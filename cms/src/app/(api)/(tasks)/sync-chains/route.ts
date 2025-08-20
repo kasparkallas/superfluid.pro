@@ -1,16 +1,16 @@
-import { syncChains } from "@/features/sync-chains";
-import { requireAdmin } from "@/utils/api-auth";
+import { syncChains } from "@/features/sync-chains"
+import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request) => {
 	// Require admin authentication
-	const auth = await requireAdmin();
-	if ("error" in auth) return auth.error;
+	const auth = await requireAdmin()
+	if ("error" in auth) return auth.error
 
 	try {
-		const results = await syncChains();
+		const results = await syncChains()
 
-		const hasFailures = results.failed.length > 0;
-		const status = hasFailures ? 207 : 200; // 207 Multi-Status for partial success
+		const hasFailures = results.failed.length > 0
+		const status = hasFailures ? 207 : 200 // 207 Multi-Status for partial success
 
 		return Response.json(
 			{
@@ -27,9 +27,9 @@ export const GET = async (_request: Request) => {
 				},
 			},
 			{ status },
-		);
+		)
 	} catch (error) {
-		console.error("Chain sync failed:", error);
+		console.error("Chain sync failed:", error)
 
 		return Response.json(
 			{
@@ -37,6 +37,6 @@ export const GET = async (_request: Request) => {
 				message: error instanceof Error ? error.message : "Unknown error",
 			},
 			{ status: 500 },
-		);
+		)
 	}
-};
+}

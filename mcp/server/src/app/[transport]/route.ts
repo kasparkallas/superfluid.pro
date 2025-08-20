@@ -1,38 +1,38 @@
-import { createMcpHandler } from "@vercel/mcp-adapter";
-import { createGetSuperfluidContractAbiTool, createListSuperfluidContractsTool } from "./(tools)/abi-tools";
+import { createMcpHandler } from "@vercel/mcp-adapter"
+import { createGetSuperfluidContractAbiTool, createListSuperfluidContractsTool } from "./(tools)/abi-tools"
 import {
 	createIntrospectSubgraphSchemaTool,
 	createListSuperfluidSubgraphEndpointsTool,
 	createQuerySubgraphTool,
-} from "./(tools)/graphql-tools";
+} from "./(tools)/graphql-tools"
 import {
 	createGetSuperfluidNetworkMetadataTool,
 	createListSuperfluidMetadataNetworksTool,
-} from "./(tools)/metadata-tools";
-import { createGetSuperfluidResourcesTool } from "./(tools)/resources-tools";
-import { createFindSuperfluidTokensTool, createGetSuperfluidTokenTool } from "./(tools)/tokenlist-tools";
+} from "./(tools)/metadata-tools"
+import { createGetSuperfluidResourcesTool } from "./(tools)/resources-tools"
+import { createFindSuperfluidTokensTool, createGetSuperfluidTokenTool } from "./(tools)/tokenlist-tools"
 
 const handler = createMcpHandler(
 	(server) => {
 		// ABI tools
-		createListSuperfluidContractsTool(server);
-		createGetSuperfluidContractAbiTool(server);
+		createListSuperfluidContractsTool(server)
+		createGetSuperfluidContractAbiTool(server)
 
 		// GraphQL tools
-		createListSuperfluidSubgraphEndpointsTool(server);
-		createIntrospectSubgraphSchemaTool(server);
-		createQuerySubgraphTool(server);
+		createListSuperfluidSubgraphEndpointsTool(server)
+		createIntrospectSubgraphSchemaTool(server)
+		createQuerySubgraphTool(server)
 
 		// Metadata tools
-		createListSuperfluidMetadataNetworksTool(server);
-		createGetSuperfluidNetworkMetadataTool(server);
+		createListSuperfluidMetadataNetworksTool(server)
+		createGetSuperfluidNetworkMetadataTool(server)
 
 		// Token list tools
-		createGetSuperfluidTokenTool(server);
-		createFindSuperfluidTokensTool(server);
+		createGetSuperfluidTokenTool(server)
+		createFindSuperfluidTokensTool(server)
 
 		// Resources tools
-		createGetSuperfluidResourcesTool(server);
+		createGetSuperfluidResourcesTool(server)
 	},
 	{
 		capabilities: {
@@ -46,6 +46,6 @@ const handler = createMcpHandler(
 		verboseLogs: true,
 		maxDuration: 60,
 	},
-);
+)
 
-export { handler as GET, handler as POST, handler as DELETE };
+export { handler as GET, handler as POST, handler as DELETE }

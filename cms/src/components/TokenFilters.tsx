@@ -1,43 +1,43 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { TokenFilters as TokenFiltersType } from "@/types/tokens";
+import { useCallback, useEffect, useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
 
 interface TokenFiltersProps {
-	filters: TokenFiltersType;
-	onFiltersChange: (filters: TokenFiltersType) => void;
-	onReset: () => void;
+	filters: TokenFiltersType
+	onFiltersChange: (filters: TokenFiltersType) => void
+	onReset: () => void
 }
 
 export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersProps) {
-	const [searchValue, setSearchValue] = useState(filters.search || "");
+	const [searchValue, setSearchValue] = useState(filters.search || "")
 
 	const handleFilterChange = useCallback(
 		(key: keyof TokenFiltersType, value: string | boolean | undefined) => {
 			onFiltersChange({
 				...filters,
 				[key]: value === "" ? undefined : value,
-			});
+			})
 		},
 		[filters, onFiltersChange],
-	);
+	)
 
 	// Debounced search handler
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			handleFilterChange("search", searchValue || undefined);
-		}, 300); // 300ms debounce delay
+			handleFilterChange("search", searchValue || undefined)
+		}, 300) // 300ms debounce delay
 
-		return () => clearTimeout(timeoutId);
-	}, [searchValue, handleFilterChange]);
+		return () => clearTimeout(timeoutId)
+	}, [searchValue, handleFilterChange])
 
 	// Reset search value when filters are reset
 	useEffect(() => {
 		if (!filters.search && searchValue) {
-			setSearchValue("");
+			setSearchValue("")
 		}
-	}, [filters.search, searchValue]);
+	}, [filters.search, searchValue])
 
 	return (
 		<div className="flex flex-wrap gap-4 p-4 bg-muted/50 rounded-lg">
@@ -95,5 +95,5 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 				Reset
 			</Button>
 		</div>
-	);
+	)
 }

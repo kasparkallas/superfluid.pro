@@ -5,4 +5,4 @@ export {
 	gdaForwarderAddress,
 	gdaPoolAbi, // No pre-determined addresses
 	superTokenAbi, // No pre-determined addresses
-} from "./generated.js";
+} from "./generated.js"

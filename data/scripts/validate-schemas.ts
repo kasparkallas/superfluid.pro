@@ -1,8 +1,8 @@
-import { CoinGeckoMappingsSchema, SuperTokenSchema, TokenFilterQuerySchema } from "../lib/api/schemas";
+import { CoinGeckoMappingsSchema, SuperTokenSchema, TokenFilterQuerySchema } from "../lib/api/schemas"
 
 // Test schema validation with sample data
 function validateSchemas() {
-	console.log("🔍 Validating API schemas...");
+	console.log("🔍 Validating API schemas...")
 
 	try {
 		// Test Super Token schema
@@ -20,20 +20,20 @@ function validateSchemas() {
 			totalNumberOfActiveStreams: 50,
 			totalNumberOfClosedStreams: 200,
 			lastUpdated: new Date().toISOString(),
-		};
+		}
 
-		SuperTokenSchema.parse(sampleToken);
-		console.log("✅ SuperToken schema validation passed");
+		SuperTokenSchema.parse(sampleToken)
+		console.log("✅ SuperToken schema validation passed")
 
 		// Test query schema
 		const sampleQuery = {
 			isListed: "true",
 			sortBy: "totalNumberOfHolders",
 			sortOrder: "desc",
-		};
+		}
 
-		TokenFilterQuerySchema.parse(sampleQuery);
-		console.log("✅ Query parameter schema validation passed");
+		TokenFilterQuerySchema.parse(sampleQuery)
+		console.log("✅ Query parameter schema validation passed")
 
 		// Test CoinGecko mappings schema
 		const sampleMappings = {
@@ -55,16 +55,16 @@ function validateSchemas() {
 					"1": "ethereum",
 				},
 			},
-		};
+		}
 
-		CoinGeckoMappingsSchema.parse(sampleMappings);
-		console.log("✅ CoinGecko mappings schema validation passed");
+		CoinGeckoMappingsSchema.parse(sampleMappings)
+		console.log("✅ CoinGecko mappings schema validation passed")
 
-		console.log("🎉 All schema validations passed!");
+		console.log("🎉 All schema validations passed!")
 	} catch (error) {
-		console.error("❌ Schema validation failed:", error);
-		process.exit(1);
+		console.error("❌ Schema validation failed:", error)
+		process.exit(1)
 	}
 }
 
-validateSchemas();
+validateSchemas()

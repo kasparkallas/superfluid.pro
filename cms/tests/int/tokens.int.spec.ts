@@ -1,14 +1,14 @@
-import { getPayload, type Payload } from "payload";
-import { beforeAll, describe, expect, it } from "vitest";
-import config from "@/payload.config";
+import { getPayload, type Payload } from "payload"
+import { beforeAll, describe, expect, it } from "vitest"
+import config from "@/payload.config"
 
-let payload: Payload;
+let payload: Payload
 
 describe("Tokens Collection", () => {
 	beforeAll(async () => {
-		const payloadConfig = await config;
-		payload = await getPayload({ config: payloadConfig });
-	});
+		const payloadConfig = await config
+		payload = await getPayload({ config: payloadConfig })
+	})
 
 	describe("Underlying Address Validation", () => {
 		const getBaseToken = (suffix: string) => ({
@@ -17,7 +17,7 @@ describe("Tokens Collection", () => {
 			name: "Test Token",
 			decimals: 18,
 			symbol: "TEST",
-		});
+		})
 
 		it("should reject underlying address for Pure Super Token", async () => {
 			await expect(
@@ -29,8 +29,8 @@ describe("Tokens Collection", () => {
 						underlyingAddress: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
 					},
 				}),
-			).rejects.toThrow();
-		});
+			).rejects.toThrow()
+		})
 
 		it("should accept empty underlying address for Pure Super Token", async () => {
 			const token = await payload.create({
@@ -40,9 +40,9 @@ describe("Tokens Collection", () => {
 					tokenType: "pureSuperToken",
 					underlyingAddress: "",
 				},
-			});
-			expect(token.underlyingAddress).toBeFalsy();
-		});
+			})
+			expect(token.underlyingAddress).toBeFalsy()
+		})
 
 		it("should reject underlying address for Underlying Token", async () => {
 			await expect(
@@ -54,8 +54,8 @@ describe("Tokens Collection", () => {
 						underlyingAddress: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcd",
 					},
 				}),
-			).rejects.toThrow();
-		});
+			).rejects.toThrow()
+		})
 
 		it("should accept empty underlying address for Underlying Token", async () => {
 			const token = await payload.create({
@@ -65,9 +65,9 @@ describe("Tokens Collection", () => {
 					tokenType: "underlyingToken",
 					underlyingAddress: "",
 				},
-			});
-			expect(token.underlyingAddress).toBeFalsy();
-		});
+			})
+			expect(token.underlyingAddress).toBeFalsy()
+		})
 
 		it("should require underlying address for Wrapper Super Token", async () => {
 			await expect(
@@ -79,8 +79,8 @@ describe("Tokens Collection", () => {
 						underlyingAddress: "",
 					},
 				}),
-			).rejects.toThrow();
-		});
+			).rejects.toThrow()
+		})
 
 		it("should accept valid underlying address for Wrapper Super Token", async () => {
 			const token = await payload.create({
@@ -90,9 +90,9 @@ describe("Tokens Collection", () => {
 					tokenType: "wrapperSuperToken",
 					underlyingAddress: "0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD",
 				},
-			});
-			expect(token.underlyingAddress).toBe("0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"); // normalized to lowercase
-		});
+			})
+			expect(token.underlyingAddress).toBe("0xabcdefabcdefabcdefabcdefabcdefabcdefabcd") // normalized to lowercase
+		})
 
 		it("should reject invalid address format for Wrapper Super Token", async () => {
 			await expect(
@@ -104,8 +104,8 @@ describe("Tokens Collection", () => {
 						underlyingAddress: "invalid-address",
 					},
 				}),
-			).rejects.toThrow();
-		});
+			).rejects.toThrow()
+		})
 
 		it("should accept underlying address for Native Asset Super Token", async () => {
 			const token = await payload.create({
@@ -115,9 +115,9 @@ describe("Tokens Collection", () => {
 					tokenType: "nativeAssetSuperToken",
 					underlyingAddress: "0xABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD",
 				},
-			});
-			expect(token.underlyingAddress).toBe("0xabcdefabcdefabcdefabcdefabcdefabcdefabcd"); // normalized to lowercase
-		});
+			})
+			expect(token.underlyingAddress).toBe("0xabcdefabcdefabcdefabcdefabcdefabcdefabcd") // normalized to lowercase
+		})
 
 		it("should accept empty underlying address for Native Asset Super Token", async () => {
 			const token = await payload.create({
@@ -127,9 +127,9 @@ describe("Tokens Collection", () => {
 					tokenType: "nativeAssetSuperToken",
 					underlyingAddress: "",
 				},
-			});
-			expect(token.underlyingAddress).toBeFalsy();
-		});
+			})
+			expect(token.underlyingAddress).toBeFalsy()
+		})
 
 		it("should reject invalid address format for Native Asset Super Token", async () => {
 			await expect(
@@ -141,7 +141,7 @@ describe("Tokens Collection", () => {
 						underlyingAddress: "invalid-address",
 					},
 				}),
-			).rejects.toThrow();
-		});
-	});
-});
+			).rejects.toThrow()
+		})
+	})
+})

@@ -15,4 +15,4 @@ export {
 	superTokenFactoryAddress,
 	togaAbi,
 	togaAddress,
-} from "./generated.js";
+} from "./generated.js"

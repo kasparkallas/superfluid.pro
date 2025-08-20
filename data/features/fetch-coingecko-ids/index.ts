@@ -1,1 +1,1 @@
-export { fetchCoingeckoIds } from "./fetchCoingeckoIds";
+export { fetchCoingeckoIds } from "./fetchCoingeckoIds"

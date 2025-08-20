@@ -1,16 +1,16 @@
-import sfMeta from "@superfluid-finance/metadata";
-import { createPrefixedLogger } from "../../logger";
+import sfMeta from "@superfluid-finance/metadata"
+import { createPrefixedLogger } from "../../logger"
 
-const logger = createPrefixedLogger("Chain Discovery");
+const logger = createPrefixedLogger("Chain Discovery")
 
 interface ChainInfo {
-	chainId: number;
-	name: string;
-	endpoint: string;
+	chainId: number
+	name: string
+	endpoint: string
 }
 
 export async function discoverChains(): Promise<ChainInfo[]> {
-	const chains: ChainInfo[] = [];
+	const chains: ChainInfo[] = []
 
 	// Iterate through mainnet networks only
 	for (const network of sfMeta.mainnets) {
@@ -20,14 +20,14 @@ export async function discoverChains(): Promise<ChainInfo[]> {
 				chainId: network.chainId,
 				name: network.name,
 				endpoint: network.subgraphV1.hostedEndpoint,
-			});
+			})
 		} else {
 			logger.warn("No subgraph endpoint for network", {
 				networkName: network.name,
 				chainId: network.chainId,
-			});
+			})
 		}
 	}
 
-	return chains;
+	return chains
 }

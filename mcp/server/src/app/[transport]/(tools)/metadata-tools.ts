@@ -1,7 +1,7 @@
-import metadata from "@superfluid-finance/metadata";
-import type { NetworkMetaData } from "@superfluid-finance/metadata/module/networks/list";
-import { z } from "zod";
-import type { McpServer } from "@/types";
+import metadata from "@superfluid-finance/metadata"
+import type { NetworkMetaData } from "@superfluid-finance/metadata/module/networks/list"
+import { z } from "zod"
+import type { McpServer } from "@/types"
 
 export const createListSuperfluidMetadataNetworksTool = (server: McpServer) => {
 	server.tool(
@@ -11,15 +11,15 @@ export const createListSuperfluidMetadataNetworksTool = (server: McpServer) => {
 			includeTestnets: z.boolean().optional(),
 		},
 		async (args: { includeTestnets?: boolean }) => {
-			const includeTestnets = args.includeTestnets ?? true;
-			const networks = includeTestnets ? metadata.networks : metadata.mainnets;
+			const includeTestnets = args.includeTestnets ?? true
+			const networks = includeTestnets ? metadata.networks : metadata.mainnets
 
 			const networkList = networks.map((network) => ({
 				chainId: network.chainId,
 				canonicalName: network.name,
 				displayName: network.humanReadableName,
 				isTestnet: network.isTestnet,
-			}));
+			}))
 
 			return {
 				content: [
@@ -28,10 +28,10 @@ export const createListSuperfluidMetadataNetworksTool = (server: McpServer) => {
 						text: JSON.stringify(networkList, null, 2),
 					},
 				],
-			};
+			}
 		},
-	);
-};
+	)
+}
 
 export const createGetSuperfluidNetworkMetadataTool = (server: McpServer) => {
 	server.tool(
@@ -41,14 +41,14 @@ export const createGetSuperfluidNetworkMetadataTool = (server: McpServer) => {
 			chainIds: z.array(z.number().int().positive()).min(1),
 		},
 		async (args: { chainIds: number[] }) => {
-			const metadataResults: Record<number, NetworkMetaData | null> = {};
+			const metadataResults: Record<number, NetworkMetaData | null> = {}
 
 			for (const chainId of args.chainIds) {
-				const network = metadata.getNetworkByChainId(chainId);
+				const network = metadata.getNetworkByChainId(chainId)
 				if (network) {
-					metadataResults[chainId] = network;
+					metadataResults[chainId] = network
 				} else {
-					metadataResults[chainId] = null;
+					metadataResults[chainId] = null
 				}
 			}
 
@@ -59,7 +59,7 @@ export const createGetSuperfluidNetworkMetadataTool = (server: McpServer) => {
 						text: JSON.stringify(metadataResults, null, 2),
 					},
 				],
-			};
+			}
 		},
-	);
-};
+	)
+}

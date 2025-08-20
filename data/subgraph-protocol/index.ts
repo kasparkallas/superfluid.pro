@@ -1,10 +1,10 @@
-import { getBuiltGraphSDK } from "./.graphclient";
+import { getBuiltGraphSDK } from "./.graphclient"
 
 // Export a pre-configured SDK instance
 export function getBuiltGraphSDKWithUrl(url: string) {
-	return getBuiltGraphSDK({ url });
+	return getBuiltGraphSDK({ url })
 }
 
-export * from "./.graphclient";
+export * from "./.graphclient"
 // Export the base SDK for flexibility
-export { getBuiltGraphSDK } from "./.graphclient";
+export { getBuiltGraphSDK } from "./.graphclient"

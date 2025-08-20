@@ -1,4 +1,4 @@
-import { defineConfig } from "@trigger.dev/sdk";
+import { defineConfig } from "@trigger.dev/sdk"
 
 export default defineConfig({
 	project: "proj_krcutfhqxlahqcrwbzbq",
@@ -22,4 +22,4 @@ export default defineConfig({
 	build: {
 		external: ["sharp"],
 	},
-});
+})

@@ -1,32 +1,32 @@
-import superfluidMetadata from "@superfluid-finance/metadata";
-import type { TokenInfo as OriginalTokenInfo, TokenList } from "@uniswap/token-lists";
-import { getPayloadInstance } from "@/payload";
-import type { Token } from "@/payload-types";
+import superfluidMetadata from "@superfluid-finance/metadata"
+import type { TokenInfo as OriginalTokenInfo, TokenList } from "@uniswap/token-lists"
+import { getPayloadInstance } from "@/payload"
+import type { Token } from "@/payload-types"
 
 // SuperToken extension types
 export type SuperTokenExtensions = {
 	readonly extensions: {
 		readonly superTokenInfo:
 			| {
-					readonly type: "Pure" | "Native Asset";
+					readonly type: "Pure" | "Native Asset"
 			  }
 			| {
-					readonly type: "Wrapper";
-					readonly underlyingTokenAddress: `0x${string}`;
-			  };
-	};
-};
-
-export interface TokenInfo extends Omit<OriginalTokenInfo, "address"> {
-	readonly address: `0x${string}`;
+					readonly type: "Wrapper"
+					readonly underlyingTokenAddress: `0x${string}`
+			  }
+	}
 }
 
-export type SuperTokenInfo = TokenInfo & SuperTokenExtensions;
-type UnderlyingTokenInfo = TokenInfo;
+export interface TokenInfo extends Omit<OriginalTokenInfo, "address"> {
+	readonly address: `0x${string}`
+}
+
+export type SuperTokenInfo = TokenInfo & SuperTokenExtensions
+type UnderlyingTokenInfo = TokenInfo
 
 export type SuperTokenList = Omit<TokenList, "tokens"> & {
-	readonly tokens: (SuperTokenInfo | UnderlyingTokenInfo)[];
-};
+	readonly tokens: (SuperTokenInfo | UnderlyingTokenInfo)[]
+}
 
 // Helper function to map CMS token to TokenList format
 function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTokenInfo {
@@ -38,7 +38,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 		decimals: token.decimals,
 		...(token.logoUri && { logoURI: token.logoUri }),
 		...(token.tags && token.tags.length > 0 && { tags: token.tags }),
-	};
+	}
 
 	// Map token types to extensions
 	switch (token.tokenType) {
@@ -50,7 +50,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 						type: "Pure",
 					},
 				},
-			} as SuperTokenInfo;
+			} as SuperTokenInfo
 
 		case "nativeAssetSuperToken":
 			return {
@@ -60,7 +60,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 						type: "Native Asset",
 					},
 				},
-			} as SuperTokenInfo;
+			} as SuperTokenInfo
 
 		case "wrapperSuperToken":
 			if (!token.underlyingAddress) {
@@ -72,7 +72,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 							type: "Pure",
 						},
 					},
-				} as SuperTokenInfo;
+				} as SuperTokenInfo
 			}
 			return {
 				...baseToken,
@@ -82,66 +82,66 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 						underlyingTokenAddress: token.underlyingAddress as `0x${string}`,
 					},
 				},
-			} as SuperTokenInfo;
+			} as SuperTokenInfo
 		default:
 			// Regular token without extensions
-			return baseToken;
+			return baseToken
 	}
 }
 
 export const GET = async (request: Request) => {
 	try {
-		const url = new URL(request.url);
-		const searchParams = url.searchParams;
+		const url = new URL(request.url)
+		const searchParams = url.searchParams
 
 		// Parse query parameters for filtering
-		const isListed = searchParams.get("isListed");
-		const tokenType = searchParams.get("tokenType");
-		const tags = searchParams.get("tags");
-		const excludeTags = searchParams.get("excludeTags");
-		const chainId = searchParams.get("chainId");
+		const isListed = searchParams.get("isListed")
+		const tokenType = searchParams.get("tokenType")
+		const tags = searchParams.get("tags")
+		const excludeTags = searchParams.get("excludeTags")
+		const chainId = searchParams.get("chainId")
 
 		// Build where clause - when no filters are specified, include all tokens
-		const where: any = {};
+		const where: any = {}
 
 		if (isListed !== null) {
-			where.isListed = { equals: isListed === "true" };
+			where.isListed = { equals: isListed === "true" }
 		}
 
 		if (tokenType) {
-			where.tokenType = { equals: tokenType };
+			where.tokenType = { equals: tokenType }
 		}
 
 		if (tags) {
 			// Support comma-separated tags
-			const tagList = tags.split(",").filter(Boolean);
+			const tagList = tags.split(",").filter(Boolean)
 			if (tagList.length > 0) {
-				where.tags = { contains: tagList[0] }; // Payload doesn't support multiple contains in one query
+				where.tags = { contains: tagList[0] } // Payload doesn't support multiple contains in one query
 			}
 		}
 
 		if (excludeTags) {
 			// Support comma-separated tags to exclude
-			const excludeTagList = excludeTags.split(",").filter(Boolean);
+			const excludeTagList = excludeTags.split(",").filter(Boolean)
 			if (excludeTagList.length > 0) {
 				// Use not_contains to exclude tokens with specific tags
-				where.tags = { ...where.tags, not_contains: excludeTagList[0] };
+				where.tags = { ...where.tags, not_contains: excludeTagList[0] }
 			}
 		}
 
 		if (chainId) {
 			// Support comma-separated chain IDs
-			const chainIds = chainId.split(",").map(Number).filter(Number.isInteger);
+			const chainIds = chainId.split(",").map(Number).filter(Number.isInteger)
 			if (chainIds.length === 1) {
-				where.chainId = { equals: chainIds[0] };
+				where.chainId = { equals: chainIds[0] }
 			} else if (chainIds.length > 1) {
-				where.chainId = { in: chainIds };
+				where.chainId = { in: chainIds }
 			}
 		}
 
 		// Note: Empty where object returns all tokens, which is the desired behavior
 
-		const payload = await getPayloadInstance();
+		const payload = await getPayloadInstance()
 
 		// Get tokens from the database with filtering (public endpoint)
 		const { docs: tokens } = await payload.find({
@@ -149,19 +149,19 @@ export const GET = async (request: Request) => {
 			limit: 10000, // Get all matching tokens
 			where,
 			sort: "chainId,symbol", // Sort by chainId then symbol for consistent ordering
-		});
+		})
 
 		// Collect underlying token addresses from wrapper super tokens
-		const underlyingAddresses = new Set<string>();
+		const underlyingAddresses = new Set<string>()
 		for (const token of tokens) {
 			if (token.tokenType === "wrapperSuperToken" && token.underlyingAddress) {
 				// Create composite ID for underlying token (chainId:address)
-				underlyingAddresses.add(`${token.chainId}:${token.underlyingAddress.toLowerCase()}`);
+				underlyingAddresses.add(`${token.chainId}:${token.underlyingAddress.toLowerCase()}`)
 			}
 		}
 
 		// Query for underlying tokens if any wrapper super tokens exist
-		let underlyingTokens: Token[] = [];
+		let underlyingTokens: Token[] = []
 		if (underlyingAddresses.size > 0) {
 			const { docs: foundUnderlyingTokens } = await payload.find({
 				collection: "tokens",
@@ -169,62 +169,62 @@ export const GET = async (request: Request) => {
 				where: {
 					id: { in: Array.from(underlyingAddresses) },
 				},
-			});
-			underlyingTokens = foundUnderlyingTokens;
+			})
+			underlyingTokens = foundUnderlyingTokens
 		}
 
 		// Combine all tokens and deduplicate by composite ID (chainId:address)
-		const tokenMap = new Map<string, Token>();
+		const tokenMap = new Map<string, Token>()
 
 		// Add initial tokens
 		for (const token of tokens) {
-			const key = `${token.chainId}:${token.address.toLowerCase()}`;
-			tokenMap.set(key, token);
+			const key = `${token.chainId}:${token.address.toLowerCase()}`
+			tokenMap.set(key, token)
 		}
 
 		// Add underlying tokens (will not overwrite existing ones)
 		for (const token of underlyingTokens) {
-			const key = `${token.chainId}:${token.address.toLowerCase()}`;
+			const key = `${token.chainId}:${token.address.toLowerCase()}`
 			if (!tokenMap.has(key)) {
-				tokenMap.set(key, token);
+				tokenMap.set(key, token)
 			}
 		}
 
-		const allTokens = Array.from(tokenMap.values());
+		const allTokens = Array.from(tokenMap.values())
 
 		// Get testnet chain IDs programmatically from Superfluid metadata
-		const testnetChainIds = new Set(superfluidMetadata.testnets.map((network) => network.chainId));
+		const testnetChainIds = new Set(superfluidMetadata.testnets.map((network) => network.chainId))
 
 		// Sort tokens: mainnets first (by chainId), then testnets (by chainId), within each chain by symbol
 		allTokens.sort((a, b) => {
-			const aIsTestnet = testnetChainIds.has(a.chainId);
-			const bIsTestnet = testnetChainIds.has(b.chainId);
+			const aIsTestnet = testnetChainIds.has(a.chainId)
+			const bIsTestnet = testnetChainIds.has(b.chainId)
 
 			// If one is testnet and the other isn't, mainnet comes first
 			if (aIsTestnet !== bIsTestnet) {
-				return aIsTestnet ? 1 : -1;
+				return aIsTestnet ? 1 : -1
 			}
 
 			// If both are the same type (both mainnet or both testnet), sort by chainId
 			if (a.chainId !== b.chainId) {
-				return a.chainId - b.chainId;
+				return a.chainId - b.chainId
 			}
 
 			// Same chain, sort by symbol
-			return a.symbol.localeCompare(b.symbol);
-		});
+			return a.symbol.localeCompare(b.symbol)
+		})
 
 		// Find the most recent update timestamp from all tokens
-		let latestUpdate = new Date().toISOString();
+		let latestUpdate = new Date().toISOString()
 		if (allTokens.length > 0) {
 			const timestamps = allTokens
 				.map((token) => token.updatedAt)
 				.filter(Boolean)
-				.map((ts) => new Date(ts).getTime());
+				.map((ts) => new Date(ts).getTime())
 
 			if (timestamps.length > 0) {
-				const maxTimestamp = Math.max(...timestamps);
-				latestUpdate = new Date(maxTimestamp).toISOString();
+				const maxTimestamp = Math.max(...timestamps)
+				latestUpdate = new Date(maxTimestamp).toISOString()
 			}
 		}
 
@@ -238,11 +238,11 @@ export const GET = async (request: Request) => {
 				patch: new Date(latestUpdate).getTime() - new Date("2025-01-01").getTime(),
 			},
 			tokens: allTokens.map(mapTokenToTokenListFormat),
-		};
+		}
 
-		return Response.json(tokenList);
+		return Response.json(tokenList)
 	} catch (error) {
-		console.error("Failed to export tokenlist:", error);
+		console.error("Failed to export tokenlist:", error)
 
 		return Response.json(
 			{
@@ -250,6 +250,6 @@ export const GET = async (request: Request) => {
 				message: error instanceof Error ? error.message : "Unknown error",
 			},
 			{ status: 500 },
-		);
+		)
 	}
-};
+}

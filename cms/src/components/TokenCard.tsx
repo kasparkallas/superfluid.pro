@@ -1,25 +1,25 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { TokenResponse } from "@/types/tokens";
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import type { TokenResponse } from "@/types/tokens"
 
 interface TokenCardProps {
-	token: TokenResponse;
+	token: TokenResponse
 }
 
 export function TokenCard({ token }: TokenCardProps) {
 	const getTokenTypeDisplay = (type: string) => {
 		switch (type) {
 			case "pureSuperToken":
-				return "Pure Super Token";
+				return "Pure Super Token"
 			case "nativeAssetSuperToken":
-				return "Native Asset Super Token";
+				return "Native Asset Super Token"
 			case "wrapperSuperToken":
-				return "Wrapper Super Token";
+				return "Wrapper Super Token"
 			case "underlyingToken":
-				return "Underlying Token";
+				return "Underlying Token"
 			default:
-				return type;
+				return type
 		}
-	};
+	}
 
 	const getChainName = (chainId: number) => {
 		const chainNames: Record<number, string> = {
@@ -35,9 +35,9 @@ export function TokenCard({ token }: TokenCardProps) {
 			56: "BSC",
 			11155111: "Sepolia",
 			80002: "Polygon Amoy",
-		};
-		return chainNames[chainId] || `Chain ${chainId}`;
-	};
+		}
+		return chainNames[chainId] || `Chain ${chainId}`
+	}
 
 	return (
 		<Card className="h-full">
@@ -97,5 +97,5 @@ export function TokenCard({ token }: TokenCardProps) {
 				</div>
 			</CardContent>
 		</Card>
-	);
+	)
 }

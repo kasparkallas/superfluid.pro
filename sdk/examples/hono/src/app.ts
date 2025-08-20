@@ -1,3 +1,3 @@
-import { Hono } from "hono";
+import { Hono } from "hono"
 
-export const app = new Hono();
+export const app = new Hono()

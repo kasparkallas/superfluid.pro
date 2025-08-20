@@ -1,17 +1,17 @@
-import Fuse from "fuse.js";
-import { z } from "zod";
-import type { McpServer } from "@/types";
+import Fuse from "fuse.js"
+import { z } from "zod"
+import type { McpServer } from "@/types"
 
-type ResourceCategory = "documentation" | "sdk" | "app" | "community" | "code";
+type ResourceCategory = "documentation" | "sdk" | "app" | "community" | "code"
 
 type Resource = {
-	name: string;
-	url: string;
-	category: ResourceCategory;
-	description: string;
-	keywords: string[];
-	useCases: string[];
-};
+	name: string
+	url: string
+	category: ResourceCategory
+	description: string
+	keywords: string[]
+	useCases: string[]
+}
 
 const SUPERFLUID_RESOURCES: Resource[] = [
 	// Documentation
@@ -319,18 +319,18 @@ const SUPERFLUID_RESOURCES: Resource[] = [
 			"Configure applications",
 		],
 	},
-];
+]
 
 // Generate description with resource names programmatically
 const getToolDescription = () => {
 	const resourcesByCategory = SUPERFLUID_RESOURCES.reduce(
 		(acc, resource) => {
-			if (!acc[resource.category]) acc[resource.category] = [];
-			acc[resource.category].push(resource.name);
-			return acc;
+			if (!acc[resource.category]) acc[resource.category] = []
+			acc[resource.category].push(resource.name)
+			return acc
 		},
 		{} as Record<ResourceCategory, string[]>,
-	);
+	)
 
 	const categoryDescriptions = {
 		documentation: "Documentation",
@@ -338,14 +338,14 @@ const getToolDescription = () => {
 		app: "Apps",
 		community: "Community",
 		code: "Code/Libraries",
-	};
+	}
 
 	const descriptions = Object.entries(resourcesByCategory)
 		.map(([category, names]) => `${categoryDescriptions[category as ResourceCategory]}: ${names.join(", ")}`)
-		.join("; ");
+		.join("; ")
 
-	return `Find Superfluid ecosystem resources. Available resources - ${descriptions}. Filter by category or search by keywords.`;
-};
+	return `Find Superfluid ecosystem resources. Available resources - ${descriptions}. Filter by category or search by keywords.`
+}
 
 export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 	server.tool(
@@ -359,22 +359,22 @@ export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 			searchTerm: z.string().optional().describe("Search for resources by name, keywords, or use cases"),
 		},
 		async (args: { category?: ResourceCategory; searchTerm?: string }) => {
-			let resources = [...SUPERFLUID_RESOURCES];
+			let resources = [...SUPERFLUID_RESOURCES]
 
 			// Filter by category if provided
 			if (args.category) {
-				resources = resources.filter((r) => r.category === args.category);
+				resources = resources.filter((r) => r.category === args.category)
 			}
 
 			// Search if term provided
 			if (args.searchTerm) {
-				const searchLower = args.searchTerm.toLowerCase();
+				const searchLower = args.searchTerm.toLowerCase()
 
 				// First try exact keyword match with full search term
-				const exactKeywordMatches = resources.filter((r) => r.keywords.some((k) => k.toLowerCase() === searchLower));
+				const exactKeywordMatches = resources.filter((r) => r.keywords.some((k) => k.toLowerCase() === searchLower))
 
 				if (exactKeywordMatches.length > 0) {
-					resources = exactKeywordMatches;
+					resources = exactKeywordMatches
 				} else {
 					// Try fuzzy search with full term
 					const fuse = new Fuse(resources, {
@@ -386,20 +386,20 @@ export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 						],
 						threshold: 0.4,
 						includeScore: true,
-					});
+					})
 
-					const results = fuse.search(args.searchTerm);
+					const results = fuse.search(args.searchTerm)
 
 					if (results.length > 0) {
-						resources = results.map((r) => r.item);
+						resources = results.map((r) => r.item)
 					} else {
 						// No results with full term, try splitting words
-						const searchWords = searchLower.split(/\s+/).filter((word) => word.length > 0);
+						const searchWords = searchLower.split(/\s+/).filter((word) => word.length > 0)
 
 						// Find resources where any keyword contains any search word
 						const keywordMatches = resources.filter((r) =>
 							searchWords.some((word) => r.keywords.some((k) => k.toLowerCase().includes(word))),
-						);
+						)
 
 						if (keywordMatches.length > 0) {
 							// Use fuzzy search on keyword matches to rank them
@@ -412,10 +412,10 @@ export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 								],
 								threshold: 0.5,
 								includeScore: true,
-							});
+							})
 
-							const splitResults = fuseSplit.search(args.searchTerm);
-							resources = splitResults.map((r) => r.item);
+							const splitResults = fuseSplit.search(args.searchTerm)
+							resources = splitResults.map((r) => r.item)
 						}
 					}
 				}
@@ -425,13 +425,13 @@ export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 			const grouped = resources.reduce(
 				(acc, resource) => {
 					if (!acc[resource.category]) {
-						acc[resource.category] = [];
+						acc[resource.category] = []
 					}
-					acc[resource.category].push(resource);
-					return acc;
+					acc[resource.category].push(resource)
+					return acc
 				},
 				{} as Record<ResourceCategory, Resource[]>,
-			);
+			)
 
 			return {
 				content: [
@@ -448,7 +448,7 @@ export const createGetSuperfluidResourcesTool = (server: McpServer) => {
 						),
 					},
 				],
-			};
+			}
 		},
-	);
-};
+	)
+}

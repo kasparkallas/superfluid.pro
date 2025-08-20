@@ -11,4 +11,4 @@ export {
 	writeGdaForwarder,
 	writeGdaPool,
 	writeSuperToken,
-} from "./generated.js";
+} from "./generated.js"

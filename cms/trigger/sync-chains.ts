@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { syncChains } from "@/features/sync-chains";
+import { schedules } from "@trigger.dev/sdk"
+import { syncChains } from "@/features/sync-chains"
 
 // Task definition - sync chains from Superfluid metadata
 export const syncChainsScheduled = schedules.task({
@@ -9,14 +9,14 @@ export const syncChainsScheduled = schedules.task({
 		maxAttempts: 3,
 	},
 	run: async () => {
-		console.log("Starting scheduled chain sync...");
+		console.log("Starting scheduled chain sync...")
 
-		const results = await syncChains();
+		const results = await syncChains()
 
-		console.log(`Chain sync completed: ${results.successful.length} successful, ${results.failed.length} failed`);
+		console.log(`Chain sync completed: ${results.successful.length} successful, ${results.failed.length} failed`)
 
 		if (results.failed.length > 0) {
-			console.error("Failed chains:", results.failed);
+			console.error("Failed chains:", results.failed)
 		}
 
 		return {
@@ -25,6 +25,6 @@ export const syncChainsScheduled = schedules.task({
 			failed: results.failed.length,
 			successfulChains: results.successful,
 			failedChains: results.failed,
-		};
+		}
 	},
-});
+})

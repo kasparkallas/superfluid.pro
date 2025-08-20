@@ -1,4 +1,4 @@
-import config from "@payload-config";
-import { getPayload } from "payload";
+import config from "@payload-config"
+import { getPayload } from "payload"
 
-export const getPayloadInstance = () => getPayload({ config });
+export const getPayloadInstance = () => getPayload({ config })

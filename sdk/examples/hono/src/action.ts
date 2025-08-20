@@ -1,32 +1,32 @@
-import { readCfa } from "@sfpro/sdk/action/core";
+import { readCfa } from "@sfpro/sdk/action/core"
 import {
 	superfluidMainnets,
 	superfluidMainnetTransports,
 	superfluidTestnets,
 	superfluidTestnetTransports,
-} from "@sfpro/sdk/config";
-import { createConfig } from "@wagmi/core";
-import { type Chain, createClient, type Transport } from "viem";
-import { app } from "./app.js";
+} from "@sfpro/sdk/config"
+import { createConfig } from "@wagmi/core"
+import { type Chain, createClient, type Transport } from "viem"
+import { app } from "./app.js"
 
 const superfluidTransports: Record<number, Transport> = {
 	...superfluidMainnetTransports,
 	...superfluidTestnetTransports,
-};
+}
 
 const config = createConfig({
 	chains: [...superfluidMainnets, ...superfluidTestnets] as [Chain, ...Chain[]],
 	client({ chain }) {
-		return createClient({ chain, transport: superfluidTransports[chain.id as keyof typeof superfluidTransports] });
+		return createClient({ chain, transport: superfluidTransports[chain.id as keyof typeof superfluidTransports] })
 	},
-});
+})
 
 app.get("/action", async (c) => {
 	const maximumFlowRate = await readCfa(config, {
 		chainId: 1,
 		functionName: "MAXIMUM_FLOW_RATE",
-	});
-	return c.text(maximumFlowRate.toString());
-});
+	})
+	return c.text(maximumFlowRate.toString())
+})
 
-export const __esModule = true;
+export const __esModule = true

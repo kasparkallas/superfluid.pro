@@ -11,4 +11,4 @@ export {
 	legacyVestingSchedulerV2Address,
 	vestingSchedulerV3Abi,
 	vestingSchedulerV3Address,
-} from "./generated.js";
+} from "./generated.js"

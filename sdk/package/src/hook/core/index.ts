@@ -23,4 +23,4 @@ export {
 	useWriteIda,
 	useWriteSuperTokenFactory,
 	useWriteToga,
-} from "./generated.js";
+} from "./generated.js"

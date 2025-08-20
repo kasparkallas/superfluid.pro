@@ -1,6 +1,6 @@
-import { headers as getHeaders } from "next/headers";
-import { getPayloadInstance } from "@/payload";
-import type { User } from "@/payload-types";
+import { headers as getHeaders } from "next/headers"
+import { getPayloadInstance } from "@/payload"
+import type { User } from "@/payload-types"
 
 /**
  * Requires the current request to be authenticated as an admin user.
@@ -17,25 +17,25 @@ import type { User } from "@/payload-types";
  * ```
  */
 export async function requireAdmin() {
-	const headers = await getHeaders();
-	const payload = await getPayloadInstance();
-	const { user } = await payload.auth({ headers });
+	const headers = await getHeaders()
+	const payload = await getPayloadInstance()
+	const { user } = await payload.auth({ headers })
 
 	if (!user) {
 		return {
 			error: Response.json({ error: "Unauthorized - Authentication required" }, { status: 401 }),
-		};
+		}
 	}
 
-	const typedUser = user as User;
+	const typedUser = user as User
 
 	if (typedUser.role !== "admin") {
 		return {
 			error: Response.json({ error: "Forbidden - Admin access required" }, { status: 403 }),
-		};
+		}
 	}
 
-	return { user: typedUser };
+	return { user: typedUser }
 }
 
 /**
@@ -53,25 +53,25 @@ export async function requireAdmin() {
  * ```
  */
 export async function requireRoles(...roles: Array<"admin" | "editor" | "viewer">) {
-	const headers = await getHeaders();
-	const payload = await getPayloadInstance();
-	const { user } = await payload.auth({ headers });
+	const headers = await getHeaders()
+	const payload = await getPayloadInstance()
+	const { user } = await payload.auth({ headers })
 
 	if (!user) {
 		return {
 			error: Response.json({ error: "Unauthorized - Authentication required" }, { status: 401 }),
-		};
+		}
 	}
 
-	const typedUser = user as User;
+	const typedUser = user as User
 
 	if (!roles.includes(typedUser.role)) {
 		return {
 			error: Response.json({ error: `Forbidden - Requires one of: ${roles.join(", ")}` }, { status: 403 }),
-		};
+		}
 	}
 
-	return { user: typedUser };
+	return { user: typedUser }
 }
 
 /**
@@ -87,9 +87,9 @@ export async function requireRoles(...roles: Array<"admin" | "editor" | "viewer"
  * ```
  */
 export async function getCurrentUser(): Promise<User | null> {
-	const headers = await getHeaders();
-	const payload = await getPayloadInstance();
-	const { user } = await payload.auth({ headers });
+	const headers = await getHeaders()
+	const payload = await getPayloadInstance()
+	const { user } = await payload.auth({ headers })
 
-	return user as User | null;
+	return user as User | null
 }

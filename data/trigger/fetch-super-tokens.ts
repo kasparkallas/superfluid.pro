@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { fetchAndStoreSuperTokens } from "@/features/fetch-super-tokens";
+import { schedules } from "@trigger.dev/sdk"
+import { fetchAndStoreSuperTokens } from "@/features/fetch-super-tokens"
 
 // Task definition - can be triggered manually via UI or scheduled
 export const fetchSuperTokensScheduled = schedules.task({
@@ -9,6 +9,6 @@ export const fetchSuperTokensScheduled = schedules.task({
 		maxAttempts: 2,
 	},
 	run: async () => {
-		return await fetchAndStoreSuperTokens("blob"); // Use blob storage in production
+		return await fetchAndStoreSuperTokens("blob") // Use blob storage in production
 	},
-});
+})

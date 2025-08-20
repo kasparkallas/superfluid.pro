@@ -1,25 +1,25 @@
-import { createPrefixedLogger } from "../../logger";
-import type { StorageProvider } from "../../storage";
-import type { SuperTokenData } from "./types";
+import { createPrefixedLogger } from "../../logger"
+import type { StorageProvider } from "../../storage"
+import type { SuperTokenData } from "./types"
 
-const logger = createPrefixedLogger("Fallback");
+const logger = createPrefixedLogger("Fallback")
 
 interface NetworkData {
-	version: string;
-	timestamp: string;
+	version: string
+	timestamp: string
 	network: {
-		chainId: number;
-		name: string;
-		endpoint: string;
-	};
-	totalTokens: number;
-	tokens: SuperTokenData[];
+		chainId: number
+		name: string
+		endpoint: string
+	}
+	totalTokens: number
+	tokens: SuperTokenData[]
 }
 
 interface FallbackResult {
-	data: SuperTokenData[];
-	isStale: boolean;
-	age: number;
+	data: SuperTokenData[]
+	isStale: boolean
+	age: number
 }
 
 /**
@@ -27,37 +27,37 @@ interface FallbackResult {
  */
 export async function fetchPreviousNetworkData(networkName: string, storage: StorageProvider): Promise<FallbackResult> {
 	try {
-		const dataString = await storage.get(`super-tokens/latest/${networkName}.json`);
+		const dataString = await storage.get(`super-tokens/latest/${networkName}.json`)
 
 		if (!dataString) {
 			return {
 				data: [],
 				isStale: false,
 				age: 0,
-			};
+			}
 		}
 
-		const parsed: NetworkData = JSON.parse(dataString);
-		const lastUpdated = new Date(parsed.timestamp);
-		const now = new Date();
-		const ageMs = now.getTime() - lastUpdated.getTime();
-		const ageHours = ageMs / (1000 * 60 * 60);
+		const parsed: NetworkData = JSON.parse(dataString)
+		const lastUpdated = new Date(parsed.timestamp)
+		const now = new Date()
+		const ageMs = now.getTime() - lastUpdated.getTime()
+		const ageHours = ageMs / (1000 * 60 * 60)
 
 		// Consider data stale if older than 24 hours
-		const isStale = ageHours > 24;
+		const isStale = ageHours > 24
 
 		return {
 			data: parsed.tokens || [],
 			isStale,
 			age: ageMs,
-		};
+		}
 	} catch (error) {
-		logger.warn("Failed to load previous data", { networkName, error: (error as Error).message });
+		logger.warn("Failed to load previous data", { networkName, error: (error as Error).message })
 		return {
 			data: [],
 			isStale: false,
 			age: 0,
-		};
+		}
 	}
 }
 
@@ -71,10 +71,10 @@ export function createFallbackNetworkResult(
 	fallbackData: SuperTokenData[],
 	error: Error,
 ) {
-	const isFallbackEmpty = fallbackData.length === 0;
+	const isFallbackEmpty = fallbackData.length === 0
 
 	if (isFallbackEmpty) {
-		logger.error("Network failed with no fallback data", { chain: name, error: error.message });
+		logger.error("Network failed with no fallback data", { chain: name, error: error.message })
 		return {
 			chainId,
 			name,
@@ -82,13 +82,13 @@ export function createFallbackNetworkResult(
 			tokens: [],
 			isStale: false,
 			isFailed: true,
-		};
+		}
 	} else {
 		logger.warn("Network failed, using fallback data", {
 			chain: name,
 			tokenCount: fallbackData.length,
 			error: error.message,
-		});
+		})
 		return {
 			chainId,
 			name,
@@ -96,6 +96,6 @@ export function createFallbackNetworkResult(
 			tokens: fallbackData,
 			isStale: true,
 			isFailed: false,
-		};
+		}
 	}
 }

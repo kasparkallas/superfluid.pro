@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { fetchDailyPrices } from "@/features/fetch-daily-prices";
+import { schedules } from "@trigger.dev/sdk"
+import { fetchDailyPrices } from "@/features/fetch-daily-prices"
 
 // Task definition - can be triggered manually via UI or scheduled
 export const fetchDailyPricesScheduled = schedules.task({
@@ -11,6 +11,6 @@ export const fetchDailyPricesScheduled = schedules.task({
 	machine: "medium-1x",
 	run: async () => {
 		// No token limit for production runs - process all tokens
-		return await fetchDailyPrices("blob", undefined); // Use blob storage in production
+		return await fetchDailyPrices("blob", undefined) // Use blob storage in production
 	},
-});
+})

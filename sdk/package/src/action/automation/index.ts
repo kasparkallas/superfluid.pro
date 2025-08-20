@@ -17,4 +17,4 @@ export {
 	writeLegacyVestingSchedulerV1,
 	writeLegacyVestingSchedulerV2,
 	writeVestingSchedulerV3,
-} from "./generated.js";
+} from "./generated.js"

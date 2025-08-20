@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { ApiReferenceReact } from "@scalar/api-reference-react";
-import "@scalar/api-reference-react/style.css";
-import { useEffect, useState } from "react";
+import { ApiReferenceReact } from "@scalar/api-reference-react"
+import "@scalar/api-reference-react/style.css"
+import { useEffect, useState } from "react"
 
 export default function ApiDocsPage() {
-	const [baseUrl, setBaseUrl] = useState("");
+	const [baseUrl, setBaseUrl] = useState("")
 
 	useEffect(() => {
-		setBaseUrl(window.location.origin);
-	}, []);
+		setBaseUrl(window.location.origin)
+	}, [])
 
 	return (
 		<ApiReferenceReact
@@ -35,5 +35,5 @@ export default function ApiDocsPage() {
 				searchHotKey: "k",
 			}}
 		/>
-	);
+	)
 }

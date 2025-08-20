@@ -1,5 +1,5 @@
-import { schedules } from "@trigger.dev/sdk";
-import { syncTokensFromDataApi } from "@/features/sync-tokens";
+import { schedules } from "@trigger.dev/sdk"
+import { syncTokensFromDataApi } from "@/features/sync-tokens"
 
 // Task definition - sync tokens from Superfluid data API (includes CoinGecko mappings)
 export const syncDataApiScheduled = schedules.task({
@@ -9,15 +9,15 @@ export const syncDataApiScheduled = schedules.task({
 		maxAttempts: 3,
 	},
 	run: async () => {
-		console.log("Starting scheduled data API sync...");
+		console.log("Starting scheduled data API sync...")
 
-		await syncTokensFromDataApi();
+		await syncTokensFromDataApi()
 
-		console.log("Data API sync completed successfully");
+		console.log("Data API sync completed successfully")
 
 		return {
 			message: "Tokens synced successfully from data API",
 			syncedAt: new Date().toISOString(),
-		};
+		}
 	},
-});
+})

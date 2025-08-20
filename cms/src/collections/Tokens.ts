@@ -1,7 +1,7 @@
-import superfluidMetadata from "@superfluid-finance/metadata";
-import type { CollectionConfig } from "payload";
-import { isAddress } from "viem";
-import { AccessControl } from "../utils/AccessControl";
+import superfluidMetadata from "@superfluid-finance/metadata"
+import type { CollectionConfig } from "payload"
+import { isAddress } from "viem"
+import { AccessControl } from "../utils/AccessControl"
 import {
 	addressSchema,
 	decimalsSchema,
@@ -9,7 +9,7 @@ import {
 	symbolSchema,
 	transformAddress,
 	validateWithZod,
-} from "../utils/validation";
+} from "../utils/validation"
 
 export const Tokens: CollectionConfig = {
 	slug: "tokens",
@@ -37,9 +37,9 @@ export const Tokens: CollectionConfig = {
 				beforeChange: [
 					({ value, data, operation }) => {
 						if (operation === "create" || operation === "update") {
-							return `${data?.chainId}:${data?.address}`.toLowerCase();
+							return `${data?.chainId}:${data?.address}`.toLowerCase()
 						}
-						return value;
+						return value
 					},
 				],
 			},
@@ -54,14 +54,14 @@ export const Tokens: CollectionConfig = {
 			},
 			validate: (value: unknown) => {
 				if (typeof value !== "number") {
-					return "Chain ID must be a number";
+					return "Chain ID must be a number"
 				}
 				// Validate it's a known Superfluid network
-				const validChainIds = superfluidMetadata.networks.map((n) => n.chainId);
+				const validChainIds = superfluidMetadata.networks.map((n) => n.chainId)
 				if (!validChainIds.includes(value)) {
-					return `Invalid chain ID. Must be one of: ${validChainIds.join(", ")}`;
+					return `Invalid chain ID. Must be one of: ${validChainIds.join(", ")}`
 				}
-				return true;
+				return true
 			},
 		},
 		{
@@ -154,38 +154,38 @@ export const Tokens: CollectionConfig = {
 				description:
 					"Required for Wrapper Super Tokens, optional for Native Asset Super Tokens, forbidden for Pure Super Tokens and Underlying Tokens",
 				condition: (data) => {
-					return data?.tokenType === "wrapperSuperToken" || data?.tokenType === "nativeAssetSuperToken";
+					return data?.tokenType === "wrapperSuperToken" || data?.tokenType === "nativeAssetSuperToken"
 				},
 			},
 			validate: (value: unknown, { data }: { data?: Record<string, unknown> }) => {
-				const tokenType = data?.tokenType;
+				const tokenType = data?.tokenType
 
 				// Pure Super Token: must not have underlying address
 				if (tokenType === "pureSuperToken") {
 					if (value && value !== "") {
-						return "Pure Super Tokens cannot have an underlying token address";
+						return "Pure Super Tokens cannot have an underlying token address"
 					}
-					return true;
+					return true
 				}
 
 				// Underlying Token: must not have underlying address
 				if (tokenType === "underlyingToken") {
 					if (value && value !== "") {
-						return "Underlying Tokens cannot have an underlying token address";
+						return "Underlying Tokens cannot have an underlying token address"
 					}
-					return true;
+					return true
 				}
 
 				// Wrapper Super Token: must have underlying address
 				if (tokenType === "wrapperSuperToken") {
 					if (!value || value === "") {
-						return "Wrapper Super Tokens require an underlying token address";
+						return "Wrapper Super Tokens require an underlying token address"
 					}
 					// Validate the address format
 					if (!isAddress(value as string)) {
-						return "Invalid Ethereum address format";
+						return "Invalid Ethereum address format"
 					}
-					return true;
+					return true
 				}
 
 				// Native Asset Super Token: optional underlying address
@@ -193,13 +193,13 @@ export const Tokens: CollectionConfig = {
 					// If provided, validate the address format
 					if (value && value !== "") {
 						if (!isAddress(value as string)) {
-							return "Invalid Ethereum address format";
+							return "Invalid Ethereum address format"
 						}
 					}
-					return true;
+					return true
 				}
 
-				return true;
+				return true
 			},
 			hooks: {
 				beforeChange: [({ value }) => transformAddress(value)],
@@ -214,4 +214,4 @@ export const Tokens: CollectionConfig = {
 			},
 		},
 	],
-};
+}

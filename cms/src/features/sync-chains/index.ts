@@ -1,18 +1,18 @@
-import superfluidMetadata from "@superfluid-finance/metadata";
-import { getPayloadInstance } from "@/payload";
-import type { Chain } from "@/payload-types";
+import superfluidMetadata from "@superfluid-finance/metadata"
+import { getPayloadInstance } from "@/payload"
+import type { Chain } from "@/payload-types"
 
-type ChainData = Omit<Chain, "createdAt" | "updatedAt" | "sizes" | "deletedAt">;
+type ChainData = Omit<Chain, "createdAt" | "updatedAt" | "sizes" | "deletedAt">
 
 export async function syncChains() {
-	const networks = superfluidMetadata.networks;
+	const networks = superfluidMetadata.networks
 	const results = {
 		successful: [] as string[],
 		failed: [] as { name: string; error: string }[],
 		total: networks.length,
-	};
+	}
 
-	const payload = await getPayloadInstance();
+	const payload = await getPayloadInstance()
 
 	for (const network of networks) {
 		// Transform the metadata structure to match Chain collection schema
@@ -69,7 +69,7 @@ export async function syncChains() {
 			publicRPCs: network.publicRPCs?.map((url) => ({ url })) || null,
 			coinGeckoId: network.coinGeckoId || null,
 			trustedForwarders: network.trustedForwarders?.map((address) => ({ address })) || null,
-		};
+		}
 
 		try {
 			// Try to find existing chain by ID first
@@ -77,7 +77,7 @@ export async function syncChains() {
 				collection: "chains",
 				where: { id: { equals: network.chainId } },
 				limit: 1,
-			});
+			})
 
 			if (existingChain.docs.length > 0) {
 				// Update existing chain
@@ -85,27 +85,27 @@ export async function syncChains() {
 					collection: "chains",
 					id: existingChain.docs[0].id,
 					data: chainData,
-				});
-				console.log(`Updated chain: ${network.name} (${network.chainId})`);
-				results.successful.push(`${network.name} (${network.chainId})`);
+				})
+				console.log(`Updated chain: ${network.name} (${network.chainId})`)
+				results.successful.push(`${network.name} (${network.chainId})`)
 			} else {
 				// Create new chain
 				await payload.create({
 					collection: "chains",
 					data: chainData,
-				});
-				console.log(`Created chain: ${network.name} (${network.chainId})`);
-				results.successful.push(`${network.name} (${network.chainId})`);
+				})
+				console.log(`Created chain: ${network.name} (${network.chainId})`)
+				results.successful.push(`${network.name} (${network.chainId})`)
 			}
 		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : "Unknown error";
-			console.error(`Failed to sync chain ${network.name} (${network.chainId}):`, error);
+			const errorMessage = error instanceof Error ? error.message : "Unknown error"
+			console.error(`Failed to sync chain ${network.name} (${network.chainId}):`, error)
 			results.failed.push({
 				name: `${network.name} (${network.chainId})`,
 				error: errorMessage,
-			});
+			})
 		}
 	}
 
-	return results;
+	return results
 }

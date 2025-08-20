@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import { useField } from "@payloadcms/ui";
-import type { TextFieldClientComponent } from "payload";
-import { useState } from "react";
+import { useField } from "@payloadcms/ui"
+import type { TextFieldClientComponent } from "payload"
+import { useState } from "react"
 
 export const LogoPreview: TextFieldClientComponent = (props) => {
-	const { value, setValue } = useField<string>({ path: props.path });
-	const [imageError, setImageError] = useState(false);
-	const logoUrl = value as string;
+	const { value, setValue } = useField<string>({ path: props.path })
+	const [imageError, setImageError] = useState(false)
+	const logoUrl = value as string
 
 	const handleImageError = () => {
-		setImageError(true);
-	};
+		setImageError(true)
+	}
 
 	const handleImageLoad = () => {
-		setImageError(false);
-	};
+		setImageError(false)
+	}
 
 	const label =
 		typeof props.field.label === "string"
 			? props.field.label
 			: props.field.label
 				? Object.values(props.field.label)[0]
-				: props.field.name;
+				: props.field.name
 
 	return (
 		<div className="field-type text">
@@ -93,5 +93,5 @@ export const LogoPreview: TextFieldClientComponent = (props) => {
 				</div>
 			)}
 		</div>
-	);
-};
+	)
+}

@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
-import "swagger-ui-react/swagger-ui.css";
+import dynamic from "next/dynamic"
+import { useEffect, useState } from "react"
+import "swagger-ui-react/swagger-ui.css"
 
 // Dynamically import SwaggerUI with no SSR to avoid hydration issues
 const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
@@ -15,27 +15,27 @@ const SwaggerUI = dynamic(() => import("swagger-ui-react"), {
 			</div>
 		</div>
 	),
-});
+})
 
 export default function HomePage() {
-	const [isClient, setIsClient] = useState(false);
+	const [isClient, setIsClient] = useState(false)
 
 	useEffect(() => {
 		// Suppress React strict mode warnings for swagger-ui-react
-		const originalConsoleWarn = console.warn;
+		const originalConsoleWarn = console.warn
 		console.warn = (...args) => {
 			if (typeof args[0] === "string" && args[0].includes("UNSAFE_componentWillReceiveProps")) {
-				return;
+				return
 			}
-			originalConsoleWarn.apply(console, args);
-		};
+			originalConsoleWarn.apply(console, args)
+		}
 
-		setIsClient(true);
+		setIsClient(true)
 
 		return () => {
-			console.warn = originalConsoleWarn;
-		};
-	}, []);
+			console.warn = originalConsoleWarn
+		}
+	}, [])
 
 	if (!isClient) {
 		return (
@@ -45,7 +45,7 @@ export default function HomePage() {
 					<p className="text-gray-600">Loading API documentation...</p>
 				</div>
 			</div>
-		);
+		)
 	}
 
 	return (
@@ -81,5 +81,5 @@ export default function HomePage() {
 				</div>
 			</div>
 		</div>
-	);
+	)
 }

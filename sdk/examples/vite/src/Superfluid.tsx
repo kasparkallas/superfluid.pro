@@ -1,13 +1,13 @@
-"use client";
+"use client"
 
-import { useReadCfa } from "@sfpro/sdk/hook/core";
-import { mainnet } from "wagmi/chains";
+import { useReadCfa } from "@sfpro/sdk/hook/core"
+import { mainnet } from "wagmi/chains"
 
 export function Superfluid() {
 	const { data, isLoading, isError } = useReadCfa({
 		chainId: mainnet.id,
 		functionName: "MAXIMUM_FLOW_RATE",
-	});
+	})
 
 	return (
 		<div>
@@ -20,5 +20,5 @@ export function Superfluid() {
 				</div>
 			)}
 		</div>
-	);
+	)
 }

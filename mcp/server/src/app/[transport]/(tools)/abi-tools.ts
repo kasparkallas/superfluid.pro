@@ -4,7 +4,7 @@ import {
 	gdaForwarderAbi,
 	gdaPoolAbi,
 	superTokenAbi,
-} from "@sfpro/sdk/abi";
+} from "@sfpro/sdk/abi"
 import {
 	// Automation ABIs
 	autoWrapManagerAbi,
@@ -13,7 +13,7 @@ import {
 	legacyVestingSchedulerV1Abi,
 	legacyVestingSchedulerV2Abi,
 	vestingSchedulerV3Abi,
-} from "@sfpro/sdk/abi/automation";
+} from "@sfpro/sdk/abi/automation"
 import {
 	// Protocol ABIs
 	batchLiquidatorAbi,
@@ -24,16 +24,16 @@ import {
 	idaAbi,
 	superTokenFactoryAbi,
 	togaAbi,
-} from "@sfpro/sdk/abi/core";
-import type { Abi } from "viem";
-import { z } from "zod";
-import type { McpServer } from "@/types";
+} from "@sfpro/sdk/abi/core"
+import type { Abi } from "viem"
+import { z } from "zod"
+import type { McpServer } from "@/types"
 
 type ContractInfo = {
-	abi: Abi;
-	names: string[];
-	tags: string[];
-};
+	abi: Abi
+	names: string[]
+	tags: string[]
+}
 
 const contractAbis = {
 	// Main contracts
@@ -138,11 +138,11 @@ const contractAbis = {
 		names: ["VestingSchedulerV3", "VestingScheduler"],
 		tags: ["automation", "whitelist", "ERC-2771"],
 	},
-} satisfies Record<string, ContractInfo>;
+} satisfies Record<string, ContractInfo>
 
 const allValidContractNames = Object.values(contractAbis)
 	.flatMap((contract) => contract.names)
-	.map((name) => name.toLowerCase()) as [string, ...string[]];
+	.map((name) => name.toLowerCase()) as [string, ...string[]]
 
 export const createListSuperfluidContractsTool = (server: McpServer) => {
 	server.tool(
@@ -152,7 +152,7 @@ export const createListSuperfluidContractsTool = (server: McpServer) => {
 			const contracts = Object.entries(contractAbis).map(([name, info]) => ({
 				name,
 				tags: info.tags,
-			}));
+			}))
 
 			return {
 				content: [
@@ -161,10 +161,10 @@ export const createListSuperfluidContractsTool = (server: McpServer) => {
 						text: JSON.stringify(contracts, null, 2),
 					},
 				],
-			};
+			}
 		},
-	);
-};
+	)
+}
 
 export const createGetSuperfluidContractAbiTool = (server: McpServer) => {
 	server.tool(
@@ -176,7 +176,7 @@ export const createGetSuperfluidContractAbiTool = (server: McpServer) => {
 		async (args: { contractName: string }) => {
 			const contractInfo = Object.values(contractAbis).find((contract) =>
 				contract.names.map((name) => name.toLowerCase()).includes(args.contractName.toLowerCase()),
-			);
+			)
 
 			return {
 				content: [
@@ -185,9 +185,9 @@ export const createGetSuperfluidContractAbiTool = (server: McpServer) => {
 						text: JSON.stringify(contractInfo?.abi, null, 2),
 					},
 				],
-			};
+			}
 		},
-	);
-};
+	)
+}
 
-export const contractNamesSchema = z.enum(allValidContractNames);
+export const contractNamesSchema = z.enum(allValidContractNames)

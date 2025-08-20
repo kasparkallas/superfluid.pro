@@ -1,36 +1,36 @@
-"use client";
-import { useState } from "react";
-import { TokenCard } from "@/components/TokenCard";
-import { TokenFilter } from "@/components/TokenFilters";
-import { TokenTable } from "@/components/TokenTable";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { useTokens } from "@/hooks/useTokens";
-import type { TokenFilters as TokenFiltersType } from "@/types/tokens";
+"use client"
+import { useState } from "react"
+import { TokenCard } from "@/components/TokenCard"
+import { TokenFilter } from "@/components/TokenFilters"
+import { TokenTable } from "@/components/TokenTable"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "@/components/ui/button"
+import { useTokens } from "@/hooks/useTokens"
+import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
 
 export default function HomePage() {
-	const [filters, setFilters] = useState<TokenFiltersType>({});
-	const [currentPage, setCurrentPage] = useState(1);
-	const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
+	const [filters, setFilters] = useState<TokenFiltersType>({})
+	const [currentPage, setCurrentPage] = useState(1)
+	const [viewMode, setViewMode] = useState<"cards" | "table">("cards")
 
 	const { data, isLoading, error } = useTokens({
 		...filters,
 		page: currentPage,
 		limit: 20,
-	});
+	})
 
 	const handleFiltersChange = (newFilters: TokenFiltersType) => {
-		setFilters(newFilters);
-		setCurrentPage(1); // Reset to first page when filters change
-	};
+		setFilters(newFilters)
+		setCurrentPage(1) // Reset to first page when filters change
+	}
 
 	const handleResetFilters = () => {
-		setFilters({});
-		setCurrentPage(1);
-	};
+		setFilters({})
+		setCurrentPage(1)
+	}
 
-	const totalPages = data?.totalPages || 0;
-	const tokens = data?.docs || [];
+	const totalPages = data?.totalPages || 0
+	const tokens = data?.docs || []
 
 	return (
 		<div className="container mx-auto py-6 space-y-6">
@@ -110,5 +110,5 @@ export default function HomePage() {
 				</>
 			)}
 		</div>
-	);
+	)
 }

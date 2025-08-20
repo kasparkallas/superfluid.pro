@@ -1,1 +1,1 @@
-export * from "./fetchAndStoreSuperTokens";
+export * from "./fetchAndStoreSuperTokens"

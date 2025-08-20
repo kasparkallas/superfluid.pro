@@ -1,5 +1,5 @@
-import type { Address } from "viem";
-import { arbitrum, avalanche, base, bsc, celo, gnosis, mainnet, optimism, polygon, scroll } from "viem/chains";
+import type { Address } from "viem"
+import { arbitrum, avalanche, base, bsc, celo, gnosis, mainnet, optimism, polygon, scroll } from "viem/chains"
 
 export const nativeAssetAddresses: Record<number, Address> = {
 	[scroll.id]: "0x0000000000000000000000000000000000000000",
@@ -12,4 +12,4 @@ export const nativeAssetAddresses: Record<number, Address> = {
 	[mainnet.id]: "0x0000000000000000000000000000000000000000",
 	[optimism.id]: "0x0000000000000000000000000000000000000000",
 	[arbitrum.id]: "0x0000000000000000000000000000000000000000",
-} as const;
+} as const
