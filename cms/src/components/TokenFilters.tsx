@@ -15,22 +15,24 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 
 	const handleFilterChange = useCallback(
 		(key: keyof TokenFiltersType, value: string | boolean | undefined) => {
-			onFiltersChange({
-				...filters,
+			onFiltersChange((prevFilters) => ({
+				...prevFilters,
 				[key]: value === "" ? undefined : value,
-			})
+			}))
 		},
-		[filters, onFiltersChange],
+		[onFiltersChange],
 	)
 
 	// Debounced search handler
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			handleFilterChange("search", searchValue || undefined)
+			if (searchValue !== (filters.search || "")) {
+				handleFilterChange("search", searchValue || undefined)
+			}
 		}, 300) // 300ms debounce delay
 
 		return () => clearTimeout(timeoutId)
-	}, [searchValue, handleFilterChange])
+	}, [searchValue, filters.search, handleFilterChange])
 
 	// Reset search value when filters are reset
 	useEffect(() => {

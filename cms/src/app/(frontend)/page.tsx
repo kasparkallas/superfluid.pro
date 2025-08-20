@@ -19,7 +19,7 @@ export default function HomePage() {
 		limit: 20,
 	})
 
-	const handleFiltersChange = (newFilters: TokenFiltersType) => {
+	const handleFiltersChange = (newFilters: TokenFiltersType | ((prev: TokenFiltersType) => TokenFiltersType)) => {
 		setFilters(newFilters)
 		setCurrentPage(1) // Reset to first page when filters change
 	}
