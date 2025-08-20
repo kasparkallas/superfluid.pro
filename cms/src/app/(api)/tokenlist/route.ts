@@ -83,8 +83,6 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 					},
 				},
 			} as SuperTokenInfo;
-
-		case "underlyingToken":
 		default:
 			// Regular token without extensions
 			return baseToken;

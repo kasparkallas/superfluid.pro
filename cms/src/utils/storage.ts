@@ -1,4 +1,4 @@
-import { head, put } from "@vercel/blob";
+import { head } from "@vercel/blob";
 
 export type StorageType = "blob" | "local";
 

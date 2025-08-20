@@ -27,8 +27,8 @@ export async function GET(request: Request, context: { params: Promise<{ chainId
 		const includePricing = url.searchParams.get("includePricing") === "true";
 
 		// Parse chainId
-		const chainIdNum = parseInt(chainId);
-		if (isNaN(chainIdNum)) {
+		const chainIdNum = parseInt(chainId, 10);
+		if (Number.isNaN(chainIdNum)) {
 			return Response.json({ error: "Invalid chainId", message: "chainId must be a number" }, { status: 400 });
 		}
 

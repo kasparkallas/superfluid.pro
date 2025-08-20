@@ -1,3 +1,4 @@
+import type { Where } from "payload";
 import { getPayloadInstance } from "@/payload";
 import type { Token } from "@/payload-types";
 import { fetchTokenPrice, type TokenPrice } from "@/utils/pricing";
@@ -28,41 +29,50 @@ export async function GET(request: Request) {
 		const isListed = searchParams.get("isListed");
 		const tokenType = searchParams.get("tokenType");
 		const tags = searchParams.get("tags");
+		const search = searchParams.get("search");
 		const includePricing = searchParams.get("includePricing") === "true";
 		const sortBy = searchParams.get("sortBy") || "symbol";
 		const sortOrder = searchParams.get("sortOrder") || "asc";
-		const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 1000);
-		const page = Math.max(parseInt(searchParams.get("page") || "1"), 1);
+		const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 1000);
+		const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1);
 
 		// Build where clause
-		const where: any = {};
+		const whereConditions: Where[] = [];
 
 		if (isListed !== null) {
-			where.isListed = { equals: isListed === "true" };
+			whereConditions.push({ isListed: { equals: isListed === "true" } });
 		}
 
 		if (tokenType) {
-			where.tokenType = { equals: tokenType };
+			whereConditions.push({ tokenType: { equals: tokenType } });
 		}
 
 		if (tags) {
-			where.tags = { contains: tags };
+			whereConditions.push({ tags: { contains: tags } });
 		}
+
+		if (search) {
+			// Use like for case-insensitive search
+			whereConditions.push({
+				or: [{ name: { like: search } }, { symbol: { like: search } }],
+			});
+		}
+
+		// Build the final where clause
+		const where: Where = whereConditions.length > 0 ? { and: whereConditions } : {};
 
 		const payload = await getPayloadInstance();
 
 		// Fetch tokens from CMS
-		const {
-			docs: tokens,
-			totalDocs,
-			totalPages,
-		} = await payload.find({
+		const result = await payload.find({
 			collection: "tokens",
 			where,
 			sort: `${sortOrder === "desc" ? "-" : ""}${sortBy}`,
 			limit,
 			page,
 		});
+
+		const { docs: tokens, totalDocs, totalPages, hasNextPage, hasPrevPage, nextPage, prevPage, pagingCounter } = result;
 
 		// Transform tokens to API format
 		const transformedTokens: TokenResponse[] = await Promise.all(
@@ -96,13 +106,16 @@ export async function GET(request: Request) {
 		);
 
 		return Response.json({
-			tokens: transformedTokens,
-			pagination: {
-				page,
-				totalPages,
-				totalDocs,
-				limit,
-			},
+			docs: transformedTokens,
+			totalDocs,
+			limit,
+			totalPages,
+			page,
+			pagingCounter,
+			hasPrevPage,
+			hasNextPage,
+			prevPage,
+			nextPage,
 		});
 	} catch (error) {
 		console.error("Error fetching tokens:", error);

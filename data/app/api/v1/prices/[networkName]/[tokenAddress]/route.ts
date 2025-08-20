@@ -53,7 +53,7 @@ export async function GET(
 		const token = find(
 			aggregatedData.tokens,
 			(t: SuperTokenData) =>
-				t.chainId === parseInt(networkChainId) && t.address.toLowerCase() === tokenAddress.toLowerCase(),
+				t.chainId === parseInt(networkChainId, 10) && t.address.toLowerCase() === tokenAddress.toLowerCase(),
 		);
 
 		if (!token) {

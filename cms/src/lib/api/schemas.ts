@@ -235,7 +235,7 @@ export const TokenFilterQuerySchema = z
 		limit: z
 			.string()
 			.optional()
-			.transform((val) => (val ? parseInt(val) : 100))
+			.transform((val) => (val ? parseInt(val, 10) : 100))
 			.openapi({
 				example: "100",
 				description: "Number of items per page",
@@ -243,7 +243,7 @@ export const TokenFilterQuerySchema = z
 		page: z
 			.string()
 			.optional()
-			.transform((val) => (val ? parseInt(val) : 1))
+			.transform((val) => (val ? parseInt(val, 10) : 1))
 			.openapi({
 				example: "1",
 				description: "Page number",

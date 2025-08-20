@@ -15,12 +15,12 @@
 			"**/*.json",
 			"**/*.yml",
 			"**/*.yaml",
-			"!**/node_modules/**",
-			"!**/dist/**",
+			"!**/node_modules",
+			"!**/dist",
 			"!**/generated.ts",
-			"!**/.next/**",
+			"!**/.next",
 			"!**/wagmi.config.ts",
-			"!**/data/subgraph-protocol/.graphclient/**"
+			"!**/data/subgraph-protocol/.graphclient"
 		]
 	},
 	"formatter": {
