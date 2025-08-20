@@ -6,7 +6,7 @@ import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
 
 interface TokenFiltersProps {
 	filters: TokenFiltersType
-	onFiltersChange: (filters: TokenFiltersType) => void
+	onFiltersChange: (filters: TokenFiltersType | ((prev: TokenFiltersType) => TokenFiltersType)) => void
 	onReset: () => void
 }
 
@@ -34,12 +34,10 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 		return () => clearTimeout(timeoutId)
 	}, [searchValue, filters.search, handleFilterChange])
 
-	// Reset search value when filters are reset
+	// Sync search value with filters
 	useEffect(() => {
-		if (!filters.search && searchValue) {
-			setSearchValue("")
-		}
-	}, [filters.search, searchValue])
+		setSearchValue(filters.search || "")
+	}, [filters.search])
 
 	return (
 		<div className="flex flex-wrap gap-4 p-4 bg-muted/50 rounded-lg">

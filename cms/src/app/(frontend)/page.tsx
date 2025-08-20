@@ -1,33 +1,20 @@
 "use client"
-import { useState } from "react"
 import { TokenCard } from "@/components/TokenCard"
 import { TokenFilter } from "@/components/TokenFilters"
 import { TokenTable } from "@/components/TokenTable"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
+import { useTokenQueryParams } from "@/hooks/useTokenQueryParams"
 import { useTokens } from "@/hooks/useTokens"
-import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
 
 export default function HomePage() {
-	const [filters, setFilters] = useState<TokenFiltersType>({})
-	const [currentPage, setCurrentPage] = useState(1)
-	const [viewMode, setViewMode] = useState<"cards" | "table">("cards")
+	const { page, filters, viewMode, setFilters, setPage, setViewMode, resetFilters } = useTokenQueryParams()
 
 	const { data, isLoading, error } = useTokens({
 		...filters,
-		page: currentPage,
+		page,
 		limit: 20,
 	})
-
-	const handleFiltersChange = (newFilters: TokenFiltersType | ((prev: TokenFiltersType) => TokenFiltersType)) => {
-		setFilters(newFilters)
-		setCurrentPage(1) // Reset to first page when filters change
-	}
-
-	const handleResetFilters = () => {
-		setFilters({})
-		setCurrentPage(1)
-	}
 
 	const totalPages = data?.totalPages || 0
 	const tokens = data?.docs || []
@@ -50,7 +37,7 @@ export default function HomePage() {
 				</div>
 			</div>
 
-			<TokenFilter filters={filters} onFiltersChange={handleFiltersChange} onReset={handleResetFilters} />
+			<TokenFilter filters={filters} onFiltersChange={setFilters} onReset={resetFilters} />
 
 			{isLoading && (
 				<div className="flex items-center justify-center py-12">
@@ -89,18 +76,18 @@ export default function HomePage() {
 							<Button
 								variant="outline"
 								size="sm"
-								onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+								onClick={() => setPage(Math.max(1, page - 1))}
 								disabled={!data?.hasPrevPage}
 							>
 								Previous
 							</Button>
 							<span className="text-sm text-muted-foreground">
-								Page {currentPage} of {totalPages}
+								Page {page} of {totalPages}
 							</span>
 							<Button
 								variant="outline"
 								size="sm"
-								onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+								onClick={() => setPage(Math.min(totalPages, page + 1))}
 								disabled={!data?.hasNextPage}
 							>
 								Next
