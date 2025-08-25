@@ -148,7 +148,7 @@ async function fetchAllTokenStatistics(chains: Chain[]): Promise<Map<string, Tok
  */
 async function batchUpdateTokens(
 	tokensWithScores: Array<{ token: LeanToken; newScore: number; oldScore: number }>,
-	batchSize = 50,
+	batchSize = 200,
 ): Promise<{
 	updated: number
 	failed: number
@@ -177,8 +177,8 @@ async function batchUpdateTokens(
 			`   Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(tokensWithScores.length / batchSize)} (${batch.length} tokens)`,
 		)
 
-		// Process batch items in parallel
-		const batchPromises = batch.map(async ({ token, newScore, oldScore }) => {
+		// Process batch items sequentially to avoid database deadlocks
+		for (const { token, newScore, oldScore } of batch) {
 			try {
 				await payload.update({
 					collection: "tokens",
@@ -210,10 +210,7 @@ async function batchUpdateTokens(
 				})
 				console.error(`     Failed to update ${token.symbol} on chain ${token.chainId}:`, error)
 			}
-		})
-
-		// Wait for batch to complete
-		await Promise.allSettled(batchPromises)
+		}
 
 		// Explicit cleanup after each batch
 		batch.length = 0
@@ -318,7 +315,7 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 	if (tokensWithScores.length > 0) {
 		console.log("\n5. Updating token orders in batches...")
 
-		const batchResults = await batchUpdateTokens(tokensWithScores, 50)
+		const batchResults = await batchUpdateTokens(tokensWithScores, 200)
 
 		result.updated = batchResults.updated
 		result.failed = batchResults.failed
