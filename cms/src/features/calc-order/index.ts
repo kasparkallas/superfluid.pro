@@ -1,10 +1,28 @@
-import { getAllExistingTokens } from "@/features/sync-tokens"
+import { getAllTokensForOrderCalculation } from "@/features/sync-tokens"
 import { getPayloadInstance } from "@/payload"
 import type { Chain, Token } from "@/payload-types"
 import type { FetchTokensStatisticsQuery } from "@/subgraph-protocol"
 import { fetchAllTokenStatisticsWithProgress } from "./fetchTokenStatistics"
 
 type TokenStatistic = FetchTokensStatisticsQuery["tokenStatistics"][0]
+
+// Minimal token info needed for order calculation
+interface LeanToken {
+	id: string
+	chainId: number
+	address: string
+	symbol: string
+	tokenType: string
+	isListed?: boolean
+	order?: number
+}
+
+// Minimal statistics needed for calculation
+interface LeanStatistic {
+	totalNumberOfHolders?: number
+	totalNumberOfActiveStreams?: number
+	totalNumberOfClosedStreams?: number
+}
 
 interface OrderScoreParams {
 	isListed: boolean
@@ -126,6 +144,85 @@ async function fetchAllTokenStatistics(chains: Chain[]): Promise<Map<string, Tok
 }
 
 /**
+ * Batch update tokens in chunks to reduce memory usage and improve performance
+ */
+async function batchUpdateTokens(
+	tokensWithScores: Array<{ token: LeanToken; newScore: number; oldScore: number }>,
+	batchSize = 50,
+): Promise<{
+	updated: number
+	failed: number
+	updatedTokens: Array<{ tokenId: string; symbol: string; chainId: number; oldScore: number; newScore: number }>
+	failedTokens: Array<{ tokenId: string; symbol: string; chainId: number; error: string }>
+}> {
+	const payload = await getPayloadInstance()
+	const result = {
+		updated: 0,
+		failed: 0,
+		updatedTokens: [] as Array<{
+			tokenId: string
+			symbol: string
+			chainId: number
+			oldScore: number
+			newScore: number
+		}>,
+		failedTokens: [] as Array<{ tokenId: string; symbol: string; chainId: number; error: string }>,
+	}
+
+	// Process in batches
+	for (let i = 0; i < tokensWithScores.length; i += batchSize) {
+		const batch = tokensWithScores.slice(i, i + batchSize)
+
+		console.log(
+			`   Processing batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(tokensWithScores.length / batchSize)} (${batch.length} tokens)`,
+		)
+
+		// Process batch items in parallel
+		const batchPromises = batch.map(async ({ token, newScore, oldScore }) => {
+			try {
+				await payload.update({
+					collection: "tokens",
+					id: token.id,
+					data: {
+						order: newScore,
+					},
+				})
+
+				result.updated++
+				result.updatedTokens.push({
+					tokenId: token.id,
+					symbol: token.symbol,
+					chainId: token.chainId,
+					oldScore,
+					newScore,
+				})
+
+				console.log(
+					`     Updated ${token.symbol} on chain ${token.chainId}: ${oldScore.toFixed(2)} → ${newScore.toFixed(2)}`,
+				)
+			} catch (error) {
+				result.failed++
+				result.failedTokens.push({
+					tokenId: token.id,
+					symbol: token.symbol,
+					chainId: token.chainId,
+					error: error instanceof Error ? error.message : "Unknown error",
+				})
+				console.error(`     Failed to update ${token.symbol} on chain ${token.chainId}:`, error)
+			}
+		})
+
+		// Wait for batch to complete
+		await Promise.allSettled(batchPromises)
+
+		// Explicit cleanup after each batch
+		batch.length = 0
+	}
+
+	return result
+}
+
+/**
  * Result structure for order calculation
  */
 export interface OrderCalculationResult {
@@ -163,19 +260,22 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 	const statsMap = await fetchAllTokenStatistics(chains)
 	console.log(`   Total statistics fetched: ${statsMap.size}`)
 
-	console.log("\n3. Fetching all tokens from Payload...")
-	const tokensMap = await getAllExistingTokens()
+	console.log("\n3. Fetching tokens for order calculation...")
+	const tokensMap = await getAllTokensForOrderCalculation()
 	console.log(`   Found ${tokensMap.size} tokens`)
 	result.total = tokensMap.size
 
 	// Create a set of mainnet chain IDs for filtering tokens
 	const mainnetChainIds = new Set(chains.map((chain) => chain.id))
 
+	// Clear chains array to free memory
+	chains.length = 0
+
 	// Calculate scores for all tokens
 	console.log("\n4. Calculating order scores...")
-	const tokensWithScores: { token: Token; newScore: number; oldScore: number }[] = []
+	const tokensWithScores: { token: LeanToken; newScore: number; oldScore: number }[] = []
 
-	for (const [, token] of tokensMap) {
+	for (const [statKey, token] of tokensMap) {
 		// Skip testnet tokens since we only process mainnet
 		if (!mainnetChainIds.has(token.chainId)) {
 			result.skipped++
@@ -190,8 +290,7 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 
 		result.processed++
 
-		// Get statistics for this token
-		const statKey = `${token.chainId}:${token.address.toLowerCase()}`
+		// Get statistics for this token (statKey is already chainId:address)
 		const stats = statsMap.get(statKey)
 
 		// Calculate new score
@@ -209,46 +308,22 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 		}
 	}
 
+	// Clear maps to free memory before updates
+	tokensMap.clear()
+	statsMap.clear()
+
 	console.log(`   ${tokensWithScores.length} tokens need order updates`)
 
-	// Update tokens with changed scores
+	// Update tokens with changed scores using batch processing
 	if (tokensWithScores.length > 0) {
-		console.log("\n5. Updating token orders...")
+		console.log("\n5. Updating token orders in batches...")
 
-		const payload = await getPayloadInstance()
+		const batchResults = await batchUpdateTokens(tokensWithScores, 50)
 
-		for (const { token, newScore, oldScore } of tokensWithScores) {
-			try {
-				await payload.update({
-					collection: "tokens",
-					id: token.id,
-					data: {
-						order: newScore,
-					},
-				})
-				result.updated++
-				result.updatedTokens.push({
-					tokenId: token.id,
-					symbol: token.symbol,
-					chainId: token.chainId,
-					oldScore,
-					newScore,
-				})
-				console.log(
-					`   Updated ${token.symbol} on chain ${token.chainId}: ${oldScore.toFixed(2)} � ${newScore.toFixed(2)}`,
-				)
-			} catch (error) {
-				result.failed++
-				result.failedTokens.push({
-					tokenId: token.id,
-					symbol: token.symbol,
-					chainId: token.chainId,
-					error: error instanceof Error ? error.message : "Unknown error",
-				})
-				console.error(`   Failed to update ${token.symbol} on chain ${token.chainId}:`, error)
-			}
-		}
-
+		result.updated = batchResults.updated
+		result.failed = batchResults.failed
+		result.updatedTokens = batchResults.updatedTokens
+		result.failedTokens = batchResults.failedTokens
 		console.log(`\n Order calculation complete: ${result.updated} updated, ${result.failed} failed`)
 	} else {
 		console.log("\n Order calculation complete: No updates needed")

@@ -46,6 +46,72 @@ export async function getAllExistingTokens(): Promise<Map<string, Token>> {
 	return existingTokensMap
 }
 
+// Lean interface for order calculation - only fields needed
+interface LeanToken {
+	id: string
+	chainId: number
+	address: string
+	symbol: string
+	tokenType: TokenType
+	isListed?: boolean
+	order?: number
+}
+
+export async function getAllTokensForOrderCalculation(): Promise<Map<string, LeanToken>> {
+	// Load only necessary token fields to reduce memory usage
+	const existingTokens: LeanToken[] = []
+	let page = 1
+	const limit = 50 // Smaller batches to reduce memory peaks
+
+	const payload = await getPayloadInstance()
+
+	while (true) {
+		const result = await payload.find({
+			collection: "tokens",
+			page,
+			limit,
+			where: {},
+			select: {
+				id: true,
+				chainId: true,
+				address: true,
+				symbol: true,
+				tokenType: true,
+				isListed: true,
+				order: true,
+			},
+		})
+
+		const leanTokens: LeanToken[] = result.docs.map((doc) => ({
+			id: doc.id,
+			chainId: doc.chainId,
+			address: doc.address,
+			symbol: doc.symbol,
+			tokenType: doc.tokenType as TokenType,
+			isListed: doc.isListed || undefined,
+			order: doc.order,
+		}))
+
+		existingTokens.push(...leanTokens)
+
+		// If we got fewer docs than the limit, we've reached the end
+		if (result.docs.length < limit) {
+			break
+		}
+
+		page++
+	}
+
+	// Create a map using chainId:address format for statistics lookup
+	const tokensMap = new Map<string, LeanToken>()
+	existingTokens.forEach((token) => {
+		const key = `${token.chainId}:${token.address.toLowerCase()}`
+		tokensMap.set(key, token)
+	})
+
+	return tokensMap
+}
+
 export function hasChanges(existingToken: Token, updateData: Partial<Token>): boolean {
 	for (const [key, newValue] of Object.entries(updateData)) {
 		const existingValue = existingToken[key as keyof Token]
