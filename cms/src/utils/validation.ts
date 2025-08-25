@@ -26,8 +26,8 @@ export const decimalsSchema = z
 
 export const symbolSchema = z.string().min(1, "Symbol is required").max(20, "Symbol must be 20 characters or less")
 
-// Logo URI schema - accepts valid URLs or empty string/undefined
-export const logoUriSchema = z.union([z.string().url("Invalid URL format"), z.literal(""), z.undefined()])
+// Logo URI schema - accepts valid URLs or empty string/undefined/null
+export const logoUriSchema = z.union([z.string().url("Invalid URL format"), z.literal(""), z.undefined(), z.null()])
 
 // Helper function for cleaner Zod validation in Payload fields
 export const validateWithZod = <T>(schema: z.ZodSchema<T>, value: unknown): true | string => {

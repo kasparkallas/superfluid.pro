@@ -17,6 +17,7 @@ interface TokenResponse {
 	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken"
 	underlyingAddress?: string | null
 	note?: string | null
+	order?: number | null
 	pricing?: TokenPrice
 }
 
@@ -31,8 +32,8 @@ export async function GET(request: Request) {
 		const tags = searchParams.get("tags")
 		const search = searchParams.get("search")
 		const includePricing = searchParams.get("includePricing") === "true"
-		const sortBy = searchParams.get("sortBy") || "symbol"
-		const sortOrder = searchParams.get("sortOrder") || "asc"
+		const sortBy = searchParams.get("sortBy") || "order"
+		const sortOrder = searchParams.get("sortOrder") || (sortBy === "order" ? "desc" : "asc")
 		const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 1000)
 		const page = Math.max(parseInt(searchParams.get("page") || "1", 10), 1)
 
@@ -91,6 +92,7 @@ export async function GET(request: Request) {
 					tokenType: token.tokenType,
 					underlyingAddress: token.underlyingAddress,
 					note: token.note,
+					order: token.order,
 				}
 
 				// Add pricing if requested

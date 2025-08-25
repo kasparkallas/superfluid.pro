@@ -71,6 +71,7 @@ export async function syncTokensFromTokenList() {
 						// TODO: Some native asset super tokens want to have underlying address defined.
 						underlyingAddress,
 						isListed: true,
+						order: 0,
 					},
 				})
 

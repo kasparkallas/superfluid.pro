@@ -133,6 +133,7 @@ export async function syncTokensFromDataApi() {
 						tokenType,
 						underlyingAddress,
 						coingeckoId: coingeckoId || undefined, // Include CoinGecko ID if available
+						order: 0,
 					},
 				})
 

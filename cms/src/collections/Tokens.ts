@@ -206,6 +206,12 @@ export const Tokens: CollectionConfig = {
 			},
 		},
 		{
+			name: "order",
+			type: "number",
+			required: true,
+			defaultValue: 0,
+		},
+		{
 			name: "note",
 			type: "text",
 			required: false,

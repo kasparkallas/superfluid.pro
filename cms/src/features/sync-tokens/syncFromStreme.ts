@@ -162,6 +162,7 @@ export async function syncFromStreme() {
 						tokenType: "pureSuperToken",
 						underlyingAddress: undefined, // Pure super tokens don't have underlying address
 						isListed: false,
+						order: 0,
 					},
 				})
 

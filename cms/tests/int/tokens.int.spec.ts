@@ -17,6 +17,7 @@ describe("Tokens Collection", () => {
 			name: "Test Token",
 			decimals: 18,
 			symbol: "TEST",
+			order: 0,
 		})
 
 		it("should reject underlying address for Pure Super Token", async () => {

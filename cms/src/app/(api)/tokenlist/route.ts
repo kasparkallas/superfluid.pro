@@ -1,5 +1,6 @@
 import superfluidMetadata from "@superfluid-finance/metadata"
 import type { TokenInfo as OriginalTokenInfo, TokenList } from "@uniswap/token-lists"
+import { orderBy } from "lodash-es"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
 
@@ -195,29 +196,59 @@ export const GET = async (request: Request) => {
 		// Get testnet chain IDs programmatically from Superfluid metadata
 		const testnetChainIds = new Set(superfluidMetadata.testnets.map((network) => network.chainId))
 
-		// Sort tokens: mainnets first (by chainId), then testnets (by chainId), within each chain by symbol
-		allTokens.sort((a, b) => {
-			const aIsTestnet = testnetChainIds.has(a.chainId)
-			const bIsTestnet = testnetChainIds.has(b.chainId)
+		// Group tokens by chainId for better sorting control
+		const tokensByChain = new Map<number, Token[]>()
+		for (const token of allTokens) {
+			const chainTokens = tokensByChain.get(token.chainId) || []
+			chainTokens.push(token)
+			tokensByChain.set(token.chainId, chainTokens)
+		}
+
+		// Sort each chain's tokens: Super Tokens first, then underlying tokens
+		// Within each group, sort by order (descending) then by symbol
+		const sortedTokens: Token[] = []
+
+		// Get all chain IDs and sort them (mainnet first, then testnet)
+		const chainIds = Array.from(tokensByChain.keys()).sort((a, b) => {
+			const aIsTestnet = testnetChainIds.has(a)
+			const bIsTestnet = testnetChainIds.has(b)
 
 			// If one is testnet and the other isn't, mainnet comes first
 			if (aIsTestnet !== bIsTestnet) {
 				return aIsTestnet ? 1 : -1
 			}
 
-			// If both are the same type (both mainnet or both testnet), sort by chainId
-			if (a.chainId !== b.chainId) {
-				return a.chainId - b.chainId
-			}
-
-			// Same chain, sort by symbol
-			return a.symbol.localeCompare(b.symbol)
+			// Both same type, sort by chainId
+			return a - b
 		})
+
+		// Process each chain
+		for (const chainId of chainIds) {
+			const chainTokens = tokensByChain.get(chainId) || []
+
+			// Separate Super Tokens from underlying tokens
+			const superTokens = chainTokens.filter(
+				(t) =>
+					t.tokenType === "pureSuperToken" ||
+					t.tokenType === "nativeAssetSuperToken" ||
+					t.tokenType === "wrapperSuperToken",
+			)
+			const underlyingTokens = chainTokens.filter((t) => t.tokenType === "underlyingToken")
+
+			// Sort Super Tokens by order (descending - higher order = more important = comes first), then by symbol
+			const sortedSuperTokens = orderBy(superTokens, ["order", "symbol"], ["desc", "asc"])
+
+			// Sort underlying tokens by symbol only (alphabetical)
+			const sortedUnderlyingTokens = orderBy(underlyingTokens, ["symbol"], ["asc"])
+
+			// Add to final array: Super Tokens first, then underlying tokens
+			sortedTokens.push(...sortedSuperTokens, ...sortedUnderlyingTokens)
+		}
 
 		// Find the most recent update timestamp from all tokens
 		let latestUpdate = new Date().toISOString()
-		if (allTokens.length > 0) {
-			const timestamps = allTokens
+		if (sortedTokens.length > 0) {
+			const timestamps = sortedTokens
 				.map((token) => token.updatedAt)
 				.filter(Boolean)
 				.map((ts) => new Date(ts).getTime())
@@ -228,16 +259,16 @@ export const GET = async (request: Request) => {
 			}
 		}
 
-		// Format as tokenlist with proper types (allTokens is already sorted)
+		// Format as tokenlist with proper types (sortedTokens is already sorted)
 		const tokenList: SuperTokenList = {
 			name: "Superfluid Token List",
 			timestamp: latestUpdate,
 			version: {
 				major: 5,
-				minor: allTokens.length,
+				minor: sortedTokens.length,
 				patch: new Date(latestUpdate).getTime() - new Date("2025-01-01").getTime(),
 			},
-			tokens: allTokens.map(mapTokenToTokenListFormat),
+			tokens: sortedTokens.map(mapTokenToTokenListFormat),
 		}
 
 		return Response.json(tokenList)

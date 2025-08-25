@@ -209,6 +209,7 @@ export interface Token {
 	 * Required for Wrapper Super Tokens, optional for Native Asset Super Tokens, forbidden for Pure Super Tokens and Underlying Tokens
 	 */
 	underlyingAddress?: string | null
+	order: number
 	/**
 	 * Any additional notes about the token
 	 */
@@ -415,6 +416,7 @@ export interface TokensSelect<T extends boolean = true> {
 	tags?: T
 	tokenType?: T
 	underlyingAddress?: T
+	order?: T
 	note?: T
 	updatedAt?: T
 	createdAt?: T

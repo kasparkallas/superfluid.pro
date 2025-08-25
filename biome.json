@@ -20,7 +20,8 @@
 			"!**/generated.ts",
 			"!**/.next",
 			"!**/wagmi.config.ts",
-			"!**/data/subgraph-protocol/.graphclient"
+			"!**/data/subgraph-protocol/.graphclient",
+			"!**/cms/src/subgraph-protocol/.graphclient"
 		]
 	},
 	"formatter": {

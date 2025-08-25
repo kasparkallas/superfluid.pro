@@ -1,0 +1,11 @@
+query FetchTokensStatistics($id_gt: ID!) {
+  tokenStatistics(first: 1000, where: {id_gt: $id_gt, token_: {isSuperToken: true}}) {
+    id
+    totalNumberOfHolders
+    totalNumberOfClosedStreams
+    totalNumberOfActiveStreams
+    token { 
+      isListed
+    }
+  }
+}
