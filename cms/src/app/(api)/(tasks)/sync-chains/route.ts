@@ -1,10 +1,12 @@
 import { syncChains } from "@/features/sync-chains"
 import { requireAdmin } from "@/utils/api-auth"
 
-export const GET = async (_request: Request) => {
+export const GET = async (_request: Request): Promise<Response> => {
 	// Require admin authentication
 	const auth = await requireAdmin()
-	if ("error" in auth) return auth.error
+	if ("error" in auth) {
+		return auth.error
+	}
 
 	try {
 		const results = await syncChains()

@@ -16,7 +16,7 @@ import type { User } from "@/payload-types"
  * console.log('Admin user:', auth.user.email)
  * ```
  */
-export async function requireAdmin() {
+export async function requireAdmin(): Promise<{ error: Response } | { user: User }> {
 	const headers = await getHeaders()
 	const payload = await getPayloadInstance()
 	const { user } = await payload.auth({ headers })
