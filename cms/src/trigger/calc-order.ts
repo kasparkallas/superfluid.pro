@@ -8,6 +8,7 @@ export const calcOrderScheduled = schedules.task({
 	retry: {
 		maxAttempts: 3,
 	},
+	machine: "medium-1x",
 	run: async () => {
 		console.log("Starting scheduled order calculation...")
 
