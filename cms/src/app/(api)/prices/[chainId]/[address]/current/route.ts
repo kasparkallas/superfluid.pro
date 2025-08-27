@@ -1,7 +1,6 @@
 import CoinGecko from "@coingecko/coingecko-typescript"
 import { find } from "lodash"
 import { zeroAddress } from "viem"
-import type { Chain, Token } from "@/payload-types"
 import { createStorageProvider, getStorageConfig } from "@/utils/storage"
 
 interface SuperTokenData {
@@ -67,7 +66,7 @@ function getCoinGeckoClient() {
 	})
 }
 
-async function fetchClassicCurrentPrice(token: SuperTokenData, coingeckoId: string): Promise<string | null> {
+async function fetchClassicCurrentPrice(_token: SuperTokenData, coingeckoId: string): Promise<string | null> {
 	const client = getCoinGeckoClient()
 
 	try {

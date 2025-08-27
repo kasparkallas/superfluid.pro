@@ -1,5 +1,5 @@
 import { getPayloadInstance } from "@/payload"
-import type { Chain, Token } from "@/payload-types"
+import type { Chain } from "@/payload-types"
 import { createStorageProvider, getStorageConfig } from "@/utils/storage"
 
 interface PriceDataPoint {

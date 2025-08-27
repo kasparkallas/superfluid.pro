@@ -29,6 +29,7 @@ export async function GET(request: Request) {
 		const tokenType = searchParams.get("tokenType")
 		const tags = searchParams.get("tags")
 		const search = searchParams.get("search")
+		const chainId = searchParams.get("chainId")
 		const sortBy = searchParams.get("sortBy") || "order"
 		const sortOrder = searchParams.get("sortOrder") || (sortBy === "order" ? "desc" : "asc")
 		const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 1000)
@@ -36,6 +37,9 @@ export async function GET(request: Request) {
 
 		// Build where clause
 		const whereConditions: Where[] = []
+
+		// Always exclude underlying tokens - only show Super Tokens
+		whereConditions.push({ tokenType: { not_equals: "underlyingToken" } })
 
 		if (isListed !== null) {
 			whereConditions.push({ isListed: { equals: isListed === "true" } })
@@ -47,6 +51,13 @@ export async function GET(request: Request) {
 
 		if (tags) {
 			whereConditions.push({ tags: { contains: tags } })
+		}
+
+		if (chainId) {
+			const chainIdNum = parseInt(chainId, 10)
+			if (!Number.isNaN(chainIdNum)) {
+				whereConditions.push({ chainId: { equals: chainIdNum } })
+			}
 		}
 
 		if (search) {

@@ -38,7 +38,7 @@ export async function syncTokensFromTokenList() {
 			const missingTags = newTags.filter((tag) => !existingTags.includes(tag as TokenTag))
 
 			if (missingTags.length > 0) {
-				updateData.tags = [...existingTags, ...missingTags] as TokenTag[]
+				updateData.tags = [...new Set([...existingTags, ...missingTags])] as TokenTag[]
 			}
 
 			// Only update if there are changes

@@ -41,6 +41,9 @@ importers:
       '@asteasolutions/zod-to-openapi':
         specifier: ^7.3.4
         version: 7.3.4(zod@3.25.76)
+      '@coingecko/coingecko-typescript':
+        specifier: ^1.11.3
+        version: 1.11.3
       '@libsql/client':
         specifier: ^0.15.12
         version: 0.15.12(bufferutil@4.0.9)(utf-8-validate@6.0.5)
@@ -68,6 +71,9 @@ importers:
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.16
         version: 2.1.16(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-hover-card':
+        specifier: ^1.1.15
+        version: 1.1.15(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@radix-ui/react-select':
         specifier: ^2.2.6
         version: 2.2.6(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -164,7 +170,7 @@ importers:
     devDependencies:
       '@graphprotocol/client-cli':
         specifier: ^3.0.7
-        version: 3.0.7(@envelop/core@5.3.0)(@graphql-mesh/cross-helpers@0.4.10(graphql@16.11.0))(@graphql-mesh/store@0.104.7(graphql@16.11.0))(@graphql-mesh/types@0.104.7(graphql@16.11.0))(@graphql-mesh/utils@0.104.7(graphql@16.11.0))(@graphql-tools/delegate@10.2.23(graphql@16.11.0))(@graphql-tools/merge@9.1.1(graphql@16.11.0))(@graphql-tools/utils@10.9.1(graphql@16.11.0))(@graphql-tools/wrap@10.1.4(graphql@16.11.0))(@types/node@24.3.0)(bufferutil@4.0.9)(crossws@0.3.5)(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.11.0))(graphql-yoga@5.15.1(graphql@16.11.0))(graphql@16.11.0)(utf-8-validate@6.0.5)
+        version: 3.0.7(@envelop/core@5.3.0)(@graphql-mesh/cross-helpers@0.4.10(graphql@16.11.0))(@graphql-mesh/store@0.102.13)(@graphql-mesh/types@0.102.13)(@graphql-mesh/utils@0.102.13)(@graphql-tools/delegate@10.2.23(graphql@16.11.0))(@graphql-tools/merge@9.1.1(graphql@16.11.0))(@graphql-tools/utils@10.9.1(graphql@16.11.0))(@graphql-tools/wrap@10.1.4(graphql@16.11.0))(@types/node@24.3.0)(bufferutil@4.0.9)(crossws@0.3.5)(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.11.0))(graphql-yoga@5.15.1(graphql@16.11.0))(graphql@16.11.0)(utf-8-validate@6.0.5)
       '@payloadcms/db-sqlite':
         specifier: ^3.53.0
         version: 3.53.0(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(@vercel/postgres@0.9.0)(bufferutil@4.0.9)(payload@3.53.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.9.2)(utf-8-validate@6.0.5))(pg@8.16.3)(utf-8-validate@6.0.5)
@@ -280,7 +286,7 @@ importers:
     devDependencies:
       '@graphprotocol/client-cli':
         specifier: ^3.0.7
-        version: 3.0.7(@envelop/core@5.3.0)(@graphql-mesh/cross-helpers@0.4.10(graphql@16.11.0))(@graphql-mesh/store@0.102.13)(@graphql-mesh/types@0.102.13)(@graphql-mesh/utils@0.102.13)(@graphql-tools/delegate@10.2.23(graphql@16.11.0))(@graphql-tools/merge@9.1.1(graphql@16.11.0))(@graphql-tools/utils@10.9.1(graphql@16.11.0))(@graphql-tools/wrap@10.1.4(graphql@16.11.0))(@types/node@24.3.0)(bufferutil@4.0.9)(crossws@0.3.5)(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.11.0))(graphql-yoga@5.15.1(graphql@16.11.0))(graphql@16.11.0)(utf-8-validate@6.0.5)
+        version: 3.0.7(@envelop/core@5.3.0)(@graphql-mesh/cross-helpers@0.4.10(graphql@16.11.0))(@graphql-mesh/store@0.104.7(graphql@16.11.0))(@graphql-mesh/types@0.104.7(graphql@16.11.0))(@graphql-mesh/utils@0.104.7(graphql@16.11.0))(@graphql-tools/delegate@10.2.23(graphql@16.11.0))(@graphql-tools/merge@9.1.1(graphql@16.11.0))(@graphql-tools/utils@10.9.1(graphql@16.11.0))(@graphql-tools/wrap@10.1.4(graphql@16.11.0))(@types/node@24.3.0)(bufferutil@4.0.9)(crossws@0.3.5)(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.11.0))(graphql-yoga@5.15.1(graphql@16.11.0))(graphql@16.11.0)(utf-8-validate@6.0.5)
       '@tailwindcss/postcss':
         specifier: ^4.1.12
         version: 4.1.12
@@ -638,7 +644,7 @@ importers:
     dependencies:
       '@wagmi/core':
         specifier: ^2
-        version: 2.20.0(@tanstack/query-core@5.85.5)(@types/react@19.1.11)(react@19.1.1)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.1))(viem@2.35.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
+        version: 2.20.0(@tanstack/query-core@5.85.5)(@types/react@19.1.11)(react@19.1.1)(typescript@5.9.2)(use-sync-external-store@1.4.0(react@19.1.1))(viem@2.35.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))
       react:
         specifier: '>=18'
         version: 19.1.1
@@ -3931,6 +3937,19 @@ packages:
 
   '@radix-ui/react-focus-scope@1.1.7':
     resolution: {integrity: sha512-t2ODlkXBQyn7jkl6TNaw/MtVEVvIGelJDCG41Okq/KwUsJBwQ4XVZsHAVUkK4mBv3ewiAS3PGuUWuY2BoK4ZUw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-hover-card@1.1.15':
+    resolution: {integrity: sha512-qgTkjNT1CfKMoP0rcasmlH2r1DAiYicWsDsufxl940sT2wHNEWWv6FMWIQXWhVdmC1d/HYfbhQx60KYyAtKxjg==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -18422,6 +18441,23 @@ snapshots:
       '@types/react': 19.1.11
       '@types/react-dom': 19.1.7(@types/react@19.1.11)
 
+  '@radix-ui/react-hover-card@1.1.15(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@radix-ui/primitive': 1.1.3
+      '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.1.11)(react@19.1.1)
+      '@radix-ui/react-context': 1.1.2(@types/react@19.1.11)(react@19.1.1)
+      '@radix-ui/react-dismissable-layer': 1.1.11(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-popper': 1.2.8(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-portal': 1.1.9(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-presence': 1.1.5(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-primitive': 2.1.3(@types/react-dom@19.1.7(@types/react@19.1.11))(@types/react@19.1.11)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@radix-ui/react-use-controllable-state': 1.2.2(@types/react@19.1.11)(react@19.1.1)
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    optionalDependencies:
+      '@types/react': 19.1.11
+      '@types/react-dom': 19.1.7(@types/react@19.1.11)
+
   '@radix-ui/react-id@1.1.1(@types/react@19.1.11)(react@19.1.1)':
     dependencies:
       '@radix-ui/react-use-layout-effect': 1.1.1(@types/react@19.1.11)(react@19.1.1)
@@ -21327,21 +21363,6 @@ snapshots:
       mipd: 0.0.7(typescript@5.9.2)
       viem: 2.35.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)
       zustand: 5.0.0(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.4.0(react@19.1.1))
-    optionalDependencies:
-      '@tanstack/query-core': 5.85.5
-      typescript: 5.9.2
-    transitivePeerDependencies:
-      - '@types/react'
-      - immer
-      - react
-      - use-sync-external-store
-
-  '@wagmi/core@2.20.0(@tanstack/query-core@5.85.5)(@types/react@19.1.11)(react@19.1.1)(typescript@5.9.2)(use-sync-external-store@1.5.0(react@19.1.1))(viem@2.35.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76))':
-    dependencies:
-      eventemitter3: 5.0.1
-      mipd: 0.0.7(typescript@5.9.2)
-      viem: 2.35.1(bufferutil@4.0.9)(typescript@5.9.2)(utf-8-validate@5.0.10)(zod@3.25.76)
-      zustand: 5.0.0(@types/react@19.1.11)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
     optionalDependencies:
       '@tanstack/query-core': 5.85.5
       typescript: 5.9.2

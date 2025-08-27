@@ -1,8 +1,20 @@
+import superfluidMetadata from "@superfluid-finance/metadata"
 import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
+
+// Get chains from Superfluid metadata and separate into mainnets and testnets
+const allChains = superfluidMetadata.networks.map((network) => ({
+	id: network.chainId,
+	name: network.humanReadableName,
+	isTestnet: network.isTestnet,
+}))
+
+const mainnets = allChains.filter((chain) => !chain.isTestnet).sort((a, b) => a.name.localeCompare(b.name))
+
+const testnets = allChains.filter((chain) => chain.isTestnet).sort((a, b) => a.name.localeCompare(b.name))
 
 interface TokenFiltersProps {
 	filters: TokenFiltersType
@@ -14,7 +26,7 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 	const [searchValue, setSearchValue] = useState(filters.search || "")
 
 	const handleFilterChange = useCallback(
-		(key: keyof TokenFiltersType, value: string | boolean | undefined) => {
+		(key: keyof TokenFiltersType, value: string | boolean | number | undefined) => {
 			onFiltersChange((prevFilters) => ({
 				...prevFilters,
 				[key]: value === "" ? undefined : value,
@@ -54,7 +66,6 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value="all">All Types</SelectItem>
-					<SelectItem value="underlyingToken">Underlying Token</SelectItem>
 					<SelectItem value="pureSuperToken">Pure Super Token</SelectItem>
 					<SelectItem value="nativeAssetSuperToken">Native Asset Super Token</SelectItem>
 					<SelectItem value="wrapperSuperToken">Wrapper Super Token</SelectItem>
@@ -88,6 +99,28 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 					<SelectItem value="all">All</SelectItem>
 					<SelectItem value="true">Listed</SelectItem>
 					<SelectItem value="false">Not Listed</SelectItem>
+				</SelectContent>
+			</Select>
+
+			<Select
+				value={filters.chainId ? String(filters.chainId) : "all"}
+				onValueChange={(value) => handleFilterChange("chainId", value === "all" ? undefined : parseInt(value, 10))}
+			>
+				<SelectTrigger className="w-40">
+					<SelectValue placeholder="Chain" />
+				</SelectTrigger>
+				<SelectContent>
+					<SelectItem value="all">All Chains</SelectItem>
+					{mainnets.map((chain) => (
+						<SelectItem key={chain.id} value={String(chain.id)}>
+							{chain.name}
+						</SelectItem>
+					))}
+					{testnets.map((chain) => (
+						<SelectItem key={chain.id} value={String(chain.id)}>
+							{chain.name} (Testnet)
+						</SelectItem>
+					))}
 				</SelectContent>
 			</Select>
 

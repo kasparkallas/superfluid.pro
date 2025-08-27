@@ -133,6 +133,15 @@ export const Tokens: CollectionConfig = {
 				{ label: "underlying", value: "underlying" },
 				{ label: "supertoken", value: "supertoken" },
 			],
+			hooks: {
+				beforeChange: [
+					({ value }) => {
+						if (!value || !Array.isArray(value)) return value
+						// Remove duplicates using Set
+						return [...new Set(value)]
+					},
+				],
+			},
 		},
 		{
 			name: "tokenType",

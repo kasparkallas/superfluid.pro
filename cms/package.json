@@ -22,7 +22,8 @@
 		"trigger:dev": "pnpm dlx trigger.dev@latest dev",
 		"trigger:login": "pnpm dlx trigger.dev@latest login",
 		"trigger:deploy": "pnpm dlx trigger.dev@latest deploy",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"cleanup:duplicate-tags": "cross-env NODE_OPTIONS=--no-deprecation tsx --env-file=.env src/scripts/cleanup-duplicate-tags.ts"
 	},
 	"dependencies": {
 		"@asteasolutions/zod-to-openapi": "^7.3.4",
@@ -36,6 +37,7 @@
 		"@payloadcms/storage-vercel-blob": "^3.53.0",
 		"@payloadcms/ui": "^3.53.0",
 		"@radix-ui/react-dropdown-menu": "^2.1.16",
+		"@radix-ui/react-hover-card": "^1.1.15",
 		"@radix-ui/react-select": "^2.2.6",
 		"@radix-ui/react-slot": "^1.2.3",
 		"@scalar/api-reference-react": "^0.7.40",

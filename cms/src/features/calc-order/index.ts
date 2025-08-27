@@ -1,6 +1,6 @@
 import { getAllTokensForOrderCalculation } from "@/features/sync-tokens"
 import { getPayloadInstance } from "@/payload"
-import type { Chain, Token } from "@/payload-types"
+import type { Chain } from "@/payload-types"
 import type { FetchTokensStatisticsQuery } from "@/subgraph-protocol"
 import { fetchAllTokenStatisticsWithProgress } from "./fetchTokenStatistics"
 

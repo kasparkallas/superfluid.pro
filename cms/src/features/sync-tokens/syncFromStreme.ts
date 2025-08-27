@@ -127,7 +127,7 @@ export async function syncFromStreme() {
 			const missingTags = stremeTags.filter((tag) => !existingTags.includes(tag))
 
 			if (missingTags.length > 0) {
-				updateData.tags = [...existingTags, ...missingTags]
+				updateData.tags = [...new Set([...existingTags, ...missingTags])]
 			}
 
 			// Only update if there are changes
