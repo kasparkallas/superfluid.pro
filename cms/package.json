@@ -26,6 +26,7 @@
 	},
 	"dependencies": {
 		"@asteasolutions/zod-to-openapi": "^7.3.4",
+		"@coingecko/coingecko-typescript": "^1.11.3",
 		"@libsql/client": "^0.15.12",
 		"@payloadcms/db-vercel-postgres": "^3.53.0",
 		"@payloadcms/email-nodemailer": "^3.53.0",

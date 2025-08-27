@@ -1,7 +1,6 @@
 import type { Where } from "payload"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { fetchTokenPrice, type TokenPrice } from "@/utils/pricing"
 
 interface TokenResponse {
 	id: string
@@ -18,7 +17,6 @@ interface TokenResponse {
 	underlyingAddress?: string | null
 	note?: string | null
 	order?: number | null
-	pricing?: TokenPrice
 }
 
 export async function GET(request: Request) {
@@ -31,7 +29,6 @@ export async function GET(request: Request) {
 		const tokenType = searchParams.get("tokenType")
 		const tags = searchParams.get("tags")
 		const search = searchParams.get("search")
-		const includePricing = searchParams.get("includePricing") === "true"
 		const sortBy = searchParams.get("sortBy") || "order"
 		const sortOrder = searchParams.get("sortOrder") || (sortBy === "order" ? "desc" : "asc")
 		const limit = Math.min(parseInt(searchParams.get("limit") || "100", 10), 1000)
@@ -76,34 +73,22 @@ export async function GET(request: Request) {
 		const { docs: tokens, totalDocs, totalPages, hasNextPage, hasPrevPage, nextPage, prevPage, pagingCounter } = result
 
 		// Transform tokens to API format
-		const transformedTokens: TokenResponse[] = await Promise.all(
-			tokens.map(async (token: Token): Promise<TokenResponse> => {
-				const baseToken: TokenResponse = {
-					id: token.id,
-					chainId: token.chainId,
-					address: token.address,
-					name: token.name,
-					symbol: token.symbol,
-					decimals: token.decimals,
-					logoUri: token.logoUri,
-					isListed: token.isListed,
-					coingeckoId: token.coingeckoId,
-					tags: token.tags,
-					tokenType: token.tokenType,
-					underlyingAddress: token.underlyingAddress,
-					note: token.note,
-					order: token.order,
-				}
-
-				// Add pricing if requested
-				if (includePricing) {
-					const pricing = await fetchTokenPrice(token)
-					if (pricing) {
-						baseToken.pricing = pricing
-					}
-				}
-
-				return baseToken
+		const transformedTokens: TokenResponse[] = tokens.map(
+			(token: Token): TokenResponse => ({
+				id: token.id,
+				chainId: token.chainId,
+				address: token.address,
+				name: token.name,
+				symbol: token.symbol,
+				decimals: token.decimals,
+				logoUri: token.logoUri,
+				isListed: token.isListed,
+				coingeckoId: token.coingeckoId,
+				tags: token.tags,
+				tokenType: token.tokenType,
+				underlyingAddress: token.underlyingAddress,
+				note: token.note,
+				order: token.order,
 			}),
 		)
 

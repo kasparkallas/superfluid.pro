@@ -313,6 +313,134 @@ export const TokenListFilterQuerySchema = z
 		description: "Query parameters for filtering token list export",
 	})
 
+// Price data point schema
+export const PriceDataPointSchema = z
+	.object({
+		date: z.string().openapi({
+			example: "2025-01-01",
+			description: "Date in YYYY-MM-DD format",
+		}),
+		price: z.string().openapi({
+			example: "0.999",
+			description: "Price value as string for precision",
+		}),
+	})
+	.openapi({
+		title: "PriceDataPoint",
+		description: "Historical price data point",
+	})
+
+// Token with price history schema
+export const TokenPriceHistoryResponseSchema = z
+	.object({
+		version: z.string().openapi({
+			example: "1.0.0",
+			description: "Data version",
+		}),
+		timestamp: z.string().datetime().openapi({
+			example: "2025-01-07T12:00:00.000Z",
+			description: "ISO 8601 timestamp of data",
+		}),
+		testRun: z.boolean().optional().openapi({
+			description: "Whether this was a test run",
+		}),
+		token: z
+			.object({
+				id: z.string(),
+				address: z.string(),
+				chainId: z.number(),
+				symbol: z.string(),
+				name: z.string(),
+				decimals: z.number(),
+				isListed: z.boolean(),
+				isNativeAssetSuperToken: z.boolean(),
+				isPureSuperToken: z.boolean(),
+				isWrapperSuperToken: z.boolean(),
+				underlyingAddress: z.string().nullable(),
+				lastUpdated: z.string().datetime(),
+			})
+			.openapi({
+				description: "Token metadata",
+			}),
+		coingeckoId: z.string().nullable().openapi({
+			example: "ethereum",
+			description: "CoinGecko ID for the token",
+		}),
+		fetchedAt: z.string().datetime().openapi({
+			example: "2025-01-07T12:00:00.000Z",
+			description: "When price data was fetched",
+		}),
+		priceHistory: z.array(PriceDataPointSchema).optional().openapi({
+			description: "Historical price data (when includePriceHistory=true)",
+		}),
+	})
+	.openapi({
+		title: "TokenPriceHistoryResponse",
+		description: "Token with optional price history",
+	})
+
+// Current price response schema
+export const CurrentPriceResponseSchema = z
+	.object({
+		token: z
+			.object({
+				id: z.string(),
+				address: z.string(),
+				chainId: z.number(),
+				symbol: z.string(),
+				name: z.string(),
+				decimals: z.number(),
+				isListed: z.boolean(),
+				isNativeAssetSuperToken: z.boolean(),
+				isPureSuperToken: z.boolean(),
+				isWrapperSuperToken: z.boolean(),
+				underlyingAddress: z.string().nullable(),
+				totalNumberOfHolders: z.number(),
+				totalNumberOfActiveStreams: z.number(),
+				totalNumberOfClosedStreams: z.number(),
+				lastUpdated: z.string().datetime(),
+			})
+			.openapi({
+				description: "Token metadata with statistics",
+			}),
+		priceUsd: z.string().nullable().openapi({
+			example: "0.999",
+			description: "Current price in USD as string for precision",
+		}),
+		timestamp: z.string().datetime().openapi({
+			example: "2025-01-07T12:00:00.000Z",
+			description: "When the price was fetched",
+		}),
+		method: z.enum(["classic", "onchain", "none"]).openapi({
+			example: "classic",
+			description: "Method used to fetch the price",
+		}),
+		coingeckoId: z.string().optional().openapi({
+			example: "ethereum",
+			description: "CoinGecko ID used (for classic method)",
+		}),
+	})
+	.openapi({
+		title: "CurrentPriceResponse",
+		description: "Current token price information",
+	})
+
+// Price history query parameters
+export const PriceHistoryQuerySchema = z
+	.object({
+		includePriceHistory: z
+			.enum(["true", "false"])
+			.optional()
+			.transform((val) => val === "true")
+			.openapi({
+				description: "Include historical price data",
+			}),
+	})
+	.openapi({
+		title: "PriceHistoryQuery",
+		description: "Query parameters for price history endpoint",
+	})
+
 // API Error schema
 export const ApiErrorSchema = z
 	.object({

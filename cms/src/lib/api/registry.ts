@@ -1,12 +1,15 @@
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
 import {
 	ApiErrorSchema,
+	CurrentPriceResponseSchema,
+	PriceHistoryQuerySchema,
 	PricingQuerySchema,
 	TokenFilterQuerySchema,
 	TokenListFilterQuerySchema,
 	TokenListResponseSchema,
 	TokenListSchema,
 	TokenPathParamsSchema,
+	TokenPriceHistoryResponseSchema,
 	TokenPriceSchema,
 	TokenSchema,
 } from "./schemas"
@@ -18,6 +21,8 @@ registry.register("Token", TokenSchema)
 registry.register("TokenListResponse", TokenListResponseSchema)
 registry.register("TokenList", TokenListSchema)
 registry.register("TokenPrice", TokenPriceSchema)
+registry.register("TokenPriceHistoryResponse", TokenPriceHistoryResponseSchema)
+registry.register("CurrentPriceResponse", CurrentPriceResponseSchema)
 registry.register("ApiError", ApiErrorSchema)
 
 // Register API paths
@@ -146,6 +151,107 @@ registry.registerPath({
 	},
 })
 
+// GET /prices/{chainId}/{address} - Get token price history
+registry.registerPath({
+	method: "get",
+	path: "/prices/{chainId}/{address}",
+	summary: "Get token price history",
+	description: "Retrieves token metadata and optional historical price data from storage",
+	tags: ["Prices"],
+	request: {
+		params: TokenPathParamsSchema,
+		query: PriceHistoryQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Token with optional price history",
+			content: {
+				"application/json": {
+					schema: TokenPriceHistoryResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Invalid parameters",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "Token or price data not found",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// GET /prices/{chainId}/{address}/current - Get current token price
+registry.registerPath({
+	method: "get",
+	path: "/prices/{chainId}/{address}/current",
+	summary: "Get current token price",
+	description: "Retrieves real-time token price from CoinGecko using classic or onchain API",
+	tags: ["Prices"],
+	request: {
+		params: TokenPathParamsSchema,
+	},
+	responses: {
+		200: {
+			description: "Current token price information",
+			content: {
+				"application/json": {
+					schema: CurrentPriceResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Invalid parameters",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "Token not found",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		503: {
+			description: "CoinGecko mappings not available",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
 // Generate OpenAPI document
 export function generateOpenApiDocument() {
 	const generator = new OpenApiGeneratorV31(registry.definitions)
@@ -176,6 +282,10 @@ export function generateOpenApiDocument() {
 			{
 				name: "Token List",
 				description: "Export tokens in standard formats",
+			},
+			{
+				name: "Prices",
+				description: "Token pricing operations",
 			},
 		],
 	})
