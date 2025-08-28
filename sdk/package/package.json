@@ -62,6 +62,18 @@
 			"types": "./dist/action/automation/index.d.ts",
 			"default": "./dist/action/automation/index.js"
 		},
+		"./abi/sup": {
+			"types": "./dist/abi/sup/index.d.ts",
+			"default": "./dist/abi/sup/index.js"
+		},
+		"./hook/sup": {
+			"types": "./dist/hook/sup/index.d.ts",
+			"default": "./dist/hook/sup/index.js"
+		},
+		"./action/sup": {
+			"types": "./dist/action/sup/index.d.ts",
+			"default": "./dist/action/sup/index.js"
+		},
 		"./util": {
 			"types": "./dist/util.d.ts",
 			"default": "./dist/util.js"
@@ -81,12 +93,15 @@
 		"generate:abi": "TYPE=abi wagmi generate",
 		"generate:abi-automation": "TYPE=abi CATEGORY=automation wagmi generate",
 		"generate:abi-core": "TYPE=abi CATEGORY=core wagmi generate",
+		"generate:abi-sup": "TYPE=abi CATEGORY=sup wagmi generate",
 		"generate:action": "TYPE=action wagmi generate",
 		"generate:action-automation": "TYPE=action CATEGORY=automation wagmi generate",
 		"generate:action-core": "TYPE=action CATEGORY=core wagmi generate",
+		"generate:action-sup": "TYPE=action CATEGORY=sup wagmi generate",
 		"generate:hook": "TYPE=hook wagmi generate",
 		"generate:hook-automation": "TYPE=hook CATEGORY=automation wagmi generate",
 		"generate:hook-core": "TYPE=hook CATEGORY=core wagmi generate",
+		"generate:hook-sup": "TYPE=hook CATEGORY=sup wagmi generate",
 		"test": "vitest",
 		"typecheck": "tsc --noEmit"
 	},
