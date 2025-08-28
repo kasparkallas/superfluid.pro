@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.1
+
+### Patch Changes
+
+- 0891ed2: Add support of SUP contracts
+
 ## 0.1.0
 
 ### Minor Changes
@@ -13,7 +19,6 @@
 - Initial alpha release of @sfpro/sdk
 
   This is the first alpha release of the Superfluid SDK, providing:
-
   - TypeScript bindings for Superfluid Protocol contracts
   - React hooks for easy integration with wagmi
   - Actions for contract interactions
@@ -21,7 +26,6 @@
   - Tree-shakeable exports for optimal bundle size
 
   Available exports:
-
   - `/abi` - Contract ABIs
   - `/hook` - React hooks for contract interactions
   - `/action` - Wagmi actions for contract calls
