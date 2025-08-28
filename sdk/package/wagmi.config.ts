@@ -1,6 +1,8 @@
 import { type Config, defineConfig } from "@wagmi/cli";
 import { erc20Abi, type Abi } from "viem";
-import { react, actions } from "@wagmi/cli/plugins";
+import { react, actions, etherscan } from "@wagmi/cli/plugins";
+import { base, baseSepolia } from "viem/chains";
+import 'dotenv/config'
 
 // # Main contracts
 import CFAv1Forwarder from "@superfluid-finance/ethereum-contracts/build/hardhat/contracts/utils/CFAv1Forwarder.sol/CFAv1Forwarder.json" with {
@@ -44,6 +46,11 @@ import TOGA from "@superfluid-finance/ethereum-contracts/build/hardhat/contracts
 import BatchLiquidator from "@superfluid-finance/ethereum-contracts/build/hardhat/contracts/utils/BatchLiquidator.sol/BatchLiquidator.json" with {
 	type: "json",
 };
+
+// # SUP contracts
+
+// # SuperBoring contracts
+
 // ---
 
 // # Automation contracts
@@ -117,28 +124,85 @@ const out = (function (): string {
 })();
 
 const plugins = (function (): Plugins {
-	switch (type) {
-		case "abi":
-			return [];
-		case "hook":
-			return [
-				react({
-					getHookName: ({ contractName, type, itemName }) => {
-						const actionName = getActionName({ contractName, type, itemName });
-						return `use${capitalizeFirstLetter(actionName)}`;
+	const basePlugins = (() => {
+		switch (type) {
+			case "abi":
+				return [];
+			case "hook":
+				return [
+					react({
+						getHookName: ({ contractName, type, itemName }) => {
+							const actionName = getActionName({ contractName, type, itemName });
+							return `use${capitalizeFirstLetter(actionName)}`;
+						},
+					}),
+				];
+			case "action":
+				return [
+					actions({
+						overridePackageName: "@wagmi/core",
+						getActionName: ({ contractName, type, itemName }) => getActionName({ contractName, type, itemName }),
+					}),
+				];
+			default:
+				throw new Error(`Invalid type [${type}], use "abi", "hook" or "action".`);
+		}
+	})();
+
+	const supPlugins = category === "sup" ? [
+		etherscan({
+			apiKey: process.env.ETHERSCAN_API_KEY!,
+			chainId: base.id,
+			tryFetchProxyImplementation: true,
+			contracts: [
+				{
+					// TODO: Should add errors?
+					name: "supToken",
+					address: {
+						[base.id]: "0xa69f80524381275A7fFdb3AE01c54150644c8792",
+						[baseSepolia.id]: "0xFd62b398DD8a233ad37156690631fb9515059d6A",
 					},
-				}),
-			];
-		case "action":
-			return [
-				actions({
-					overridePackageName: "@wagmi/core",
-					getActionName: ({ contractName, type, itemName }) => getActionName({ contractName, type, itemName }),
-				}),
-			];
-		default:
-			throw new Error(`Invalid type [${type}], use "abi", "hook" or "action".`);
-	}
+				},
+				{
+					name: "programManager",
+					address: {
+						[base.id]: "0x1e32cf099992E9D3b17eDdDFFfeb2D07AED95C6a",
+						[baseSepolia.id]: "0x71a1975A1009e48E0BF2f621B6835db5Ea1f7706",
+					},
+				},
+				{
+					name: "stakingRewardController",
+					address: {
+						[base.id]: "0xb19Ae25A98d352B36CED60F93db926247535048b",
+						[baseSepolia.id]: "0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018",
+					},
+				},
+				{
+					name: "fluidLockerFactory",
+					address: {
+						[base.id]: "0x25963B2502F895D7d0953D147da97CCD12225380",
+						[baseSepolia.id]: "0x897D343D24Ac5b84838B976Cf37036EDEfe3E967",
+					},
+				},
+				{
+					name: "fontaine",
+					address: {
+						[base.id]: "0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d",
+						[baseSepolia.id]: "0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE",
+					},
+				},
+				{
+					name: "locker",
+					address: {
+						[base.id]: "0x664161f0974F5B17FB1fD3FDcE5D1679E829176c",
+						[baseSepolia.id]: "0xf2880c6D68080393C1784f978417a96ab4f37c38",
+					},
+				},
+			],
+		}),
+	] : [];
+
+	return [...basePlugins, ...supPlugins];
 })();
 
 export default defineConfig({

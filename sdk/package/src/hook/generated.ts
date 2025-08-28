@@ -263,6 +263,19 @@ export const cfaForwarderAbi = [
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_ADMIN' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_GOV_OWNER' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_SELF' },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'SUPER_TOKEN_PERMIT_EXPIRED_SIGNATURE',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'SUPER_TOKEN_PERMIT_INVALID_SIGNER',
+  },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_FROM_ZERO_ADDRESS' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_TO_ZERO_ADDRESS' },
 ] as const
@@ -678,6 +691,19 @@ export const gdaForwarderAbi = [
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_ADMIN' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_GOV_OWNER' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_SELF' },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'SUPER_TOKEN_PERMIT_EXPIRED_SIGNATURE',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'SUPER_TOKEN_PERMIT_INVALID_SIGNER',
+  },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_FROM_ZERO_ADDRESS' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_TO_ZERO_ADDRESS' },
 ] as const
@@ -953,11 +979,28 @@ export const gdaPoolAbi = [
   },
   {
     type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: 'spender', internalType: 'address', type: 'address' },
       { name: 'subtractedValue', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'decreaseAllowance',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'memberAddr', internalType: 'address', type: 'address' },
+      { name: 'subtractedUnits', internalType: 'uint128', type: 'uint128' },
+    ],
+    name: 'decreaseMemberUnits',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'nonpayable',
   },
@@ -1071,6 +1114,16 @@ export const gdaPoolAbi = [
   {
     type: 'function',
     inputs: [
+      { name: 'memberAddr', internalType: 'address', type: 'address' },
+      { name: 'addedUnits', internalType: 'uint128', type: 'uint128' },
+    ],
+    name: 'increaseMemberUnits',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
       { name: 'admin_', internalType: 'address', type: 'address' },
       {
         name: 'superToken_',
@@ -1087,10 +1140,20 @@ export const gdaPoolAbi = [
         internalType: 'bool',
         type: 'bool',
       },
+      { name: 'erc20Name_', internalType: 'string', type: 'string' },
+      { name: 'erc20Symbol_', internalType: 'string', type: 'string' },
+      { name: 'erc20Decimals_', internalType: 'uint8', type: 'uint8' },
     ],
     name: 'initialize',
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -1166,6 +1229,13 @@ export const gdaPoolAbi = [
     outputs: [
       { name: '', internalType: 'contract ISuperfluidToken', type: 'address' },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
     stateMutability: 'view',
   },
   {
@@ -1277,6 +1347,19 @@ export const superTokenAbi = [
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_ADMIN' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_GOV_OWNER' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_SELF' },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'SUPER_TOKEN_PERMIT_EXPIRED_SIGNATURE',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'SUPER_TOKEN_PERMIT_INVALID_SIGNER',
+  },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_FROM_ZERO_ADDRESS' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_TO_ZERO_ADDRESS' },
   {
@@ -1612,6 +1695,7 @@ export const superTokenAbi = [
     ],
     name: 'CodeUpdated',
   },
+  { type: 'event', anonymous: false, inputs: [], name: 'EIP712DomainChanged' },
   {
     type: 'event',
     anonymous: false,
@@ -1802,6 +1886,13 @@ export const superTokenAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'DOMAIN_SEPARATOR',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'POOL_ADMIN_NFT',
     outputs: [
       { name: '', internalType: 'contract IPoolAdminNFT', type: 'address' },
@@ -1925,6 +2016,21 @@ export const superTokenAbi = [
     name: 'downgradeTo',
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'eip712Domain',
+    outputs: [
+      { name: 'fields', internalType: 'bytes1', type: 'bytes1' },
+      { name: '', internalType: 'string', type: 'string' },
+      { name: 'version', internalType: 'string', type: 'string' },
+      { name: 'chainId', internalType: 'uint256', type: 'uint256' },
+      { name: 'verifyingContract', internalType: 'address', type: 'address' },
+      { name: 'salt', internalType: 'bytes32', type: 'bytes32' },
+      { name: 'extensions', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -2123,6 +2229,13 @@ export const superTokenAbi = [
   },
   {
     type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [
       { name: 'account', internalType: 'address', type: 'address' },
       { name: 'spender', internalType: 'address', type: 'address' },
@@ -2242,6 +2355,21 @@ export const superTokenAbi = [
       { name: 'operatorData', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'operatorSend',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'value', internalType: 'uint256', type: 'uint256' },
+      { name: 'deadline', internalType: 'uint256', type: 'uint256' },
+      { name: 'v', internalType: 'uint8', type: 'uint8' },
+      { name: 'r', internalType: 'bytes32', type: 'bytes32' },
+      { name: 's', internalType: 'bytes32', type: 'bytes32' },
+    ],
+    name: 'permit',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -3863,6 +3991,14 @@ export const useReadGdaPoolBalanceOf = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"decimals"`
+ */
+export const useReadGdaPoolDecimals = /*#__PURE__*/ createUseReadContract({
+  abi: gdaPoolAbi,
+  functionName: 'decimals',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"distributionFromAnyAddress"`
  */
 export const useReadGdaPoolDistributionFromAnyAddress =
@@ -3977,6 +4113,14 @@ export const useReadGdaPoolGetUnits = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"name"`
+ */
+export const useReadGdaPoolName = /*#__PURE__*/ createUseReadContract({
+  abi: gdaPoolAbi,
+  functionName: 'name',
+})
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"poolOperatorGetIndex"`
  */
 export const useReadGdaPoolPoolOperatorGetIndex =
@@ -3999,6 +4143,14 @@ export const useReadGdaPoolProxiableUuid = /*#__PURE__*/ createUseReadContract({
 export const useReadGdaPoolSuperToken = /*#__PURE__*/ createUseReadContract({
   abi: gdaPoolAbi,
   functionName: 'superToken',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"symbol"`
+ */
+export const useReadGdaPoolSymbol = /*#__PURE__*/ createUseReadContract({
+  abi: gdaPoolAbi,
+  functionName: 'symbol',
 })
 
 /**
@@ -4059,12 +4211,30 @@ export const useWriteGdaPoolDecreaseAllowance =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"decreaseMemberUnits"`
+ */
+export const useWriteGdaPoolDecreaseMemberUnits =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: gdaPoolAbi,
+    functionName: 'decreaseMemberUnits',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"increaseAllowance"`
  */
 export const useWriteGdaPoolIncreaseAllowance =
   /*#__PURE__*/ createUseWriteContract({
     abi: gdaPoolAbi,
     functionName: 'increaseAllowance',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"increaseMemberUnits"`
+ */
+export const useWriteGdaPoolIncreaseMemberUnits =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: gdaPoolAbi,
+    functionName: 'increaseMemberUnits',
   })
 
 /**
@@ -4161,12 +4331,30 @@ export const useSimulateGdaPoolDecreaseAllowance =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"decreaseMemberUnits"`
+ */
+export const useSimulateGdaPoolDecreaseMemberUnits =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: gdaPoolAbi,
+    functionName: 'decreaseMemberUnits',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"increaseAllowance"`
  */
 export const useSimulateGdaPoolIncreaseAllowance =
   /*#__PURE__*/ createUseSimulateContract({
     abi: gdaPoolAbi,
     functionName: 'increaseAllowance',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link gdaPoolAbi}__ and `functionName` set to `"increaseMemberUnits"`
+ */
+export const useSimulateGdaPoolIncreaseMemberUnits =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: gdaPoolAbi,
+    functionName: 'increaseMemberUnits',
   })
 
 /**
@@ -4301,6 +4489,15 @@ export const useReadSuperTokenConstantOutflowNft =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"DOMAIN_SEPARATOR"`
+ */
+export const useReadSuperTokenDomainSeparator =
+  /*#__PURE__*/ createUseReadContract({
+    abi: superTokenAbi,
+    functionName: 'DOMAIN_SEPARATOR',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"POOL_ADMIN_NFT"`
  */
 export const useReadSuperTokenPoolAdminNft =
@@ -4349,6 +4546,15 @@ export const useReadSuperTokenDefaultOperators =
   /*#__PURE__*/ createUseReadContract({
     abi: superTokenAbi,
     functionName: 'defaultOperators',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"eip712Domain"`
+ */
+export const useReadSuperTokenEip712Domain =
+  /*#__PURE__*/ createUseReadContract({
+    abi: superTokenAbi,
+    functionName: 'eip712Domain',
   })
 
 /**
@@ -4479,6 +4685,14 @@ export const useReadSuperTokenIsOperatorFor =
 export const useReadSuperTokenName = /*#__PURE__*/ createUseReadContract({
   abi: superTokenAbi,
   functionName: 'name',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"nonces"`
+ */
+export const useReadSuperTokenNonces = /*#__PURE__*/ createUseReadContract({
+  abi: superTokenAbi,
+  functionName: 'nonces',
 })
 
 /**
@@ -4749,6 +4963,14 @@ export const useWriteSuperTokenOperatorSend =
     abi: superTokenAbi,
     functionName: 'operatorSend',
   })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useWriteSuperTokenPermit = /*#__PURE__*/ createUseWriteContract({
+  abi: superTokenAbi,
+  functionName: 'permit',
+})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"revokeOperator"`
@@ -5138,6 +5360,15 @@ export const useSimulateSuperTokenOperatorSend =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"permit"`
+ */
+export const useSimulateSuperTokenPermit =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: superTokenAbi,
+    functionName: 'permit',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link superTokenAbi}__ and `functionName` set to `"revokeOperator"`
  */
 export const useSimulateSuperTokenRevokeOperator =
@@ -5429,6 +5660,15 @@ export const useWatchSuperTokenCodeUpdatedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: superTokenAbi,
     eventName: 'CodeUpdated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link superTokenAbi}__ and `eventName` set to `"EIP712DomainChanged"`
+ */
+export const useWatchSuperTokenEip712DomainChangedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: superTokenAbi,
+    eventName: 'EIP712DomainChanged',
   })
 
 /**

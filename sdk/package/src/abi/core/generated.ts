@@ -1322,6 +1322,53 @@ export const gdaAbi = [
     type: 'function',
     inputs: [
       {
+        name: 'token',
+        internalType: 'contract ISuperfluidToken',
+        type: 'address',
+      },
+      { name: 'admin', internalType: 'address', type: 'address' },
+      {
+        name: 'config',
+        internalType: 'struct PoolConfig',
+        type: 'tuple',
+        components: [
+          {
+            name: 'transferabilityForUnitsOwner',
+            internalType: 'bool',
+            type: 'bool',
+          },
+          {
+            name: 'distributionFromAnyAddress',
+            internalType: 'bool',
+            type: 'bool',
+          },
+        ],
+      },
+      {
+        name: 'poolERC20Metadata',
+        internalType: 'struct PoolERC20Metadata',
+        type: 'tuple',
+        components: [
+          { name: 'name', internalType: 'string', type: 'string' },
+          { name: 'symbol', internalType: 'string', type: 'string' },
+          { name: 'decimals', internalType: 'uint8', type: 'uint8' },
+        ],
+      },
+    ],
+    name: 'createPoolWithCustomERC20Metadata',
+    outputs: [
+      {
+        name: 'pool',
+        internalType: 'contract ISuperfluidPool',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
         name: 'pool',
         internalType: 'contract ISuperfluidPool',
         type: 'address',
@@ -2585,10 +2632,16 @@ export const hostAbi = [
       { name: 'appWhiteListingEnabled', internalType: 'bool', type: 'bool' },
       { name: 'callbackGasLimit', internalType: 'uint64', type: 'uint64' },
       {
+        name: 'simpleForwarderAddress',
+        internalType: 'address',
+        type: 'address',
+      },
+      {
         name: 'erc2771ForwarderAddress',
         internalType: 'address',
         type: 'address',
       },
+      { name: 'simpleAclAddress', internalType: 'address', type: 'address' },
     ],
     stateMutability: 'nonpayable',
   },
@@ -2797,6 +2850,13 @@ export const hostAbi = [
       },
     ],
     name: 'SuperTokenLogicUpdated',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'ACL_SUPERAPP_REGISTRATION_ROLE',
+    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -3148,6 +3208,15 @@ export const hostAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'getSimpleACL',
+    outputs: [
+      { name: '', internalType: 'contract IAccessControl', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'getSuperTokenFactory',
     outputs: [
       {
@@ -3437,6 +3506,19 @@ export const hostAbi = [
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_ADMIN' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_GOV_OWNER' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_SELF' },
+  {
+    type: 'error',
+    inputs: [{ name: 'deadline', internalType: 'uint256', type: 'uint256' }],
+    name: 'SUPER_TOKEN_PERMIT_EXPIRED_SIGNATURE',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'signer', internalType: 'address', type: 'address' },
+      { name: 'owner', internalType: 'address', type: 'address' },
+    ],
+    name: 'SUPER_TOKEN_PERMIT_INVALID_SIGNER',
+  },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_FROM_ZERO_ADDRESS' },
   { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_TO_ZERO_ADDRESS' },
   { type: 'error', inputs: [], name: 'AGREEMENT_BASE_ONLY_HOST' },
