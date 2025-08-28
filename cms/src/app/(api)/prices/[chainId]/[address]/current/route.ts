@@ -61,7 +61,7 @@ function getCoinGeckoClient() {
 
 	return new CoinGecko({
 		proAPIKey: process.env.COINGECKO_API_KEY,
-		timeout: 10000, // 10 second timeout
+		timeout: 5000, // 5 second timeout
 		maxRetries: 2,
 	})
 }
