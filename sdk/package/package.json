@@ -139,5 +139,8 @@
 			"optional": true
 		}
 	},
-	"packageManager": "pnpm@10.6.2"
+	"packageManager": "pnpm@10.6.2",
+	"publishConfig": {
+		"access": "public"
+	}
 }
