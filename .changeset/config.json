@@ -19,6 +19,8 @@
 		"@sfpro/example-hono-app",
 		"@sfpro/example-nextjs-app",
 		"@sfpro/example-react-app",
-		"@sfpro/example-vue-app"
+		"@sfpro/example-vue-app",
+		"superfluid-cms",
+		"superfluid-data"
 	]
 }
