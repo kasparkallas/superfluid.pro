@@ -1,9 +1,10 @@
 {
-	"name": "superfluid-cms",
+	"name": "@sfpro/cms",
 	"version": "1.0.0",
 	"description": "A blank template to get started with Payload 3.0",
 	"license": "MIT",
 	"type": "module",
+	"private": true,
 	"scripts": {
 		"migrate": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" payload migrate",
 		"build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",

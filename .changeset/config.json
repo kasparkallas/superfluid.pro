@@ -20,7 +20,7 @@
 		"@sfpro/example-nextjs-app",
 		"@sfpro/example-react-app",
 		"@sfpro/example-vue-app",
-		"superfluid-cms",
-		"superfluid-data"
+		"@sfpro/cms",
+		"@sfpro/data"
 	]
 }
