@@ -346,8 +346,280 @@ export const lockerAbi = [
   {
     type: 'constructor',
     inputs: [
-      { name: 'implementation_', internalType: 'address', type: 'address' },
+      { name: 'fluid', internalType: 'contract ISuperToken', type: 'address' },
+      {
+        name: 'taxDistributionPool',
+        internalType: 'contract ISuperfluidPool',
+        type: 'address',
+      },
+      {
+        name: 'programManager',
+        internalType: 'contract IEPProgramManager',
+        type: 'address',
+      },
+      {
+        name: 'stakingRewardController',
+        internalType: 'contract IStakingRewardController',
+        type: 'address',
+      },
+      { name: 'fontaineBeacon', internalType: 'address', type: 'address' },
+      { name: 'isUnlockAvailable', internalType: 'bool', type: 'bool' },
     ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'EP_PROGRAM_MANAGER',
+    outputs: [
+      { name: '', internalType: 'contract IEPProgramManager', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'FLUID',
+    outputs: [
+      { name: '', internalType: 'contract ISuperToken', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'FONTAINE_BEACON',
+    outputs: [
+      { name: '', internalType: 'contract UpgradeableBeacon', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'STAKING_REWARD_CONTROLLER',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract IStakingRewardController',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'TAX_DISTRIBUTION_POOL',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'UNLOCK_AVAILABLE',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programId', internalType: 'uint256', type: 'uint256' },
+      { name: 'totalProgramUnits', internalType: 'uint256', type: 'uint256' },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'programId', internalType: 'uint256', type: 'uint256' }],
+    name: 'connect',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'disconnect',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'programId', internalType: 'uint256', type: 'uint256' }],
+    name: 'disconnect',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'programIdsToDisconnect',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'programIdsToClaim',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'disconnectAndClaim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'fontaineCount',
+    outputs: [{ name: '', internalType: 'uint16', type: 'uint16' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'unlockId', internalType: 'uint256', type: 'uint256' }],
+    name: 'fontaines',
+    outputs: [
+      { name: 'fontaine', internalType: 'contract IFontaine', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getAvailableBalance',
+    outputs: [{ name: 'aBalance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'getFlowRatePerProgram',
+    outputs: [{ name: 'flowRates', internalType: 'int96[]', type: 'int96[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'programId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getFlowRatePerProgram',
+    outputs: [{ name: 'flowRate', internalType: 'int96', type: 'int96' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getFontaineBeaconImplementation',
+    outputs: [
+      { name: 'fontaineBeaconImpl', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getStakedBalance',
+    outputs: [{ name: 'sBalance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'programId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getUnitsPerProgram',
+    outputs: [{ name: 'units', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+    ],
+    name: 'getUnitsPerProgram',
+    outputs: [{ name: 'units', internalType: 'uint128[]', type: 'uint128[]' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
+    name: 'lock',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'lockerOwner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'stakingUnlocksAt',
+    outputs: [{ name: '', internalType: 'uint80', type: 'uint80' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'unlockPeriod', internalType: 'uint128', type: 'uint128' },
+      { name: 'recipient', internalType: 'address', type: 'address' },
+    ],
+    name: 'unlock',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'unstake',
+    outputs: [],
     stateMutability: 'nonpayable',
   },
   {
@@ -355,70 +627,136 @@ export const lockerAbi = [
     anonymous: false,
     inputs: [
       {
-        name: 'previousOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
         indexed: true,
       },
     ],
-    name: 'OwnershipTransferred',
+    name: 'FluidLocked',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       {
-        name: 'implementation',
+        name: 'newTotalStakedBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'addedAmount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'FluidStaked',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'programId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'FluidStreamClaimed',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'programId',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: true,
+      },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+        indexed: true,
+      },
+    ],
+    name: 'FluidStreamsClaimed',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'unlockPeriod',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: true,
+      },
+      {
+        name: 'availableBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'recipient',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'fontaine',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
     ],
-    name: 'Upgraded',
+    name: 'FluidUnlocked',
   },
+  { type: 'event', anonymous: false, inputs: [], name: 'FluidUnstaked' },
   {
-    type: 'function',
-    inputs: [],
-    name: 'implementation',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
+    type: 'event',
+    anonymous: false,
     inputs: [
-      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      {
+        name: 'version',
+        internalType: 'uint64',
+        type: 'uint64',
+        indexed: false,
+      },
     ],
-    name: 'upgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'Initialized',
   },
+  { type: 'error', inputs: [], name: 'FORBIDDEN' },
+  { type: 'error', inputs: [], name: 'INVALID_UNLOCK_PERIOD' },
+  { type: 'error', inputs: [], name: 'InvalidInitialization' },
+  { type: 'error', inputs: [], name: 'NOT_LOCKER_OWNER' },
+  { type: 'error', inputs: [], name: 'NO_FLUID_TO_STAKE' },
+  { type: 'error', inputs: [], name: 'NO_FLUID_TO_UNLOCK' },
+  { type: 'error', inputs: [], name: 'NO_FLUID_TO_UNSTAKE' },
+  { type: 'error', inputs: [], name: 'NotInitializing' },
+  { type: 'error', inputs: [], name: 'Reentrancy' },
+  { type: 'error', inputs: [], name: 'STAKING_COOLDOWN_NOT_ELAPSED' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'bits', internalType: 'uint8', type: 'uint8' },
+      { name: 'value', internalType: 'int256', type: 'int256' },
+    ],
+    name: 'SafeCastOverflowedIntDowncast',
+  },
+  { type: 'error', inputs: [], name: 'TAX_DISTRIBUTION_POOL_HAS_NO_UNITS' },
+  { type: 'error', inputs: [], name: 'TTE_NOT_ACTIVATED' },
 ] as const
 
 /**
@@ -3125,27 +3463,187 @@ export const readLocker = /*#__PURE__*/ createReadContract({
 })
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"implementation"`
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"EP_PROGRAM_MANAGER"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const readLockerImplementation = /*#__PURE__*/ createReadContract({
+export const readLockerEpProgramManager = /*#__PURE__*/ createReadContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'implementation',
+  functionName: 'EP_PROGRAM_MANAGER',
 })
 
 /**
- * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"owner"`
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"FLUID"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const readLockerOwner = /*#__PURE__*/ createReadContract({
+export const readLockerFluid = /*#__PURE__*/ createReadContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'owner',
+  functionName: 'FLUID',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"FONTAINE_BEACON"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerFontaineBeacon = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'FONTAINE_BEACON',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"STAKING_REWARD_CONTROLLER"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerStakingRewardController =
+  /*#__PURE__*/ createReadContract({
+    abi: lockerAbi,
+    address: lockerAddress,
+    functionName: 'STAKING_REWARD_CONTROLLER',
+  })
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"TAX_DISTRIBUTION_POOL"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerTaxDistributionPool = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'TAX_DISTRIBUTION_POOL',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"UNLOCK_AVAILABLE"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerUnlockAvailable = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'UNLOCK_AVAILABLE',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"fontaineCount"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerFontaineCount = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'fontaineCount',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"fontaines"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerFontaines = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'fontaines',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getAvailableBalance"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerGetAvailableBalance = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'getAvailableBalance',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getFlowRatePerProgram"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerGetFlowRatePerProgram = /*#__PURE__*/ createReadContract(
+  {
+    abi: lockerAbi,
+    address: lockerAddress,
+    functionName: 'getFlowRatePerProgram',
+  },
+)
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getFontaineBeaconImplementation"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerGetFontaineBeaconImplementation =
+  /*#__PURE__*/ createReadContract({
+    abi: lockerAbi,
+    address: lockerAddress,
+    functionName: 'getFontaineBeaconImplementation',
+  })
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getStakedBalance"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerGetStakedBalance = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'getStakedBalance',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getUnitsPerProgram"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerGetUnitsPerProgram = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'getUnitsPerProgram',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"lockerOwner"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerLockerOwner = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'lockerOwner',
+})
+
+/**
+ * Wraps __{@link readContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stakingUnlocksAt"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const readLockerStakingUnlocksAt = /*#__PURE__*/ createReadContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'stakingUnlocksAt',
 })
 
 /**
@@ -3160,39 +3658,111 @@ export const writeLocker = /*#__PURE__*/ createWriteContract({
 })
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const writeLockerRenounceOwnership = /*#__PURE__*/ createWriteContract({
+export const writeLockerClaim = /*#__PURE__*/ createWriteContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'renounceOwnership',
+  functionName: 'claim',
 })
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"transferOwnership"`
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"connect"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const writeLockerTransferOwnership = /*#__PURE__*/ createWriteContract({
+export const writeLockerConnect = /*#__PURE__*/ createWriteContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'transferOwnership',
+  functionName: 'connect',
 })
 
 /**
- * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"upgradeTo"`
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnect"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const writeLockerUpgradeTo = /*#__PURE__*/ createWriteContract({
+export const writeLockerDisconnect = /*#__PURE__*/ createWriteContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'upgradeTo',
+  functionName: 'disconnect',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnectAndClaim"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerDisconnectAndClaim = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'disconnectAndClaim',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"initialize"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerInitialize = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'initialize',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"lock"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerLock = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'lock',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerStake = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'stake',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"unlock"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerUnlock = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'unlock',
+})
+
+/**
+ * Wraps __{@link writeContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"unstake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const writeLockerUnstake = /*#__PURE__*/ createWriteContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'unstake',
 })
 
 /**
@@ -3207,41 +3777,112 @@ export const simulateLocker = /*#__PURE__*/ createSimulateContract({
 })
 
 /**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"renounceOwnership"`
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"claim"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const simulateLockerRenounceOwnership =
-  /*#__PURE__*/ createSimulateContract({
-    abi: lockerAbi,
-    address: lockerAddress,
-    functionName: 'renounceOwnership',
-  })
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"transferOwnership"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
- */
-export const simulateLockerTransferOwnership =
-  /*#__PURE__*/ createSimulateContract({
-    abi: lockerAbi,
-    address: lockerAddress,
-    functionName: 'transferOwnership',
-  })
-
-/**
- * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"upgradeTo"`
- *
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
- */
-export const simulateLockerUpgradeTo = /*#__PURE__*/ createSimulateContract({
+export const simulateLockerClaim = /*#__PURE__*/ createSimulateContract({
   abi: lockerAbi,
   address: lockerAddress,
-  functionName: 'upgradeTo',
+  functionName: 'claim',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"connect"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerConnect = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'connect',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnect"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerDisconnect = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'disconnect',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnectAndClaim"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerDisconnectAndClaim =
+  /*#__PURE__*/ createSimulateContract({
+    abi: lockerAbi,
+    address: lockerAddress,
+    functionName: 'disconnectAndClaim',
+  })
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"initialize"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerInitialize = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'initialize',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"lock"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerLock = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'lock',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerStake = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'stake',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"unlock"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerUnlock = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'unlock',
+})
+
+/**
+ * Wraps __{@link simulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"unstake"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const simulateLockerUnstake = /*#__PURE__*/ createSimulateContract({
+  abi: lockerAbi,
+  address: lockerAddress,
+  functionName: 'unstake',
 })
 
 /**
@@ -3256,29 +3897,95 @@ export const watchLockerEvent = /*#__PURE__*/ createWatchContractEvent({
 })
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidLocked"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const watchLockerOwnershipTransferredEvent =
+export const watchLockerFluidLockedEvent =
   /*#__PURE__*/ createWatchContractEvent({
     abi: lockerAbi,
     address: lockerAddress,
-    eventName: 'OwnershipTransferred',
+    eventName: 'FluidLocked',
   })
 
 /**
- * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"Upgraded"`
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidStaked"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
  */
-export const watchLockerUpgradedEvent = /*#__PURE__*/ createWatchContractEvent({
-  abi: lockerAbi,
-  address: lockerAddress,
-  eventName: 'Upgraded',
-})
+export const watchLockerFluidStakedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'FluidStaked',
+  })
+
+/**
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidStreamClaimed"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const watchLockerFluidStreamClaimedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'FluidStreamClaimed',
+  })
+
+/**
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidStreamsClaimed"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const watchLockerFluidStreamsClaimedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'FluidStreamsClaimed',
+  })
+
+/**
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidUnlocked"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const watchLockerFluidUnlockedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'FluidUnlocked',
+  })
+
+/**
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"FluidUnstaked"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const watchLockerFluidUnstakedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'FluidUnstaked',
+  })
+
+/**
+ * Wraps __{@link watchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"Initialized"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
+ */
+export const watchLockerInitializedEvent =
+  /*#__PURE__*/ createWatchContractEvent({
+    abi: lockerAbi,
+    address: lockerAddress,
+    eventName: 'Initialized',
+  })
 
 /**
  * Wraps __{@link readContract}__ with `abi` set to __{@link programManagerAbi}__

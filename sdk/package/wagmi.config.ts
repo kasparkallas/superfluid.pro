@@ -48,8 +48,9 @@ import BatchLiquidator from "@superfluid-finance/ethereum-contracts/build/hardha
 };
 
 // # SUP contracts
-
-// # SuperBoring contracts
+import FluidLocker from "./abis/FluidLocker.json" with {
+	type: "json",
+};
 
 // ---
 
@@ -154,6 +155,7 @@ const plugins = (function (): Plugins {
 			apiKey: process.env.ETHERSCAN_API_KEY!,
 			chainId: base.id,
 			tryFetchProxyImplementation: true,
+			cacheDuration: 3600000, // 1 hour in ms
 			contracts: [
 				{
 					// TODO: Should add errors?
@@ -189,13 +191,6 @@ const plugins = (function (): Plugins {
 					address: {
 						[base.id]: "0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d",
 						[baseSepolia.id]: "0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE",
-					},
-				},
-				{
-					name: "locker",
-					address: {
-						[base.id]: "0x664161f0974F5B17FB1fD3FDcE5D1679E829176c",
-						[baseSepolia.id]: "0xf2880c6D68080393C1784f978417a96ab4f37c38",
 					},
 				},
 			],
@@ -307,6 +302,18 @@ export default defineConfig({
 						abi: VestingSchedulerV3 as Abi,
 						name: "vestingSchedulerV3",
 						address: getAddressesFromMetadata((network) => network.contractsV1.vestingSchedulerV3),
+					},
+				]
+			: []),
+		...(category === "sup"
+			? [
+					{
+						abi: FluidLocker.abi as Abi,
+						name: "locker",
+						address: {
+							[baseSepolia.id]: "0xf2880c6D68080393C1784f978417a96ab4f37c38",
+							[base.id]: "0x664161f0974F5B17FB1fD3FDcE5D1679E829176c",
+						}
 					},
 				]
 			: []),
