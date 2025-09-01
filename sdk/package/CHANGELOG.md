@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.3
+
+### Patch Changes
+
+- f09ebe8: Remove "Fluid" from LockerFactory's name
+
 ## 0.1.2
 
 ### Patch Changes
