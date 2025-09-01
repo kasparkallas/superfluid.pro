@@ -48,7 +48,10 @@ import BatchLiquidator from "@superfluid-finance/ethereum-contracts/build/hardha
 };
 
 // # SUP contracts
-import FluidLocker from "./abis/FluidLocker.json" with {
+import Locker from "./abis/FluidLocker.json" with {
+	type: "json",
+};
+import Fontaine from "./abis/Fontaine.json" with {
 	type: "json",
 };
 
@@ -185,14 +188,7 @@ const plugins = (function (): Plugins {
 						[base.id]: "0x25963B2502F895D7d0953D147da97CCD12225380",
 						[baseSepolia.id]: "0x897D343D24Ac5b84838B976Cf37036EDEfe3E967",
 					},
-				},
-				{
-					name: "fontaine",
-					address: {
-						[base.id]: "0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d",
-						[baseSepolia.id]: "0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE",
-					},
-				},
+				}
 			],
 		}),
 	] : [];
@@ -308,12 +304,12 @@ export default defineConfig({
 		...(category === "sup"
 			? [
 					{
-						abi: FluidLocker.abi as Abi,
-						name: "locker",
-						address: {
-							[baseSepolia.id]: "0xf2880c6D68080393C1784f978417a96ab4f37c38",
-							[base.id]: "0x664161f0974F5B17FB1fD3FDcE5D1679E829176c",
-						}
+						abi: Locker.abi as Abi,
+						name: "locker"
+					},
+					{
+						abi: Fontaine as Abi,
+						name: "fontaine"
 					},
 				]
 			: []),

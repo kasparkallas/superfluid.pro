@@ -226,115 +226,117 @@ export const fluidLockerFactoryConfig = {
 // fontaine
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE)
- */
 export const fontaineAbi = [
   {
     type: 'constructor',
     inputs: [
-      { name: 'implementation_', internalType: 'address', type: 'address' },
+      { name: 'fluid', internalType: 'contract ISuperToken', type: 'address' },
+      {
+        name: 'taxDistributionPool',
+        internalType: 'contract ISuperfluidPool',
+        type: 'address',
+      },
     ],
     stateMutability: 'nonpayable',
   },
   {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'previousOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'OwnershipTransferred',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
+    type: 'function',
+    inputs: [],
+    name: 'EARLY_END',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
-    name: 'implementation',
+    name: 'FLUID',
+    outputs: [
+      { name: '', internalType: 'contract ISuperToken', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'TAX_DISTRIBUTION_POOL',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'endDate',
+    outputs: [{ name: '', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'unlockRecipient', internalType: 'address', type: 'address' },
+      { name: 'targetUnlockFlowRate', internalType: 'int96', type: 'int96' },
+      { name: 'targetTaxFlowRate', internalType: 'int96', type: 'int96' },
+      { name: 'unlockPeriod', internalType: 'uint128', type: 'uint128' },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'recipient',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'taxFlowRate',
+    outputs: [{ name: '', internalType: 'uint96', type: 'uint96' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
-    name: 'renounceOwnership',
+    name: 'terminateUnlock',
     outputs: [],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    inputs: [],
+    name: 'unlockFlowRate',
+    outputs: [{ name: '', internalType: 'uint96', type: 'uint96' }],
+    stateMutability: 'view',
   },
   {
-    type: 'function',
+    type: 'event',
+    anonymous: false,
     inputs: [
-      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      {
+        name: 'version',
+        internalType: 'uint64',
+        type: 'uint64',
+        indexed: false,
+      },
     ],
-    name: 'upgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'Initialized',
   },
+  { type: 'error', inputs: [], name: 'CANNOT_UNLOCK_TO_SUPERAPP' },
+  { type: 'error', inputs: [], name: 'CFA_INVALID_FLOW_RATE' },
+  { type: 'error', inputs: [], name: 'InvalidInitialization' },
+  { type: 'error', inputs: [], name: 'NOT_CONNECTED_LOCKER' },
+  { type: 'error', inputs: [], name: 'NO_ACTIVE_UNLOCK' },
+  { type: 'error', inputs: [], name: 'NotInitializing' },
+  { type: 'error', inputs: [], name: 'TOO_EARLY_TO_TERMINATE_UNLOCK' },
 ] as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE)
- */
-export const fontaineAddress = {
-  8453: '0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d',
-  84532: '0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE',
-} as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA26FbA47Da24F7DF11b3E4CF60Dcf7D1691Ae47d)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xeBfA246A0BAd08A2A3ffB137ed75601AA41867dE)
- */
-export const fontaineConfig = {
-  address: fontaineAddress,
-  abi: fontaineAbi,
-} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // locker
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
- */
 export const lockerAbi = [
   {
     type: 'constructor',
@@ -751,21 +753,6 @@ export const lockerAbi = [
   { type: 'error', inputs: [], name: 'TAX_DISTRIBUTION_POOL_HAS_NO_UNITS' },
   { type: 'error', inputs: [], name: 'TTE_NOT_ACTIVATED' },
 ] as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
- */
-export const lockerAddress = {
-  8453: '0x664161f0974F5B17FB1fD3FDcE5D1679E829176c',
-  84532: '0xf2880c6D68080393C1784f978417a96ab4f37c38',
-} as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x664161f0974F5B17FB1fD3FDcE5D1679E829176c)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xf2880c6D68080393C1784f978417a96ab4f37c38)
- */
-export const lockerConfig = { address: lockerAddress, abi: lockerAbi } as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // programManager
