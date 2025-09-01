@@ -1,6 +1,6 @@
 {
 	"name": "@sfpro/sdk",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "TypeScript SDK for Superfluid Protocol - stream money every second",
 	"keywords": [
 		"superfluid",
