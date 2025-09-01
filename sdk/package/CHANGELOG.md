@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- 68d8ca1: Fix Locker and Fontaine being bound to concrete addresses
+
 ## 0.1.1
 
 ### Patch Changes
