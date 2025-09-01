@@ -1,228 +1,4 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// fluidLockerFactory
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
- */
-export const fluidLockerFactoryAbi = [
-  {
-    type: 'constructor',
-    inputs: [
-      { name: 'lockerBeacon', internalType: 'address', type: 'address' },
-      {
-        name: 'stakingRewardController',
-        internalType: 'contract IStakingRewardController',
-        type: 'address',
-      },
-      { name: 'pauseStatus', internalType: 'bool', type: 'bool' },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'error',
-    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
-    name: 'AddressEmptyCode',
-  },
-  {
-    type: 'error',
-    inputs: [
-      { name: 'implementation', internalType: 'address', type: 'address' },
-    ],
-    name: 'ERC1967InvalidImplementation',
-  },
-  { type: 'error', inputs: [], name: 'ERC1967NonPayable' },
-  { type: 'error', inputs: [], name: 'FailedInnerCall' },
-  { type: 'error', inputs: [], name: 'InvalidInitialization' },
-  { type: 'error', inputs: [], name: 'LOCKER_CREATION_PAUSED' },
-  { type: 'error', inputs: [], name: 'NOT_GOVERNOR' },
-  { type: 'error', inputs: [], name: 'NotInitializing' },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'newGovernor',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'GovernorUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'version',
-        internalType: 'uint64',
-        type: 'uint64',
-        indexed: false,
-      },
-    ],
-    name: 'Initialized',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'lockerOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'lockerAddress',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-    ],
-    name: 'LockerCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'implementation',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'Upgraded',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'IS_PAUSED',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'LOCKER_BEACON',
-    outputs: [
-      { name: '', internalType: 'contract UpgradeableBeacon', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'STAKING_REWARD_CONTROLLER',
-    outputs: [
-      {
-        name: '',
-        internalType: 'contract IStakingRewardController',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
-    name: 'createLockerContract',
-    outputs: [
-      { name: 'lockerInstance', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'createLockerContract',
-    outputs: [
-      { name: 'lockerInstance', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
-    name: 'getLockerAddress',
-    outputs: [
-      { name: 'lockerAddress', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getLockerBeaconImplementation',
-    outputs: [
-      { name: 'lockerBeaconImpl', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
-    name: 'getUserLocker',
-    outputs: [
-      { name: 'isCreated', internalType: 'bool', type: 'bool' },
-      { name: 'lockerAddress', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'governor',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: '_governor', internalType: 'address', type: 'address' }],
-    name: 'initialize',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newGovernor', internalType: 'address', type: 'address' }],
-    name: 'setGovernor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'newImplementation', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'upgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-] as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
- */
-export const fluidLockerFactoryAddress = {
-  8453: '0x25963B2502F895D7d0953D147da97CCD12225380',
-  84532: '0x897D343D24Ac5b84838B976Cf37036EDEfe3E967',
-} as const
-
-/**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
- */
-export const fluidLockerFactoryConfig = {
-  address: fluidLockerFactoryAddress,
-  abi: fluidLockerFactoryAbi,
-} as const
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // fontaine
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -753,6 +529,230 @@ export const lockerAbi = [
   { type: 'error', inputs: [], name: 'TAX_DISTRIBUTION_POOL_HAS_NO_UNITS' },
   { type: 'error', inputs: [], name: 'TTE_NOT_ACTIVATED' },
 ] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// lockerFactory
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
+ */
+export const lockerFactoryAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      { name: 'lockerBeacon', internalType: 'address', type: 'address' },
+      {
+        name: 'stakingRewardController',
+        internalType: 'contract IStakingRewardController',
+        type: 'address',
+      },
+      { name: 'pauseStatus', internalType: 'bool', type: 'bool' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
+  },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'implementation', internalType: 'address', type: 'address' },
+    ],
+    name: 'ERC1967InvalidImplementation',
+  },
+  { type: 'error', inputs: [], name: 'ERC1967NonPayable' },
+  { type: 'error', inputs: [], name: 'FailedInnerCall' },
+  { type: 'error', inputs: [], name: 'InvalidInitialization' },
+  { type: 'error', inputs: [], name: 'LOCKER_CREATION_PAUSED' },
+  { type: 'error', inputs: [], name: 'NOT_GOVERNOR' },
+  { type: 'error', inputs: [], name: 'NotInitializing' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'newGovernor',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'GovernorUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'version',
+        internalType: 'uint64',
+        type: 'uint64',
+        indexed: false,
+      },
+    ],
+    name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'lockerOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'lockerAddress',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+    ],
+    name: 'LockerCreated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'implementation',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'Upgraded',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'IS_PAUSED',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'LOCKER_BEACON',
+    outputs: [
+      { name: '', internalType: 'contract UpgradeableBeacon', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'STAKING_REWARD_CONTROLLER',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract IStakingRewardController',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'createLockerContract',
+    outputs: [
+      { name: 'lockerInstance', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'createLockerContract',
+    outputs: [
+      { name: 'lockerInstance', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'getLockerAddress',
+    outputs: [
+      { name: 'lockerAddress', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getLockerBeaconImplementation',
+    outputs: [
+      { name: 'lockerBeaconImpl', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'user', internalType: 'address', type: 'address' }],
+    name: 'getUserLocker',
+    outputs: [
+      { name: 'isCreated', internalType: 'bool', type: 'bool' },
+      { name: 'lockerAddress', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'governor',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '_governor', internalType: 'address', type: 'address' }],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newGovernor', internalType: 'address', type: 'address' }],
+    name: 'setGovernor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'upgradeTo',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+] as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
+ */
+export const lockerFactoryAddress = {
+  8453: '0x25963B2502F895D7d0953D147da97CCD12225380',
+  84532: '0x897D343D24Ac5b84838B976Cf37036EDEfe3E967',
+} as const
+
+/**
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
+ */
+export const lockerFactoryConfig = {
+  address: lockerFactoryAddress,
+  abi: lockerFactoryAbi,
+} as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // programManager

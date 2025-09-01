@@ -183,7 +183,7 @@ const plugins = (function (): Plugins {
 					},
 				},
 				{
-					name: "fluidLockerFactory",
+					name: "lockerFactory",
 					address: {
 						[base.id]: "0x25963B2502F895D7d0953D147da97CCD12225380",
 						[baseSepolia.id]: "0x897D343D24Ac5b84838B976Cf37036EDEfe3E967",

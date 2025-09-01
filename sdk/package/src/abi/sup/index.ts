@@ -1,8 +1,8 @@
 export {
-	fluidLockerFactoryAbi,
-	fluidLockerFactoryAddress,
 	fontaineAbi,
 	lockerAbi,
+	lockerFactoryAbi,
+	lockerFactoryAddress,
 	programManagerAbi,
 	programManagerAddress,
 	stakingRewardControllerAbi,
