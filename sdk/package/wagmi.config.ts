@@ -1,7 +1,7 @@
 import { type Config, defineConfig } from "@wagmi/cli";
 import { erc20Abi, type Abi } from "viem";
 import { react, actions, etherscan } from "@wagmi/cli/plugins";
-import { base, baseSepolia } from "viem/chains";
+import { base, baseSepolia, mainnet } from "viem/chains";
 import 'dotenv/config'
 
 // # Main contracts
@@ -164,6 +164,7 @@ const plugins = (function (): Plugins {
 					// TODO: Should add errors?
 					name: "supToken",
 					address: {
+						[mainnet.id]: "0xD05001Db979ff2f1a3B2105875d3454E90dd2961",
 						[base.id]: "0xa69f80524381275A7fFdb3AE01c54150644c8792",
 						[baseSepolia.id]: "0xFd62b398DD8a233ad37156690631fb9515059d6A",
 					},
@@ -185,8 +186,14 @@ const plugins = (function (): Plugins {
 				{
 					name: "lockerFactory",
 					address: {
-						[base.id]: "0x25963B2502F895D7d0953D147da97CCD12225380",
+						[base.id]: "0xA6694cAB43713287F7735dADc940b555db9d39D9",
 						[baseSepolia.id]: "0x897D343D24Ac5b84838B976Cf37036EDEfe3E967",
+					},
+				},
+				{
+					name: "vestingFactory",
+					address: {
+						[base.id]: "0x3DF8A6558073e973f4c3979138Cca836C993E285"
 					},
 				}
 			],

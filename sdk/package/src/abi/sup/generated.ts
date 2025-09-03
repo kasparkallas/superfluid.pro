@@ -535,7 +535,7 @@ export const lockerAbi = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA6694cAB43713287F7735dADc940b555db9d39D9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
  */
 export const lockerFactoryAbi = [
@@ -737,16 +737,16 @@ export const lockerFactoryAbi = [
 ] as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA6694cAB43713287F7735dADc940b555db9d39D9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
  */
 export const lockerFactoryAddress = {
-  8453: '0x25963B2502F895D7d0953D147da97CCD12225380',
+  8453: '0xA6694cAB43713287F7735dADc940b555db9d39D9',
   84532: '0x897D343D24Ac5b84838B976Cf37036EDEfe3E967',
 } as const
 
 /**
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x25963B2502F895D7d0953D147da97CCD12225380)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xA6694cAB43713287F7735dADc940b555db9d39D9)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x897D343D24Ac5b84838B976Cf37036EDEfe3E967)
  */
 export const lockerFactoryConfig = {
@@ -1702,6 +1702,7 @@ export const stakingRewardControllerConfig = {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
@@ -2948,19 +2949,234 @@ export const supTokenAbi = [
 ] as const
 
 /**
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
 export const supTokenAddress = {
+  1: '0xD05001Db979ff2f1a3B2105875d3454E90dd2961',
   8453: '0xa69f80524381275A7fFdb3AE01c54150644c8792',
   84532: '0xFd62b398DD8a233ad37156690631fb9515059d6A',
 } as const
 
 /**
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
 export const supTokenConfig = {
   address: supTokenAddress,
   abi: supTokenAbi,
+} as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// vestingFactory
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x3DF8A6558073e973f4c3979138Cca836C993E285)
+ */
+export const vestingFactoryAbi = [
+  {
+    type: 'constructor',
+    inputs: [
+      {
+        name: 'vestingScheduler',
+        internalType: 'contract IVestingSchedulerV2',
+        type: 'address',
+      },
+      { name: 'token', internalType: 'contract ISuperToken', type: 'address' },
+      { name: 'treasuryAddress', internalType: 'address', type: 'address' },
+      { name: 'adminAddress', internalType: 'address', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'error', inputs: [], name: 'FORBIDDEN' },
+  { type: 'error', inputs: [], name: 'VESTING_DUPLICATED' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'recipient',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newSupVestingContract',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'SupVestingCreated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'MIN_CLIFF_PERIOD',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'SUP',
+    outputs: [
+      { name: '', internalType: 'contract ISuperToken', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'VESTING_SCHEDULER',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract IVestingSchedulerV2',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'admin',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'vestingReceiver', internalType: 'address', type: 'address' },
+    ],
+    name: 'balanceOf',
+    outputs: [
+      { name: 'unvestedBalance', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      {
+        name: 'recipientVestingIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
+      { name: 'cliffAmount', internalType: 'uint256', type: 'uint256' },
+      { name: 'cliffDate', internalType: 'uint32', type: 'uint32' },
+      { name: 'endDate', internalType: 'uint32', type: 'uint32' },
+    ],
+    name: 'createSupVestingContract',
+    outputs: [
+      {
+        name: 'newSupVestingContract',
+        internalType: 'address',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    name: 'recipients',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newAdmin', internalType: 'address', type: 'address' }],
+    name: 'setAdmin',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newTreasury', internalType: 'address', type: 'address' }],
+    name: 'setTreasury',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipient', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'supVestings',
+    outputs: [{ name: 'supVesting', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ name: 'supply', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'treasury',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+] as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x3DF8A6558073e973f4c3979138Cca836C993E285)
+ */
+export const vestingFactoryAddress = {
+  8453: '0x3DF8A6558073e973f4c3979138Cca836C993E285',
+} as const
+
+/**
+ * [__View Contract on Base Basescan__](https://basescan.org/address/0x3DF8A6558073e973f4c3979138Cca836C993E285)
+ */
+export const vestingFactoryConfig = {
+  address: vestingFactoryAddress,
+  abi: vestingFactoryAbi,
 } as const

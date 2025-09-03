@@ -9,4 +9,6 @@ export {
 	stakingRewardControllerAddress,
 	supTokenAbi,
 	supTokenAddress,
+	vestingFactoryAbi,
+	vestingFactoryAddress,
 } from "./generated.js"
