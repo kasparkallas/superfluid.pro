@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.4
+
+### Patch Changes
+
+- 7d5a797: Fix contract address & add more SUP contracts
+
 ## 0.1.3
 
 ### Patch Changes
