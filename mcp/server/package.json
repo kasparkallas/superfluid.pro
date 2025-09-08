@@ -13,8 +13,8 @@
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.17.4",
 		"@sfpro/sdk": "workspace:*",
-		"@superfluid-finance/metadata": "^1.6.0",
-		"@superfluid-finance/tokenlist": "^5.29.0",
+		"@superfluid-finance/metadata": "^1.6.1",
+		"@superfluid-finance/tokenlist": "^5.31.0",
 		"@vercel/mcp-adapter": "^1.0.0",
 		"fuse.js": "^7.1.0",
 		"graphql": "^16.11.0",
@@ -24,7 +24,7 @@
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"redis": "^5.8.2",
-		"viem": "^2.35.1",
+		"viem": "^2.37.4",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {

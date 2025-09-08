@@ -14,7 +14,7 @@
 		"@sfpro/sdk": "workspace:*",
 		"@tanstack/vue-query": "^5.85.5",
 		"@wagmi/vue": "^0.1.28",
-		"viem": "^2.35.1",
+		"viem": "^2.37.4",
 		"vue": "^3.5.20"
 	},
 	"devDependencies": {

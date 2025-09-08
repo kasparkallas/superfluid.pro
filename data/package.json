@@ -25,8 +25,8 @@
 	"dependencies": {
 		"@asteasolutions/zod-to-openapi": "^7.3.4",
 		"@coingecko/coingecko-typescript": "^1.11.3",
-		"@superfluid-finance/metadata": "^1.6.0",
-		"@superfluid-finance/tokenlist": "^5.29.0",
+		"@superfluid-finance/metadata": "^1.6.1",
+		"@superfluid-finance/tokenlist": "^5.31.0",
 		"@trigger.dev/sdk": "^4.0.1",
 		"@vercel/blob": "^1.1.1",
 		"decimal.js": "^10.6.0",
@@ -38,7 +38,7 @@
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"swagger-ui-react": "5.27.1",
-		"viem": "^2.35.1",
+		"viem": "^2.37.4",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {

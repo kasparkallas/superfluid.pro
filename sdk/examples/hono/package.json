@@ -9,9 +9,9 @@
 	"dependencies": {
 		"@hono/node-server": "^1.19.0",
 		"@sfpro/sdk": "workspace:*",
-		"@wagmi/core": "^2.20.0",
+		"@wagmi/core": "^2.20.3",
 		"hono": "^4.9.4",
-		"viem": "^2.35.1"
+		"viem": "^2.37.4"
 	},
 	"devDependencies": {
 		"@types/node": "^24.3.0",

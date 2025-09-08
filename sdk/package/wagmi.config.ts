@@ -57,6 +57,9 @@ import Fontaine from "./abis/Fontaine.json" with {
 import StakingRewardController from "./abis/StakingRewardController.json" with {
 	type: "json"
 }
+import SupToken from "./abis/SupToken.json" with {
+	type: "json"
+}
 // ---
 
 // # Automation contracts
@@ -162,15 +165,6 @@ const plugins = (function (): Plugins {
 			tryFetchProxyImplementation: true,
 			cacheDuration: 3600000, // 1 hour in ms
 			contracts: [
-				{
-					// TODO: Should add errors?
-					name: "supToken",
-					address: {
-						[mainnet.id]: "0xD05001Db979ff2f1a3B2105875d3454E90dd2961",
-						[base.id]: "0xa69f80524381275A7fFdb3AE01c54150644c8792",
-						[baseSepolia.id]: "0xFd62b398DD8a233ad37156690631fb9515059d6A",
-					},
-				},
 				{
 					name: "programManager",
 					address: {
@@ -305,6 +299,17 @@ export default defineConfig({
 			: []),
 		...(category === "sup"
 			? [
+				{
+					// TODO: Should add errors?
+					// TODO: Combine with L1 and L2 ABI? The token is a little different on Mainnet vs Base.
+					name: "supToken",
+					abi: SupToken as Abi,
+					address: {
+						[mainnet.id]: "0xD05001Db979ff2f1a3B2105875d3454E90dd2961",
+						[base.id]: "0xa69f80524381275A7fFdb3AE01c54150644c8792",
+						[baseSepolia.id]: "0xFd62b398DD8a233ad37156690631fb9515059d6A",
+					},
+				},
 				{
 					abi: Locker as Abi,
 					name: "locker"

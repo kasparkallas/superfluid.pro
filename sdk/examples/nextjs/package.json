@@ -16,8 +16,8 @@
 		"next": "^15.5.0",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
-		"viem": "^2.35.1",
-		"wagmi": "^2.16.5"
+		"viem": "^2.37.4",
+		"wagmi": "^2.16.9"
 	},
 	"devDependencies": {
 		"@tailwindcss/postcss": "^4.1.12",

@@ -8,7 +8,7 @@
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x2AcdD61ac1EFFe1535109449c31889bdE8d7f325)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0x2581c27E7f6D6AF452E63fCe884EDE3EDd716b32)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5D0acD0864Ad07ba4E1E0474AE69Da87482e14A9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x041D4bF21367e9B92016B28Fb5A2f697c1befd01)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xf01825eAFAe5CD1Dab5593EFAF218efC8968D272)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x30aE282CF477E2eF28B14d0125aCEAd57Fe1d7a1)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
@@ -452,7 +452,7 @@ export const autoWrapManagerAbi = [
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x2AcdD61ac1EFFe1535109449c31889bdE8d7f325)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0x2581c27E7f6D6AF452E63fCe884EDE3EDd716b32)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5D0acD0864Ad07ba4E1E0474AE69Da87482e14A9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x041D4bF21367e9B92016B28Fb5A2f697c1befd01)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xf01825eAFAe5CD1Dab5593EFAF218efC8968D272)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x30aE282CF477E2eF28B14d0125aCEAd57Fe1d7a1)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
@@ -464,7 +464,7 @@ export const autoWrapManagerAddress = {
   56: '0x2AcdD61ac1EFFe1535109449c31889bdE8d7f325',
   100: '0x8082e58681350876aFe8f52d3Bf8672034A03Db0',
   137: '0x2581c27E7f6D6AF452E63fCe884EDE3EDd716b32',
-  8453: '0x5D0acD0864Ad07ba4E1E0474AE69Da87482e14A9',
+  8453: '0x041D4bF21367e9B92016B28Fb5A2f697c1befd01',
   42161: '0xf01825eAFAe5CD1Dab5593EFAF218efC8968D272',
   43113: '0x30aE282CF477E2eF28B14d0125aCEAd57Fe1d7a1',
   43114: '0x8082e58681350876aFe8f52d3Bf8672034A03Db0',
@@ -477,7 +477,7 @@ export const autoWrapManagerAddress = {
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x2AcdD61ac1EFFe1535109449c31889bdE8d7f325)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0x2581c27E7f6D6AF452E63fCe884EDE3EDd716b32)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0x5D0acD0864Ad07ba4E1E0474AE69Da87482e14A9)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0x041D4bF21367e9B92016B28Fb5A2f697c1befd01)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0xf01825eAFAe5CD1Dab5593EFAF218efC8968D272)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x30aE282CF477E2eF28B14d0125aCEAd57Fe1d7a1)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x8082e58681350876aFe8f52d3Bf8672034A03Db0)
@@ -498,7 +498,7 @@ export const autoWrapManagerConfig = {
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x9e308cb079ae130790F604b1030cDf386670f199)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0xb4afa36BAd8c76976Dc77a21c9Ad711EF720eE4b)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xB29005319B0caB24cF6D4d24e8420E54BB29Cb0d)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xD790CDE7A1B3194d8Ce3CF21544F03a770336E23)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x342076aA957B0ec8bC1d3893af719b288eA31e61)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x1D65c6d3AD39d454Ea8F682c49aE7744706eA96d)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
@@ -685,7 +685,7 @@ export const autoWrapStrategyAbi = [
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x9e308cb079ae130790F604b1030cDf386670f199)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0xb4afa36BAd8c76976Dc77a21c9Ad711EF720eE4b)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xB29005319B0caB24cF6D4d24e8420E54BB29Cb0d)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xD790CDE7A1B3194d8Ce3CF21544F03a770336E23)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x342076aA957B0ec8bC1d3893af719b288eA31e61)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x1D65c6d3AD39d454Ea8F682c49aE7744706eA96d)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
@@ -697,7 +697,7 @@ export const autoWrapStrategyAddress = {
   56: '0x9e308cb079ae130790F604b1030cDf386670f199',
   100: '0x51FBAbD31A615E14b1bC12E9d887f60997264a4E',
   137: '0xb4afa36BAd8c76976Dc77a21c9Ad711EF720eE4b',
-  8453: '0xB29005319B0caB24cF6D4d24e8420E54BB29Cb0d',
+  8453: '0xD790CDE7A1B3194d8Ce3CF21544F03a770336E23',
   42161: '0x342076aA957B0ec8bC1d3893af719b288eA31e61',
   43113: '0x1D65c6d3AD39d454Ea8F682c49aE7744706eA96d',
   43114: '0x51FBAbD31A615E14b1bC12E9d887f60997264a4E',
@@ -710,7 +710,7 @@ export const autoWrapStrategyAddress = {
  * - [__View Contract on Bnb Smart Chain Bsc Scan__](https://bscscan.com/address/0x9e308cb079ae130790F604b1030cDf386670f199)
  * - [__View Contract on Gnosis Gnosisscan__](https://gnosisscan.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
  * - [__View Contract on Polygon Polygon Scan__](https://polygonscan.com/address/0xb4afa36BAd8c76976Dc77a21c9Ad711EF720eE4b)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xB29005319B0caB24cF6D4d24e8420E54BB29Cb0d)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xD790CDE7A1B3194d8Ce3CF21544F03a770336E23)
  * - [__View Contract on Arbitrum One Arbiscan__](https://arbiscan.io/address/0x342076aA957B0ec8bC1d3893af719b288eA31e61)
  * - [__View Contract on Avalanche Fuji Snow Trace__](https://testnet.snowtrace.io/address/0x1D65c6d3AD39d454Ea8F682c49aE7744706eA96d)
  * - [__View Contract on Avalanche Snow Trace__](https://snowtrace.io/address/0x51FBAbD31A615E14b1bC12E9d887f60997264a4E)
