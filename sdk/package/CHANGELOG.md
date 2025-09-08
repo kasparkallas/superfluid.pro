@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.5
+
+### Patch Changes
+
+- 26a4fe8: Update to newer testnet SUP contracts
+
 ## 0.1.4
 
 ### Patch Changes
