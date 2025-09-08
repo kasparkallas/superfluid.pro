@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.6
+
+### Patch Changes
+
+- 3676c5f: Update SUP token contract
+
 ## 0.1.5
 
 ### Patch Changes
