@@ -54,7 +54,9 @@ import Locker from "./abis/FluidLocker.json" with {
 import Fontaine from "./abis/Fontaine.json" with {
 	type: "json",
 };
-
+import StakingRewardController from "./abis/StakingRewardController.json" with {
+	type: "json"
+}
 // ---
 
 // # Automation contracts
@@ -177,13 +179,6 @@ const plugins = (function (): Plugins {
 					},
 				},
 				{
-					name: "stakingRewardController",
-					address: {
-						[base.id]: "0xb19Ae25A98d352B36CED60F93db926247535048b",
-						[baseSepolia.id]: "0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018",
-					},
-				},
-				{
 					name: "lockerFactory",
 					address: {
 						[base.id]: "0xA6694cAB43713287F7735dADc940b555db9d39D9",
@@ -209,116 +204,124 @@ export default defineConfig({
 	contracts: [
 		...(!category
 			? [
-					{
-						abi: SuperTokenCombined as Abi,
-						name: "superToken",
-					},
-					{
-						abi: CfaForwarderWithCfaErrors,
-						name: "cfaForwarder",
-						address: getAddressesFromMetadata((network) => network.contractsV1.cfaV1Forwarder),
-					},
-					{
-						abi: GdaForwarderWithGdaErrors,
-						name: "gdaForwarder",
-						address: getAddressesFromMetadata((network) => network.contractsV1.gdaV1Forwarder),
-					},
-					{
-						abi: SuperfluidPool.abi as Abi,
-						name: "gdaPool",
-					},
-				]
+				{
+					abi: SuperTokenCombined as Abi,
+					name: "superToken",
+				},
+				{
+					abi: CfaForwarderWithCfaErrors,
+					name: "cfaForwarder",
+					address: getAddressesFromMetadata((network) => network.contractsV1.cfaV1Forwarder),
+				},
+				{
+					abi: GdaForwarderWithGdaErrors,
+					name: "gdaForwarder",
+					address: getAddressesFromMetadata((network) => network.contractsV1.gdaV1Forwarder),
+				},
+				{
+					abi: SuperfluidPool.abi as Abi,
+					name: "gdaPool",
+				},
+			]
 			: []),
 		...(category === "core"
 			? [
-					{
-						abi: HostWithAllErrors,
-						name: "host",
-						address: getAddressesFromMetadata((network) => network.contractsV1.host),
-					},
-					{
-						abi: ConstantFlowAgreementV1.abi as Abi,
-						name: "cfa",
-						address: getAddressesFromMetadata((network) => network.contractsV1.cfaV1),
-					},
-					{
-						abi: GeneralDistributionAgreementV1.abi as Abi,
-						name: "gda",
-						address: getAddressesFromMetadata((network) => network.contractsV1.gdaV1),
-					},
-					{
-						abi: InstantDistributionAgreementV1.abi as Abi,
-						name: "ida",
-						address: getAddressesFromMetadata((network) => network.contractsV1.idaV1),
-					},
-					{
-						abi: SuperTokenFactory.abi as Abi,
-						name: "superTokenFactory",
-						address: getAddressesFromMetadata((network) => network.contractsV1.superTokenFactory),
-					},
-					{
-						abi: TOGA.abi as Abi,
-						name: "toga",
-						address: getAddressesFromMetadata((network) => network.contractsV1.toga),
-					},
-					{
-						abi: SuperfluidGovernanceII.abi as Abi,
-						name: "governance",
-						address: getAddressesFromMetadata((network) => network.contractsV1.governance),
-					},
-					{
-						abi: BatchLiquidator.abi as Abi,
-						name: "batchLiquidator",
-						address: getAddressesFromMetadata((network) => network.contractsV1.superfluidLoader),
-					},
-				]
+				{
+					abi: HostWithAllErrors,
+					name: "host",
+					address: getAddressesFromMetadata((network) => network.contractsV1.host),
+				},
+				{
+					abi: ConstantFlowAgreementV1.abi as Abi,
+					name: "cfa",
+					address: getAddressesFromMetadata((network) => network.contractsV1.cfaV1),
+				},
+				{
+					abi: GeneralDistributionAgreementV1.abi as Abi,
+					name: "gda",
+					address: getAddressesFromMetadata((network) => network.contractsV1.gdaV1),
+				},
+				{
+					abi: InstantDistributionAgreementV1.abi as Abi,
+					name: "ida",
+					address: getAddressesFromMetadata((network) => network.contractsV1.idaV1),
+				},
+				{
+					abi: SuperTokenFactory.abi as Abi,
+					name: "superTokenFactory",
+					address: getAddressesFromMetadata((network) => network.contractsV1.superTokenFactory),
+				},
+				{
+					abi: TOGA.abi as Abi,
+					name: "toga",
+					address: getAddressesFromMetadata((network) => network.contractsV1.toga),
+				},
+				{
+					abi: SuperfluidGovernanceII.abi as Abi,
+					name: "governance",
+					address: getAddressesFromMetadata((network) => network.contractsV1.governance),
+				},
+				{
+					abi: BatchLiquidator.abi as Abi,
+					name: "batchLiquidator",
+					address: getAddressesFromMetadata((network) => network.contractsV1.superfluidLoader),
+				},
+			]
 			: []),
 		...(category === "automation"
 			? [
-					{
-						abi: AutoWrapStrategy as Abi,
-						name: "autoWrapStrategy",
-						address: getAddressesFromMetadata((network) => network.contractsV1.autowrap?.wrapStrategy),
-					},
-					{
-						abi: AutoWrapManager as Abi,
-						name: "autoWrapManager",
-						address: getAddressesFromMetadata((network) => network.contractsV1.autowrap?.manager),
-					},
-					{
-						abi: FlowScheduler as Abi,
-						name: "flowScheduler",
-						address: getAddressesFromMetadata((network) => network.contractsV1.flowScheduler),
-					},
-					{
-						abi: VestingSchedulerV1 as Abi,
-						name: "legacyVestingSchedulerV1",
-						address: getAddressesFromMetadata((network) => network.contractsV1.vestingScheduler),
-					},
-					{
-						abi: VestingSchedulerV2 as Abi,
-						name: "legacyVestingSchedulerV2",
-						address: getAddressesFromMetadata((network) => network.contractsV1.vestingSchedulerV2),
-					},
-					{
-						// TODO: Should any errors be added here?
-						abi: VestingSchedulerV3 as Abi,
-						name: "vestingSchedulerV3",
-						address: getAddressesFromMetadata((network) => network.contractsV1.vestingSchedulerV3),
-					},
-				]
+				{
+					abi: AutoWrapStrategy as Abi,
+					name: "autoWrapStrategy",
+					address: getAddressesFromMetadata((network) => network.contractsV1.autowrap?.wrapStrategy),
+				},
+				{
+					abi: AutoWrapManager as Abi,
+					name: "autoWrapManager",
+					address: getAddressesFromMetadata((network) => network.contractsV1.autowrap?.manager),
+				},
+				{
+					abi: FlowScheduler as Abi,
+					name: "flowScheduler",
+					address: getAddressesFromMetadata((network) => network.contractsV1.flowScheduler),
+				},
+				{
+					abi: VestingSchedulerV1 as Abi,
+					name: "legacyVestingSchedulerV1",
+					address: getAddressesFromMetadata((network) => network.contractsV1.vestingScheduler),
+				},
+				{
+					abi: VestingSchedulerV2 as Abi,
+					name: "legacyVestingSchedulerV2",
+					address: getAddressesFromMetadata((network) => network.contractsV1.vestingSchedulerV2),
+				},
+				{
+					// TODO: Should any errors be added here?
+					abi: VestingSchedulerV3 as Abi,
+					name: "vestingSchedulerV3",
+					address: getAddressesFromMetadata((network) => network.contractsV1.vestingSchedulerV3),
+				},
+			]
 			: []),
 		...(category === "sup"
 			? [
-					{
-						abi: Locker.abi as Abi,
-						name: "locker"
-					},
-					{
-						abi: Fontaine as Abi,
-						name: "fontaine"
-					},
-				]
+				{
+					abi: Locker as Abi,
+					name: "locker"
+				},
+				{
+					abi: Fontaine as Abi,
+					name: "fontaine"
+				},
+				{
+					abi: StakingRewardController as Abi,
+					name: "stakingRewardController",
+					address: {
+						[base.id]: "0xb19Ae25A98d352B36CED60F93db926247535048b",
+						[baseSepolia.id]: "0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018",
+					}
+				}
+			]
 			: []),
 	],
 });

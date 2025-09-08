@@ -126,11 +126,6 @@ export const lockerAbi = [
     inputs: [
       { name: 'fluid', internalType: 'contract ISuperToken', type: 'address' },
       {
-        name: 'taxDistributionPool',
-        internalType: 'contract ISuperfluidPool',
-        type: 'address',
-      },
-      {
         name: 'programManager',
         internalType: 'contract IEPProgramManager',
         type: 'address',
@@ -142,8 +137,39 @@ export const lockerAbi = [
       },
       { name: 'fontaineBeacon', internalType: 'address', type: 'address' },
       { name: 'isUnlockAvailable', internalType: 'bool', type: 'bool' },
+      {
+        name: 'nonfungiblePositionManager',
+        internalType: 'contract INonfungiblePositionManager',
+        type: 'address',
+      },
+      {
+        name: 'ethSupPool',
+        internalType: 'contract IUniswapV3Pool',
+        type: 'address',
+      },
+      {
+        name: 'swapRouter',
+        internalType: 'contract IV3SwapRouter',
+        type: 'address',
+      },
     ],
     stateMutability: 'nonpayable',
+  },
+  { type: 'fallback', stateMutability: 'payable' },
+  { type: 'receive', stateMutability: 'payable' },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'BP_PUMP_RATIO',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'BP_SLIPPAGE_TOLERANCE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
@@ -151,6 +177,15 @@ export const lockerAbi = [
     name: 'EP_PROGRAM_MANAGER',
     outputs: [
       { name: '', internalType: 'contract IEPProgramManager', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'ETH_SUP_POOL',
+    outputs: [
+      { name: '', internalType: 'contract IUniswapV3Pool', type: 'address' },
     ],
     stateMutability: 'view',
   },
@@ -175,6 +210,51 @@ export const lockerAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'LP_DISTRIBUTION_POOL',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'LP_OPERATION_DEADLINE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'MIN_UNLOCK_AMOUNT',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'NONFUNGIBLE_POSITION_MANAGER',
+    outputs: [
+      {
+        name: '',
+        internalType: 'contract INonfungiblePositionManager',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'STAKER_DISTRIBUTION_POOL',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'STAKING_REWARD_CONTROLLER',
     outputs: [
       {
@@ -188,10 +268,17 @@ export const lockerAbi = [
   {
     type: 'function',
     inputs: [],
-    name: 'TAX_DISTRIBUTION_POOL',
+    name: 'SWAP_ROUTER',
     outputs: [
-      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+      { name: '', internalType: 'contract IV3SwapRouter', type: 'address' },
     ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'TAX_FREE_WITHDRAW_DELAY',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -199,6 +286,13 @@ export const lockerAbi = [
     inputs: [],
     name: 'UNLOCK_AVAILABLE',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'activePositionCount',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
@@ -227,6 +321,16 @@ export const lockerAbi = [
     ],
     name: 'claim',
     outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'collectFees',
+    outputs: [
+      { name: 'collectedWeth', internalType: 'uint256', type: 'uint256' },
+      { name: 'collectedSup', internalType: 'uint256', type: 'uint256' },
+    ],
     stateMutability: 'nonpayable',
   },
   {
@@ -328,6 +432,20 @@ export const lockerAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'getLiquidityBalance',
+    outputs: [{ name: 'lBalance', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getPositionLiquidity',
+    outputs: [{ name: 'liquidity', internalType: 'uint128', type: 'uint128' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'getStakedBalance',
     outputs: [{ name: 'sBalance', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
@@ -371,7 +489,27 @@ export const lockerAbi = [
   },
   {
     type: 'function',
-    inputs: [],
+    inputs: [
+      { name: 'positionTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'lpCooldownTimestamps',
+    outputs: [
+      { name: 'lpCooldownTimestamp', internalType: 'uint256', type: 'uint256' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'supAmount', internalType: 'uint256', type: 'uint256' }],
+    name: 'provideLiquidity',
+    outputs: [],
+    stateMutability: 'payable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'amountToStake', internalType: 'uint256', type: 'uint256' },
+    ],
     name: 'stake',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -386,6 +524,22 @@ export const lockerAbi = [
   {
     type: 'function',
     inputs: [
+      { name: 'positionTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'taxFreeExitTimestamps',
+    outputs: [
+      {
+        name: 'taxFreeWithdrawTimestamp',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'unlockAmount', internalType: 'uint256', type: 'uint256' },
       { name: 'unlockPeriod', internalType: 'uint128', type: 'uint128' },
       { name: 'recipient', internalType: 'address', type: 'address' },
     ],
@@ -395,8 +549,29 @@ export const lockerAbi = [
   },
   {
     type: 'function',
-    inputs: [],
+    inputs: [
+      { name: 'amountToUnstake', internalType: 'uint256', type: 'uint256' },
+    ],
     name: 'unstake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'withdrawDustETH',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: 'liquidityToRemove', internalType: 'uint128', type: 'uint128' },
+      { name: 'amount0ToRemove', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount1ToRemove', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'withdrawLiquidity',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -516,14 +691,24 @@ export const lockerAbi = [
     name: 'Initialized',
   },
   { type: 'error', inputs: [], name: 'FORBIDDEN' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_AVAILABLE_BALANCE' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_BALANCE' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_ETH_SENT' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_STAKED_BALANCE' },
+  { type: 'error', inputs: [], name: 'INSUFFICIENT_UNLOCK_AMOUNT' },
   { type: 'error', inputs: [], name: 'INVALID_UNLOCK_PERIOD' },
   { type: 'error', inputs: [], name: 'InvalidInitialization' },
+  { type: 'error', inputs: [], name: 'LIQUIDITY_POOL_NOT_APPROVED' },
+  { type: 'error', inputs: [], name: 'LOCKER_HAS_NO_POSITION' },
+  { type: 'error', inputs: [], name: 'LP_COOLDOWN_NOT_ELAPSED' },
+  { type: 'error', inputs: [], name: 'LP_DISTRIBUTION_POOL_HAS_NO_UNITS' },
+  { type: 'error', inputs: [], name: 'MathOverflowedMulDiv' },
   { type: 'error', inputs: [], name: 'NOT_LOCKER_OWNER' },
-  { type: 'error', inputs: [], name: 'NO_FLUID_TO_STAKE' },
   { type: 'error', inputs: [], name: 'NO_FLUID_TO_UNLOCK' },
   { type: 'error', inputs: [], name: 'NO_FLUID_TO_UNSTAKE' },
   { type: 'error', inputs: [], name: 'NotInitializing' },
   { type: 'error', inputs: [], name: 'Reentrancy' },
+  { type: 'error', inputs: [], name: 'STAKER_DISTRIBUTION_POOL_HAS_NO_UNITS' },
   { type: 'error', inputs: [], name: 'STAKING_COOLDOWN_NOT_ELAPSED' },
   {
     type: 'error',
@@ -533,7 +718,6 @@ export const lockerAbi = [
     ],
     name: 'SafeCastOverflowedIntDowncast',
   },
-  { type: 'error', inputs: [], name: 'TAX_DISTRIBUTION_POOL_HAS_NO_UNITS' },
   { type: 'error', inputs: [], name: 'TTE_NOT_ACTIVATED' },
 ] as const
 
@@ -1445,34 +1629,176 @@ export const stakingRewardControllerAbi = [
     stateMutability: 'nonpayable',
   },
   {
-    type: 'error',
-    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
-    name: 'AddressEmptyCode',
-  },
-  {
-    type: 'error',
-    inputs: [
-      { name: 'implementation', internalType: 'address', type: 'address' },
+    type: 'function',
+    inputs: [],
+    name: 'FLUID',
+    outputs: [
+      { name: '', internalType: 'contract ISuperToken', type: 'address' },
     ],
-    name: 'ERC1967InvalidImplementation',
+    stateMutability: 'view',
   },
-  { type: 'error', inputs: [], name: 'ERC1967NonPayable' },
-  { type: 'error', inputs: [], name: 'FailedInnerCall' },
-  { type: 'error', inputs: [], name: 'INVALID_PARAMETER' },
-  { type: 'error', inputs: [], name: 'InvalidInitialization' },
-  { type: 'error', inputs: [], name: 'NOT_APPROVED_LOCKER' },
-  { type: 'error', inputs: [], name: 'NOT_LOCKER_FACTORY' },
-  { type: 'error', inputs: [], name: 'NOT_PROGRAM_MANAGER' },
-  { type: 'error', inputs: [], name: 'NotInitializing' },
   {
-    type: 'error',
+    type: 'function',
+    inputs: [
+      { name: 'lockerAddress', internalType: 'address', type: 'address' },
+    ],
+    name: 'approveLocker',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'getTaxAllocation',
+    outputs: [
+      { name: 'stakerAllocationBP', internalType: 'uint128', type: 'uint128' },
+      {
+        name: 'liquidityProviderAllocationBP',
+        internalType: 'uint128',
+        type: 'uint128',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
-    name: 'OwnableInvalidOwner',
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
-    type: 'error',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'OwnableUnauthorizedAccount',
+    type: 'function',
+    inputs: [],
+    name: 'lockerFactory',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'lpDistributionPool',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'refreshTaxDistributionFlow',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'lockerFactoryAddress',
+        internalType: 'address',
+        type: 'address',
+      },
+    ],
+    name: 'setLockerFactory',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'stakerAllocationBP', internalType: 'uint128', type: 'uint128' },
+      {
+        name: 'liquidityProviderAllocationBP',
+        internalType: 'uint128',
+        type: 'uint128',
+      },
+    ],
+    name: 'setTaxAllocation',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'setupLPDistributionPool',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'taxAllocation',
+    outputs: [
+      { name: 'stakerAllocationBP', internalType: 'uint128', type: 'uint128' },
+      {
+        name: 'liquidityProviderAllocationBP',
+        internalType: 'uint128',
+        type: 'uint128',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'taxDistributionPool',
+    outputs: [
+      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'lockerLiquidityBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateLiquidityProviderUnits',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'lockerStakedBalance', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'updateStakerUnits',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'newImplementation', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'upgradeTo',
+    outputs: [],
+    stateMutability: 'nonpayable',
   },
   {
     type: 'event',
@@ -1563,6 +1889,63 @@ export const stakingRewardControllerAbi = [
     anonymous: false,
     inputs: [
       {
+        name: 'stakerAllocationBP',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: false,
+      },
+      {
+        name: 'liquidityProviderAllocationBP',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: false,
+      },
+    ],
+    name: 'TaxAllocationUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'liquidityProviderFlowRate',
+        internalType: 'int96',
+        type: 'int96',
+        indexed: false,
+      },
+      {
+        name: 'stakerFlowRate',
+        internalType: 'int96',
+        type: 'int96',
+        indexed: false,
+      },
+    ],
+    name: 'TaxDistributionFlowUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'liquidityProvider',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'totalLiquidityProviderUnits',
+        internalType: 'uint128',
+        type: 'uint128',
+        indexed: true,
+      },
+    ],
+    name: 'UpdatedLiquidityProviderUnits',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
         name: 'staker',
         internalType: 'address',
         type: 'address',
@@ -1591,98 +1974,43 @@ export const stakingRewardControllerAbi = [
     name: 'Upgraded',
   },
   {
-    type: 'function',
-    inputs: [],
-    name: 'FLUID',
-    outputs: [
-      { name: '', internalType: 'contract ISuperToken', type: 'address' },
-    ],
-    stateMutability: 'view',
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
   },
   {
-    type: 'function',
+    type: 'error',
     inputs: [
-      { name: 'lockerAddress', internalType: 'address', type: 'address' },
+      { name: 'implementation', internalType: 'address', type: 'address' },
     ],
-    name: 'approveLocker',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'ERC1967InvalidImplementation',
   },
+  { type: 'error', inputs: [], name: 'ERC1967NonPayable' },
+  { type: 'error', inputs: [], name: 'FailedInnerCall' },
+  { type: 'error', inputs: [], name: 'INVALID_PARAMETER' },
+  { type: 'error', inputs: [], name: 'InvalidInitialization' },
+  { type: 'error', inputs: [], name: 'LP_DISTRIBUTION_POOL_ALREADY_SET' },
+  { type: 'error', inputs: [], name: 'NOT_APPROVED_LOCKER' },
+  { type: 'error', inputs: [], name: 'NOT_LOCKER_FACTORY' },
+  { type: 'error', inputs: [], name: 'NOT_PROGRAM_MANAGER' },
+  { type: 'error', inputs: [], name: 'NotInitializing' },
   {
-    type: 'function',
+    type: 'error',
     inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
-    name: 'initialize',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'OwnableInvalidOwner',
   },
   {
-    type: 'function',
-    inputs: [],
-    name: 'lockerFactory',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'OwnableUnauthorizedAccount',
   },
   {
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
+    type: 'error',
     inputs: [
-      {
-        name: 'lockerFactoryAddress',
-        internalType: 'address',
-        type: 'address',
-      },
+      { name: 'bits', internalType: 'uint8', type: 'uint8' },
+      { name: 'value', internalType: 'int256', type: 'int256' },
     ],
-    name: 'setLockerFactory',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'taxDistributionPool',
-    outputs: [
-      { name: '', internalType: 'contract ISuperfluidPool', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'lockerStakedBalance', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'updateStakerUnits',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'newImplementation', internalType: 'address', type: 'address' },
-      { name: 'data', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'upgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'SafeCastOverflowedIntDowncast',
   },
 ] as const
 
@@ -1717,639 +2045,114 @@ export const supTokenAbi = [
   {
     type: 'constructor',
     inputs: [
-      { name: 'host', internalType: 'contract ISuperfluid', type: 'address' },
-      {
-        name: 'constantOutflowNFT',
-        internalType: 'contract IConstantOutflowNFT',
-        type: 'address',
-      },
-      {
-        name: 'constantInflowNFT',
-        internalType: 'contract IConstantInflowNFT',
-        type: 'address',
-      },
-      {
-        name: 'poolAdminNFT',
-        internalType: 'contract IPoolAdminNFT',
-        type: 'address',
-      },
-      {
-        name: 'poolMemberNFT',
-        internalType: 'contract IPoolMemberNFT',
-        type: 'address',
-      },
+      { name: 'nativeBridge_', internalType: 'address', type: 'address' },
+      { name: 'remoteToken_', internalType: 'address', type: 'address' },
     ],
     stateMutability: 'nonpayable',
   },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_AGREEMENT_ALREADY_EXISTS' },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_AGREEMENT_DOES_NOT_EXIST' },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_BURN_INSUFFICIENT_BALANCE' },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_MOVE_INSUFFICIENT_BALANCE' },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_ONLY_HOST' },
-  { type: 'error', inputs: [], name: 'SF_TOKEN_ONLY_LISTED_AGREEMENT' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_APPROVE_FROM_ZERO_ADDRESS' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_APPROVE_TO_ZERO_ADDRESS' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_BURN_FROM_ZERO_ADDRESS' },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'SUPER_TOKEN_CALLER_IS_NOT_OPERATOR_FOR_HOLDER',
-  },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'SUPER_TOKEN_INFLATIONARY_DEFLATIONARY_NOT_SUPPORTED',
-  },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_MINT_TO_ZERO_ADDRESS' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_NFT_PROXY_ADDRESS_CHANGED' },
-  {
-    type: 'error',
-    inputs: [],
-    name: 'SUPER_TOKEN_NOT_ERC777_TOKENS_RECIPIENT',
-  },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_NO_UNDERLYING_TOKEN' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_ADMIN' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_GOV_OWNER' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_ONLY_SELF' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_FROM_ZERO_ADDRESS' },
-  { type: 'error', inputs: [], name: 'SUPER_TOKEN_TRANSFER_TO_ZERO_ADDRESS' },
+  { type: 'error', inputs: [], name: 'IXERC20_LimitsTooHigh' },
+  { type: 'error', inputs: [], name: 'IXERC20_NoLockBox' },
+  { type: 'error', inputs: [], name: 'IXERC20_NotHighEnoughLimits' },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       {
-        name: 'oldAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'newAdmin',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AdminChanged',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-      {
-        name: 'data',
-        internalType: 'bytes32[]',
-        type: 'bytes32[]',
-        indexed: false,
-      },
-    ],
-    name: 'AgreementCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-      {
-        name: 'penaltyAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'rewardAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'rewardAmount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AgreementLiquidated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'liquidatorAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-      {
-        name: 'penaltyAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'bondAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'rewardAmount',
+        name: '_mintingLimit',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
       },
       {
-        name: 'bailoutAmount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AgreementLiquidatedBy',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-      {
-        name: 'liquidatorAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'targetAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'rewardAmountReceiver',
-        internalType: 'address',
-        type: 'address',
-        indexed: false,
-      },
-      {
-        name: 'rewardAmount',
+        name: '_burningLimit',
         internalType: 'uint256',
         type: 'uint256',
         indexed: false,
       },
       {
-        name: 'targetAccountBalanceDelta',
-        internalType: 'int256',
-        type: 'int256',
-        indexed: false,
-      },
-      {
-        name: 'liquidationTypeData',
-        internalType: 'bytes',
-        type: 'bytes',
-        indexed: false,
+        name: '_bridge',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
       },
     ],
-    name: 'AgreementLiquidatedV2',
+    name: 'BridgeLimitsSet',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'account',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'slotId',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'AgreementStateUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-    ],
-    name: 'AgreementTerminated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'agreementClass',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32', indexed: false },
-      {
-        name: 'data',
-        internalType: 'bytes32[]',
-        type: 'bytes32[]',
-        indexed: false,
-      },
-    ],
-    name: 'AgreementUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'owner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'spender',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'value',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'Approval',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'operator',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'tokenHolder',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AuthorizedOperator',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'bailoutAccount',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'bailoutAmount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'Bailout',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'operator',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'from', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
-      {
-        name: 'operatorData',
-        internalType: 'bytes',
-        type: 'bytes',
-        indexed: false,
-      },
-    ],
-    name: 'Burned',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'uuid',
-        internalType: 'bytes32',
-        type: 'bytes32',
-        indexed: false,
-      },
-      {
-        name: 'codeAddress',
+        name: '_lockbox',
         internalType: 'address',
         type: 'address',
         indexed: false,
       },
     ],
-    name: 'CodeUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'version', internalType: 'uint8', type: 'uint8', indexed: false },
-    ],
-    name: 'Initialized',
+    name: 'LockboxSet',
   },
   {
     type: 'event',
     anonymous: false,
     inputs: [
       {
-        name: 'operator',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'to', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
-      {
-        name: 'operatorData',
-        internalType: 'bytes',
-        type: 'bytes',
-        indexed: false,
-      },
-    ],
-    name: 'Minted',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'poolAdminNFT',
-        internalType: 'contract IPoolAdminNFT',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'PoolAdminNFTCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'poolMemberNFT',
-        internalType: 'contract IPoolMemberNFT',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'PoolMemberNFTCreated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'operator',
+        name: 'previousOwner',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
       {
-        name: 'tokenHolder',
+        name: 'newOwner',
         internalType: 'address',
         type: 'address',
         indexed: true,
       },
     ],
-    name: 'RevokedOperator',
+    name: 'OwnershipTransferred',
   },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'operator',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      { name: 'from', internalType: 'address', type: 'address', indexed: true },
-      { name: 'to', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
-      {
-        name: 'operatorData',
-        internalType: 'bytes',
-        type: 'bytes',
-        indexed: false,
-      },
-    ],
-    name: 'Sent',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'account',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'TokenDowngraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      {
-        name: 'account',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'TokenUpgraded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'from', internalType: 'address', type: 'address', indexed: true },
-      { name: 'to', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'value',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'Transfer',
-  },
+  { type: 'fallback', stateMutability: 'payable' },
   {
     type: 'function',
     inputs: [],
-    name: 'CONSTANT_INFLOW_NFT',
+    name: 'bridge',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'bridges',
     outputs: [
       {
-        name: '',
-        internalType: 'contract IConstantInflowNFT',
-        type: 'address',
+        name: 'minterParams',
+        internalType: 'struct IXERC20.BridgeParameters',
+        type: 'tuple',
+        components: [
+          { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+          { name: 'ratePerSecond', internalType: 'uint256', type: 'uint256' },
+          { name: 'maxLimit', internalType: 'uint256', type: 'uint256' },
+          { name: 'currentLimit', internalType: 'uint256', type: 'uint256' },
+        ],
       },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'CONSTANT_OUTFLOW_NFT',
-    outputs: [
       {
-        name: '',
-        internalType: 'contract IConstantOutflowNFT',
-        type: 'address',
+        name: 'burnerParams',
+        internalType: 'struct IXERC20.BridgeParameters',
+        type: 'tuple',
+        components: [
+          { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+          { name: 'ratePerSecond', internalType: 'uint256', type: 'uint256' },
+          { name: 'maxLimit', internalType: 'uint256', type: 'uint256' },
+          { name: 'currentLimit', internalType: 'uint256', type: 'uint256' },
+        ],
       },
     ],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'POOL_ADMIN_NFT',
-    outputs: [
-      { name: '', internalType: 'contract IPoolAdminNFT', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'POOL_MEMBER_NFT',
-    outputs: [
-      { name: '', internalType: 'contract IPoolMemberNFT', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
     inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-    ],
-    name: 'allowance',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
+      { name: 'user', internalType: 'address', type: 'address' },
       { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'approve',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
-    name: 'authorizeOperator',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: 'balance', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'burn',
     outputs: [],
@@ -2357,172 +2160,30 @@ export const supTokenAbi = [
   },
   {
     type: 'function',
-    inputs: [],
-    name: 'castrate',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newAdmin', internalType: 'address', type: 'address' }],
-    name: 'changeAdmin',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'id', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'data', internalType: 'bytes32[]', type: 'bytes32[]' },
-    ],
-    name: 'createAgreement',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
-    stateMutability: 'pure',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'subtractedValue', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'decreaseAllowance',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'defaultOperators',
-    outputs: [{ name: '', internalType: 'address[]', type: 'address[]' }],
+    inputs: [{ name: 'bridge', internalType: 'address', type: 'address' }],
+    name: 'burningCurrentLimitOf',
+    outputs: [{ name: 'limit', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
-    name: 'downgrade',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'downgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'getAccountActiveAgreements',
-    outputs: [
-      {
-        name: '',
-        internalType: 'contract ISuperAgreement[]',
-        type: 'address[]',
-      },
-    ],
+    inputs: [{ name: 'bridge', internalType: 'address', type: 'address' }],
+    name: 'burningMaxLimitOf',
+    outputs: [{ name: 'limit', internalType: 'uint256', type: 'uint256' }],
     stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getAdmin',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'agreementClass', internalType: 'address', type: 'address' },
-      { name: 'id', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'dataLength', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'getAgreementData',
-    outputs: [{ name: 'data', internalType: 'bytes32[]', type: 'bytes32[]' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'agreementClass', internalType: 'address', type: 'address' },
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'slotId', internalType: 'uint256', type: 'uint256' },
-      { name: 'dataLength', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'getAgreementStateSlot',
-    outputs: [
-      { name: 'slotData', internalType: 'bytes32[]', type: 'bytes32[]' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getCodeAddress',
-    outputs: [
-      { name: 'codeAddress', internalType: 'address', type: 'address' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getHost',
-    outputs: [{ name: 'host', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getUnderlyingDecimals',
-    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'getUnderlyingToken',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'granularity',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'pure',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'increaseAllowance',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
       {
-        name: 'underlyingToken',
-        internalType: 'contract IERC20',
+        name: 'factory',
+        internalType: 'contract ISuperTokenFactory',
         type: 'address',
       },
-      { name: 'underlyingDecimals', internalType: 'uint8', type: 'uint8' },
-      { name: 'n', internalType: 'string', type: 'string' },
-      { name: 's', internalType: 'string', type: 'string' },
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'symbol', internalType: 'string', type: 'string' },
+      { name: 'receiver', internalType: 'address', type: 'address' },
+      { name: 'initialSupply', internalType: 'uint256', type: 'uint256' },
     ],
     name: 'initialize',
     outputs: [],
@@ -2531,428 +2192,90 @@ export const supTokenAbi = [
   {
     type: 'function',
     inputs: [
-      {
-        name: 'underlyingToken',
-        internalType: 'contract IERC20',
-        type: 'address',
-      },
-      { name: 'underlyingDecimals', internalType: 'uint8', type: 'uint8' },
-      { name: 'n', internalType: 'string', type: 'string' },
-      { name: 's', internalType: 'string', type: 'string' },
-      { name: 'admin', internalType: 'address', type: 'address' },
+      { name: 'initialAddress', internalType: 'address', type: 'address' },
     ],
-    name: 'initializeWithAdmin',
+    name: 'initializeProxy',
     outputs: [],
     stateMutability: 'nonpayable',
   },
   {
     type: 'function',
     inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
+      { name: 'user', internalType: 'address', type: 'address' },
+      { name: 'amount', internalType: 'uint256', type: 'uint256' },
     ],
-    name: 'isAccountCritical',
-    outputs: [{ name: 'isCritical', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'isAccountCriticalNow',
-    outputs: [{ name: 'isCritical', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'isAccountSolvent',
-    outputs: [{ name: 'isSolvent', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'isAccountSolventNow',
-    outputs: [{ name: 'isSolvent', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'operator', internalType: 'address', type: 'address' },
-      { name: 'tokenHolder', internalType: 'address', type: 'address' },
-    ],
-    name: 'isOperatorFor',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'id', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'liquidationTypeData', internalType: 'bytes', type: 'bytes' },
-      { name: 'liquidatorAccount', internalType: 'address', type: 'address' },
-      { name: 'useDefaultRewardAccount', internalType: 'bool', type: 'bool' },
-      { name: 'targetAccount', internalType: 'address', type: 'address' },
-      { name: 'rewardAmount', internalType: 'uint256', type: 'uint256' },
-      {
-        name: 'targetAccountBalanceDelta',
-        internalType: 'int256',
-        type: 'int256',
-      },
-    ],
-    name: 'makeLiquidationPayoutsV2',
+    name: 'mint',
     outputs: [],
     stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'bridge', internalType: 'address', type: 'address' }],
+    name: 'mintingCurrentLimitOf',
+    outputs: [{ name: 'limit', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'bridge', internalType: 'address', type: 'address' }],
+    name: 'mintingMaxLimitOf',
+    outputs: [{ name: 'limit', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
-    name: 'name',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationApprove',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'subtractedValue', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationDecreaseAllowance',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationDowngrade',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationDowngradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'addedValue', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationIncreaseAllowance',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'operationSend',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationTransferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationUpgrade',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'operationUpgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-      { name: 'operatorData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'operatorBurn',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'sender', internalType: 'address', type: 'address' },
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-      { name: 'operatorData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'operatorSend',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    inputs: [],
+    name: 'remoteToken',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
   },
   {
     type: 'function',
     inputs: [],
-    name: 'proxiableUUID',
-    outputs: [{ name: '', internalType: 'bytes32', type: 'bytes32' }],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'bridge', internalType: 'address', type: 'address' },
+      { name: 'mintingLimit', internalType: 'uint256', type: 'uint256' },
+      { name: 'burningLimit', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'setLimits',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'setLockbox',
+    outputs: [],
     stateMutability: 'pure',
   },
   {
     type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'realtimeBalanceOf',
-    outputs: [
-      { name: 'availableBalance', internalType: 'int256', type: 'int256' },
-      { name: 'deposit', internalType: 'uint256', type: 'uint256' },
-      { name: 'owedDeposit', internalType: 'uint256', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
-    name: 'realtimeBalanceOfNow',
-    outputs: [
-      { name: 'availableBalance', internalType: 'int256', type: 'int256' },
-      { name: 'deposit', internalType: 'uint256', type: 'uint256' },
-      { name: 'owedDeposit', internalType: 'uint256', type: 'uint256' },
-      { name: 'timestamp', internalType: 'uint256', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'operator', internalType: 'address', type: 'address' }],
-    name: 'revokeOperator',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'selfApproveFor',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'selfBurn',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'selfMint',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'holder', internalType: 'address', type: 'address' },
-      { name: 'spender', internalType: 'address', type: 'address' },
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'selfTransferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'send',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'delta', internalType: 'int256', type: 'int256' },
-    ],
-    name: 'settleBalance',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'symbol',
-    outputs: [{ name: '', internalType: 'string', type: 'string' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'id', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'dataLength', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'terminateAgreement',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
-    name: 'toUnderlyingAmount',
-    outputs: [
-      { name: 'underlyingAmount', internalType: 'uint256', type: 'uint256' },
-      { name: 'adjustedAmount', internalType: 'uint256', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [],
-    name: 'totalSupply',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    stateMutability: 'view',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'transfer',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
+    stateMutability: 'pure',
   },
   {
     type: 'function',
-    inputs: [{ name: 'recipient', internalType: 'address', type: 'address' }],
-    name: 'transferAll',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
   },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'holder', internalType: 'address', type: 'address' },
-      { name: 'recipient', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'transferFrom',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'id', internalType: 'bytes32', type: 'bytes32' },
-      { name: 'data', internalType: 'bytes32[]', type: 'bytes32[]' },
-    ],
-    name: 'updateAgreementData',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'account', internalType: 'address', type: 'address' },
-      { name: 'slotId', internalType: 'uint256', type: 'uint256' },
-      { name: 'slotData', internalType: 'bytes32[]', type: 'bytes32[]' },
-    ],
-    name: 'updateAgreementStateSlot',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'newAddress', internalType: 'address', type: 'address' }],
-    name: 'updateCode',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [{ name: 'amount', internalType: 'uint256', type: 'uint256' }],
-    name: 'upgrade',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    inputs: [
-      { name: 'to', internalType: 'address', type: 'address' },
-      { name: 'amount', internalType: 'uint256', type: 'uint256' },
-      { name: 'userData', internalType: 'bytes', type: 'bytes' },
-    ],
-    name: 'upgradeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
+  { type: 'receive', stateMutability: 'payable' },
 ] as const
 
 /**
@@ -3330,6 +2653,23 @@ export const useReadLocker = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"BP_PUMP_RATIO"`
+ */
+export const useReadLockerBpPumpRatio = /*#__PURE__*/ createUseReadContract({
+  abi: lockerAbi,
+  functionName: 'BP_PUMP_RATIO',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"BP_SLIPPAGE_TOLERANCE"`
+ */
+export const useReadLockerBpSlippageTolerance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'BP_SLIPPAGE_TOLERANCE',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"EP_PROGRAM_MANAGER"`
  */
 export const useReadLockerEpProgramManager =
@@ -3337,6 +2677,14 @@ export const useReadLockerEpProgramManager =
     abi: lockerAbi,
     functionName: 'EP_PROGRAM_MANAGER',
   })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"ETH_SUP_POOL"`
+ */
+export const useReadLockerEthSupPool = /*#__PURE__*/ createUseReadContract({
+  abi: lockerAbi,
+  functionName: 'ETH_SUP_POOL',
+})
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"FLUID"`
@@ -3355,6 +2703,49 @@ export const useReadLockerFontaineBeacon = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"LP_DISTRIBUTION_POOL"`
+ */
+export const useReadLockerLpDistributionPool =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'LP_DISTRIBUTION_POOL',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"LP_OPERATION_DEADLINE"`
+ */
+export const useReadLockerLpOperationDeadline =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'LP_OPERATION_DEADLINE',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"MIN_UNLOCK_AMOUNT"`
+ */
+export const useReadLockerMinUnlockAmount = /*#__PURE__*/ createUseReadContract(
+  { abi: lockerAbi, functionName: 'MIN_UNLOCK_AMOUNT' },
+)
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"NONFUNGIBLE_POSITION_MANAGER"`
+ */
+export const useReadLockerNonfungiblePositionManager =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'NONFUNGIBLE_POSITION_MANAGER',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"STAKER_DISTRIBUTION_POOL"`
+ */
+export const useReadLockerStakerDistributionPool =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'STAKER_DISTRIBUTION_POOL',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"STAKING_REWARD_CONTROLLER"`
  */
 export const useReadLockerStakingRewardController =
@@ -3364,12 +2755,20 @@ export const useReadLockerStakingRewardController =
   })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"TAX_DISTRIBUTION_POOL"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"SWAP_ROUTER"`
  */
-export const useReadLockerTaxDistributionPool =
+export const useReadLockerSwapRouter = /*#__PURE__*/ createUseReadContract({
+  abi: lockerAbi,
+  functionName: 'SWAP_ROUTER',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"TAX_FREE_WITHDRAW_DELAY"`
+ */
+export const useReadLockerTaxFreeWithdrawDelay =
   /*#__PURE__*/ createUseReadContract({
     abi: lockerAbi,
-    functionName: 'TAX_DISTRIBUTION_POOL',
+    functionName: 'TAX_FREE_WITHDRAW_DELAY',
   })
 
 /**
@@ -3378,6 +2777,15 @@ export const useReadLockerTaxDistributionPool =
 export const useReadLockerUnlockAvailable = /*#__PURE__*/ createUseReadContract(
   { abi: lockerAbi, functionName: 'UNLOCK_AVAILABLE' },
 )
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"activePositionCount"`
+ */
+export const useReadLockerActivePositionCount =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'activePositionCount',
+  })
 
 /**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"fontaineCount"`
@@ -3423,6 +2831,24 @@ export const useReadLockerGetFontaineBeaconImplementation =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getLiquidityBalance"`
+ */
+export const useReadLockerGetLiquidityBalance =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'getLiquidityBalance',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getPositionLiquidity"`
+ */
+export const useReadLockerGetPositionLiquidity =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'getPositionLiquidity',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"getStakedBalance"`
  */
 export const useReadLockerGetStakedBalance =
@@ -3449,12 +2875,30 @@ export const useReadLockerLockerOwner = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"lpCooldownTimestamps"`
+ */
+export const useReadLockerLpCooldownTimestamps =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'lpCooldownTimestamps',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stakingUnlocksAt"`
  */
 export const useReadLockerStakingUnlocksAt =
   /*#__PURE__*/ createUseReadContract({
     abi: lockerAbi,
     functionName: 'stakingUnlocksAt',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"taxFreeExitTimestamps"`
+ */
+export const useReadLockerTaxFreeExitTimestamps =
+  /*#__PURE__*/ createUseReadContract({
+    abi: lockerAbi,
+    functionName: 'taxFreeExitTimestamps',
   })
 
 /**
@@ -3470,6 +2914,14 @@ export const useWriteLocker = /*#__PURE__*/ createUseWriteContract({
 export const useWriteLockerClaim = /*#__PURE__*/ createUseWriteContract({
   abi: lockerAbi,
   functionName: 'claim',
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"collectFees"`
+ */
+export const useWriteLockerCollectFees = /*#__PURE__*/ createUseWriteContract({
+  abi: lockerAbi,
+  functionName: 'collectFees',
 })
 
 /**
@@ -3514,6 +2966,15 @@ export const useWriteLockerLock = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"provideLiquidity"`
+ */
+export const useWriteLockerProvideLiquidity =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: lockerAbi,
+    functionName: 'provideLiquidity',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stake"`
  */
 export const useWriteLockerStake = /*#__PURE__*/ createUseWriteContract({
@@ -3538,6 +2999,24 @@ export const useWriteLockerUnstake = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"withdrawDustETH"`
+ */
+export const useWriteLockerWithdrawDustEth =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: lockerAbi,
+    functionName: 'withdrawDustETH',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"withdrawLiquidity"`
+ */
+export const useWriteLockerWithdrawLiquidity =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: lockerAbi,
+    functionName: 'withdrawLiquidity',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__
  */
 export const useSimulateLocker = /*#__PURE__*/ createUseSimulateContract({
@@ -3551,6 +3030,15 @@ export const useSimulateLockerClaim = /*#__PURE__*/ createUseSimulateContract({
   abi: lockerAbi,
   functionName: 'claim',
 })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"collectFees"`
+ */
+export const useSimulateLockerCollectFees =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'collectFees',
+  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"connect"`
@@ -3595,6 +3083,15 @@ export const useSimulateLockerLock = /*#__PURE__*/ createUseSimulateContract({
 })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"provideLiquidity"`
+ */
+export const useSimulateLockerProvideLiquidity =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'provideLiquidity',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"stake"`
  */
 export const useSimulateLockerStake = /*#__PURE__*/ createUseSimulateContract({
@@ -3616,6 +3113,24 @@ export const useSimulateLockerUnlock = /*#__PURE__*/ createUseSimulateContract({
 export const useSimulateLockerUnstake = /*#__PURE__*/ createUseSimulateContract(
   { abi: lockerAbi, functionName: 'unstake' },
 )
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"withdrawDustETH"`
+ */
+export const useSimulateLockerWithdrawDustEth =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'withdrawDustETH',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"withdrawLiquidity"`
+ */
+export const useSimulateLockerWithdrawLiquidity =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'withdrawLiquidity',
+  })
 
 /**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link lockerAbi}__
@@ -4818,6 +4333,19 @@ export const useReadStakingRewardControllerFluid =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"getTaxAllocation"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useReadStakingRewardControllerGetTaxAllocation =
+  /*#__PURE__*/ createUseReadContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'getTaxAllocation',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"lockerFactory"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -4831,6 +4359,19 @@ export const useReadStakingRewardControllerLockerFactory =
   })
 
 /**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"lpDistributionPool"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useReadStakingRewardControllerLpDistributionPool =
+  /*#__PURE__*/ createUseReadContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'lpDistributionPool',
+  })
+
+/**
  * Wraps __{@link useReadContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"owner"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -4841,6 +4382,19 @@ export const useReadStakingRewardControllerOwner =
     abi: stakingRewardControllerAbi,
     address: stakingRewardControllerAddress,
     functionName: 'owner',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"taxAllocation"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useReadStakingRewardControllerTaxAllocation =
+  /*#__PURE__*/ createUseReadContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'taxAllocation',
   })
 
 /**
@@ -4895,6 +4449,19 @@ export const useWriteStakingRewardControllerInitialize =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"refreshTaxDistributionFlow"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWriteStakingRewardControllerRefreshTaxDistributionFlow =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'refreshTaxDistributionFlow',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -4921,6 +4488,32 @@ export const useWriteStakingRewardControllerSetLockerFactory =
   })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"setTaxAllocation"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWriteStakingRewardControllerSetTaxAllocation =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'setTaxAllocation',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"setupLPDistributionPool"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWriteStakingRewardControllerSetupLpDistributionPool =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'setupLPDistributionPool',
+  })
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -4931,6 +4524,19 @@ export const useWriteStakingRewardControllerTransferOwnership =
     abi: stakingRewardControllerAbi,
     address: stakingRewardControllerAddress,
     functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"updateLiquidityProviderUnits"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWriteStakingRewardControllerUpdateLiquidityProviderUnits =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'updateLiquidityProviderUnits',
   })
 
 /**
@@ -4998,6 +4604,19 @@ export const useSimulateStakingRewardControllerInitialize =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"refreshTaxDistributionFlow"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useSimulateStakingRewardControllerRefreshTaxDistributionFlow =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'refreshTaxDistributionFlow',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -5024,6 +4643,32 @@ export const useSimulateStakingRewardControllerSetLockerFactory =
   })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"setTaxAllocation"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useSimulateStakingRewardControllerSetTaxAllocation =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'setTaxAllocation',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"setupLPDistributionPool"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useSimulateStakingRewardControllerSetupLpDistributionPool =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'setupLPDistributionPool',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -5034,6 +4679,19 @@ export const useSimulateStakingRewardControllerTransferOwnership =
     abi: stakingRewardControllerAbi,
     address: stakingRewardControllerAddress,
     functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `functionName` set to `"updateLiquidityProviderUnits"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useSimulateStakingRewardControllerUpdateLiquidityProviderUnits =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    functionName: 'updateLiquidityProviderUnits',
   })
 
 /**
@@ -5153,6 +4811,45 @@ export const useWatchStakingRewardControllerSubsidyFlowRateUpdatedEvent =
   })
 
 /**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `eventName` set to `"TaxAllocationUpdated"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWatchStakingRewardControllerTaxAllocationUpdatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    eventName: 'TaxAllocationUpdated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `eventName` set to `"TaxDistributionFlowUpdated"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWatchStakingRewardControllerTaxDistributionFlowUpdatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    eventName: 'TaxDistributionFlowUpdated',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `eventName` set to `"UpdatedLiquidityProviderUnits"`
+ *
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0x9FC0Bb109F3e733Bd84B30F8D89685b0304fC018)
+ */
+export const useWatchStakingRewardControllerUpdatedLiquidityProviderUnitsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: stakingRewardControllerAbi,
+    address: stakingRewardControllerAddress,
+    eventName: 'UpdatedLiquidityProviderUnits',
+  })
+
+/**
  * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link stakingRewardControllerAbi}__ and `eventName` set to `"UpdatedStakersUnits"`
  *
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xb19Ae25A98d352B36CED60F93db926247535048b)
@@ -5191,395 +4888,139 @@ export const useReadSupToken = /*#__PURE__*/ createUseReadContract({
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"CONSTANT_INFLOW_NFT"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"bridge"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenConstantInflowNft =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'CONSTANT_INFLOW_NFT',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"CONSTANT_OUTFLOW_NFT"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenConstantOutflowNft =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'CONSTANT_OUTFLOW_NFT',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"POOL_ADMIN_NFT"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenPoolAdminNft = /*#__PURE__*/ createUseReadContract({
+export const useReadSupTokenBridge = /*#__PURE__*/ createUseReadContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'POOL_ADMIN_NFT',
+  functionName: 'bridge',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"POOL_MEMBER_NFT"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"bridges"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenPoolMemberNft = /*#__PURE__*/ createUseReadContract(
-  {
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'POOL_MEMBER_NFT',
-  },
-)
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"allowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenAllowance = /*#__PURE__*/ createUseReadContract({
+export const useReadSupTokenBridges = /*#__PURE__*/ createUseReadContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'allowance',
+  functionName: 'bridges',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"balanceOf"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"burningCurrentLimitOf"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenBalanceOf = /*#__PURE__*/ createUseReadContract({
+export const useReadSupTokenBurningCurrentLimitOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: supTokenAbi,
+    address: supTokenAddress,
+    functionName: 'burningCurrentLimitOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"burningMaxLimitOf"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
+ */
+export const useReadSupTokenBurningMaxLimitOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: supTokenAbi,
+    address: supTokenAddress,
+    functionName: 'burningMaxLimitOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"mintingCurrentLimitOf"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
+ */
+export const useReadSupTokenMintingCurrentLimitOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: supTokenAbi,
+    address: supTokenAddress,
+    functionName: 'mintingCurrentLimitOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"mintingMaxLimitOf"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
+ */
+export const useReadSupTokenMintingMaxLimitOf =
+  /*#__PURE__*/ createUseReadContract({
+    abi: supTokenAbi,
+    address: supTokenAddress,
+    functionName: 'mintingMaxLimitOf',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"owner"`
+ *
+ * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
+ * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
+ * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
+ */
+export const useReadSupTokenOwner = /*#__PURE__*/ createUseReadContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'balanceOf',
+  functionName: 'owner',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"decimals"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"remoteToken"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenDecimals = /*#__PURE__*/ createUseReadContract({
+export const useReadSupTokenRemoteToken = /*#__PURE__*/ createUseReadContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'decimals',
+  functionName: 'remoteToken',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"defaultOperators"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"setLockbox"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenDefaultOperators =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'defaultOperators',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getAccountActiveAgreements"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetAccountActiveAgreements =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'getAccountActiveAgreements',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getAdmin"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetAdmin = /*#__PURE__*/ createUseReadContract({
+export const useReadSupTokenSetLockbox = /*#__PURE__*/ createUseReadContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'getAdmin',
+  functionName: 'setLockbox',
 })
 
 /**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getAgreementData"`
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"supportsInterface"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useReadSupTokenGetAgreementData =
+export const useReadSupTokenSupportsInterface =
   /*#__PURE__*/ createUseReadContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'getAgreementData',
+    functionName: 'supportsInterface',
   })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getAgreementStateSlot"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetAgreementStateSlot =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'getAgreementStateSlot',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getCodeAddress"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetCodeAddress =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'getCodeAddress',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getHost"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetHost = /*#__PURE__*/ createUseReadContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'getHost',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getUnderlyingDecimals"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetUnderlyingDecimals =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'getUnderlyingDecimals',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"getUnderlyingToken"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGetUnderlyingToken =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'getUnderlyingToken',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"granularity"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenGranularity = /*#__PURE__*/ createUseReadContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'granularity',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"isAccountCritical"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenIsAccountCritical =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'isAccountCritical',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"isAccountCriticalNow"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenIsAccountCriticalNow =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'isAccountCriticalNow',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"isAccountSolvent"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenIsAccountSolvent =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'isAccountSolvent',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"isAccountSolventNow"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenIsAccountSolventNow =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'isAccountSolventNow',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"isOperatorFor"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenIsOperatorFor = /*#__PURE__*/ createUseReadContract(
-  { abi: supTokenAbi, address: supTokenAddress, functionName: 'isOperatorFor' },
-)
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"name"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenName = /*#__PURE__*/ createUseReadContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'name',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"proxiableUUID"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenProxiableUuid = /*#__PURE__*/ createUseReadContract(
-  { abi: supTokenAbi, address: supTokenAddress, functionName: 'proxiableUUID' },
-)
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"realtimeBalanceOf"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenRealtimeBalanceOf =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'realtimeBalanceOf',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"realtimeBalanceOfNow"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenRealtimeBalanceOfNow =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'realtimeBalanceOfNow',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"symbol"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenSymbol = /*#__PURE__*/ createUseReadContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'symbol',
-})
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"toUnderlyingAmount"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenToUnderlyingAmount =
-  /*#__PURE__*/ createUseReadContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'toUnderlyingAmount',
-  })
-
-/**
- * Wraps __{@link useReadContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"totalSupply"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useReadSupTokenTotalSupply = /*#__PURE__*/ createUseReadContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'totalSupply',
-})
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__
@@ -5592,33 +5033,6 @@ export const useWriteSupToken = /*#__PURE__*/ createUseWriteContract({
   abi: supTokenAbi,
   address: supTokenAddress,
 })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"approve"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenApprove = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'approve',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"authorizeOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenAuthorizeOperator =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'authorizeOperator',
-  })
 
 /**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"burn"`
@@ -5634,96 +5048,6 @@ export const useWriteSupTokenBurn = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"castrate"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenCastrate = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'castrate',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"changeAdmin"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenChangeAdmin = /*#__PURE__*/ createUseWriteContract(
-  { abi: supTokenAbi, address: supTokenAddress, functionName: 'changeAdmin' },
-)
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"createAgreement"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenCreateAgreement =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'createAgreement',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"decreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenDecreaseAllowance =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'decreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"downgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenDowngrade = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'downgrade',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"downgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenDowngradeTo = /*#__PURE__*/ createUseWriteContract(
-  { abi: supTokenAbi, address: supTokenAddress, functionName: 'downgradeTo' },
-)
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"increaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenIncreaseAllowance =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'increaseAllowance',
-  })
-
-/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initialize"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
@@ -5737,400 +5061,72 @@ export const useWriteSupTokenInitialize = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initializeWithAdmin"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initializeProxy"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWriteSupTokenInitializeWithAdmin =
+export const useWriteSupTokenInitializeProxy =
   /*#__PURE__*/ createUseWriteContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'initializeWithAdmin',
+    functionName: 'initializeProxy',
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"makeLiquidationPayoutsV2"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"mint"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWriteSupTokenMakeLiquidationPayoutsV2 =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'makeLiquidationPayoutsV2',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationApprove"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationApprove =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationApprove',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDecreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationDecreaseAllowance =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDecreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDowngrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationDowngrade =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDowngrade',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDowngradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationDowngradeTo =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDowngradeTo',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationIncreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationIncreaseAllowance =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationIncreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationSend"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationSend =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationSend',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationTransferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationTransferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationUpgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationUpgrade =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationUpgrade',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationUpgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperationUpgradeTo =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationUpgradeTo',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operatorBurn"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperatorBurn =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operatorBurn',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operatorSend"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenOperatorSend =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operatorSend',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"revokeOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenRevokeOperator =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'revokeOperator',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfApproveFor"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenSelfApproveFor =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'selfApproveFor',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfBurn"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenSelfBurn = /*#__PURE__*/ createUseWriteContract({
+export const useWriteSupTokenMint = /*#__PURE__*/ createUseWriteContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'selfBurn',
+  functionName: 'mint',
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfMint"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWriteSupTokenSelfMint = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'selfMint',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfTransferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenSelfTransferFrom =
+export const useWriteSupTokenRenounceOwnership =
   /*#__PURE__*/ createUseWriteContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'selfTransferFrom',
+    functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"send"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"setLimits"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWriteSupTokenSend = /*#__PURE__*/ createUseWriteContract({
+export const useWriteSupTokenSetLimits = /*#__PURE__*/ createUseWriteContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'send',
+  functionName: 'setLimits',
 })
 
 /**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"settleBalance"`
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWriteSupTokenSettleBalance =
+export const useWriteSupTokenTransferOwnership =
   /*#__PURE__*/ createUseWriteContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'settleBalance',
+    functionName: 'transferOwnership',
   })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"terminateAgreement"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenTerminateAgreement =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'terminateAgreement',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transfer"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenTransfer = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'transfer',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferAll"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenTransferAll = /*#__PURE__*/ createUseWriteContract(
-  { abi: supTokenAbi, address: supTokenAddress, functionName: 'transferAll' },
-)
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenTransferFrom =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'transferFrom',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateAgreementData"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenUpdateAgreementData =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'updateAgreementData',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateAgreementStateSlot"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenUpdateAgreementStateSlot =
-  /*#__PURE__*/ createUseWriteContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'updateAgreementStateSlot',
-  })
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateCode"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenUpdateCode = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'updateCode',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"upgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenUpgrade = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'upgrade',
-})
-
-/**
- * Wraps __{@link useWriteContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"upgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWriteSupTokenUpgradeTo = /*#__PURE__*/ createUseWriteContract({
-  abi: supTokenAbi,
-  address: supTokenAddress,
-  functionName: 'upgradeTo',
-})
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__
@@ -6145,34 +5141,6 @@ export const useSimulateSupToken = /*#__PURE__*/ createUseSimulateContract({
 })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"approve"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenApprove =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'approve',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"authorizeOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenAuthorizeOperator =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'authorizeOperator',
-  })
-
-/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"burn"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
@@ -6184,104 +5152,6 @@ export const useSimulateSupTokenBurn = /*#__PURE__*/ createUseSimulateContract({
   address: supTokenAddress,
   functionName: 'burn',
 })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"castrate"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenCastrate =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'castrate',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"changeAdmin"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenChangeAdmin =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'changeAdmin',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"createAgreement"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenCreateAgreement =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'createAgreement',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"decreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenDecreaseAllowance =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'decreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"downgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenDowngrade =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'downgrade',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"downgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenDowngradeTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'downgradeTo',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"increaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenIncreaseAllowance =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'increaseAllowance',
-  })
 
 /**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initialize"`
@@ -6298,408 +5168,72 @@ export const useSimulateSupTokenInitialize =
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initializeWithAdmin"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"initializeProxy"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useSimulateSupTokenInitializeWithAdmin =
+export const useSimulateSupTokenInitializeProxy =
   /*#__PURE__*/ createUseSimulateContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'initializeWithAdmin',
+    functionName: 'initializeProxy',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"makeLiquidationPayoutsV2"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"mint"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useSimulateSupTokenMakeLiquidationPayoutsV2 =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'makeLiquidationPayoutsV2',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationApprove"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationApprove =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationApprove',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDecreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationDecreaseAllowance =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDecreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDowngrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationDowngrade =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDowngrade',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationDowngradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationDowngradeTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationDowngradeTo',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationIncreaseAllowance"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationIncreaseAllowance =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationIncreaseAllowance',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationSend"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationSend =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationSend',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationTransferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationTransferFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationTransferFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationUpgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationUpgrade =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationUpgrade',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operationUpgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperationUpgradeTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operationUpgradeTo',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operatorBurn"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperatorBurn =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operatorBurn',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"operatorSend"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenOperatorSend =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'operatorSend',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"revokeOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenRevokeOperator =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'revokeOperator',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfApproveFor"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenSelfApproveFor =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'selfApproveFor',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfBurn"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenSelfBurn =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'selfBurn',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfMint"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenSelfMint =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'selfMint',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"selfTransferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenSelfTransferFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'selfTransferFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"send"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenSend = /*#__PURE__*/ createUseSimulateContract({
+export const useSimulateSupTokenMint = /*#__PURE__*/ createUseSimulateContract({
   abi: supTokenAbi,
   address: supTokenAddress,
-  functionName: 'send',
+  functionName: 'mint',
 })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"settleBalance"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"renounceOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useSimulateSupTokenSettleBalance =
+export const useSimulateSupTokenRenounceOwnership =
   /*#__PURE__*/ createUseSimulateContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'settleBalance',
+    functionName: 'renounceOwnership',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"terminateAgreement"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"setLimits"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useSimulateSupTokenTerminateAgreement =
+export const useSimulateSupTokenSetLimits =
   /*#__PURE__*/ createUseSimulateContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'terminateAgreement',
+    functionName: 'setLimits',
   })
 
 /**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transfer"`
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferOwnership"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useSimulateSupTokenTransfer =
+export const useSimulateSupTokenTransferOwnership =
   /*#__PURE__*/ createUseSimulateContract({
     abi: supTokenAbi,
     address: supTokenAddress,
-    functionName: 'transfer',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferAll"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenTransferAll =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'transferAll',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"transferFrom"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenTransferFrom =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'transferFrom',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateAgreementData"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenUpdateAgreementData =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'updateAgreementData',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateAgreementStateSlot"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenUpdateAgreementStateSlot =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'updateAgreementStateSlot',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"updateCode"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenUpdateCode =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'updateCode',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"upgrade"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenUpgrade =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'upgrade',
-  })
-
-/**
- * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link supTokenAbi}__ and `functionName` set to `"upgradeTo"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useSimulateSupTokenUpgradeTo =
-  /*#__PURE__*/ createUseSimulateContract({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    functionName: 'upgradeTo',
+    functionName: 'transferOwnership',
   })
 
 /**
@@ -6715,311 +5249,45 @@ export const useWatchSupTokenEvent = /*#__PURE__*/ createUseWatchContractEvent({
 })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AdminChanged"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"BridgeLimitsSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWatchSupTokenAdminChangedEvent =
+export const useWatchSupTokenBridgeLimitsSetEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: supTokenAbi,
     address: supTokenAddress,
-    eventName: 'AdminChanged',
+    eventName: 'BridgeLimitsSet',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementCreated"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"LockboxSet"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWatchSupTokenAgreementCreatedEvent =
+export const useWatchSupTokenLockboxSetEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: supTokenAbi,
     address: supTokenAddress,
-    eventName: 'AgreementCreated',
+    eventName: 'LockboxSet',
   })
 
 /**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementLiquidated"`
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"OwnershipTransferred"`
  *
  * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
  * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
  * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
  */
-export const useWatchSupTokenAgreementLiquidatedEvent =
+export const useWatchSupTokenOwnershipTransferredEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: supTokenAbi,
     address: supTokenAddress,
-    eventName: 'AgreementLiquidated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementLiquidatedBy"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAgreementLiquidatedByEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AgreementLiquidatedBy',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementLiquidatedV2"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAgreementLiquidatedV2Event =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AgreementLiquidatedV2',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementStateUpdated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAgreementStateUpdatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AgreementStateUpdated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementTerminated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAgreementTerminatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AgreementTerminated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AgreementUpdated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAgreementUpdatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AgreementUpdated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Approval"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenApprovalEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Approval',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"AuthorizedOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenAuthorizedOperatorEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'AuthorizedOperator',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Bailout"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenBailoutEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Bailout',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Burned"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenBurnedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Burned',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"CodeUpdated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenCodeUpdatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'CodeUpdated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Initialized"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenInitializedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Initialized',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Minted"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenMintedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Minted',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"PoolAdminNFTCreated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenPoolAdminNftCreatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'PoolAdminNFTCreated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"PoolMemberNFTCreated"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenPoolMemberNftCreatedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'PoolMemberNFTCreated',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"RevokedOperator"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenRevokedOperatorEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'RevokedOperator',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Sent"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenSentEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Sent',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"TokenDowngraded"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenTokenDowngradedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'TokenDowngraded',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"TokenUpgraded"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenTokenUpgradedEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'TokenUpgraded',
-  })
-
-/**
- * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link supTokenAbi}__ and `eventName` set to `"Transfer"`
- *
- * - [__View Contract on Ethereum Etherscan__](https://etherscan.io/address/0xD05001Db979ff2f1a3B2105875d3454E90dd2961)
- * - [__View Contract on Base Basescan__](https://basescan.org/address/0xa69f80524381275A7fFdb3AE01c54150644c8792)
- * - [__View Contract on Base Sepolia Basescan__](https://sepolia.basescan.org/address/0xFd62b398DD8a233ad37156690631fb9515059d6A)
- */
-export const useWatchSupTokenTransferEvent =
-  /*#__PURE__*/ createUseWatchContractEvent({
-    abi: supTokenAbi,
-    address: supTokenAddress,
-    eventName: 'Transfer',
+    eventName: 'OwnershipTransferred',
   })
 
 /**
