@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.7
+
+### Patch Changes
+
+- 81135e7: Update deps
+
 ## 0.1.6
 
 ### Patch Changes
