@@ -63,6 +63,7 @@ async function fetchClassicPrices(
 async function fetchOnchainPrices(
 	token: { symbol: string; chainId: number; address: string },
 	platformId: string,
+	days: "max" | "7",
 ): Promise<Array<{ date: string; price: string }>> {
 	logger.info("Fetching onchain prices", {
 		symbol: token.symbol,
@@ -115,12 +116,14 @@ async function fetchOnchainPrices(
 	})
 
 	// Step 3: Fetch OHLCV data from the best pool
+	// For onchain data, adjust limit based on days parameter
+	const limit = days === "max" ? 365 : 7 // Max 1 year for new tokens, 7 days for updates
 	const ohlcvResponse = await coingeckoPro.onchain.networks.pools.ohlcv.getTimeframe(OHLCV_TIMEFRAME, {
 		network: platformId,
 		pool_address: bestPool.attributes.address,
 		currency: DEFAULT_CURRENCY,
 		aggregate: "1",
-		limit: 30,
+		limit,
 		token: token.address.toLowerCase(),
 	})
 
@@ -134,6 +137,16 @@ async function fetchOnchainPrices(
 }
 
 // Type definitions
+interface StoredPriceData {
+	version: string
+	timestamp: string
+	token: SuperTokenData
+	coingeckoId?: string
+	fetchedAt: string
+	pricesUsd: Array<{ date: string; price: string }>
+	method?: "classic" | "onchain" | "none" // May not exist in old data
+}
+
 type TokenPriceData = {
 	token: SuperTokenData
 	coingeckoId?: string
@@ -141,27 +154,76 @@ type TokenPriceData = {
 	method: "classic" | "onchain" | "none"
 }
 
-// Helper function to read existing price data
+// Helper function to read existing price data and metadata
 async function readExistingPriceData(
 	storage: StorageProvider,
 	chainName: string,
 	token: { symbol: string; address: string },
-): Promise<Array<{ date: string; price: string }> | null> {
+): Promise<{
+	prices: Array<{ date: string; price: string }> | null
+	lastFetchTimestamp: string | null
+	pricesFoundInLastFetch: boolean
+	previousMethod: "classic" | "onchain" | "none"
+}> {
 	const sanitizedSymbol = token.symbol.replace(/[/\\]/g, "")
 	const filename = `daily-prices/${chainName}/${sanitizedSymbol}_${token.address}.json`
 
 	try {
 		const existingData = await storage.get(filename)
-		if (!existingData) return null
+		if (!existingData) {
+			return {
+				prices: null,
+				lastFetchTimestamp: null,
+				pricesFoundInLastFetch: false,
+				previousMethod: "none",
+			}
+		}
 
-		const parsed = JSON.parse(existingData)
-		// Support both old format (with full token data) and new format (with tokenReference)
-		// This ensures backward compatibility during transition
-		return parsed.pricesUsd || null
+		const parsed: StoredPriceData = JSON.parse(existingData)
+		const prices = parsed.pricesUsd || null
+		const lastFetchTimestamp = parsed.fetchedAt || parsed.timestamp || null
+		const pricesFoundInLastFetch = Boolean(prices && prices.length > 0)
+		const previousMethod = parsed.method || "none"
+
+		return { prices, lastFetchTimestamp, pricesFoundInLastFetch, previousMethod }
 	} catch (_error) {
 		// File doesn't exist or is invalid
-		return null
+		return {
+			prices: null,
+			lastFetchTimestamp: null,
+			pricesFoundInLastFetch: false,
+			previousMethod: "none",
+		}
 	}
+}
+
+// Helper function to determine if a token should be updated based on tiered strategy
+function shouldUpdateToken(
+	token: { totalNumberOfHolders: number; isListed: boolean },
+	lastFetchTimestamp: string | null,
+	pricesFoundInLastFetch: boolean,
+): boolean {
+	// Always update if we never attempted a fetch
+	if (!lastFetchTimestamp) {
+		return true
+	}
+
+	const now = new Date()
+	const lastFetch = new Date(lastFetchTimestamp)
+	const hoursSinceLastFetch = (now.getTime() - lastFetch.getTime()) / (1000 * 60 * 60)
+
+	// Listed tokens or high activity: update daily (24 hours)
+	if (token.isListed || token.totalNumberOfHolders > 100) {
+		return hoursSinceLastFetch >= 24
+	}
+
+	// Semi-active tokens: update every 3 days (72 hours)
+	if (token.totalNumberOfHolders >= 50) {
+		return hoursSinceLastFetch >= 72
+	}
+
+	// Low activity tokens: update weekly (168 hours)
+	return hoursSinceLastFetch >= 168
 }
 
 // Helper function to merge price data (newer data takes precedence)
@@ -218,7 +280,7 @@ async function processSingleToken(
 			const platformId = coingeckoMappings.metadata?.chainIdToPlatformIds?.[token.chainId]
 
 			if (platformId) {
-				const newPrices = await fetchOnchainPrices(token, platformId)
+				const newPrices = await fetchOnchainPrices(token, platformId, daysToFetch)
 				const prices = existingPrices ? mergePriceData(existingPrices, newPrices) : newPrices
 				return {
 					token,
@@ -308,6 +370,21 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 		totalTokens: coingeckoMappings.totalSuperTokens,
 	})
 
+	// First, filter out dead tokens (≤5 holders) unless they are listed
+	const activeTokens = aggregatedData.tokens.filter((token) => {
+		if (token.isListed) return true // Always include listed tokens
+		return token.totalNumberOfHolders > 5 // Only include unlisted tokens with >5 holders
+	})
+
+	const skippedTokens = aggregatedData.tokens.length - activeTokens.length
+	if (skippedTokens > 0) {
+		logger.info("Skipped dead tokens", {
+			skipped: skippedTokens,
+			total: aggregatedData.tokens.length,
+			remaining: activeTokens.length,
+		})
+	}
+
 	// Process tokens with optional limit or specific token - distribute across chains for better testing
 	let tokensToProcess: typeof aggregatedData.tokens
 	let modeDescription: string
@@ -315,10 +392,10 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 	if (specificTokenAddress) {
 		// Filter for specific token address (case-insensitive)
 		const normalizedAddress = specificTokenAddress.toLowerCase()
-		tokensToProcess = aggregatedData.tokens.filter((token) => token.address.toLowerCase() === normalizedAddress)
+		tokensToProcess = activeTokens.filter((token) => token.address.toLowerCase() === normalizedAddress)
 
 		if (tokensToProcess.length === 0) {
-			throw new Error(`Token with address '${specificTokenAddress}' not found in super token data`)
+			throw new Error(`Token with address '${specificTokenAddress}' not found in active token data`)
 		}
 
 		modeDescription = `specific token ${specificTokenAddress} (${tokensToProcess.length} instance${tokensToProcess.length > 1 ? "s" : ""} across chains)`
@@ -329,10 +406,17 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 		})
 	} else if (tokenLimit) {
 		// When limiting, prioritize listed tokens and distribute across chains
-		const tokensPerChain = Math.ceil(tokenLimit / tokensByChain.size)
+		const activeTokensByChain = new Map<number, typeof aggregatedData.tokens>()
+		for (const token of activeTokens) {
+			const chainTokens = activeTokensByChain.get(token.chainId) || []
+			chainTokens.push(token)
+			activeTokensByChain.set(token.chainId, chainTokens)
+		}
+
+		const tokensPerChain = Math.ceil(tokenLimit / activeTokensByChain.size)
 		const selectedTokens: typeof aggregatedData.tokens = []
 
-		for (const [, chainTokens] of tokensByChain) {
+		for (const [, chainTokens] of activeTokensByChain) {
 			// Sort tokens: listed tokens first, then by holder count (descending)
 			const sortedTokens = chainTokens
 				.slice() // Create a copy to avoid mutating original
@@ -352,10 +436,10 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 
 		tokensToProcess = selectedTokens.slice(0, tokenLimit)
 		const listedCount = tokensToProcess.filter((t) => t.isListed).length
-		modeDescription = `${tokenLimit} tokens distributed across chains (${listedCount} listed, limited)`
+		modeDescription = `${tokenLimit} active tokens distributed across chains (${listedCount} listed, limited)`
 	} else {
-		tokensToProcess = aggregatedData.tokens
-		modeDescription = `all ${tokensToProcess.length} tokens`
+		tokensToProcess = activeTokens
+		modeDescription = `all ${tokensToProcess.length} active tokens (skipped ${skippedTokens} dead tokens)`
 	}
 	logger.info("Processing mode", { mode: modeDescription })
 
@@ -367,15 +451,47 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 		limit(async () => {
 			await new Promise((resolve) => setTimeout(resolve, API_CALL_DELAY_MS))
 
-			// Read existing price data if available
+			// Read existing price data and metadata
 			const chainName = aggregatedData.chains[token.chainId]?.name || `chain-${token.chainId}`
-			const existingPrices = await readExistingPriceData(storage, chainName, token)
+			const {
+				prices: existingPrices,
+				lastFetchTimestamp,
+				pricesFoundInLastFetch,
+				previousMethod,
+			} = await readExistingPriceData(storage, chainName, token)
+
+			// Check if this token should be updated based on tiered strategy
+			const shouldUpdate = shouldUpdateToken(token, lastFetchTimestamp, pricesFoundInLastFetch)
+
+			if (!shouldUpdate) {
+				logger.info("Skipping token due to tiered refresh strategy", {
+					symbol: token.symbol,
+					holders: token.totalNumberOfHolders,
+					isListed: token.isListed,
+					lastFetchTimestamp,
+					pricesFoundInLastFetch,
+				})
+
+				// Return existing data without fetching new prices
+				return {
+					token,
+					coingeckoId: coingeckoMappings.mappings[token.chainId]?.[token.address.toLowerCase()],
+					prices: existingPrices || [],
+					method: previousMethod,
+				}
+			}
 
 			if (existingPrices && existingPrices.length > 0) {
-				logger.info("Found existing prices", {
+				logger.info("Found existing prices, will update", {
 					symbol: token.symbol,
 					existingPriceCount: existingPrices.length,
+					lastFetchTimestamp,
 					mode: "update",
+				})
+			} else {
+				logger.info("No existing prices, will fetch full history", {
+					symbol: token.symbol,
+					mode: "new",
 				})
 			}
 
@@ -452,6 +568,7 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 			coingeckoId,
 			fetchedAt: timestamp,
 			pricesUsd: prices,
+			method: tokenData.method,
 		}
 
 		try {
