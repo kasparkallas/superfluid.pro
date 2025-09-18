@@ -9,28 +9,28 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"fumadocs-core": "15.6.12",
-		"fumadocs-mdx": "11.7.5",
-		"fumadocs-ui": "15.6.12",
-		"mermaid": "^11.10.1",
+		"fumadocs-core": "15.7.12",
+		"fumadocs-mdx": "11.10.0",
+		"fumadocs-ui": "15.7.12",
+		"mermaid": "^11.12.0",
 		"next": "15.4.7",
 		"next-themes": "^0.4.6",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1"
 	},
 	"devDependencies": {
-		"@tailwindcss/postcss": "^4.1.12",
+		"@tailwindcss/postcss": "^4.1.13",
 		"@types/mdx": "^2.0.13",
 		"@types/node": "24.3.0",
-		"@types/react": "^19.1.11",
-		"@types/react-dom": "^19.1.7",
-		"fumadocs-typescript": "^4.0.6",
+		"@types/react": "^19.1.13",
+		"@types/react-dom": "^19.1.9",
+		"fumadocs-typescript": "^4.0.8",
 		"postcss": "^8.5.6",
 		"remark": "^15.0.1",
 		"remark-gfm": "^4.0.1",
-		"remark-mdx": "^3.1.0",
-		"tailwindcss": "^4.1.12",
+		"remark-mdx": "^3.1.1",
+		"tailwindcss": "^4.1.13",
 		"typescript": "^5.9.2"
 	},
-	"tyoe": "module"
+	"type": "module"
 }
