@@ -86,6 +86,9 @@ export async function syncTokensFromDataApi() {
 			updateData.tokenType = tokenType
 			updateData.underlyingAddress = underlyingAddress
 
+			// Update listed status - keep as listed if either source shows it as listed
+			updateData.isListed = dataApiToken.isListed || existingToken.isListed
+
 			// Update CoinGecko ID if available
 			if (coingeckoId) {
 				updateData.coingeckoId = coingeckoId
@@ -133,6 +136,7 @@ export async function syncTokensFromDataApi() {
 						tokenType,
 						underlyingAddress,
 						coingeckoId: coingeckoId || undefined, // Include CoinGecko ID if available
+						isListed: dataApiToken.isListed,
 						order: 0,
 					},
 				})
