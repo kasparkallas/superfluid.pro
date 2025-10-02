@@ -21773,7 +21773,8 @@ const merger = new(BareMerger as any)({
         store: rootStore.child('bareMerger')
       })
 const documentHashMap = {
-        "bdf7d32258bb3fcbeb4b24de95187ca54d761c40c897afb9cb947a76d171c836": FetchTokensStatisticsDocument
+        "1918e1373f4d3be8e02b237548ec7de0294798c188ce8df52dee32d530b345b5": FetchAllTokensDocument,
+"bdf7d32258bb3fcbeb4b24de95187ca54d761c40c897afb9cb947a76d171c836": FetchTokensStatisticsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -21795,6 +21796,13 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
+        document: FetchAllTokensDocument,
+        get rawSDL() {
+          return printWithCache(FetchAllTokensDocument);
+        },
+        location: 'FetchAllTokensDocument.graphql',
+        sha256Hash: '1918e1373f4d3be8e02b237548ec7de0294798c188ce8df52dee32d530b345b5'
+      },{
         document: FetchTokensStatisticsDocument,
         get rawSDL() {
           return printWithCache(FetchTokensStatisticsDocument);
@@ -21855,6 +21863,13 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
+export type FetchAllTokensQueryVariables = Exact<{
+  id_gt: Scalars['ID']['input'];
+}>;
+
+
+export type FetchAllTokensQuery = { tokens: Array<Pick<Token, 'id' | 'name' | 'decimals' | 'symbol' | 'underlyingAddress' | 'isListed' | 'isNativeAssetSuperToken' | 'isSuperToken'>> };
+
 export type FetchTokensStatisticsQueryVariables = Exact<{
   id_gt: Scalars['ID']['input'];
 }>;
@@ -21866,6 +21881,20 @@ export type FetchTokensStatisticsQuery = { tokenStatistics: Array<(
   )> };
 
 
+export const FetchAllTokensDocument = gql`
+    query FetchAllTokens($id_gt: ID!) {
+  tokens(first: 1000, where: {id_gt: $id_gt}) {
+    id
+    name
+    decimals
+    symbol
+    underlyingAddress
+    isListed
+    isNativeAssetSuperToken
+    isSuperToken
+  }
+}
+    ` as unknown as DocumentNode<FetchAllTokensQuery, FetchAllTokensQueryVariables>;
 export const FetchTokensStatisticsDocument = gql`
     query FetchTokensStatistics($id_gt: ID!) {
   tokenStatistics(
@@ -21884,9 +21913,13 @@ export const FetchTokensStatisticsDocument = gql`
     ` as unknown as DocumentNode<FetchTokensStatisticsQuery, FetchTokensStatisticsQueryVariables>;
 
 
+
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
+    FetchAllTokens(variables: FetchAllTokensQueryVariables, options?: C): Promise<FetchAllTokensQuery> {
+      return requester<FetchAllTokensQuery, FetchAllTokensQueryVariables>(FetchAllTokensDocument, variables, options) as Promise<FetchAllTokensQuery>;
+    },
     FetchTokensStatistics(variables: FetchTokensStatisticsQueryVariables, options?: C): Promise<FetchTokensStatisticsQuery> {
       return requester<FetchTokensStatisticsQuery, FetchTokensStatisticsQueryVariables>(FetchTokensStatisticsDocument, variables, options) as Promise<FetchTokensStatisticsQuery>;
     }

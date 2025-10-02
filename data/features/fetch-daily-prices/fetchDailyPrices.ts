@@ -201,7 +201,7 @@ async function readExistingPriceData(
 function shouldUpdateToken(
 	token: { totalNumberOfHolders: number; isListed: boolean },
 	lastFetchTimestamp: string | null,
-	pricesFoundInLastFetch: boolean,
+	_pricesFoundInLastFetch: boolean,
 ): boolean {
 	// Always update if we never attempted a fetch
 	if (!lastFetchTimestamp) {

@@ -1,6 +1,6 @@
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { getAllExistingTokens, hasChanges } from "."
+import { getAllExistingTokens, hasChanges, mergeTags, shouldUpdateLogoUri } from "."
 
 // # Types
 interface StremeToken {
@@ -117,17 +117,15 @@ export async function syncFromStreme() {
 			updateData.isListed = false
 
 			// Update logoUri if available and current one is empty
-			if (stremeToken.img_url && (!existingToken.logoUri || existingToken.logoUri === "")) {
+			if (shouldUpdateLogoUri(existingToken.logoUri, stremeToken.img_url)) {
 				updateData.logoUri = stremeToken.img_url
 			}
 
 			// Add Streme-specific tags if they don't exist
-			const existingTags = existingToken.tags || []
 			const stremeTags = ["streme", "supertoken"] as const
-			const missingTags = stremeTags.filter((tag) => !existingTags.includes(tag))
-
-			if (missingTags.length > 0) {
-				updateData.tags = [...new Set([...existingTags, ...missingTags])]
+			const mergedTags = mergeTags(existingToken.tags, [...stremeTags])
+			if (mergedTags) {
+				updateData.tags = mergedTags
 			}
 
 			// Only update if there are changes

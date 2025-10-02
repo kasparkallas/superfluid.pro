@@ -1,7 +1,15 @@
 import { fetchLatestExtendedSuperTokenList } from "@superfluid-finance/tokenlist"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { getAllExistingTokens, hasChanges, type TokenTag, type TokenType, type TokenTypeInfo } from "."
+import {
+	getAllExistingTokens,
+	hasChanges,
+	mergeTags,
+	shouldUpdateLogoUri,
+	type TokenTag,
+	type TokenType,
+	type TokenTypeInfo,
+} from "."
 
 // # Types
 export interface SuperTokenInfo {
@@ -28,17 +36,15 @@ export async function syncTokensFromTokenList() {
 			updateData.isListed = true
 
 			// Update logoUri only if current one is empty/null and new one is available
-			if ((!existingToken.logoUri || existingToken.logoUri === "") && token.logoURI) {
+			if (shouldUpdateLogoUri(existingToken.logoUri, token.logoURI)) {
 				updateData.logoUri = token.logoURI
 			}
 
 			// Update tags by adding missing ones
-			const existingTags = existingToken.tags || []
-			const newTags = token.tags || []
-			const missingTags = newTags.filter((tag) => !existingTags.includes(tag as TokenTag))
-
-			if (missingTags.length > 0) {
-				updateData.tags = [...new Set([...existingTags, ...missingTags])] as TokenTag[]
+			const newTags = (token.tags || []) as TokenTag[]
+			const mergedTags = mergeTags(existingToken.tags, newTags)
+			if (mergedTags) {
+				updateData.tags = mergedTags
 			}
 
 			// Only update if there are changes

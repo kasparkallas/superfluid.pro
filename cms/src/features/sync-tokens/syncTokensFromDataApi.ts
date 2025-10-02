@@ -1,7 +1,6 @@
-import superfluidMetadata from "@superfluid-finance/metadata"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { getAllExistingTokens, hasChanges, type TokenTag, type TokenType, type TokenTypeInfo } from "."
+import { getAllExistingTokens, getTokenTags, hasChanges, mergeTags, type TokenType, type TokenTypeInfo } from "."
 
 // # Types
 interface DataApiToken {
@@ -100,11 +99,9 @@ export async function syncTokensFromDataApi() {
 			}
 
 			// Merge tags - add data API tags that don't already exist
-			const existingTags = existingToken.tags || []
-			const missingTags = dataApiTags.filter((tag) => !existingTags.includes(tag))
-
-			if (missingTags.length > 0) {
-				updateData.tags = [...new Set([...existingTags, ...missingTags])]
+			const mergedTags = mergeTags(existingToken.tags, dataApiTags)
+			if (mergedTags) {
+				updateData.tags = mergedTags
 			}
 
 			// Only update if there are changes
@@ -173,26 +170,4 @@ export function getTokenTypeFromDataApi(dataApiToken: DataApiToken): TokenTypeIn
 		tokenType,
 		underlyingAddress,
 	}
-}
-
-export function getTokenTags(tokenType: TokenType, chainId: number): TokenTag[] {
-	const tags: TokenTag[] = []
-
-	// Add "supertoken" tag for all super token types
-	if (tokenType === "pureSuperToken" || tokenType === "nativeAssetSuperToken" || tokenType === "wrapperSuperToken") {
-		tags.push("supertoken")
-	}
-
-	// Add "underlying" tag for underlying tokens
-	if (tokenType === "underlyingToken") {
-		tags.push("underlying")
-	}
-
-	// Check if the chain is a testnet
-	const network = superfluidMetadata.testnets.find((n) => n.chainId === chainId)
-	if (network?.isTestnet) {
-		tags.push("testnet")
-	}
-
-	return tags
 }

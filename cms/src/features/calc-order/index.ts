@@ -1,4 +1,4 @@
-import { getAllTokensForOrderCalculation } from "@/features/sync-tokens"
+import { getAllChains, getAllTokensForOrderCalculation } from "@/features/sync-tokens"
 import { getPayloadInstance } from "@/payload"
 import type { Chain } from "@/payload-types"
 import type { FetchTokensStatisticsQuery } from "@/subgraph-protocol"
@@ -66,37 +66,6 @@ function calculateOrderScore(params: OrderScoreParams): number {
 
 	// Round to integer
 	return Math.round(score)
-}
-
-/**
- * Fetch all mainnet chains from Payload CMS (excludes testnets)
- */
-async function getMainnetChains(): Promise<Chain[]> {
-	const payload = await getPayloadInstance()
-	const chains: Chain[] = []
-	let page = 1
-	const limit = 100
-
-	while (true) {
-		const result = await payload.find({
-			collection: "chains",
-			page,
-			limit,
-			where: {
-				isTestnet: { equals: false },
-			},
-		})
-
-		chains.push(...result.docs)
-
-		if (result.docs.length < limit) {
-			break
-		}
-
-		page++
-	}
-
-	return chains
 }
 
 /**
@@ -250,7 +219,7 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 
 	// Fetch all data
 	console.log("\n1. Fetching mainnet chains...")
-	const chains = await getMainnetChains()
+	const chains = await getAllChains("mainnetsOnly")
 	console.log(`   Found ${chains.length} mainnet chains`)
 
 	console.log("\n2. Fetching token statistics from subgraphs...")
