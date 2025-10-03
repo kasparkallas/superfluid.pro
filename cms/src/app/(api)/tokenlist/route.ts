@@ -1,32 +1,34 @@
 import superfluidMetadata from "@superfluid-finance/metadata"
-import type { TokenInfo as OriginalTokenInfo, TokenList } from "@uniswap/token-lists"
+import type { SuperTokenInfo, TokenInfo } from "@superfluid-finance/tokenlist"
+import type { TokenList } from "@uniswap/token-lists"
 import { orderBy } from "lodash-es"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
 
-// SuperToken extension types
-export type SuperTokenExtensions = {
-	readonly extensions: {
-		readonly superTokenInfo:
-			| {
-					readonly type: "Pure" | "Native Asset"
-			  }
-			| {
-					readonly type: "Wrapper"
-					readonly underlyingTokenAddress: `0x${string}`
-			  }
-	}
-}
-
-export interface TokenInfo extends Omit<OriginalTokenInfo, "address"> {
-	readonly address: `0x${string}`
-}
-
-export type SuperTokenInfo = TokenInfo & SuperTokenExtensions
 type UnderlyingTokenInfo = TokenInfo
 
+// Custom SuperTokenList that allows both SuperTokenInfo and UnderlyingTokenInfo
+// and includes tags metadata
 export type SuperTokenList = Omit<TokenList, "tokens"> & {
 	readonly tokens: (SuperTokenInfo | UnderlyingTokenInfo)[]
+	readonly tags?: {
+		readonly supertoken?: {
+			readonly name: string
+			readonly description: string
+		}
+		readonly underlying?: {
+			readonly name: string
+			readonly description: string
+		}
+		readonly testnet?: {
+			readonly name: string
+			readonly description: string
+		}
+		readonly streme?: {
+			readonly name: string
+			readonly description: string
+		}
+	}
 }
 
 // Helper function to map CMS token to TokenList format
@@ -47,6 +49,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 			return {
 				...baseToken,
 				extensions: {
+					...(token.order != null && { orderingScore: token.order }),
 					superTokenInfo: {
 						type: "Pure",
 					},
@@ -57,6 +60,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 			return {
 				...baseToken,
 				extensions: {
+					...(token.order != null && { orderingScore: token.order }),
 					superTokenInfo: {
 						type: "Native Asset",
 					},
@@ -69,6 +73,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 				return {
 					...baseToken,
 					extensions: {
+						...(token.order != null && { orderingScore: token.order }),
 						superTokenInfo: {
 							type: "Pure",
 						},
@@ -78,6 +83,7 @@ function mapTokenToTokenListFormat(token: Token): SuperTokenInfo | UnderlyingTok
 			return {
 				...baseToken,
 				extensions: {
+					...(token.order != null && { orderingScore: token.order }),
 					superTokenInfo: {
 						type: "Wrapper",
 						underlyingTokenAddress: token.underlyingAddress as `0x${string}`,
@@ -226,23 +232,12 @@ export const GET = async (request: Request) => {
 		for (const chainId of chainIds) {
 			const chainTokens = tokensByChain.get(chainId) || []
 
-			// Separate Super Tokens from underlying tokens
-			const superTokens = chainTokens.filter(
-				(t) =>
-					t.tokenType === "pureSuperToken" ||
-					t.tokenType === "nativeAssetSuperToken" ||
-					t.tokenType === "wrapperSuperToken",
-			)
-			const underlyingTokens = chainTokens.filter((t) => t.tokenType === "underlyingToken")
+			// Sort all tokens by symbol - this naturally groups super tokens with their underlying tokens
+			// (e.g., ARB near ARBx, USDC near USDCx)
+			const sortedChainTokens = orderBy(chainTokens, ["symbol"], ["asc"])
 
-			// Sort Super Tokens by order (descending - higher order = more important = comes first), then by symbol
-			const sortedSuperTokens = orderBy(superTokens, ["order", "symbol"], ["desc", "asc"])
-
-			// Sort underlying tokens by symbol only (alphabetical)
-			const sortedUnderlyingTokens = orderBy(underlyingTokens, ["symbol"], ["asc"])
-
-			// Add to final array: Super Tokens first, then underlying tokens
-			sortedTokens.push(...sortedSuperTokens, ...sortedUnderlyingTokens)
+			// Add to final array
+			sortedTokens.push(...sortedChainTokens)
 		}
 
 		// Find the most recent update timestamp from all tokens
@@ -269,6 +264,24 @@ export const GET = async (request: Request) => {
 				patch: new Date(latestUpdate).getTime() - new Date("2025-01-01").getTime(),
 			},
 			tokens: sortedTokens.map(mapTokenToTokenListFormat),
+			tags: {
+				supertoken: {
+					name: "SuperToken",
+					description: "This is a supertoken, learn more from the extensions.",
+				},
+				underlying: {
+					name: "Underlying Token",
+					description: "This is an underlying token, of a supertoken.",
+				},
+				testnet: {
+					name: "Testnet",
+					description: "This is a testnet token.",
+				},
+				streme: {
+					name: "Streme",
+					description: "This is a token from streme.fun",
+				},
+			},
 		}
 
 		return Response.json(tokenList)
