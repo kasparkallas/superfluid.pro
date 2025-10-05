@@ -318,6 +318,34 @@ export const lockerAbi = [
   },
   {
     type: 'function',
+    inputs: [
+      { name: 'programId', internalType: 'uint256', type: 'uint256' },
+      { name: 'totalProgramUnits', internalType: 'uint256', type: 'uint256' },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claimAndStake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claimAndStake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'collectFees',
     outputs: [
@@ -371,6 +399,31 @@ export const lockerAbi = [
       { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'disconnectAndClaim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'programIdsToDisconnect',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'programIdsToClaim',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'disconnectAndClaimAndStake',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -669,7 +722,25 @@ export const lockerAbi = [
     ],
     name: 'FluidUnlocked',
   },
-  { type: 'event', anonymous: false, inputs: [], name: 'FluidUnstaked' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'newTotalStakedBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'removedAmount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'FluidUnstaked',
+  },
   {
     type: 'event',
     anonymous: false,
@@ -682,6 +753,32 @@ export const lockerAbi = [
       },
     ],
     name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'LiquidityPositionBurned',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'LiquidityPositionCreated',
   },
   { type: 'error', inputs: [], name: 'FORBIDDEN' },
   { type: 'error', inputs: [], name: 'INSUFFICIENT_AVAILABLE_BALANCE' },

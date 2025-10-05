@@ -325,6 +325,34 @@ export const lockerAbi = [
   },
   {
     type: 'function',
+    inputs: [
+      { name: 'programId', internalType: 'uint256', type: 'uint256' },
+      { name: 'totalProgramUnits', internalType: 'uint256', type: 'uint256' },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claimAndStake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'programIds', internalType: 'uint256[]', type: 'uint256[]' },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'claimAndStake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'collectFees',
     outputs: [
@@ -378,6 +406,31 @@ export const lockerAbi = [
       { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
     ],
     name: 'disconnectAndClaim',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'programIdsToDisconnect',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'programIdsToClaim',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      {
+        name: 'totalProgramUnits',
+        internalType: 'uint256[]',
+        type: 'uint256[]',
+      },
+      { name: 'nonce', internalType: 'uint256', type: 'uint256' },
+      { name: 'stackSignature', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'disconnectAndClaimAndStake',
     outputs: [],
     stateMutability: 'nonpayable',
   },
@@ -676,7 +729,25 @@ export const lockerAbi = [
     ],
     name: 'FluidUnlocked',
   },
-  { type: 'event', anonymous: false, inputs: [], name: 'FluidUnstaked' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'newTotalStakedBalance',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'removedAmount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'FluidUnstaked',
+  },
   {
     type: 'event',
     anonymous: false,
@@ -689,6 +760,32 @@ export const lockerAbi = [
       },
     ],
     name: 'Initialized',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'LiquidityPositionBurned',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'LiquidityPositionCreated',
   },
   { type: 'error', inputs: [], name: 'FORBIDDEN' },
   { type: 'error', inputs: [], name: 'INSUFFICIENT_AVAILABLE_BALANCE' },
@@ -3104,6 +3201,13 @@ export const useWriteLockerClaim = /*#__PURE__*/ createUseWriteContract({
 })
 
 /**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"claimAndStake"`
+ */
+export const useWriteLockerClaimAndStake = /*#__PURE__*/ createUseWriteContract(
+  { abi: lockerAbi, functionName: 'claimAndStake' },
+)
+
+/**
  * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"collectFees"`
  */
 export const useWriteLockerCollectFees = /*#__PURE__*/ createUseWriteContract({
@@ -3134,6 +3238,15 @@ export const useWriteLockerDisconnectAndClaim =
   /*#__PURE__*/ createUseWriteContract({
     abi: lockerAbi,
     functionName: 'disconnectAndClaim',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnectAndClaimAndStake"`
+ */
+export const useWriteLockerDisconnectAndClaimAndStake =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: lockerAbi,
+    functionName: 'disconnectAndClaimAndStake',
   })
 
 /**
@@ -3219,6 +3332,15 @@ export const useSimulateLockerClaim = /*#__PURE__*/ createUseSimulateContract({
 })
 
 /**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"claimAndStake"`
+ */
+export const useSimulateLockerClaimAndStake =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'claimAndStake',
+  })
+
+/**
  * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"collectFees"`
  */
 export const useSimulateLockerCollectFees =
@@ -3250,6 +3372,15 @@ export const useSimulateLockerDisconnectAndClaim =
   /*#__PURE__*/ createUseSimulateContract({
     abi: lockerAbi,
     functionName: 'disconnectAndClaim',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link lockerAbi}__ and `functionName` set to `"disconnectAndClaimAndStake"`
+ */
+export const useSimulateLockerDisconnectAndClaimAndStake =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: lockerAbi,
+    functionName: 'disconnectAndClaimAndStake',
   })
 
 /**
@@ -3387,6 +3518,24 @@ export const useWatchLockerInitializedEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: lockerAbi,
     eventName: 'Initialized',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"LiquidityPositionBurned"`
+ */
+export const useWatchLockerLiquidityPositionBurnedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: lockerAbi,
+    eventName: 'LiquidityPositionBurned',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link lockerAbi}__ and `eventName` set to `"LiquidityPositionCreated"`
+ */
+export const useWatchLockerLiquidityPositionCreatedEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: lockerAbi,
+    eventName: 'LiquidityPositionCreated',
   })
 
 /**
