@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.8
+
+### Patch Changes
+
+- 2144fd8: Update SupLocker contract
+
 ## 0.1.7
 
 ### Patch Changes
