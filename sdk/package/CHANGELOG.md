@@ -1,5 +1,11 @@
 # @sfpro/sdk
 
+## 0.1.9
+
+### Patch Changes
+
+- cbbda9a: Update Locker contract ABI
+
 ## 0.1.8
 
 ### Patch Changes
