@@ -145,6 +145,7 @@ export const lockerAbi = [
         internalType: 'contract IV3SwapRouter',
         type: 'address',
       },
+      { name: 'daoTreasury', internalType: 'address', type: 'address' },
     ],
     stateMutability: 'nonpayable',
   },
@@ -162,6 +163,13 @@ export const lockerAbi = [
     inputs: [],
     name: 'BP_SLIPPAGE_TOLERANCE',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'DAO_TREASURY',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
     stateMutability: 'view',
   },
   {
@@ -277,6 +285,13 @@ export const lockerAbi = [
   {
     type: 'function',
     inputs: [],
+    name: 'UNLOCKING_FEE',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [],
     name: 'UNLOCK_AVAILABLE',
     outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
     stateMutability: 'view',
@@ -349,7 +364,7 @@ export const lockerAbi = [
     inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
     name: 'collectFees',
     outputs: [
-      { name: 'collectedWeth', internalType: 'uint256', type: 'uint256' },
+      { name: 'collectedEthx', internalType: 'uint256', type: 'uint256' },
       { name: 'collectedSup', internalType: 'uint256', type: 'uint256' },
     ],
     stateMutability: 'nonpayable',
@@ -548,7 +563,9 @@ export const lockerAbi = [
     type: 'function',
     inputs: [{ name: 'supAmount', internalType: 'uint256', type: 'uint256' }],
     name: 'provideLiquidity',
-    outputs: [],
+    outputs: [
+      { name: 'positionTokenId', internalType: 'uint256', type: 'uint256' },
+    ],
     stateMutability: 'payable',
   },
   {
@@ -591,7 +608,7 @@ export const lockerAbi = [
     ],
     name: 'unlock',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
   },
   {
     type: 'function',
@@ -786,6 +803,7 @@ export const lockerAbi = [
   { type: 'error', inputs: [], name: 'INSUFFICIENT_ETH_SENT' },
   { type: 'error', inputs: [], name: 'INSUFFICIENT_STAKED_BALANCE' },
   { type: 'error', inputs: [], name: 'INSUFFICIENT_UNLOCK_AMOUNT' },
+  { type: 'error', inputs: [], name: 'INVALID_UNLOCKING_FEE' },
   { type: 'error', inputs: [], name: 'INVALID_UNLOCK_PERIOD' },
   { type: 'error', inputs: [], name: 'InvalidInitialization' },
   { type: 'error', inputs: [], name: 'LIQUIDITY_POOL_NOT_APPROVED' },
