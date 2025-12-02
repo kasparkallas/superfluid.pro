@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { syncTokensFromDataApi } from "@/features/sync-tokens"
+import { syncTokensFromDataApi } from "@/domains/tokens/features/sync-tokens"
 
 // Task definition - sync tokens from Superfluid data API (includes CoinGecko mappings)
 export const syncDataApiScheduled = schedules.task({

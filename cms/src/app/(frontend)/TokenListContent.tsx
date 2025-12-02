@@ -1,12 +1,9 @@
 "use client"
 import { ExternalLink } from "lucide-react"
-import { TokenCard } from "@/components/TokenCard"
-import { TokenFilter } from "@/components/TokenFilters"
-import { TokenTable } from "@/components/TokenTable"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { useTokenQueryParams } from "@/hooks/useTokenQueryParams"
-import { useTokens } from "@/hooks/useTokens"
+import { TokenCard, TokenFilter, TokenTable } from "@/domains/tokens/components"
+import { useTokenQueryParams, useTokens } from "@/domains/tokens/hooks"
 
 export function TokenListContent() {
 	const { page, filters, viewMode, setFilters, setPage, setViewMode, resetFilters } = useTokenQueryParams()

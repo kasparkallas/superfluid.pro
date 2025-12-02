@@ -1,21 +1,9 @@
+import type { TokenResponse } from "@/domains/tokens/types"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
 import { fetchTokenPrice, type TokenPrice } from "@/utils/pricing"
 
-interface TokenResponse {
-	id: string
-	chainId: number
-	address: string
-	name: string
-	symbol: string
-	decimals: number
-	logoUri?: string | null
-	isListed?: boolean | null
-	coingeckoId?: string | null
-	tags?: ("streme" | "testnet" | "underlying" | "supertoken")[] | null
-	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken"
-	underlyingAddress?: string | null
-	note?: string | null
+interface TokenResponseWithPricing extends TokenResponse {
 	pricing?: TokenPrice
 }
 
@@ -59,7 +47,7 @@ export async function GET(request: Request, context: { params: Promise<{ chainId
 		}
 
 		// Transform token to API format
-		const transformedToken: TokenResponse = {
+		const transformedToken: TokenResponseWithPricing = {
 			id: token.id,
 			chainId: token.chainId,
 			address: token.address,

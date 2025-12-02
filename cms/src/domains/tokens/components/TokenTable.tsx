@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import type { TokenResponse } from "@/types/tokens"
+import type { TokenResponse } from "../types"
 
 interface TokenTableProps {
 	tokens: TokenResponse[]

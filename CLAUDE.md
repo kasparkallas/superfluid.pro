@@ -105,6 +105,8 @@ Both documentation sites use Fumadocs with:
 
 ### CMS Architecture
 - Payload CMS v3 with SQLite database
+- Domain-based folder structure (`src/domains/tokens/`) for feature organization
+- Each domain contains: types, collections, components, hooks, features, trigger jobs
 - Collections: Users, Media, Tokens, Chains
 - Data sync from multiple sources (tokenlist, API, Streme.fun)
 - Composite IDs for tokens using `chainId:address` pattern

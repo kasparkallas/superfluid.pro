@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { syncFromStreme } from "@/features/sync-tokens"
+import { syncFromStreme } from "@/domains/tokens/features/sync-tokens"
 
 // Task definition - sync tokens from Streme.fun community platform
 export const syncStremeScheduled = schedules.task({

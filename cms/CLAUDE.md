@@ -33,9 +33,25 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - **TypeScript**: Auto-generated types in `src/payload-types.ts`
 - **Authentication**: Uses Users collection for admin authentication
 
+### Domain-Based Architecture
+
+The CMS uses a domain-based folder structure for organizing features. Each domain is self-contained with its own types, collections, components, hooks, features, and scheduled tasks.
+
+```
+src/domains/tokens/
+├── types.ts          # Shared types (TokenResponse, PayloadTokensApiResponse)
+├── collections/      # Payload collections (Tokens, Chains)
+├── components/       # React components (TokenCard, TokenTable, TokenFilters)
+├── hooks/            # React hooks (useTokens, useTokenQueryParams)
+├── features/         # Business logic (sync-tokens, sync-chains, calc-order)
+└── trigger/          # Trigger.dev scheduled tasks
+```
+
+API routes remain in `src/app/(api)/` per Next.js App Router convention, but import types from the domain.
+
 ### Key Collections
 
-**Chains Collection** (`src/collections/Chain.ts`):
+**Chains Collection** (`src/domains/tokens/collections/Chains.ts`):
 - Stores Superfluid network metadata (contract addresses, RPCs, subgraph endpoints)
 - Uses comprehensive Zod validation for Ethereum addresses and URLs
 - Organized with grouped fields for contracts (V1), subgraphs, and optional services
@@ -43,7 +59,7 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - Fields include: contractsV1 (resolver, host, cfaV1, gdaV1, etc.), autowrap, subgraph endpoints
 - Synced from `@superfluid-finance/metadata` package
 
-**Tokens Collection** (`src/collections/Tokens.ts`):
+**Tokens Collection** (`src/domains/tokens/collections/Tokens.ts`):
 - Stores token data with auto-generated composite IDs (`chainId:address`)
 - Token types: underlyingToken, pureSuperToken, nativeAssetSuperToken, wrapperSuperToken
 - Validates chain IDs against known Superfluid networks
@@ -53,13 +69,13 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 
 ### Data Synchronization Architecture
 
-**Chain Sync** (`src/features/sync-chains/index.ts`):
+**Chain Sync** (`src/domains/tokens/features/sync-chains/index.ts`):
 - Imports all Superfluid networks from `@superfluid-finance/metadata`
 - Transforms metadata structure to match collection schema
 - Handles array transformations (publicRPCs → array of objects, trustedForwarders → array of objects)
 - Implements upsert logic using chainId as unique identifier
 
-**Token Sync** (`src/features/sync-tokens/`):
+**Token Sync** (`src/domains/tokens/features/sync-tokens/`):
 - Three sync sources with dedicated modules:
   1. **Tokenlist** (`syncTokensFromTokenList.ts`): Official Superfluid tokenlist with extension info for token types
   2. **Data API** (`syncTokensFromDataApi.ts`): Superfluid data API with holder/stream statistics
@@ -69,9 +85,9 @@ This is a Superfluid CMS built with Payload CMS v3, using SQLite for data storag
 - `hasChanges()` function to avoid unnecessary database updates
 - `getAllExistingTokens()` helper for efficient token retrieval
 
-**Automated Sync via Trigger.dev** (`/trigger/`):
+**Automated Sync via Trigger.dev** (`src/domains/tokens/trigger/`):
 - **Chains**: Daily at 02:00 UTC - sync blockchain networks from Superfluid metadata
-- **Tokenlist**: Daily at 02:30 UTC - sync official Superfluid tokenlist 
+- **Tokenlist**: Daily at 02:30 UTC - sync official Superfluid tokenlist
 - **Data API**: Daily at 03:00 UTC - sync from Superfluid data API with CoinGecko mappings
 - **Streme**: Daily at 03:30 UTC - sync community tokens from Streme.fun
 - All tasks configured with retry logic and error handling

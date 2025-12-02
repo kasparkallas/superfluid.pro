@@ -1,5 +1,14 @@
 import { useQuery } from "@tanstack/react-query"
-import type { PayloadTokensApiResponse, TokenQueryParams } from "@/types/tokens"
+import type { TokenFilters } from "../components/TokenFilters"
+import type { PayloadTokensApiResponse, TokenResponse } from "../types"
+
+export interface TokenQueryParams extends TokenFilters {
+	page?: number
+	limit?: number
+	sortBy?: string
+	sortOrder?: "asc" | "desc"
+	includePricing?: boolean
+}
 
 async function fetchTokens(params: TokenQueryParams): Promise<PayloadTokensApiResponse> {
 	const searchParams = new URLSearchParams()

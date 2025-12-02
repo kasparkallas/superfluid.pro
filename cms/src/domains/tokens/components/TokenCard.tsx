@@ -4,8 +4,8 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import type { TokenResponse } from "@/types/tokens"
 import { copyToClipboard, formatAddress } from "@/utils/formatAddress"
+import type { TokenResponse } from "../types"
 
 interface TokenCardProps {
 	token: TokenResponse

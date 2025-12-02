@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { syncFromSubgraph } from "@/features/sync-tokens"
+import { syncFromSubgraph } from "@/domains/tokens/features/sync-tokens"
 
 // Task definition - sync tokens from Superfluid subgraphs (both Super Tokens and underlying tokens)
 export const syncSubgraphScheduled = schedules.task({

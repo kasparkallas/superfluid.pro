@@ -1,7 +1,7 @@
 import superfluidMetadata from "@superfluid-finance/metadata"
 import type { CollectionConfig } from "payload"
 import { isAddress } from "viem"
-import { AccessControl } from "../utils/AccessControl"
+import { AccessControl } from "../../../utils/AccessControl"
 import {
 	addressSchema,
 	decimalsSchema,
@@ -9,7 +9,7 @@ import {
 	symbolSchema,
 	transformAddress,
 	validateWithZod,
-} from "../utils/validation"
+} from "../../../utils/validation"
 
 export const Tokens: CollectionConfig = {
 	slug: "tokens",

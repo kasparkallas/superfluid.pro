@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { calculateAndUpdateTokenOrders } from "@/features/calc-order"
+import { calculateAndUpdateTokenOrders } from "@/domains/tokens/features/calc-order"
 
 // Task definition - calculate and update token order scores
 export const calcOrderScheduled = schedules.task({

@@ -1,4 +1,4 @@
-import { calculateAndUpdateTokenOrders } from "@/features/calc-order"
+import { calculateAndUpdateTokenOrders } from "@/domains/tokens/features/calc-order"
 import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request): Promise<Response> => {

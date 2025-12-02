@@ -1,7 +1,7 @@
 "use client"
 
 import { parseAsBoolean, parseAsInteger, parseAsString, parseAsStringEnum, useQueryStates } from "nuqs"
-import type { TokenFilters } from "@/types/tokens"
+import type { TokenFilters } from "../components/TokenFilters"
 
 export const tokenQueryParsers = {
 	page: parseAsInteger.withDefault(1),

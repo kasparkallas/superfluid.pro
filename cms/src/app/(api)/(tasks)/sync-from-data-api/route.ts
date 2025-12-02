@@ -1,4 +1,4 @@
-import { syncTokensFromDataApi } from "@/features/sync-tokens/syncTokensFromDataApi"
+import { syncTokensFromDataApi } from "@/domains/tokens/features/sync-tokens"
 import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request): Promise<Response> => {

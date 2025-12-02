@@ -3,7 +3,14 @@ import { useCallback, useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import type { TokenFilters as TokenFiltersType } from "@/types/tokens"
+
+export interface TokenFilters {
+	isListed?: boolean
+	tokenType?: string
+	tags?: string
+	search?: string
+	chainId?: number
+}
 
 // Get chains from Superfluid metadata and separate into mainnets and testnets
 const allChains = superfluidMetadata.networks.map((network) => ({
@@ -17,8 +24,8 @@ const mainnets = allChains.filter((chain) => !chain.isTestnet).sort((a, b) => a.
 const testnets = allChains.filter((chain) => chain.isTestnet).sort((a, b) => a.name.localeCompare(b.name))
 
 interface TokenFiltersProps {
-	filters: TokenFiltersType
-	onFiltersChange: (filters: TokenFiltersType | ((prev: TokenFiltersType) => TokenFiltersType)) => void
+	filters: TokenFilters
+	onFiltersChange: (filters: TokenFilters | ((prev: TokenFilters) => TokenFilters)) => void
 	onReset: () => void
 }
 
@@ -26,7 +33,7 @@ export function TokenFilter({ filters, onFiltersChange, onReset }: TokenFiltersP
 	const [searchValue, setSearchValue] = useState(filters.search || "")
 
 	const handleFilterChange = useCallback(
-		(key: keyof TokenFiltersType, value: string | boolean | number | undefined) => {
+		(key: keyof TokenFilters, value: string | boolean | number | undefined) => {
 			onFiltersChange((prevFilters) => ({
 				...prevFilters,
 				[key]: value === "" ? undefined : value,

@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { syncChains } from "@/features/sync-chains"
+import { syncChains } from "@/domains/tokens/features/sync-chains"
 
 // Task definition - sync chains from Superfluid metadata
 export const syncChainsScheduled = schedules.task({

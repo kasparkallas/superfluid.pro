@@ -1,4 +1,4 @@
-import { getAllChains, getAllTokensForOrderCalculation } from "@/features/sync-tokens"
+import { getAllChains, getAllTokensForOrderCalculation } from "@/domains/tokens/features/sync-tokens"
 import { getPayloadInstance } from "@/payload"
 import type { Chain } from "@/payload-types"
 import type { FetchTokensStatisticsQuery } from "@/subgraph-protocol"
@@ -95,7 +95,7 @@ async function fetchAllTokenStatistics(chains: Chain[]): Promise<Map<string, Tok
 				},
 			})
 
-			console.log(`\n   Fetched ${statistics.length} token statistics`)
+			console.log(`\n   Fetched ${statistics.length} token statistics`)
 
 			// Store statistics by token ID (format: chainId:address)
 			for (const stat of statistics) {
@@ -105,7 +105,7 @@ async function fetchAllTokenStatistics(chains: Chain[]): Promise<Map<string, Tok
 				statsMap.set(key, stat)
 			}
 		} catch (error) {
-			console.error(`\n   Failed to fetch statistics for ${chain.humanReadableName}:`, error)
+			console.error(`\n   Failed to fetch statistics for ${chain.humanReadableName}:`, error)
 		}
 	}
 
@@ -220,15 +220,15 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 	// Fetch all data
 	console.log("\n1. Fetching mainnet chains...")
 	const chains = await getAllChains("mainnetsOnly")
-	console.log(`   Found ${chains.length} mainnet chains`)
+	console.log(`   Found ${chains.length} mainnet chains`)
 
 	console.log("\n2. Fetching token statistics from subgraphs...")
 	const statsMap = await fetchAllTokenStatistics(chains)
-	console.log(`   Total statistics fetched: ${statsMap.size}`)
+	console.log(`   Total statistics fetched: ${statsMap.size}`)
 
 	console.log("\n3. Fetching tokens for order calculation...")
 	const tokensMap = await getAllTokensForOrderCalculation()
-	console.log(`   Found ${tokensMap.size} tokens`)
+	console.log(`   Found ${tokensMap.size} tokens`)
 	result.total = tokensMap.size
 
 	// Create a set of mainnet chain IDs for filtering tokens
@@ -278,7 +278,7 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 	tokensMap.clear()
 	statsMap.clear()
 
-	console.log(`   ${tokensWithScores.length} tokens need order updates`)
+	console.log(`   ${tokensWithScores.length} tokens need order updates`)
 
 	// Update tokens with changed scores using batch processing
 	if (tokensWithScores.length > 0) {
@@ -290,9 +290,9 @@ export async function calculateAndUpdateTokenOrders(): Promise<OrderCalculationR
 		result.failed = batchResults.failed
 		result.updatedTokens = batchResults.updatedTokens
 		result.failedTokens = batchResults.failedTokens
-		console.log(`\n Order calculation complete: ${result.updated} updated, ${result.failed} failed`)
+		console.log(`\n Order calculation complete: ${result.updated} updated, ${result.failed} failed`)
 	} else {
-		console.log("\n Order calculation complete: No updates needed")
+		console.log("\n Order calculation complete: No updates needed")
 	}
 
 	return result

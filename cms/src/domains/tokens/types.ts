@@ -1,7 +1,4 @@
-export interface TokenPrice {
-	usd?: number
-	usd_24h_change?: number
-}
+// Shared token types for the tokens domain
 
 export interface TokenResponse {
 	id: string
@@ -17,7 +14,7 @@ export interface TokenResponse {
 	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken"
 	underlyingAddress?: string | null
 	note?: string | null
-	pricing?: TokenPrice
+	order?: number | null
 }
 
 export interface PayloadTokensApiResponse {
@@ -31,20 +28,4 @@ export interface PayloadTokensApiResponse {
 	hasNextPage: boolean
 	prevPage: number | null
 	nextPage: number | null
-}
-
-export interface TokenFilters {
-	isListed?: boolean
-	tokenType?: string
-	tags?: string
-	search?: string
-	chainId?: number
-}
-
-export interface TokenQueryParams extends TokenFilters {
-	page?: number
-	limit?: number
-	sortBy?: string
-	sortOrder?: "asc" | "desc"
-	includePricing?: boolean
 }

@@ -18,7 +18,7 @@ export default defineConfig({
 			randomize: true,
 		},
 	},
-	dirs: ["./src/trigger"],
+	dirs: ["./src/domains/tokens/trigger"],
 	build: {
 		external: ["sharp"],
 	},

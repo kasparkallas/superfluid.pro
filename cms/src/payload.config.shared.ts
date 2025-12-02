@@ -7,10 +7,9 @@ import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob"
 import sharp from "sharp"
-import { Chains } from "./collections/Chains"
-// import { Media } from './collections/Media'
-import { Tokens } from "./collections/Tokens"
 import { Users } from "./collections/Users"
+// import { Media } from './collections/Media'
+import { Chains, Tokens } from "./domains/tokens/collections"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)

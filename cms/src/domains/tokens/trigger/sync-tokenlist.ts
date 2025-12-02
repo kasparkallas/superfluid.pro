@@ -1,5 +1,5 @@
 import { schedules } from "@trigger.dev/sdk"
-import { syncTokensFromTokenList } from "@/features/sync-tokens"
+import { syncTokensFromTokenList } from "@/domains/tokens/features/sync-tokens"
 
 // Task definition - sync tokens from official Superfluid tokenlist
 export const syncTokenlistScheduled = schedules.task({
