@@ -16,7 +16,8 @@
 		"dev": "turbo dev --parallel --filter=website --filter=@sfpro/sdk-docs --filter=@sfpro/mcp-docs",
 		"format": "biome format --write .",
 		"prepare": "husky",
-		"typecheck": "turbo typecheck"
+		"typecheck": "turbo typecheck",
+		"clean:node_modules": "rimraf **/node_modules"
 	},
 	"lint-staged": {
 		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
@@ -27,15 +28,16 @@
 		]
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.2.0",
-		"@changesets/cli": "^2.29.7",
-		"@commitlint/cli": "^19.8.1",
-		"@commitlint/config-conventional": "^19.8.1",
-		"@commitlint/types": "^19.8.1",
-		"@playwright/test": "^1.55.1",
+		"@biomejs/biome": "2.3.8",
+		"@changesets/cli": "^2.29.8",
+		"@commitlint/cli": "^20.2.0",
+		"@commitlint/config-conventional": "^20.2.0",
+		"@commitlint/types": "^20.2.0",
+		"@playwright/test": "^1.57.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.2.3",
-		"turbo": "^2.5.8"
+		"lint-staged": "^16.2.7",
+		"rimraf": "^6.1.2",
+		"turbo": "^2.6.3"
 	},
 	"packageManager": "pnpm@10.6.2",
 	"overrides": {
@@ -57,6 +59,7 @@
 		"strip-ansi": "7.1.0",
 		"supports-color": "10.2.0",
 		"supports-hyperlinks": "4.1.0",
-		"wrap-ansi": "9.0.0"
+		"wrap-ansi": "9.0.0",
+		"react": "19"
 	}
 }

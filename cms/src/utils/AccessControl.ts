@@ -1,4 +1,4 @@
-import type { Access, AccessArgs, Where } from "payload"
+import type { Access, AccessArgs, FieldAccess, Where } from "payload"
 import type { User } from "../payload-types"
 
 export class AccessControl {
@@ -79,7 +79,7 @@ export class AccessControl {
 	}
 
 	// Field-level access helper
-	static fieldAdminOnly({ req: { user } }: AccessArgs) {
+	static fieldAdminOnly: FieldAccess = ({ req: { user } }) => {
 		if (!user) return false
 		const typedUser = user as User
 		return typedUser.role === "admin"
