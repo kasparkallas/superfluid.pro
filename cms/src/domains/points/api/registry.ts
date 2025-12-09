@@ -1,0 +1,341 @@
+import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
+import {
+	ApiErrorSchema,
+	BalanceQuerySchema,
+	BatchWithDefaultsRequestSchema,
+	BatchWithPerEventRequestSchema,
+	EventsQuerySchema,
+	PaginationSchema,
+	PointBalanceSchema,
+	PointBalancesResponseSchema,
+	PointEventSchema,
+	PointEventsResponseSchema,
+	PushResponseSchema,
+	SingleEventRequestSchema,
+} from "./schemas"
+
+export const pointsRegistry = new OpenAPIRegistry()
+
+// Register reusable components
+pointsRegistry.register("PointBalance", PointBalanceSchema)
+pointsRegistry.register("PointBalancesResponse", PointBalancesResponseSchema)
+pointsRegistry.register("PointEvent", PointEventSchema)
+pointsRegistry.register("PointEventsResponse", PointEventsResponseSchema)
+pointsRegistry.register("Pagination", PaginationSchema)
+pointsRegistry.register("PushResponse", PushResponseSchema)
+pointsRegistry.register("ApiError", ApiErrorSchema)
+
+// Register security scheme
+pointsRegistry.registerComponent("securitySchemes", "ApiKeyAuth", {
+	type: "apiKey",
+	in: "header",
+	name: "X-API-Key",
+	description: "API key for authentication. Format: sfp_ followed by 64 hexadecimal characters.",
+})
+
+// ============================================
+// GET /points/balance
+// ============================================
+pointsRegistry.registerPath({
+	method: "get",
+	path: "/points/balance",
+	summary: "Get point balance(s)",
+	description:
+		"Retrieves point balance(s) for one or more Ethereum accounts. For a single account, returns a simple balance object. For multiple accounts (comma-separated), returns an array of balances.",
+	tags: ["Balance"],
+	security: [{ ApiKeyAuth: [] }],
+	request: {
+		query: BalanceQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Point balance(s) retrieved successfully",
+			content: {
+				"application/json": {
+					schema: PointBalancesResponseSchema,
+					examples: {
+						single: {
+							summary: "Single account response",
+							value: {
+								account: "0x1234567890abcdef1234567890abcdef12345678",
+								points: 1500,
+							},
+						},
+						multiple: {
+							summary: "Multiple accounts response",
+							value: {
+								balances: [
+									{ account: "0x1234567890abcdef1234567890abcdef12345678", points: 1500 },
+									{ account: "0xabcdef1234567890abcdef1234567890abcdef12", points: 750 },
+								],
+							},
+						},
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (missing account parameter or invalid addresses)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized (missing or invalid API key)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// GET /points/events
+// ============================================
+pointsRegistry.registerPath({
+	method: "get",
+	path: "/points/events",
+	summary: "Get point events",
+	description:
+		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first).",
+	tags: ["Events"],
+	security: [{ ApiKeyAuth: [] }],
+	request: {
+		query: EventsQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Point events retrieved successfully",
+			content: {
+				"application/json": {
+					schema: PointEventsResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (invalid pagination or address format)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized (missing or invalid API key)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// POST /points/push
+// ============================================
+pointsRegistry.registerPath({
+	method: "post",
+	path: "/points/push",
+	summary: "Push point events",
+	description: `Push one or more point events for processing. Events are processed asynchronously in the background.
+
+**Request Formats:**
+
+1. **Single Event** - Push a single event directly:
+\`\`\`json
+{
+  "eventName": "swap",
+  "account": "0x...",
+  "points": 100,
+  "uniqueId": "tx-0xabc" // optional
+}
+\`\`\`
+
+2. **Batch with Shared eventName** - All events share the root eventName:
+\`\`\`json
+{
+  "eventName": "swap",
+  "uniqueId": "batch-123", // optional, applied to all
+  "events": [
+    { "account": "0x...", "points": 100 },
+    { "account": "0x...", "points": 50 }
+  ]
+}
+\`\`\`
+
+3. **Batch with Per-Event eventNames** - Each event has its own eventName:
+\`\`\`json
+{
+  "events": [
+    { "eventName": "swap", "account": "0x...", "points": 100 },
+    { "eventName": "stake", "account": "0x...", "points": 200 }
+  ]
+}
+\`\`\`
+
+**Deduplication:** If \`uniqueId\` is provided, duplicate events (same campaign + account + uniqueId) will be skipped.`,
+	tags: ["Push"],
+	security: [{ ApiKeyAuth: [] }],
+	request: {
+		body: {
+			description: "Point event(s) to push",
+			content: {
+				"application/json": {
+					schema: SingleEventRequestSchema,
+					examples: {
+						single: {
+							summary: "Single event",
+							value: {
+								eventName: "swap",
+								account: "0x1234567890abcdef1234567890abcdef12345678",
+								points: 100,
+								uniqueId: "tx-0xabc123",
+							},
+						},
+						batchWithDefaults: {
+							summary: "Batch with shared eventName",
+							value: {
+								eventName: "daily_login",
+								events: [
+									{ account: "0x1234567890abcdef1234567890abcdef12345678", points: 10 },
+									{ account: "0xabcdef1234567890abcdef1234567890abcdef12", points: 10 },
+								],
+							},
+						},
+						batchPerEvent: {
+							summary: "Batch with per-event eventNames",
+							value: {
+								events: [
+									{
+										eventName: "swap",
+										account: "0x1234567890abcdef1234567890abcdef12345678",
+										points: 100,
+									},
+									{
+										eventName: "stake",
+										account: "0xabcdef1234567890abcdef1234567890abcdef12",
+										points: 200,
+									},
+								],
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+	responses: {
+		202: {
+			description: "Push request accepted for processing",
+			content: {
+				"application/json": {
+					schema: PushResponseSchema,
+				},
+			},
+		},
+		400: {
+			description: "Validation failed",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+					example: {
+						error: "Validation failed",
+						details: [{ path: "eventName", message: "String must contain at least 1 character(s)" }],
+					},
+				},
+			},
+		},
+		401: {
+			description: "Unauthorized (missing or invalid API key)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// Generate OpenAPI document
+export function generatePointsOpenApiDocument() {
+	const generator = new OpenApiGeneratorV31(pointsRegistry.definitions)
+
+	return generator.generateDocument({
+		openapi: "3.1.0",
+		info: {
+			title: "Superfluid Points API",
+			version: "1.0.0",
+			description: `API for managing point-based reward campaigns in the Superfluid ecosystem.
+
+## Authentication
+
+All endpoints require an API key passed in the \`X-API-Key\` header. API keys are scoped to a specific campaign.
+
+\`\`\`
+X-API-Key: sfp_<64 hex characters>
+\`\`\`
+
+## Rate Limits
+
+- Push endpoint: Max 1000 events per request
+- Query endpoints: Max 100 results per page
+
+## Deduplication
+
+Events can include a \`uniqueId\` field for deduplication. If an event with the same \`uniqueId\` already exists for the same account and campaign, it will be skipped.`,
+			contact: {
+				name: "Superfluid",
+				url: "https://superfluid.finance",
+			},
+		},
+		servers: [
+			{
+				url: "",
+				description: "Current server",
+			},
+		],
+		tags: [
+			{
+				name: "Balance",
+				description: "Query point balances for accounts",
+			},
+			{
+				name: "Events",
+				description: "Query historical point events",
+			},
+			{
+				name: "Push",
+				description: "Push new point events",
+			},
+		],
+	})
+}

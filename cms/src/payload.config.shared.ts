@@ -6,9 +6,11 @@ import { nodemailerAdapter } from "@payloadcms/email-nodemailer"
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob"
+import type { Payload } from "payload"
 import sharp from "sharp"
 import { Users } from "./collections/Users"
 // import { Media } from './collections/Media'
+import { ApiKeys, Campaigns, PointBalances, PointEvents, PushRequests } from "./domains/points/collections"
 import { Chains, Tokens } from "./domains/tokens/collections"
 
 const filename = fileURLToPath(import.meta.url)
@@ -23,7 +25,30 @@ export const sharedConfig = {
 			baseDir: path.resolve(dirname),
 		},
 	},
-	collections: [Users, Tokens, Chains],
+	onInit: async (payload: Payload) => {
+		const isDev = process.env.NODE_ENV === "development"
+		const isSQLite = !process.env.POSTGRES_URL
+
+		if (!isDev || !isSQLite) return
+
+		const existingUsers = await payload.find({
+			collection: "users",
+			limit: 1,
+		})
+
+		if (existingUsers.totalDocs === 0) {
+			await payload.create({
+				collection: "users",
+				data: {
+					email: "admin@superfluid.pro",
+					password: "admin123",
+					role: "admin",
+				},
+			})
+			payload.logger.info("Seeded admin user: admin@superfluid.pro / admin123")
+		}
+	},
+	collections: [Users, Tokens, Chains, Campaigns, ApiKeys, PushRequests, PointEvents, PointBalances],
 	editor: lexicalEditor(),
 	secret: process.env.PAYLOAD_SECRET || "",
 	typescript: {

@@ -1,0 +1,307 @@
+import { extendZodWithOpenApi } from "@asteasolutions/zod-to-openapi"
+import { z } from "zod"
+
+// Extend Zod with OpenAPI functionality
+extendZodWithOpenApi(z)
+
+// ============================================
+// Common Schemas
+// ============================================
+
+export const EthereumAddressSchema = z
+	.string()
+	.regex(/^0x[a-fA-F0-9]{40}$/)
+	.openapi({
+		example: "0x1234567890abcdef1234567890abcdef12345678",
+		description: "Ethereum wallet address",
+	})
+
+export const ApiErrorSchema = z
+	.object({
+		error: z.string().openapi({
+			example: "Validation failed",
+			description: "Error type",
+		}),
+		message: z.string().optional().openapi({
+			example: "Invalid Ethereum address",
+			description: "Detailed error message",
+		}),
+		details: z
+			.array(
+				z.object({
+					path: z.string(),
+					message: z.string(),
+				}),
+			)
+			.optional()
+			.openapi({
+				description: "Validation error details",
+			}),
+		invalid: z.array(z.string()).optional().openapi({
+			description: "List of invalid addresses",
+		}),
+	})
+	.openapi({
+		title: "ApiError",
+		description: "API error response",
+	})
+
+// ============================================
+// Balance Endpoint Schemas
+// ============================================
+
+export const BalanceQuerySchema = z
+	.object({
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address or comma-separated list of addresses",
+		}),
+	})
+	.openapi({
+		title: "BalanceQuery",
+		description: "Query parameters for balance endpoint",
+	})
+
+export const PointBalanceSchema = z
+	.object({
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum wallet address",
+		}),
+		points: z.number().openapi({
+			example: 1500,
+			description: "Total accumulated points",
+		}),
+	})
+	.openapi({
+		title: "PointBalance",
+		description: "Point balance for a single account",
+	})
+
+export const PointBalancesResponseSchema = z
+	.object({
+		balances: z.array(PointBalanceSchema).openapi({
+			description: "List of balances for requested accounts",
+		}),
+	})
+	.openapi({
+		title: "PointBalancesResponse",
+		description: "Response containing multiple account balances",
+	})
+
+// ============================================
+// Events Endpoint Schemas
+// ============================================
+
+export const EventsQuerySchema = z
+	.object({
+		account: z.string().optional().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Filter by Ethereum address",
+		}),
+		eventName: z.string().optional().openapi({
+			example: "swap",
+			description: "Filter by event name",
+		}),
+		limit: z.string().optional().openapi({
+			example: "50",
+			description: "Number of results per page (1-100, default: 50)",
+		}),
+		page: z.string().optional().openapi({
+			example: "1",
+			description: "Page number (default: 1)",
+		}),
+	})
+	.openapi({
+		title: "EventsQuery",
+		description: "Query parameters for events endpoint",
+	})
+
+export const PointEventSchema = z
+	.object({
+		id: z.number().openapi({
+			example: 42,
+			description: "Event ID",
+		}),
+		eventName: z.string().openapi({
+			example: "swap",
+			description: "Name of the event that awarded points",
+		}),
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address that received points",
+		}),
+		points: z.number().openapi({
+			example: 100,
+			description: "Points awarded (can be positive or negative)",
+		}),
+		uniqueId: z.string().nullable().openapi({
+			example: "tx-0xabc123",
+			description: "Unique identifier for deduplication",
+		}),
+		createdAt: z.string().openapi({
+			example: "2025-01-07T12:00:00.000Z",
+			description: "ISO 8601 timestamp of event creation",
+		}),
+	})
+	.openapi({
+		title: "PointEvent",
+		description: "A single point event",
+	})
+
+export const PaginationSchema = z
+	.object({
+		page: z.number().openapi({
+			example: 1,
+			description: "Current page number",
+		}),
+		limit: z.number().openapi({
+			example: 50,
+			description: "Items per page",
+		}),
+		totalDocs: z.number().openapi({
+			example: 150,
+			description: "Total number of documents",
+		}),
+		totalPages: z.number().openapi({
+			example: 3,
+			description: "Total number of pages",
+		}),
+		hasNextPage: z.boolean().openapi({
+			example: true,
+			description: "Whether there is a next page",
+		}),
+		hasPrevPage: z.boolean().openapi({
+			example: false,
+			description: "Whether there is a previous page",
+		}),
+	})
+	.openapi({
+		title: "Pagination",
+		description: "Pagination metadata",
+	})
+
+export const PointEventsResponseSchema = z
+	.object({
+		events: z.array(PointEventSchema).openapi({
+			description: "List of point events",
+		}),
+		pagination: PaginationSchema,
+	})
+	.openapi({
+		title: "PointEventsResponse",
+		description: "Paginated list of point events",
+	})
+
+// ============================================
+// Push Endpoint Schemas
+// ============================================
+
+// Single event in a batch (minimal - inherits eventName from root)
+export const BatchEventMinimalSchema = z
+	.object({
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address to award points to",
+		}),
+		points: z.number().int().openapi({
+			example: 100,
+			description: "Points to award (must be an integer)",
+		}),
+	})
+	.openapi({
+		title: "BatchEventMinimal",
+		description: "Event in a batch that inherits eventName from root",
+	})
+
+// Single event with all fields
+export const PushEventSchema = z
+	.object({
+		eventName: z.string().min(1).max(100).openapi({
+			example: "swap",
+			description: "Name of the event (1-100 characters)",
+		}),
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address to award points to",
+		}),
+		points: z.number().int().openapi({
+			example: 100,
+			description: "Points to award (must be an integer)",
+		}),
+		uniqueId: z.string().max(255).optional().openapi({
+			example: "tx-0xabc123",
+			description: "Unique identifier for deduplication (max 255 chars)",
+		}),
+	})
+	.openapi({
+		title: "PushEvent",
+		description: "A single point event to push",
+	})
+
+// Format 1: Single event (no events array)
+export const SingleEventRequestSchema = PushEventSchema.openapi({
+	title: "SingleEventRequest",
+	description: "Push a single point event",
+})
+
+// Format 2: Batch with root-level defaults
+export const BatchWithDefaultsRequestSchema = z
+	.object({
+		eventName: z.string().min(1).max(100).openapi({
+			example: "swap",
+			description: "Event name applied to all events in the batch",
+		}),
+		uniqueId: z.string().max(255).optional().openapi({
+			example: "batch-123",
+			description: "Unique ID applied to all events (optional)",
+		}),
+		events: z.array(BatchEventMinimalSchema).min(1).max(1000).openapi({
+			description: "Array of events (1-1000 items)",
+		}),
+	})
+	.openapi({
+		title: "BatchWithDefaultsRequest",
+		description: "Push multiple events with shared eventName from root",
+	})
+
+// Format 3: Batch with per-event values
+export const BatchWithPerEventRequestSchema = z
+	.object({
+		events: z.array(PushEventSchema).min(1).max(1000).openapi({
+			description: "Array of events with individual eventNames (1-1000 items)",
+		}),
+	})
+	.openapi({
+		title: "BatchWithPerEventRequest",
+		description: "Push multiple events each with their own eventName",
+	})
+
+// Combined push request schema (for documentation purposes)
+export const PushRequestBodySchema = z
+	.union([SingleEventRequestSchema, BatchWithDefaultsRequestSchema, BatchWithPerEventRequestSchema])
+	.openapi({
+		title: "PushRequestBody",
+		description:
+			"Push request body. Accepts three formats: single event object, batch with root-level eventName, or batch with per-event eventNames.",
+	})
+
+export const PushResponseSchema = z
+	.object({
+		message: z.string().openapi({
+			example: "Push request accepted for processing",
+			description: "Status message",
+		}),
+		pushRequestId: z.number().openapi({
+			example: 42,
+			description: "ID of the created push request for tracking",
+		}),
+		eventCount: z.number().openapi({
+			example: 5,
+			description: "Number of events in the push request",
+		}),
+	})
+	.openapi({
+		title: "PushResponse",
+		description: "Response from push endpoint (202 Accepted)",
+	})

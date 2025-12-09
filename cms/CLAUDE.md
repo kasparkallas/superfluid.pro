@@ -67,6 +67,13 @@ API routes remain in `src/app/(api)/` per Next.js App Router convention, but imp
 - Tags system: streme, testnet, underlying, supertoken
 - Synced from multiple sources: tokenlist, data API, Streme.fun
 
+**Points Domain Collections** (`src/domains/points/collections/`):
+- **Campaigns**: Multi-tenant point campaigns with name, description, and status
+- **ApiKeys**: API authentication keys with `sfp_` prefix, scoped to campaigns
+- **PointEvents**: Individual point award/deduct events with deduplication via uniqueId
+- **PointBalances**: Aggregated per-account balances with composite ID `campaignId:account`
+- **PushRequests**: Audit trail for API push requests with processing status
+
 ### Data Synchronization Architecture
 
 **Chain Sync** (`src/domains/tokens/features/sync-chains/index.ts`):
@@ -92,6 +99,10 @@ API routes remain in `src/app/(api)/` per Next.js App Router convention, but imp
 - **Streme**: Daily at 03:30 UTC - sync community tokens from Streme.fun
 - All tasks configured with retry logic and error handling
 - Manual triggers available via API endpoints or Trigger.dev dashboard
+
+**Points Processing via Trigger.dev** (`src/domains/points/trigger/`):
+- **Process Push Request**: Background task to process incoming point events with retries
+- **Retry Stale Requests**: Every 15 min - retries push requests stuck for 15min-2hrs
 
 ### API Endpoints (`src/app/(api)/`)
 
@@ -125,6 +136,17 @@ API routes remain in `src/app/(api)/` per Next.js App Router convention, but imp
   - Machine-readable API documentation
   - Used by Swagger UI and API clients
 
+**Points API Endpoints:**
+- `POST /points/push` - Push point events (API key auth, 202 Accepted for async processing)
+  - Supports single event or batch (up to 1000 events)
+  - Automatic deduplication via uniqueId
+- `GET /points/balance` - Query point balances
+  - Query params: `account` (single) or `accounts` (up to 100, comma-separated)
+- `GET /points/events` - Query point events with pagination
+  - Query params: `account`, `eventName`, `page`, `limit`, `sort`, `order`
+- `GET /points/api-docs` - Interactive Swagger UI for Points API
+- `GET /points/openapi.json` - OpenAPI 3.1 specification
+
 All sync endpoints use `requireAdmin()` authentication from `src/utils/api-auth.ts`
 
 ### Validation & Utilities
@@ -147,6 +169,9 @@ All sync endpoints use `requireAdmin()` authentication from `src/utils/api-auth.
 5. **Incremental updates** - Sync functions check for changes before updating to minimize database writes
 6. **Composite IDs** - Tokens use `chainId:address` pattern for unique identification
 7. **Tag management** - Sync functions merge tags without creating duplicates
+8. **API Key Authentication** - Points API uses `sfp_` prefixed API keys, validated via `validateApiKey()`
+9. **Async Processing** - Push requests return 202 immediately, processing via Trigger.dev
+10. **Deduplication** - PointEvents use `dedupKey` (`campaignId:account:uniqueId`) for idempotency
 
 ## Dependencies
 
