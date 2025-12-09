@@ -25,6 +25,16 @@ export const Campaigns: CollectionConfig = {
 	},
 	fields: [
 		{
+			name: "id",
+			label: "Campaign ID",
+			type: "number",
+			required: true,
+			unique: true,
+			admin: {
+				description: "Unique numeric identifier for this campaign",
+			},
+		},
+		{
 			name: "name",
 			type: "text",
 			required: true,
