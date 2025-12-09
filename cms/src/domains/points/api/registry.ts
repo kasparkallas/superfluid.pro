@@ -41,9 +41,8 @@ pointsRegistry.registerPath({
 	path: "/points/balance",
 	summary: "Get point balance(s)",
 	description:
-		"Retrieves point balance(s) for one or more Ethereum accounts. For a single account, returns a simple balance object. For multiple accounts (comma-separated), returns an array of balances.",
+		"Retrieves point balance(s) for one or more Ethereum accounts. For a single account, returns a simple balance object. For multiple accounts (comma-separated), returns an array of balances. Requires a campaign slug or ID.",
 	tags: ["Balance"],
-	security: [{ ApiKeyAuth: [] }],
 	request: {
 		query: BalanceQuerySchema,
 	},
@@ -75,15 +74,15 @@ pointsRegistry.registerPath({
 			},
 		},
 		400: {
-			description: "Invalid request (missing account parameter or invalid addresses)",
+			description: "Invalid request (missing campaign/account parameter or invalid addresses)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
 				},
 			},
 		},
-		401: {
-			description: "Unauthorized (missing or invalid API key)",
+		404: {
+			description: "Campaign not found",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -109,9 +108,8 @@ pointsRegistry.registerPath({
 	path: "/points/events",
 	summary: "Get point events",
 	description:
-		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first).",
+		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first). Requires a campaign slug or ID.",
 	tags: ["Events"],
-	security: [{ ApiKeyAuth: [] }],
 	request: {
 		query: EventsQuerySchema,
 	},
@@ -125,15 +123,15 @@ pointsRegistry.registerPath({
 			},
 		},
 		400: {
-			description: "Invalid request (invalid pagination or address format)",
+			description: "Invalid request (missing campaign parameter, invalid pagination or address format)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
 				},
 			},
 		},
-		401: {
-			description: "Unauthorized (missing or invalid API key)",
+		404: {
+			description: "Campaign not found",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -298,7 +296,9 @@ export function generatePointsOpenApiDocument() {
 
 ## Authentication
 
-All endpoints require an API key passed in the \`X-API-Key\` header. API keys are scoped to a specific campaign.
+**Query Endpoints** (\`/balance\`, \`/events\`): Public access, no authentication required. Requires \`campaign\` query parameter (slug or numeric ID).
+
+**Push Endpoint** (\`/push\`): Requires API key in the \`X-API-Key\` header. API keys are scoped to a specific campaign.
 
 \`\`\`
 X-API-Key: sfp_<64 hex characters>

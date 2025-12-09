@@ -52,6 +52,10 @@ export const ApiErrorSchema = z
 
 export const BalanceQuerySchema = z
 	.object({
+		campaign: z.string().openapi({
+			example: "my-campaign",
+			description: "Campaign slug or numeric ID",
+		}),
 		account: z.string().openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
 			description: "Ethereum address or comma-separated list of addresses",
@@ -95,6 +99,10 @@ export const PointBalancesResponseSchema = z
 
 export const EventsQuerySchema = z
 	.object({
+		campaign: z.string().openapi({
+			example: "my-campaign",
+			description: "Campaign slug or numeric ID",
+		}),
 		account: z.string().optional().openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
 			description: "Filter by Ethereum address",

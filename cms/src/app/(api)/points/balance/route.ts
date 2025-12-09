@@ -1,27 +1,40 @@
 import { isAddress } from "viem"
-import { validateApiKey } from "@/domains/points/features/api-key/validateApiKey"
 import type { PointBalanceResponse, PointBalancesResponse } from "@/domains/points/types"
 import { getPayloadInstance } from "@/payload"
 
 /**
- * GET /points/balance?account=0x...
+ * GET /points/balance?campaign=...&account=0x...
  * Query points for one or more accounts (comma-separated).
  *
  * Examples:
- * - /points/balance?account=0x1234...
- * - /points/balance?account=0x1234...,0x5678...
+ * - /points/balance?campaign=my-campaign&account=0x1234...
+ * - /points/balance?campaign=my-campaign&account=0x1234...,0x5678...
  */
 export const GET = async (request: Request): Promise<Response> => {
-	// Validate API key
-	const auth = await validateApiKey()
-	if ("error" in auth) {
-		return auth.error
-	}
-
-	const { campaign } = auth.data
-
 	try {
 		const url = new URL(request.url)
+
+		// Get campaign parameter (required)
+		const campaignParam = url.searchParams.get("campaign")
+		if (!campaignParam) {
+			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		}
+
+		// Resolve campaign by ID or slug
+		const payload = await getPayloadInstance()
+		const isNumericId = /^\d+$/.test(campaignParam)
+
+		const campaignResult = await payload.find({
+			collection: "campaigns",
+			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			limit: 1,
+		})
+
+		if (campaignResult.docs.length === 0) {
+			return Response.json({ error: "Campaign not found" }, { status: 404 })
+		}
+
+		const campaign = campaignResult.docs[0]
 		const accountParam = url.searchParams.get("account")
 
 		if (!accountParam) {
@@ -49,8 +62,6 @@ export const GET = async (request: Request): Promise<Response> => {
 				{ status: 400 },
 			)
 		}
-
-		const payload = await getPayloadInstance()
 
 		// Query balances for all accounts
 		const result = await payload.find({

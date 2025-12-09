@@ -1,30 +1,43 @@
 import type { Where } from "payload"
 import { isAddress } from "viem"
-import { validateApiKey } from "@/domains/points/features/api-key/validateApiKey"
 import type { PointEventsResponse } from "@/domains/points/types"
 import { getPayloadInstance } from "@/payload"
 
 /**
- * GET /points/events
+ * GET /points/events?campaign=...
  * Query events with filters: account, eventName, limit, page
  *
  * Examples:
- * - /points/events
- * - /points/events?account=0x1234...
- * - /points/events?eventName=swap
- * - /points/events?account=0x1234...&eventName=swap&limit=50&page=2
+ * - /points/events?campaign=my-campaign
+ * - /points/events?campaign=my-campaign&account=0x1234...
+ * - /points/events?campaign=my-campaign&eventName=swap
+ * - /points/events?campaign=my-campaign&account=0x1234...&eventName=swap&limit=50&page=2
  */
 export const GET = async (request: Request): Promise<Response> => {
-	// Validate API key
-	const auth = await validateApiKey()
-	if ("error" in auth) {
-		return auth.error
-	}
-
-	const { campaign } = auth.data
-
 	try {
 		const url = new URL(request.url)
+
+		// Get campaign parameter (required)
+		const campaignParam = url.searchParams.get("campaign")
+		if (!campaignParam) {
+			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		}
+
+		// Resolve campaign by ID or slug
+		const payload = await getPayloadInstance()
+		const isNumericId = /^\d+$/.test(campaignParam)
+
+		const campaignResult = await payload.find({
+			collection: "campaigns",
+			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			limit: 1,
+		})
+
+		if (campaignResult.docs.length === 0) {
+			return Response.json({ error: "Campaign not found" }, { status: 404 })
+		}
+
+		const campaign = campaignResult.docs[0]
 		const accountParam = url.searchParams.get("account")
 		const eventNameParam = url.searchParams.get("eventName")
 		const limitParam = url.searchParams.get("limit")
@@ -65,8 +78,6 @@ export const GET = async (request: Request): Promise<Response> => {
 		if (eventNameParam) {
 			conditions.push({ eventName: { equals: eventNameParam } })
 		}
-
-		const payload = await getPayloadInstance()
 
 		const result = await payload.find({
 			collection: "point-events",
