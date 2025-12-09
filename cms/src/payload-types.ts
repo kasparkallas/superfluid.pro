@@ -75,6 +75,7 @@ export interface Config {
 		"push-requests": PushRequest
 		"point-events": PointEvent
 		"point-balances": PointBalance
+		"payload-kv": PayloadKv
 		"payload-locked-documents": PayloadLockedDocument
 		"payload-preferences": PayloadPreference
 		"payload-migrations": PayloadMigration
@@ -89,6 +90,7 @@ export interface Config {
 		"push-requests": PushRequestsSelect<false> | PushRequestsSelect<true>
 		"point-events": PointEventsSelect<false> | PointEventsSelect<true>
 		"point-balances": PointBalancesSelect<false> | PointBalancesSelect<true>
+		"payload-kv": PayloadKvSelect<false> | PayloadKvSelect<true>
 		"payload-locked-documents": PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>
 		"payload-preferences": PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
 		"payload-migrations": PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
@@ -96,6 +98,7 @@ export interface Config {
 	db: {
 		defaultIDType: number
 	}
+	fallbackLocale: null
 	globals: {}
 	globalsSelect: {}
 	locale: null
@@ -306,6 +309,9 @@ export interface Chain {
  * via the `definition` "campaigns".
  */
 export interface Campaign {
+	/**
+	 * Unique numeric identifier for this campaign
+	 */
 	id: number
 	/**
 	 * Human-readable name for this campaign
@@ -465,6 +471,23 @@ export interface PointBalance {
 	events?: (number | PointEvent)[] | null
 	updatedAt: string
 	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+	id: number
+	key: string
+	data:
+		| {
+				[k: string]: unknown
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -692,6 +715,7 @@ export interface ChainsSelect<T extends boolean = true> {
  * via the `definition` "campaigns_select".
  */
 export interface CampaignsSelect<T extends boolean = true> {
+	id?: T
 	name?: T
 	slug?: T
 	updatedAt?: T
@@ -755,6 +779,14 @@ export interface PointBalancesSelect<T extends boolean = true> {
 	events?: T
 	updatedAt?: T
 	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+	key?: T
+	data?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
