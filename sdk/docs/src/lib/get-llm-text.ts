@@ -12,9 +12,10 @@ const processor = remark()
 	.use(remarkGfm)
 
 export async function getLLMText(page: InferPageType<typeof source>) {
+	const content = await page.data.getText("raw")
 	const processed = await processor.process({
-		path: page.data._file.absolutePath,
-		value: page.data.content,
+		path: page.data.info.fullPath,
+		value: content,
 	})
 
 	return `# ${page.data.title}

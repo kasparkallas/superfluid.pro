@@ -7,14 +7,14 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
-		"@hono/node-server": "^1.19.5",
+		"@hono/node-server": "^1.19.7",
 		"@sfpro/sdk": "workspace:*",
-		"@wagmi/core": "^2.21.2",
-		"hono": "^4.9.9",
-		"viem": "^2.37.12"
+		"@wagmi/core": "^2.22.1",
+		"hono": "^4.10.8",
+		"viem": "^2.41.2"
 	},
 	"devDependencies": {
-		"@types/node": "^24.6.2",
-		"tsx": "^4.20.6"
+		"@types/node": "^24.10.2",
+		"tsx": "^4.21.0"
 	}
 }
