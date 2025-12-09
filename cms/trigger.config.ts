@@ -22,6 +22,6 @@ export default defineConfig({
 	dirs: ["./src/domains/tokens/trigger", "./src/domains/points/trigger"],
 	build: {
 		external: ["sharp"],
-		extensions: [syncVercelEnvVars()],
+		// extensions: [syncVercelEnvVars()], // Doesn't work well with the Neon Vercel integration as Neon changes the database URL for preview branches but it won't appear as the environment variable on Vercel.
 	},
 })
