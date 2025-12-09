@@ -143,16 +143,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "point_balances" CASCADE;
   DROP TABLE "point_balances_rels" CASCADE;
   DROP TABLE "payload_kv" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_campaigns_fk";
-  
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_api_keys_fk";
-  
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_push_requests_fk";
-  
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_point_events_fk";
-  
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_point_balances_fk";
-  
   DROP INDEX "payload_locked_documents_rels_campaigns_id_idx";
   DROP INDEX "payload_locked_documents_rels_api_keys_id_idx";
   DROP INDEX "payload_locked_documents_rels_push_requests_id_idx";
