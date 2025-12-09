@@ -1,3 +1,4 @@
+import { syncVercelEnvVars } from "@trigger.dev/build/extensions/core"
 import { defineConfig } from "@trigger.dev/sdk"
 
 export default defineConfig({
@@ -21,5 +22,6 @@ export default defineConfig({
 	dirs: ["./src/domains/tokens/trigger", "./src/domains/points/trigger"],
 	build: {
 		external: ["sharp"],
+		extensions: [syncVercelEnvVars()],
 	},
 })
