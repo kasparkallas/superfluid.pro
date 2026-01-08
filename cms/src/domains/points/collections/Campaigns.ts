@@ -42,7 +42,7 @@ export const Campaigns: CollectionConfig = {
 	slug: "campaigns",
 	admin: {
 		useAsTitle: "name",
-		defaultColumns: ["name", "slug", "createdAt"],
+		defaultColumns: ["name", "slug", "relatedEntities", "createdAt"],
 		group: "Points",
 	},
 	access: {
@@ -55,6 +55,16 @@ export const Campaigns: CollectionConfig = {
 		beforeDelete: [cascadeDeleteRelatedRecords],
 	},
 	fields: [
+		{
+			name: "relatedEntities",
+			type: "ui",
+			admin: {
+				components: {
+					Cell: "/components/CampaignRelatedLinksCell#CampaignRelatedLinksCell",
+					Field: "/components/CampaignRelatedLinksField#CampaignRelatedLinksField",
+				},
+			},
+		},
 		{
 			name: "id",
 			label: "Campaign ID",

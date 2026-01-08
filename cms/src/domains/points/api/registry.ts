@@ -2,8 +2,6 @@ import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-ope
 import {
 	ApiErrorSchema,
 	BalanceQuerySchema,
-	BatchWithDefaultsRequestSchema,
-	BatchWithPerEventRequestSchema,
 	EventsQuerySchema,
 	PaginationSchema,
 	PointBalanceSchema,

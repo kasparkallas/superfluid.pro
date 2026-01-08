@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import type { TokenFilters } from "../components/TokenFilters"
-import type { PayloadTokensApiResponse, TokenResponse } from "../types"
+import type { PayloadTokensApiResponse } from "../types"
 
 export interface TokenQueryParams extends TokenFilters {
 	page?: number
