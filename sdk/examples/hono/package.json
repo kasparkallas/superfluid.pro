@@ -10,11 +10,11 @@
 		"@hono/node-server": "^1.19.7",
 		"@sfpro/sdk": "workspace:*",
 		"@wagmi/core": "^2.22.1",
-		"hono": "^4.10.8",
-		"viem": "^2.41.2"
+		"hono": "^4.11.3",
+		"viem": "^2.43.5"
 	},
 	"devDependencies": {
-		"@types/node": "^24.10.2",
+		"@types/node": "^24.10.4",
 		"tsx": "^4.21.0"
 	}
 }
