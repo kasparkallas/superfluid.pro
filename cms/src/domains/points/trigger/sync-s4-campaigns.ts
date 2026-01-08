@@ -8,7 +8,7 @@ const S4_CAMPAIGNS = [
 	{ id: 7849, name: "S4 streme.fun", slug: "s4-streme-fun", disableNegativeSync: false },
 	{ id: 7850, name: "S4 SuperBoring", slug: "s4-superboring", disableNegativeSync: false },
 	{ id: 7853, name: "S4 Community Activations", slug: "s4-community-activations", disableNegativeSync: false },
-	{ id: 7855, name: "S4 SUP reserve names", slug: "s4-sup-reserve-names", disableNegativeSync: false },
+	// { id: 7855, name: "S4 SUP reserve names", slug: "s4-sup-reserve-names", disableNegativeSync: false },
 	{ id: 7856, name: "S4 Degen Dogs", slug: "s4-degen-dogs", disableNegativeSync: false },
 	{ id: 7857, name: "S4 Giveth", slug: "s4-giveth", disableNegativeSync: false },
 	{ id: 7859, name: "S4 Gardens", slug: "s4-gardens", disableNegativeSync: false },
