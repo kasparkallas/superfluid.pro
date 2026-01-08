@@ -313,3 +313,51 @@ export const PushResponseSchema = z
 		title: "PushResponse",
 		description: "Response from push endpoint (202 Accepted)",
 	})
+
+// ============================================
+// Signed Balance Endpoint Schemas
+// ============================================
+
+export const SignedBalanceQuerySchema = z
+	.object({
+		campaign: z.string().openapi({
+			example: "my-campaign",
+			description: "Campaign slug or numeric ID",
+		}),
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address to get signed balance for",
+		}),
+	})
+	.openapi({
+		title: "SignedBalanceQuery",
+		description: "Query parameters for signed balance endpoint",
+	})
+
+export const SignedBalanceResponseSchema = z
+	.object({
+		address: z.string().openapi({
+			example: "0x1234567890abcdef1234567890ABCDEF12345678",
+			description: "Checksummed Ethereum address",
+		}),
+		points: z.number().openapi({
+			example: 1500,
+			description: "Total accumulated points",
+		}),
+		signatureTimestamp: z.number().openapi({
+			example: 1704672000,
+			description: "Unix timestamp when the signature was generated",
+		}),
+		signature: z.string().openapi({
+			example: "0x8afc2c13c4ed315fcff3f93e4be66815ef259042c789f7e30be2a6160a5fc70f...",
+			description: "EIP-191 signature of the message hash",
+		}),
+		signer: z.string().openapi({
+			example: "0xBc2cfCd4c615Ff1d06f1d07b37E3652b15bd40A2",
+			description: "Address of the signer that produced the signature",
+		}),
+	})
+	.openapi({
+		title: "SignedBalanceResponse",
+		description: "Signed point balance for on-chain verification",
+	})

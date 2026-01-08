@@ -11,6 +11,8 @@ import {
 	PointEventSchema,
 	PointEventsResponseSchema,
 	PushResponseSchema,
+	SignedBalanceQuerySchema,
+	SignedBalanceResponseSchema,
 	SingleEventRequestSchema,
 } from "./schemas"
 
@@ -23,6 +25,7 @@ pointsRegistry.register("PointEvent", PointEventSchema)
 pointsRegistry.register("PointEventsResponse", PointEventsResponseSchema)
 pointsRegistry.register("Pagination", PaginationSchema)
 pointsRegistry.register("PushResponse", PushResponseSchema)
+pointsRegistry.register("SignedBalanceResponse", SignedBalanceResponseSchema)
 pointsRegistry.register("ApiError", ApiErrorSchema)
 
 // Register security scheme
@@ -91,6 +94,70 @@ pointsRegistry.registerPath({
 		},
 		500: {
 			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// GET /points/signed-balance
+// ============================================
+pointsRegistry.registerPath({
+	method: "get",
+	path: "/points/signed-balance",
+	summary: "Get signed point balance",
+	description: `Returns a signed point balance for on-chain verification. The signature follows the same format as Stack's getSignedPoints API.
+
+**Signature Structure:**
+The message hash is computed as:
+\`\`\`
+keccak256(encodePacked([address, points, campaignId, timestamp]))
+\`\`\`
+
+This can be verified on-chain using ECDSA recovery.`,
+	tags: ["Signed Balance"],
+	request: {
+		query: SignedBalanceQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Signed balance retrieved successfully",
+			content: {
+				"application/json": {
+					schema: SignedBalanceResponseSchema,
+					example: {
+						address: "0x1234567890abcdef1234567890ABCDEF12345678",
+						points: 1500,
+						signatureTimestamp: 1704672000,
+						signature:
+							"0x8afc2c13c4ed315fcff3f93e4be66815ef259042c789f7e30be2a6160a5fc70f1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1c",
+						signer: "0xBc2cfCd4c615Ff1d06f1d07b37E3652b15bd40A2",
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (missing campaign/account parameter or invalid address)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "Campaign not found",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error (signing not available or other error)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -327,6 +394,10 @@ Events can include a \`uniqueId\` field for deduplication. If an event with the 
 			{
 				name: "Balance",
 				description: "Query point balances for accounts",
+			},
+			{
+				name: "Signed Balance",
+				description: "Get signed point balances for on-chain verification",
 			},
 			{
 				name: "Events",

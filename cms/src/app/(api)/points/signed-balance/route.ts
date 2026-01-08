@@ -1,0 +1,108 @@
+import { encodePacked, getAddress, isAddress, keccak256 } from "viem"
+import { privateKeyToAccount } from "viem/accounts"
+import { getPayloadInstance } from "@/payload"
+
+/**
+ * GET /points/signed-balance?campaign=...&account=0x...
+ *
+ * Returns a signed point balance for on-chain verification.
+ * The signature follows the same format as Stack's getSignedPoints API.
+ *
+ * Signature message: keccak256(encodePacked([address, points, campaignId, timestamp]))
+ */
+export const GET = async (request: Request): Promise<Response> => {
+	try {
+		// Validate signer key is configured
+		const signerPrivateKey = process.env.SIGNER_PRIVATE_KEY as `0x${string}` | undefined
+		if (!signerPrivateKey) {
+			console.error("SIGNER_PRIVATE_KEY is not configured")
+			return Response.json({ error: "Signing not available" }, { status: 500 })
+		}
+
+		const url = new URL(request.url)
+
+		// Get campaign parameter (required)
+		const campaignParam = url.searchParams.get("campaign")
+		if (!campaignParam) {
+			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		}
+
+		// Get account parameter (required)
+		const accountParam = url.searchParams.get("account")
+		if (!accountParam) {
+			return Response.json({ error: "Missing required query parameter: account" }, { status: 400 })
+		}
+
+		// Validate account address
+		const accountLower = accountParam.toLowerCase()
+		if (!isAddress(accountLower)) {
+			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+		}
+
+		// Resolve campaign by ID or slug
+		const payload = await getPayloadInstance()
+		const isNumericId = /^\d+$/.test(campaignParam)
+
+		const campaignResult = await payload.find({
+			collection: "campaigns",
+			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			limit: 1,
+		})
+
+		if (campaignResult.docs.length === 0) {
+			return Response.json({ error: "Campaign not found" }, { status: 404 })
+		}
+
+		const campaign = campaignResult.docs[0]
+
+		// Fetch balance
+		const balanceId = `${campaign.id}:${accountLower}`
+		let points = 0
+
+		try {
+			const balance = await payload.findByID({
+				collection: "point-balances",
+				id: balanceId,
+			})
+			points = balance.totalPoints
+		} catch {
+			// Balance doesn't exist, default to 0
+		}
+
+		// Generate signature
+		const signer = privateKeyToAccount(signerPrivateKey)
+		const signatureTimestamp = Math.floor(Date.now() / 1000)
+
+		// Create message hash: keccak256(encodePacked([address, points, campaignId, timestamp]))
+		const checksumAddress = getAddress(accountLower)
+		const messageHash = keccak256(
+			encodePacked(
+				["address", "uint256", "uint256", "uint256"],
+				[checksumAddress, BigInt(points), BigInt(campaign.id), BigInt(signatureTimestamp)],
+			),
+		)
+
+		// Sign the message hash
+		const signature = await signer.signMessage({
+			message: { raw: messageHash },
+		})
+
+		return Response.json({
+			address: checksumAddress,
+			points,
+			signatureTimestamp,
+			signature,
+			signer: signer.address,
+		})
+	} catch (error) {
+		console.error("Failed to get signed balance:", error)
+
+		return Response.json(
+			{
+				error: "Failed to get signed balance",
+				message: error instanceof Error ? error.message : "Unknown error",
+			},
+			{ status: 500 },
+		)
+	}
+}
