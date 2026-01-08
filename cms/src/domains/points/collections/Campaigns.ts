@@ -1,4 +1,4 @@
-import type { CollectionConfig } from "payload"
+import type { CollectionBeforeDeleteHook, CollectionConfig } from "payload"
 import { z } from "zod"
 import { AccessControl } from "../../../utils/AccessControl"
 import { validateWithZod } from "../../../utils/validation"
@@ -9,6 +9,34 @@ const slugSchema = z
 	.min(1, "Slug is required")
 	.max(50, "Slug must be 50 characters or less")
 	.regex(/^[a-z0-9-]+$/, "Slug must contain only lowercase letters, numbers, and hyphens")
+
+/**
+ * Cascade delete all related records when a campaign is deleted.
+ * Deletes in order: point-balances (references point-events), point-events (references push-requests),
+ * push-requests, api-keys.
+ */
+const cascadeDeleteRelatedRecords: CollectionBeforeDeleteHook = async ({ req, id }) => {
+	await req.payload.delete({
+		collection: "point-balances",
+		where: { campaign: { equals: id } },
+		req,
+	})
+	await req.payload.delete({
+		collection: "point-events",
+		where: { campaign: { equals: id } },
+		req,
+	})
+	await req.payload.delete({
+		collection: "push-requests",
+		where: { campaign: { equals: id } },
+		req,
+	})
+	await req.payload.delete({
+		collection: "api-keys",
+		where: { campaign: { equals: id } },
+		req,
+	})
+}
 
 export const Campaigns: CollectionConfig = {
 	slug: "campaigns",
@@ -22,6 +50,9 @@ export const Campaigns: CollectionConfig = {
 		create: AccessControl.adminOnly,
 		update: AccessControl.adminOnly,
 		delete: AccessControl.adminOnly,
+	},
+	hooks: {
+		beforeDelete: [cascadeDeleteRelatedRecords],
 	},
 	fields: [
 		{
