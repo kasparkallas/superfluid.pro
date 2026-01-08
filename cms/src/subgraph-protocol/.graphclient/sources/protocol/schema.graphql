@@ -1,6 +1,5 @@
 schema {
   query: Query
-  subscription: Subscription
 }
 
 """
@@ -18,7 +17,6 @@ directive @derivedFrom(field: String!) on FIELD_DEFINITION
 
 """
 Account: A higher order entity created for any addresses which interact with Superfluid contracts.
-
 """
 type Account {
   id: ID!
@@ -26,10 +24,7 @@ type Account {
   createdAtBlockNumber: BigInt!
   updatedAtTimestamp: BigInt!
   updatedAtBlockNumber: BigInt!
-  """
-  Indicates whether the address/account is a super app.
-  
-  """
+  """Indicates whether the address/account is a super app."""
   isSuperApp: Boolean!
   inflows(skip: Int = 0, first: Int = 100, orderBy: Stream_orderBy, orderDirection: OrderDirection, where: Stream_filter): [Stream!]!
   outflows(skip: Int = 0, first: Int = 100, orderBy: Stream_orderBy, orderDirection: OrderDirection, where: Stream_filter): [Stream!]!
@@ -46,13 +41,9 @@ type Account {
 
 """
 AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`.
-
 """
 type AccountTokenSnapshot {
-  """
-  ID composed of: accountID-tokenID
-  
-  """
+  """ID composed of: accountID-tokenID"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -61,198 +52,144 @@ type AccountTokenSnapshot {
   """
   isLiquidationEstimateOptimistic, If `totalSubscriptionsWithUnits > 0`, it is true.
   "Optimistic" can be thought of as conservative as it refers to the earliest time the user may be liquidated as they may receive ongoing distributions which aren't tracked by the subgraph.
-  
   """
   isLiquidationEstimateOptimistic: Boolean!
-  """
-  Optimistic liquidation estimation property.
-  
-  """
+  """Optimistic liquidation estimation property."""
   maybeCriticalAtTimestamp: BigInt
   """
   The count of currently open streams for an account, both incoming and outgoing for all agreements.
-  
   """
   totalNumberOfActiveStreams: Int!
   """
   The count of currently open streams for an account, both incoming and outgoing for the CFA.
-  
   """
   totalCFANumberOfActiveStreams: Int!
   """
   The count of currently open streams for an account, both incoming and outgoing for the GDA.
-  
   """
   totalGDANumberOfActiveStreams: Int!
   """
   The count of active outgoing streams from this account for all agreements.
-  
   """
   activeOutgoingStreamCount: Int!
-  """
-  The count of active outgoing streams from this account for the CFA.
-  
-  """
+  """The count of active outgoing streams from this account for the CFA."""
   activeCFAOutgoingStreamCount: Int!
-  """
-  The count of active outgoing streams from this account for the GDA.
-  
-  """
+  """The count of active outgoing streams from this account for the GDA."""
   activeGDAOutgoingStreamCount: Int!
   """
   The count of active incoming streams to this account for the CFA.
   GDA incoming streams are *NOT* counted here.
-  
   """
   activeIncomingStreamCount: Int!
   """
   The count of closed streams by `account`, both incoming and outgoing for all agreements.
-  
   """
   totalNumberOfClosedStreams: Int!
   """
   The count of closed streams by `account`, both incoming and outgoing for the CFA.
-  
   """
   totalCFANumberOfClosedStreams: Int!
   """
   The count of closed streams by `account`, both incoming and outgoing for the GDA.
-  
   """
   totalGDANumberOfClosedStreams: Int!
-  """
-  The count of closed outgoing streams by `account` for all agreements.
-  
-  """
+  """The count of closed outgoing streams by `account` for all agreements."""
   inactiveOutgoingStreamCount: Int!
-  """
-  The count of closed outgoing streams by `account` for the CFA.
-  
-  """
+  """The count of closed outgoing streams by `account` for the CFA."""
   inactiveCFAOutgoingStreamCount: Int!
-  """
-  The count of closed outgoing streams by `account` for the GDA.
-  
-  """
+  """The count of closed outgoing streams by `account` for the GDA."""
   inactiveGDAOutgoingStreamCount: Int!
   """
   The count of closed incoming streams by `account` for the CFA.
   Close incoming GDA streams are *NOT* counted here.
-  
   """
   inactiveIncomingStreamCount: Int!
   """
   The current (as of updatedAt) number of subscriptions with units allocated to them tied to this `account`.
-  
   """
   totalSubscriptionsWithUnits: Int!
   """
   Counts all currently (as of updatedAt) approved subscriptions whether or not they have units.
-  
   """
   totalApprovedSubscriptions: Int!
   """
   The current (as of updatedAt) number of membership with units allocated to them tied to this `account`. (both IDA and GDA)
-  
   """
   totalMembershipsWithUnits: Int!
   """
   Counts all currently (as of updatedAt) approved membership whether or not they have units. (both IDA and GDA)
-  
   """
   totalConnectedMemberships: Int!
   """
   Counts how many pools the account is a pool admin of. The pool admin can be set arbitrarily when creating a GDA pool. The pool admin might receive an "adjustment flow" if the pool has a flow distribution.
-  
   """
   adminOfPoolCount: Int!
-  """
-  Balance of `account` as of `updatedAtTimestamp`/`updatedAtBlock`.
-  
-  """
+  """Balance of `account` as of `updatedAtTimestamp`/`updatedAtBlock`."""
   balanceUntilUpdatedAt: BigInt!
   """
   The last block the balance was queried from an RPC (the most accurate source for balance data).
-  
   """
   balanceLastUpdatedFromRpcBlocknumber: BigInt
   """
   The total deposit this account has held by all flow agreements for `account` active streams.
-  
   """
   totalDeposit: BigInt!
   """
   The total deposit this account has held by the CFA agreement for `account` active streams.
-  
   """
   totalCFADeposit: BigInt!
   """
   The total deposit this account has held by the GDA agreement for `account` active streams.
-  
   """
   totalGDADeposit: BigInt!
   """
   The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
   This can be obtained by: `totalInflowRate - totalOutflowRate`.
   NOTE: this property will NOT be 100% accurate all the time for receivers of GDA flows.
-  
   """
   totalNetFlowRate: BigInt!
   """
   The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-  
   """
   totalCFANetFlowRate: BigInt!
   """
   The total inflow rate (receive flowRate per second) of the `account` for the CFA.
   GDA inflow rate is *NOT* included here.
-  
   """
   totalInflowRate: BigInt!
   """
   The total outflow rate (send flowrate per second) of the `account` for all flow agreements.
-  
   """
   totalOutflowRate: BigInt!
   """
   The total outflow rate (send flowrate per second) of the `account` for the CFA.
-  
   """
   totalCFAOutflowRate: BigInt!
   """
   The total outflow rate (send flowrate per second) of the `account` for the GDA.
-  
   """
   totalGDAOutflowRate: BigInt!
   """
   The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-  
   """
   totalAmountStreamedInUntilUpdatedAt: BigInt!
   """
   The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-  
   """
   totalAmountStreamedOutUntilUpdatedAt: BigInt!
   """
   The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-  
   """
   totalCFAAmountStreamedOutUntilUpdatedAt: BigInt!
   """
   The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-  
   """
   totalAmountStreamedUntilUpdatedAt: BigInt!
   """
   The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-  
   """
   totalCFAAmountStreamedUntilUpdatedAt: BigInt!
-  """
-  The total amount of `token` this `account` has transferred.
-  
-  """
+  """The total amount of `token` this `account` has transferred."""
   totalAmountTransferredUntilUpdatedAt: BigInt!
   account: Account!
   token: Token!
@@ -262,7 +199,6 @@ type AccountTokenSnapshot {
 
 """
 AccountTokenSnapshotLog: Historical entries of `AccountTokenSnapshot` updates.
-
 """
 type AccountTokenSnapshotLog {
   id: ID!
@@ -272,181 +208,124 @@ type AccountTokenSnapshotLog {
   logIndex: BigInt!
   order: BigInt!
   triggeredByEventName: String!
-  """
-  Optimistic liquidation estimation property.
-  
-  """
+  """Optimistic liquidation estimation property."""
   maybeCriticalAtTimestamp: BigInt
   """
   The current (as of timestamp) number of open streams for all agreements.
-  
   """
   totalNumberOfActiveStreams: Int!
-  """
-  The current (as of timestamp) number of open streams.
-  
-  """
+  """The current (as of timestamp) number of open streams."""
   totalCFANumberOfActiveStreams: Int!
-  """
-  The current (as of timestamp) number of open streams.
-  
-  """
+  """The current (as of timestamp) number of open streams."""
   totalGDANumberOfActiveStreams: Int!
   """
   The count of active outgoing streams from this account for all agreements.
-  
   """
   activeOutgoingStreamCount: Int!
-  """
-  The count of active outgoing streams from this account.
-  
-  """
+  """The count of active outgoing streams from this account."""
   activeCFAOutgoingStreamCount: Int!
-  """
-  The count of active outgoing streams from this account.
-  
-  """
+  """The count of active outgoing streams from this account."""
   activeGDAOutgoingStreamCount: Int!
   """
   The count of active incoming streams to this account for all agreements.
-  
   """
   activeIncomingStreamCount: Int!
   """
   The current (as of timestamp) count of closed streams for all agreements.
-  
   """
   totalNumberOfClosedStreams: Int!
-  """
-  The current (as of timestamp) count of closed streams for the CFA.
-  
-  """
+  """The current (as of timestamp) count of closed streams for the CFA."""
   totalCFANumberOfClosedStreams: Int!
-  """
-  The current (as of timestamp) count of closed streams for the GDA.
-  
-  """
+  """The current (as of timestamp) count of closed streams for the GDA."""
   totalGDANumberOfClosedStreams: Int!
-  """
-  The count of closed outgoing streams by `account` for all agreements.
-  
-  """
+  """The count of closed outgoing streams by `account` for all agreements."""
   inactiveOutgoingStreamCount: Int!
-  """
-  The count of closed outgoing streams by `account` for the CFA.
-  
-  """
+  """The count of closed outgoing streams by `account` for the CFA."""
   inactiveCFAOutgoingStreamCount: Int!
-  """
-  The count of closed outgoing streams by `account` for the GDA.
-  
-  """
+  """The count of closed outgoing streams by `account` for the GDA."""
   inactiveGDAOutgoingStreamCount: Int!
   """
   The count of closed incoming streams by `account` for the CFA.
   Close incoming GDA streams are *NOT* counted here.
-  
   """
   inactiveIncomingStreamCount: Int!
   """
   The current (as of timestamp) number of subscriptions with units allocated to them tied to this `account`.
-  
   """
   totalSubscriptionsWithUnits: Int!
   """
   Counts all currently (as of timestamp) approved subscriptions whether or not they have units.
-  
   """
   totalApprovedSubscriptions: Int!
   """
   The current (as of timestamp) number of membership with units allocated to them tied to this `account`.
-  
   """
   totalMembershipsWithUnits: Int!
   """
   Counts all currently (as of timestamp) connected membership whether or not they have units.
-  
   """
   totalConnectedMemberships: Int!
-  """
-  Balance of `account` as of `timestamp`/`block`.
-  
-  """
+  """Balance of `account` as of `timestamp`/`block`."""
   balance: BigInt!
   """
   The total (as of timestamp) deposit this account has held by all flow agreements for `account` active streams.
-  
   """
   totalDeposit: BigInt!
   """
   The total (as of timestamp) deposit this account has held by the CFA agreement for `account` active streams.
-  
   """
   totalCFADeposit: BigInt!
   """
   The total (as of timestamp) deposit this account has held by the GDA agreement for `account` active streams.
-  
   """
   totalGDADeposit: BigInt!
   """
   The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block`.
   This can be obtained by: `totalInflowRate - totalOutflowRate`
-  
   """
   totalNetFlowRate: BigInt!
   """
   The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the CFA.
-  
   """
   totalCFANetFlowRate: BigInt!
   """
   The total (as of timestamp) inflow rate (receive flowRate per second) of the `account`.
-  
   """
   totalInflowRate: BigInt!
   """
   The total (as of timestamp) outflow rate (send flowrate per second) of the `account`.
-  
   """
   totalOutflowRate: BigInt!
   """
   The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the CFA.
-  
   """
   totalCFAOutflowRate: BigInt!
   """
   The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the GDA.
-  
   """
   totalGDAOutflowRate: BigInt!
   """
   The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block`.
-  
   """
   totalAmountStreamedIn: BigInt!
   """
   The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block`.
-  
   """
   totalAmountStreamedOut: BigInt!
   """
   The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block` for the CFA.
-  
   """
   totalCFAAmountStreamedOut: BigInt!
   """
   The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block`.
-  
   """
   totalAmountStreamed: BigInt!
   """
   The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the CFA.
-  
   """
   totalCFAAmountStreamed: BigInt!
   """
   The total (as of timestamp) amount of `token` this `account` has transferred out until the `timestamp`/`block`.
-  
   """
   totalAmountTransferred: BigInt!
   account: Account!
@@ -1535,7 +1414,6 @@ type AgreementClassRegisteredEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `code`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -1689,7 +1567,6 @@ type AgreementClassUpdatedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `code`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -1838,7 +1715,6 @@ NOTE: This event was deprecated since the introduction of the 3Ps system.
 Replaced by: `AgreementLiquidatedV2Event`
 See: https://docs.superfluid.finance/superfluid/sentinels/liquidations-and-toga#patricians-plebs-and-pirates-3ps for more details on the 3Ps system.
 See: https://github.com/superfluid-finance/protocol-monorepo/blob/dev/packages/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidToken.sol#L425 for more details on the events.
-
 """
 type AgreementLiquidatedByEvent implements Event {
   id: ID!
@@ -1853,7 +1729,6 @@ type AgreementLiquidatedByEvent implements Event {
   addresses[1] = liquidatorAccount (executor of liquidation)
   addresses[2] = penaltyAccount (the sender of the flow/stream)
   addresses[3] = bondAccount (the address receiving the reward - the reward account for the token, pre 3Ps)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -1867,15 +1742,9 @@ type AgreementLiquidatedByEvent implements Event {
   bondAccount: Bytes!
   rewardAmount: BigInt!
   bailoutAmount: BigInt!
-  """
-  The full deposit amount of the stream that was liquidated.
-  
-  """
+  """The full deposit amount of the stream that was liquidated."""
   deposit: BigInt!
-  """
-  The flow rate of the stream at the time of liquidation.
-  
-  """
+  """The flow rate of the stream at the time of liquidation."""
   flowRateAtLiquidation: BigInt!
 }
 
@@ -2106,7 +1975,6 @@ type AgreementLiquidatedV2Event implements Event {
   addresses[1] = `liquidatorAccount` (executor of liquidation)
   addresses[2] = `targetAccount` (the sender of the flow/stream)
   addresses[3] = `rewardAmountReceiver` (the address receiving the reward) addresses
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -2122,20 +1990,11 @@ type AgreementLiquidatedV2Event implements Event {
   targetAccountBalanceDelta: BigInt!
   version: BigInt!
   liquidationType: Int!
-  """
-  The full deposit amount of the stream that was liquidated.
-  
-  """
+  """The full deposit amount of the stream that was liquidated."""
   deposit: BigInt!
-  """
-  The flow rate of the stream at the time of liquidation.
-  
-  """
+  """The flow rate of the stream at the time of liquidation."""
   flowRateAtLiquidation: BigInt!
-  """
-  TO BE DEPRECATED in v2 endpoint - use rewardAmountReceiver instead
-  
-  """
+  """TO BE DEPRECATED in v2 endpoint - use rewardAmountReceiver instead"""
   rewardAccount: Bytes!
 }
 
@@ -2392,7 +2251,6 @@ type AppRegisteredEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `app`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -2536,26 +2394,18 @@ type ApprovalEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `owner`
   addresses[2] = `to`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address that will be granting allowance to transfer ERC20.
-  
-  """
+  """The address that will be granting allowance to transfer ERC20."""
   owner: Account!
-  """
-  The address that will be granted allowance to transfer ERC20.
-  
-  """
+  """The address that will be granted allowance to transfer ERC20."""
   to: Account!
   """
   If `amount` is non-zero, this event was emitted for the approval of an ERC20.
   Tne amount of ERC20 tokens that will be granted allowance to transfer.
-  
   """
   amount: BigInt!
 }
@@ -2761,20 +2611,15 @@ type BondIncreasedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address of the `token` (supertoken).
-  
-  """
+  """The address of the `token` (supertoken)."""
   token: Bytes!
   """
   The additional amount added to the bond by the current Patrician In Charge (PIC).
-  
   """
   additionalBond: BigInt!
 }
@@ -2924,7 +2769,6 @@ type BufferAdjustedEvent implements Event {
   addresses[1] = `pool`
   addresses[2] = `distributor`
   addresses[3] = `operator`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -3173,7 +3017,6 @@ type BurnedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `from`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -3372,17 +3215,13 @@ type CFAv1LiquidationPeriodChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `governanceAddress`
   addresses[1] = `host`
   addresses[2] = `superToken`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -3560,17 +3399,13 @@ type ConfigChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `governanceAddress`
   addresses[1] = `host`
   addresses[2] = `superToken`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -3763,7 +3598,6 @@ type CustomSuperTokenCreatedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -3907,7 +3741,6 @@ type DistributionClaimedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `pool`
   addresses[2] = `member`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -4139,61 +3972,38 @@ enum DistributionClaimedEvent_orderBy {
 
 """
 Event: An interface which is shared by all event entities and contains basic transaction data.
-
 """
 interface Event {
-  """
-  The id of the event entity.
-  
-  """
+  """The id of the event entity."""
   id: ID!
-  """
-  The block number which the event was logged in.
-  
-  """
+  """The block number which the event was logged in."""
   blockNumber: BigInt!
   """
   The index of the event, e.g. first event emitted would have `logIndex` of 0.
-  
   """
   logIndex: BigInt!
   """
   A number used internally to sort the order of transactions.
   The formula: `blockNumber * ORDER_MULTIPLIER + logIndex`
   where: ORDER_MULTIPLIER = 10000
-  
   """
   order: BigInt!
   """
   The name of the event - is a 1-to-1 match with the name in our smart contracts.
-  
   """
   name: String!
   """
   Contains the addresses for accounts that were "impacted" by the event.
   This typically involves accounts which experienced a state change as a result of the transaction which emitted this event.
-  
   """
   addresses: [Bytes!]!
-  """
-  The block timestamp which the event was logged in.
-  
-  """
+  """The block timestamp which the event was logged in."""
   timestamp: BigInt!
-  """
-  The transaction hash of the transaction that the event was logged in.
-  
-  """
+  """The transaction hash of the transaction that the event was logged in."""
   transactionHash: Bytes!
-  """
-  The gas price of the transaction that the event was logged in.
-  
-  """
+  """The gas price of the transaction that the event was logged in."""
   gasPrice: BigInt!
-  """
-  The gas used for this transaction.
-  
-  """
+  """The gas used for this transaction."""
   gasUsed: BigInt
 }
 
@@ -4319,20 +4129,15 @@ type ExitRateChangedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address of the `token` (supertoken).
-  
-  """
+  """The address of the `token` (supertoken)."""
   token: Bytes!
   """
   The flowrate at which the bond is streamed back to the Patrician In Charge.
-  
   """
   exitRate: BigInt!
 }
@@ -4482,7 +4287,6 @@ type FlowDistributionUpdatedEvent implements Event {
   addresses[1] = `pool`
   addresses[2] = `poolDistributor`
   addresses[3] = `operator`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -4778,13 +4582,9 @@ enum FlowDistributionUpdatedEvent_orderBy {
 
 """
 FlowOperator: A higher order entity that of a flow operator for an `AccountTokenSnapshot`.
-
 """
 type FlowOperator {
-  """
-  ID composed of: flowOperator-token-sender
-  
-  """
+  """ID composed of: flowOperator-token-sender"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -4796,12 +4596,10 @@ type FlowOperator {
   Delete | Update | Create
   | D | U | C |
   | 0 | 0 | 0 |
-  
   """
   permissions: Int!
   """
   The flow rate allowance granted to the `flowOperator` by the `sender`. This can be reset if the `sender` updates the `flowOperator` flow rate allowance.
-  
   """
   flowRateAllowanceGranted: BigInt!
   """
@@ -4809,13 +4607,9 @@ type FlowOperator {
   This will go down every time when the `flowOperator` uses the allowance, that is, if they increase flowRate for `sender` or create a new flow on behalf of `sender`.
   It can only be reset if the `sender` updates the flow rate allowance.
   NOTE: this value will NOT go down if max flow rate allowance is set.
-  
   """
   flowRateAllowanceRemaining: BigInt!
-  """
-  The transfer allowance granted to the `flowOperator` by the `sender`.
-  
-  """
+  """The transfer allowance granted to the `flowOperator` by the `sender`."""
   allowance: BigInt!
   flowOperator: Bytes!
   sender: Account!
@@ -4836,22 +4630,17 @@ type FlowOperatorUpdatedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = sender
   addresses[2] = `flowOperator`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address of the `token` being streamed.
-  
-  """
+  """The address of the `token` being streamed."""
   token: Bytes!
   sender: Bytes!
   """
   The permissions granted to the `flowOperator`.
   Octo bitmask representation.
-  
   """
   permissions: Int!
   flowRateAllowance: BigInt!
@@ -5274,7 +5063,6 @@ enum FlowOperator_orderBy {
 """
 FlowUpdated: An `Event` entity that is emitted
 when a flow is created, updated, or deleted.
-
 """
 type FlowUpdatedEvent implements Event {
   id: ID!
@@ -5288,81 +5076,51 @@ type FlowUpdatedEvent implements Event {
   addresses[0] = `token` (supertoken)
   addresses[1] = `sender`
   addresses[2] = `receiver`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address of the `token` (supertoken) being streamed.
-  
-  """
+  """The address of the `token` (supertoken) being streamed."""
   token: Bytes!
-  """
-  The address of the flow sender.
-  
-  """
+  """The address of the flow sender."""
   sender: Bytes!
-  """
-  The address of the flow receiver.
-  
-  """
+  """The address of the flow receiver."""
   receiver: Bytes!
   """
   The address that is executing the flow update transaction.
   This will be the zero address until the flowOperator feature is live.
-  
   """
   flowOperator: Bytes!
-  """
-  The flow rate per second.
-  
-  """
+  """The flow rate per second."""
   flowRate: BigInt!
   """
   The total (global/account level) flow rate of `sender` for `token` as of this event.
-  
   """
   totalSenderFlowRate: BigInt!
   """
   The total (global/account level) flow rate of `receiver` for `token` as of this event.
-  
   """
   totalReceiverFlowRate: BigInt!
-  """
-  The deposit amount put up for the creation of the flow.
-  
-  """
+  """The deposit amount put up for the creation of the flow."""
   deposit: BigInt!
-  """
-  Arbitrary bytes (additional data) passed upon flow creation.
-  
-  """
+  """Arbitrary bytes (additional data) passed upon flow creation."""
   userData: Bytes!
-  """
-  The previous flow rate, the absolute (positive) value.
-  
-  """
+  """The previous flow rate, the absolute (positive) value."""
   oldFlowRate: BigInt!
   """
   The "type" of the `FlowUpdated` event.
   0 = create
   1 = update
   2 = terminate
-  
   """
   type: Int!
   """
   The total amount streamed until the timestamp
   for the Stream entity linked to this event.
-  
   """
   totalAmountStreamedUntilTimestamp: BigInt!
-  """
-  The stream entity which is being modified.
-  
-  """
+  """The stream entity which is being modified."""
   stream: Stream!
 }
 
@@ -5641,7 +5399,6 @@ type GovernanceReplacedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `oldGovernance`
   addresses[1] = `newGovernance`
-  
   """
   addresses: [Bytes!]!
   oldGovernance: Bytes!
@@ -5782,15 +5539,9 @@ enum GovernanceReplacedEvent_orderBy {
   newGovernance
 }
 
-"""
-Index: An Index higher order entity.
-
-"""
+"""Index: An Index higher order entity."""
 type Index {
-  """
-  ID composed of: publisherAddress-tokenAddress-indexId
-  
-  """
+  """ID composed of: publisherAddress-tokenAddress-indexId"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -5799,49 +5550,35 @@ type Index {
   """
   NOTE: indexId is not the same as the id of the `Index` entity.
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   indexValue: BigInt!
   """
   The number of subscriptions which have units allocated to them on the `Index`.
-  
   """
   totalSubscriptionsWithUnits: Int!
   """
   The number of units allocated by the `Index` that are pending.
   This refers to the current (as of updatedAt) `totalUnitsPending`-not all that has ever been pending.
-  
   """
   totalUnitsPending: BigInt!
   """
   The number of units allocated by the `Index` that are approved.
   This refers to the current (as of updatedAt) `totalUnitsApproved`-not all that has ever been approved.
-  
   """
   totalUnitsApproved: BigInt!
-  """
-  The sum of `totalUnitsPending` and `totalUnitsApproved`.
-  
-  """
+  """The sum of `totalUnitsPending` and `totalUnitsApproved`."""
   totalUnits: BigInt!
-  """
-  The total amount distributed from this `Index`.
-  
-  """
+  """The total amount distributed from this `Index`."""
   totalAmountDistributedUntilUpdatedAt: BigInt!
   token: Token!
   publisher: Account!
   """
   The subscriptions of the index, it will include approved, unapproved
   and deleted subscriptions.
-  
   """
   subscriptions(skip: Int = 0, first: Int = 100, orderBy: IndexSubscription_orderBy, orderDirection: OrderDirection, where: IndexSubscription_filter): [IndexSubscription!]!
-  """
-  IndexCreated event, there will only be one.
-  
-  """
+  """IndexCreated event, there will only be one."""
   indexCreatedEvent: IndexCreatedEvent!
   indexDistributionClaimedEvents(skip: Int = 0, first: Int = 100, orderBy: IndexDistributionClaimedEvent_orderBy, orderDirection: OrderDirection, where: IndexDistributionClaimedEvent_filter): [IndexDistributionClaimedEvent!]!
   indexUpdatedEvents(skip: Int = 0, first: Int = 100, orderBy: IndexUpdatedEvent_orderBy, orderDirection: OrderDirection, where: IndexUpdatedEvent_filter): [IndexUpdatedEvent!]!
@@ -5861,21 +5598,16 @@ type IndexCreatedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   userData: Bytes!
@@ -6082,27 +5814,21 @@ type IndexDistributionClaimedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
   amount: BigInt!
@@ -6318,27 +6044,21 @@ type IndexSubscribedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
   userData: Bytes!
@@ -6546,12 +6266,10 @@ enum IndexSubscribedEvent_orderBy {
 
 """
 IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
-
 """
 type IndexSubscription {
   """
   ID composed of: subscriberAddress-publisherAddress-tokenAddress-IndexId
-  
   """
   id: ID!
   createdAtTimestamp: BigInt!
@@ -6562,32 +6280,25 @@ type IndexSubscription {
   """
   A boolean indicating whether the `IndexSubscription` is approved.
   Approved subscriptions don't require `subscriber` to claim tokens that are distributed from the publisher.
-  
   """
   approved: Boolean!
   """
   If `units` is `0`, it indicates that the subscription is "deleted" and `subscriber` is no longer subscribed to `index`.
-  
   """
   units: BigInt!
   """
   The total amount of tokens you've received via IDA until
   `updatedAtTimestamp`/`updatedAtBlock`.
-  
   """
   totalAmountReceivedUntilUpdatedAt: BigInt!
   """
   The previous index value - used to calculate `totalAmountReceivedUntilUpdatedAt` field as of the `index.updatedAtTimestamp`.
   The formula to get this value is:
   `IndexSubscription.totalAmountReceivedUntilUpdatedAt + ((index.newIndexValue - indexSubscription.indexValueUntilUpdatedAt) * indexSubscription.units)`.
-  
   """
   indexValueUntilUpdatedAt: BigInt!
   index: Index!
-  """
-  IndexSubscription approved events on the subscription.
-  
-  """
+  """IndexSubscription approved events on the subscription."""
   subscriptionApprovedEvents(skip: Int = 0, first: Int = 100, orderBy: SubscriptionApprovedEvent_orderBy, orderDirection: OrderDirection, where: SubscriptionApprovedEvent_filter): [SubscriptionApprovedEvent!]!
   subscriptionDistributionClaimedEvents(skip: Int = 0, first: Int = 100, orderBy: SubscriptionDistributionClaimedEvent_orderBy, orderDirection: OrderDirection, where: SubscriptionDistributionClaimedEvent_filter): [SubscriptionDistributionClaimedEvent!]!
   subscriptionRevokedEvents(skip: Int = 0, first: Int = 100, orderBy: SubscriptionRevokedEvent_orderBy, orderDirection: OrderDirection, where: SubscriptionRevokedEvent_filter): [SubscriptionRevokedEvent!]!
@@ -6763,27 +6474,21 @@ type IndexUnitsUpdatedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
   units: BigInt!
@@ -7021,27 +6726,21 @@ type IndexUnsubscribedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
   userData: Bytes!
@@ -7258,21 +6957,16 @@ type IndexUpdatedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
   token: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   oldIndexValue: BigInt!
@@ -7745,7 +7439,6 @@ type InstantDistributionUpdatedEvent implements Event {
   addresses[1] = `pool`
   addresses[2] = `poolDistributor`
   addresses[3] = `operator`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -8007,10 +7700,7 @@ enum InstantDistributionUpdatedEvent_orderBy {
   poolDistributor__flowRate
 }
 
-"""
-8 bytes signed integer
-
-"""
+"""8 bytes signed integer"""
 scalar Int8
 
 type JailEvent implements Event {
@@ -8023,7 +7713,6 @@ type JailEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `app`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -8177,7 +7866,6 @@ type MemberUnitsUpdatedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `pool`
   addresses[2] = `member`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -8429,7 +8117,6 @@ type MintedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `operator`
   addresses[2] = `to`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -8630,31 +8317,18 @@ type NewPICEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `pic` (new Patrician In Charge)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
   order: BigInt!
-  """
-  The address of the `token` (supertoken) the PIC is posting a bond for.
-  
-  """
+  """The address of the `token` (supertoken) the PIC is posting a bond for."""
   token: Bytes!
-  """
-  The address of the new Patrician In Charge (PIC).
-  
-  """
+  """The address of the new Patrician In Charge (PIC)."""
   pic: Bytes!
-  """
-  The bond the new PIC staked in order to claim the position.
-  
-  """
+  """The bond the new PIC staked in order to claim the position."""
   bond: BigInt!
-  """
-  The flowrate at which the bond is streamed back to the PIC.
-  
-  """
+  """The flowrate at which the bond is streamed back to the PIC."""
   exitRate: BigInt!
 }
 
@@ -8823,17 +8497,13 @@ type PPPConfigurationChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `governanceAddress`
   addresses[1] = `host`
   addresses[2] = `superToken`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -9015,10 +8685,7 @@ enum PPPConfigurationChangedEvent_orderBy {
 }
 
 type Pool {
-  """
-  ID: poolAddress
-  
-  """
+  """ID: poolAddress"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -9033,19 +8700,14 @@ type Pool {
   totalFlowAdjustmentAmountDistributedUntilUpdatedAt: BigInt!
   perUnitSettledValue: BigInt!
   perUnitFlowRate: BigInt!
-  """
-  A member is any account which has more than 0 units in the pool.
-  
-  """
+  """A member is any account which has more than 0 units in the pool."""
   totalMembers: Int!
   """
   A connected member is any account which has more than 0 units in the pool and is connected.
-  
   """
   totalConnectedMembers: Int!
   """
   A disconnected member is any account which has more than 0 units in the pool and is not connected.
-  
   """
   totalDisconnectedMembers: Int!
   adjustmentFlowRate: BigInt!
@@ -9076,7 +8738,6 @@ type PoolConnectionUpdatedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `pool`
   addresses[2] = `poolMember`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -9317,7 +8978,6 @@ type PoolCreatedEvent implements Event {
   addresses[1] = `pool`
   addresses[2] = `caller`
   addresses[3] = `admin`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -9517,10 +9177,7 @@ enum PoolCreatedEvent_orderBy {
 }
 
 type PoolDistributor {
-  """
-  ID composed of: "poolDistributor"-pool-poolDistributorAddress
-  
-  """
+  """ID composed of: "poolDistributor"-pool-poolDistributorAddress"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -9715,10 +9372,7 @@ enum PoolDistributor_orderBy {
 }
 
 type PoolMember {
-  """
-  ID composed of: "poolMember"-poolAddress-poolMemberAddress
-  
-  """
+  """ID composed of: "poolMember"-poolAddress-poolMemberAddress"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -12034,10 +11688,7 @@ type Query {
 }
 
 type ResolverEntry {
-  """
-  ID: the keccak256 hash of the set name
-  
-  """
+  """ID: the keccak256 hash of the set name"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -12134,10 +11785,7 @@ type RewardAddressChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
@@ -12145,7 +11793,6 @@ type RewardAddressChangedEvent implements Event {
   addresses[1] = `host`
   addresses[2] = `superToken`
   addresses[3] = `rewardAddress`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -12329,7 +11976,6 @@ type RoleAdminChangedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `previousAdminRole`
   addresses[1] = `newAdminRole`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -12496,7 +12142,6 @@ type RoleGrantedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `account`
   addresses[1] = `sender`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -12663,7 +12308,6 @@ type RoleRevokedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `account`
   addresses[1] = `sender`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -12820,27 +12464,15 @@ enum RoleRevokedEvent_orderBy {
 }
 
 type SFMeta {
-  """
-  The id is the commit hash.
-  
-  """
+  """The id is the commit hash."""
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
-  """
-  Whether the branch is feature/dev/v1.
-  
-  """
+  """Whether the branch is feature/dev/v1."""
   configuration: String!
-  """
-  The branch the current deployment is coming from.
-  
-  """
+  """The branch the current deployment is coming from."""
   branch: String!
-  """
-  The subgraph package.json semver version of the current deployment.
-  
-  """
+  """The subgraph package.json semver version of the current deployment."""
   packageVersion: String!
 }
 
@@ -12946,7 +12578,6 @@ enum SFMeta_orderBy {
 
 """
 WARNING: This event has been deprecated. It is not indexed anymore. It's kept in schema to avoid breakage in the schema.
-
 """
 type SentEvent implements Event {
   id: ID!
@@ -12960,7 +12591,6 @@ type SentEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `operator`
   addresses[2] = `from`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -13169,10 +12799,7 @@ type SetEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  Empty addresses array.
-  
-  """
+  """Empty addresses array."""
   addresses: [Bytes!]!
   blockNumber: BigInt!
   logIndex: BigInt!
@@ -13181,7 +12808,6 @@ type SetEvent implements Event {
   Because the name property is indexed, the
   returned value will be a keccak256 hash
   of the string.
-  
   """
   hashedName: Bytes!
   target: Bytes!
@@ -13357,12 +12983,10 @@ Stream: A higher order entity that represents the lifetime of a stream between a
 A account can start a stream, update the flow rate, but when they close it, it is considered "dead".
 The next stream you create with the same `sender` and `receiver` will create a new stream entity.
 Therefore, multiple stream entities can be created between the same `sender` and `receiver`.
-
 """
 type Stream {
   """
   ID composed of: senderAddress-receiverAddress-tokenAddress-revisionIndex
-  
   """
   id: ID!
   createdAtTimestamp: BigInt!
@@ -13375,7 +12999,6 @@ type Stream {
   The amount streamed until `updatedAtTimestamp`/`updatedAtBlock`.
   The formula to get the current streamed amount is:
   `streamedUntilUpdatedAt + ((currentTime in seconds) - updatedAtTimestamp) * currentFlowRate`.
-  
   """
   streamedUntilUpdatedAt: BigInt!
   token: Token!
@@ -13384,7 +13007,6 @@ type Stream {
   """
   The `userData` stored on the Stream is the last `userData` that was set in a `FlowUpdatedEvent`,
   for this particular stream. To see the historical `userData` for this stream, you can query the `flowUpdatedEvents` field.
-  
   """
   userData: Bytes!
   flowUpdatedEvents(skip: Int = 0, first: Int = 100, orderBy: FlowUpdatedEvent_orderBy, orderDirection: OrderDirection, where: FlowUpdatedEvent_filter): [FlowUpdatedEvent!]!
@@ -13393,13 +13015,9 @@ type Stream {
 
 """
 StreamPeriod: A higher order entity that represents a period of time in a Stream with a constant flowRate.
-
 """
 type StreamPeriod {
-  """
-  ID composed of: streamId - periodRevisionIndex
-  
-  """
+  """ID composed of: streamId - periodRevisionIndex"""
   id: ID!
   stream: Stream!
   sender: Account!
@@ -13410,10 +13028,7 @@ type StreamPeriod {
   startedAtTimestamp: BigInt!
   startedAtBlockNumber: BigInt!
   startedAtEvent: FlowUpdatedEvent!
-  """
-  Following values are null until the StreamPeriod is terminated
-  
-  """
+  """Following values are null until the StreamPeriod is terminated"""
   stoppedAtTimestamp: BigInt
   stoppedAtBlockNumber: BigInt
   stoppedAtEvent: FlowUpdatedEvent
@@ -13708,17 +13323,13 @@ enum StreamPeriod_orderBy {
 }
 
 type StreamRevision {
-  """
-  ID composed of: keccak256(abi.encode(sender,receiver))-tokenAddress
-  
-  """
+  """ID composed of: keccak256(abi.encode(sender,receiver))-tokenAddress"""
   id: ID!
   revisionIndex: Int!
   periodRevisionIndex: Int!
   """
   The "most recently alive" stream between a sender and receiver.
   Note: The `revisionIndex` property may not be the same as the `revisionIndex` of `mostRecentStream`. Which means `mostRecentStream` has been closed and no new stream has been opened.
-  
   """
   mostRecentStream: Stream!
 }
@@ -13976,1831 +13587,6 @@ enum Stream_orderBy {
   streamPeriods
 }
 
-type Subscription {
-  flowUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): FlowUpdatedEvent
-  flowUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: FlowUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: FlowUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [FlowUpdatedEvent!]!
-  flowOperatorUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): FlowOperatorUpdatedEvent
-  flowOperatorUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: FlowOperatorUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: FlowOperatorUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [FlowOperatorUpdatedEvent!]!
-  indexCreatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexCreatedEvent
-  indexCreatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexCreatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexCreatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexCreatedEvent!]!
-  indexDistributionClaimedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexDistributionClaimedEvent
-  indexDistributionClaimedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexDistributionClaimedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexDistributionClaimedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexDistributionClaimedEvent!]!
-  indexUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexUpdatedEvent
-  indexUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexUpdatedEvent!]!
-  indexSubscribedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexSubscribedEvent
-  indexSubscribedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexSubscribedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexSubscribedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexSubscribedEvent!]!
-  indexUnitsUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexUnitsUpdatedEvent
-  indexUnitsUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexUnitsUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexUnitsUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexUnitsUpdatedEvent!]!
-  indexUnsubscribedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexUnsubscribedEvent
-  indexUnsubscribedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexUnsubscribedEvent_orderBy
-    orderDirection: OrderDirection
-    where: IndexUnsubscribedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexUnsubscribedEvent!]!
-  subscriptionApprovedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SubscriptionApprovedEvent
-  subscriptionApprovedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SubscriptionApprovedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SubscriptionApprovedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SubscriptionApprovedEvent!]!
-  subscriptionDistributionClaimedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SubscriptionDistributionClaimedEvent
-  subscriptionDistributionClaimedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SubscriptionDistributionClaimedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SubscriptionDistributionClaimedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SubscriptionDistributionClaimedEvent!]!
-  subscriptionRevokedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SubscriptionRevokedEvent
-  subscriptionRevokedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SubscriptionRevokedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SubscriptionRevokedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SubscriptionRevokedEvent!]!
-  subscriptionUnitsUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SubscriptionUnitsUpdatedEvent
-  subscriptionUnitsUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SubscriptionUnitsUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SubscriptionUnitsUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SubscriptionUnitsUpdatedEvent!]!
-  poolCreatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): PoolCreatedEvent
-  poolCreatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: PoolCreatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: PoolCreatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [PoolCreatedEvent!]!
-  poolConnectionUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): PoolConnectionUpdatedEvent
-  poolConnectionUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: PoolConnectionUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: PoolConnectionUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [PoolConnectionUpdatedEvent!]!
-  bufferAdjustedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): BufferAdjustedEvent
-  bufferAdjustedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: BufferAdjustedEvent_orderBy
-    orderDirection: OrderDirection
-    where: BufferAdjustedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [BufferAdjustedEvent!]!
-  instantDistributionUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): InstantDistributionUpdatedEvent
-  instantDistributionUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: InstantDistributionUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: InstantDistributionUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [InstantDistributionUpdatedEvent!]!
-  flowDistributionUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): FlowDistributionUpdatedEvent
-  flowDistributionUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: FlowDistributionUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: FlowDistributionUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [FlowDistributionUpdatedEvent!]!
-  distributionClaimedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): DistributionClaimedEvent
-  distributionClaimedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: DistributionClaimedEvent_orderBy
-    orderDirection: OrderDirection
-    where: DistributionClaimedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [DistributionClaimedEvent!]!
-  memberUnitsUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): MemberUnitsUpdatedEvent
-  memberUnitsUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: MemberUnitsUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: MemberUnitsUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [MemberUnitsUpdatedEvent!]!
-  agreementClassRegisteredEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AgreementClassRegisteredEvent
-  agreementClassRegisteredEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AgreementClassRegisteredEvent_orderBy
-    orderDirection: OrderDirection
-    where: AgreementClassRegisteredEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AgreementClassRegisteredEvent!]!
-  agreementClassUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AgreementClassUpdatedEvent
-  agreementClassUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AgreementClassUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: AgreementClassUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AgreementClassUpdatedEvent!]!
-  appRegisteredEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AppRegisteredEvent
-  appRegisteredEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AppRegisteredEvent_orderBy
-    orderDirection: OrderDirection
-    where: AppRegisteredEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AppRegisteredEvent!]!
-  governanceReplacedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): GovernanceReplacedEvent
-  governanceReplacedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: GovernanceReplacedEvent_orderBy
-    orderDirection: OrderDirection
-    where: GovernanceReplacedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [GovernanceReplacedEvent!]!
-  jailEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): JailEvent
-  jailEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: JailEvent_orderBy
-    orderDirection: OrderDirection
-    where: JailEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [JailEvent!]!
-  superTokenFactoryUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SuperTokenFactoryUpdatedEvent
-  superTokenFactoryUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SuperTokenFactoryUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SuperTokenFactoryUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SuperTokenFactoryUpdatedEvent!]!
-  superTokenLogicUpdatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SuperTokenLogicUpdatedEvent
-  superTokenLogicUpdatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SuperTokenLogicUpdatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SuperTokenLogicUpdatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SuperTokenLogicUpdatedEvent!]!
-  roleAdminChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): RoleAdminChangedEvent
-  roleAdminChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: RoleAdminChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: RoleAdminChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [RoleAdminChangedEvent!]!
-  roleGrantedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): RoleGrantedEvent
-  roleGrantedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: RoleGrantedEvent_orderBy
-    orderDirection: OrderDirection
-    where: RoleGrantedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [RoleGrantedEvent!]!
-  roleRevokedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): RoleRevokedEvent
-  roleRevokedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: RoleRevokedEvent_orderBy
-    orderDirection: OrderDirection
-    where: RoleRevokedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [RoleRevokedEvent!]!
-  setEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SetEvent
-  setEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SetEvent_orderBy
-    orderDirection: OrderDirection
-    where: SetEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SetEvent!]!
-  cfav1LiquidationPeriodChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): CFAv1LiquidationPeriodChangedEvent
-  cfav1LiquidationPeriodChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: CFAv1LiquidationPeriodChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: CFAv1LiquidationPeriodChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [CFAv1LiquidationPeriodChangedEvent!]!
-  configChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ConfigChangedEvent
-  configChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ConfigChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: ConfigChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ConfigChangedEvent!]!
-  rewardAddressChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): RewardAddressChangedEvent
-  rewardAddressChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: RewardAddressChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: RewardAddressChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [RewardAddressChangedEvent!]!
-  pppconfigurationChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): PPPConfigurationChangedEvent
-  pppconfigurationChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: PPPConfigurationChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: PPPConfigurationChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [PPPConfigurationChangedEvent!]!
-  superTokenMinimumDepositChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SuperTokenMinimumDepositChangedEvent
-  superTokenMinimumDepositChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SuperTokenMinimumDepositChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SuperTokenMinimumDepositChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SuperTokenMinimumDepositChangedEvent!]!
-  trustedForwarderChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TrustedForwarderChangedEvent
-  trustedForwarderChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TrustedForwarderChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: TrustedForwarderChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TrustedForwarderChangedEvent!]!
-  agreementLiquidatedByEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AgreementLiquidatedByEvent
-  agreementLiquidatedByEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AgreementLiquidatedByEvent_orderBy
-    orderDirection: OrderDirection
-    where: AgreementLiquidatedByEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AgreementLiquidatedByEvent!]!
-  agreementLiquidatedV2Event(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AgreementLiquidatedV2Event
-  agreementLiquidatedV2Events(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AgreementLiquidatedV2Event_orderBy
-    orderDirection: OrderDirection
-    where: AgreementLiquidatedV2Event_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AgreementLiquidatedV2Event!]!
-  burnedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): BurnedEvent
-  burnedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: BurnedEvent_orderBy
-    orderDirection: OrderDirection
-    where: BurnedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [BurnedEvent!]!
-  mintedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): MintedEvent
-  mintedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: MintedEvent_orderBy
-    orderDirection: OrderDirection
-    where: MintedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [MintedEvent!]!
-  sentEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SentEvent
-  sentEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SentEvent_orderBy
-    orderDirection: OrderDirection
-    where: SentEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SentEvent!]!
-  transferEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TransferEvent
-  transferEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TransferEvent_orderBy
-    orderDirection: OrderDirection
-    where: TransferEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TransferEvent!]!
-  tokenDowngradedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TokenDowngradedEvent
-  tokenDowngradedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TokenDowngradedEvent_orderBy
-    orderDirection: OrderDirection
-    where: TokenDowngradedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TokenDowngradedEvent!]!
-  tokenUpgradedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TokenUpgradedEvent
-  tokenUpgradedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TokenUpgradedEvent_orderBy
-    orderDirection: OrderDirection
-    where: TokenUpgradedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TokenUpgradedEvent!]!
-  approvalEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ApprovalEvent
-  approvalEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ApprovalEvent_orderBy
-    orderDirection: OrderDirection
-    where: ApprovalEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ApprovalEvent!]!
-  customSuperTokenCreatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): CustomSuperTokenCreatedEvent
-  customSuperTokenCreatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: CustomSuperTokenCreatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: CustomSuperTokenCreatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [CustomSuperTokenCreatedEvent!]!
-  superTokenCreatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SuperTokenCreatedEvent
-  superTokenCreatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SuperTokenCreatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SuperTokenCreatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SuperTokenCreatedEvent!]!
-  superTokenLogicCreatedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SuperTokenLogicCreatedEvent
-  superTokenLogicCreatedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SuperTokenLogicCreatedEvent_orderBy
-    orderDirection: OrderDirection
-    where: SuperTokenLogicCreatedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SuperTokenLogicCreatedEvent!]!
-  newPICEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): NewPICEvent
-  newPICEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: NewPICEvent_orderBy
-    orderDirection: OrderDirection
-    where: NewPICEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [NewPICEvent!]!
-  exitRateChangedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ExitRateChangedEvent
-  exitRateChangedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ExitRateChangedEvent_orderBy
-    orderDirection: OrderDirection
-    where: ExitRateChangedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ExitRateChangedEvent!]!
-  bondIncreasedEvent(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): BondIncreasedEvent
-  bondIncreasedEvents(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: BondIncreasedEvent_orderBy
-    orderDirection: OrderDirection
-    where: BondIncreasedEvent_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [BondIncreasedEvent!]!
-  account(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Account
-  accounts(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Account_orderBy
-    orderDirection: OrderDirection
-    where: Account_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Account!]!
-  pool(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Pool
-  pools(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Pool_orderBy
-    orderDirection: OrderDirection
-    where: Pool_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Pool!]!
-  poolMember(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): PoolMember
-  poolMembers(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: PoolMember_orderBy
-    orderDirection: OrderDirection
-    where: PoolMember_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [PoolMember!]!
-  poolDistributor(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): PoolDistributor
-  poolDistributors(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: PoolDistributor_orderBy
-    orderDirection: OrderDirection
-    where: PoolDistributor_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [PoolDistributor!]!
-  index(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Index
-  indexes(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Index_orderBy
-    orderDirection: OrderDirection
-    where: Index_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Index!]!
-  indexSubscription(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): IndexSubscription
-  indexSubscriptions(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: IndexSubscription_orderBy
-    orderDirection: OrderDirection
-    where: IndexSubscription_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [IndexSubscription!]!
-  stream(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Stream
-  streams(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Stream_orderBy
-    orderDirection: OrderDirection
-    where: Stream_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Stream!]!
-  flowOperator(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): FlowOperator
-  flowOperators(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: FlowOperator_orderBy
-    orderDirection: OrderDirection
-    where: FlowOperator_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [FlowOperator!]!
-  streamPeriod(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): StreamPeriod
-  streamPeriods(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: StreamPeriod_orderBy
-    orderDirection: OrderDirection
-    where: StreamPeriod_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [StreamPeriod!]!
-  tokenGovernanceConfig(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TokenGovernanceConfig
-  tokenGovernanceConfigs(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TokenGovernanceConfig_orderBy
-    orderDirection: OrderDirection
-    where: TokenGovernanceConfig_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TokenGovernanceConfig!]!
-  streamRevision(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): StreamRevision
-  streamRevisions(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: StreamRevision_orderBy
-    orderDirection: OrderDirection
-    where: StreamRevision_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [StreamRevision!]!
-  token(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Token
-  tokens(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Token_orderBy
-    orderDirection: OrderDirection
-    where: Token_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Token!]!
-  resolverEntry(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ResolverEntry
-  resolverEntries(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ResolverEntry_orderBy
-    orderDirection: OrderDirection
-    where: ResolverEntry_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ResolverEntry!]!
-  accountTokenSnapshot(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AccountTokenSnapshot
-  accountTokenSnapshots(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AccountTokenSnapshot_orderBy
-    orderDirection: OrderDirection
-    where: AccountTokenSnapshot_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AccountTokenSnapshot!]!
-  accountTokenSnapshotLog(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): AccountTokenSnapshotLog
-  accountTokenSnapshotLogs(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: AccountTokenSnapshotLog_orderBy
-    orderDirection: OrderDirection
-    where: AccountTokenSnapshotLog_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [AccountTokenSnapshotLog!]!
-  tokenStatistic(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TokenStatistic
-  tokenStatistics(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TokenStatistic_orderBy
-    orderDirection: OrderDirection
-    where: TokenStatistic_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TokenStatistic!]!
-  tokenStatisticLog(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): TokenStatisticLog
-  tokenStatisticLogs(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: TokenStatisticLog_orderBy
-    orderDirection: OrderDirection
-    where: TokenStatisticLog_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [TokenStatisticLog!]!
-  sfmeta(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): SFMeta
-  sfmetas(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: SFMeta_orderBy
-    orderDirection: OrderDirection
-    where: SFMeta_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [SFMeta!]!
-  event(
-    id: ID!
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): Event
-  events(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: Event_orderBy
-    orderDirection: OrderDirection
-    where: Event_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [Event!]!
-  """Access to subgraph metadata"""
-  _meta(block: Block_height): _Meta_
-}
-
 type SubscriptionApprovedEvent implements Event {
   id: ID!
   transactionHash: Bytes!
@@ -15813,7 +13599,6 @@ type SubscriptionApprovedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -15823,17 +13608,12 @@ type SubscriptionApprovedEvent implements Event {
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   userData: Bytes!
@@ -16048,7 +13828,6 @@ type SubscriptionDistributionClaimedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -16058,17 +13837,12 @@ type SubscriptionDistributionClaimedEvent implements Event {
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   amount: BigInt!
@@ -16281,7 +14055,6 @@ type SubscriptionRevokedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -16291,17 +14064,12 @@ type SubscriptionRevokedEvent implements Event {
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   userData: Bytes!
@@ -16516,7 +14284,6 @@ type SubscriptionUnitsUpdatedEvent implements Event {
   addresses[0] = `token` (superToken)
   addresses[1] = `publisher`
   addresses[2] = `subscriber`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -16526,17 +14293,12 @@ type SubscriptionUnitsUpdatedEvent implements Event {
   """
   The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
   `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-  
   """
   subscriber: Bytes!
-  """
-  The creator of the `index`.
-  
-  """
+  """The creator of the `index`."""
   publisher: Bytes!
   """
   An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-  
   """
   indexId: BigInt!
   units: BigInt!
@@ -16769,7 +14531,6 @@ type SuperTokenCreatedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -16911,7 +14672,6 @@ type SuperTokenFactoryUpdatedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `newFactory`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -17053,7 +14813,6 @@ type SuperTokenLogicCreatedEvent implements Event {
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `tokenLogic`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -17196,7 +14955,6 @@ type SuperTokenLogicUpdatedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token`
   addresses[1] = `code`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -17347,17 +15105,13 @@ type SuperTokenMinimumDepositChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
   addresses[0] = `governanceAddress`
   addresses[1] = `host`
   addresses[2] = `superToken`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -17528,21 +15282,14 @@ enum SuperTokenMinimumDepositChangedEvent_orderBy {
   minimumDeposit
 }
 
-"""
-A string representation of microseconds UNIX timestamp (16 digits)
-
-"""
+"""A string representation of microseconds UNIX timestamp (16 digits)"""
 scalar Timestamp
 
 """
 Token: A higher order entity created for super tokens (and underlying tokens) that are "valid" (tokens that have Superfluid's host contract address set as the host).
-
 """
 type Token {
-  """
-  ID: the token address
-  
-  """
+  """ID: the token address"""
   id: ID!
   createdAtTimestamp: BigInt!
   createdAtBlockNumber: BigInt!
@@ -17550,29 +15297,20 @@ type Token {
   name: String!
   symbol: String!
   isSuperToken: Boolean!
-  """
-  A boolean indicating whether the token is a NativeAssetSuperToken.
-  
-  """
+  """A boolean indicating whether the token is a NativeAssetSuperToken."""
   isNativeAssetSuperToken: Boolean!
-  """
-  A boolean indicating whether the token is a part of our resolver list.
-  
-  """
+  """A boolean indicating whether the token is a part of our resolver list."""
   isListed: Boolean!
   """
   The address of the underlying ERC20 token (zero address for non-ERC20WrapperSuperToken's)
-  
   """
   underlyingAddress: Bytes!
   """
   The underlying ERC20 token for a ERC20WrapperSuperToken otherwise null.
-  
   """
   underlyingToken: Token
   """
   If `governanceConfig.id` is the zero address, the token uses the default governance config.
-  
   """
   governanceConfig: TokenGovernanceConfig
 }
@@ -17589,7 +15327,6 @@ type TokenDowngradedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `account`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -17762,13 +15499,11 @@ enum TokenDowngradedEvent_orderBy {
 """
 TokenGovernanceConfig: A higher order entity that represents the governance configs for a token.
 If `id` is `address(0)`, it will be used as the default config.
-
 """
 type TokenGovernanceConfig {
   """
   id is the address of the SuperToken
   NOTE: the zero address is reserved for the default config for all tokens with unset configs.
-  
   """
   id: ID!
   createdAtTimestamp: BigInt!
@@ -17777,34 +15512,26 @@ type TokenGovernanceConfig {
   updatedAtBlockNumber: BigInt!
   """
   If true, `id` is `address(0)` and this is the default config for all tokens with unset configs.
-  
   """
   isDefault: Boolean!
   """
   The (default or token-specific) address that receives liquidation rewards for a token prior to 3Ps and the TOGA address after 3Ps.
-  
   """
   rewardAddress: Bytes
   """
   The (default or token-specific) liquidation period (buffer amount required for a token).
   This field can be used to calculate the liquidation buffer (or deposit) amount for a token: `liquidationBufferAmount = liquidationPeriod * flowRate`.
   Note that if `minimumDeposit` is set, the liquidation buffer amount will be the greater of the two values.
-  
   """
   liquidationPeriod: BigInt
   """
   The (default or token-specific) patrician period, the patrician period is the window in which a patrician receives all rewards for a liquidation, no matter the liquidating account.
-  
   """
   patricianPeriod: BigInt
-  """
-  The (default or token-specific) minimum deposit amount.
-  
-  """
+  """The (default or token-specific) minimum deposit amount."""
   minimumDeposit: BigInt
   """
   A reverse lookup to the token it is associated with and null if it is the default config.
-  
   """
   token: Token
 }
@@ -17941,150 +15668,95 @@ enum TokenGovernanceConfig_orderBy {
 
 """
 TokenStatistic: An aggregate entity which contains aggregate data for `token`.
-
 """
 type TokenStatistic {
-  """
-  id: `token` (superToken) address
-  
-  """
+  """id: `token` (superToken) address"""
   id: ID!
   updatedAtTimestamp: BigInt!
   updatedAtBlockNumber: BigInt!
-  """
-  The total number of currently active `token` streams.
-  
-  """
+  """The total number of currently active `token` streams."""
   totalNumberOfActiveStreams: Int!
-  """
-  The total number of currently active `token` streams for the CFA.
-  
-  """
+  """The total number of currently active `token` streams for the CFA."""
   totalCFANumberOfActiveStreams: Int!
-  """
-  The total number of currently active `token` streams for the GDA.
-  
-  """
+  """The total number of currently active `token` streams for the GDA."""
   totalGDANumberOfActiveStreams: Int!
-  """
-  The count of closed streams for `token`.
-  
-  """
+  """The count of closed streams for `token`."""
   totalNumberOfClosedStreams: Int!
-  """
-  The count of closed streams for `token` for the CFA.
-  
-  """
+  """The count of closed streams for `token` for the CFA."""
   totalCFANumberOfClosedStreams: Int!
-  """
-  The count of closed streams for `token` for the GDA.
-  
-  """
+  """The count of closed streams for `token` for the GDA."""
   totalGDANumberOfClosedStreams: Int!
-  """
-  The total number of Indexes created with `token`.
-  
-  """
+  """The total number of Indexes created with `token`."""
   totalNumberOfIndexes: Int!
   """
   The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`.
-  
   """
   totalNumberOfActiveIndexes: Int!
   """
   The number of subscriptions which have units allocated to them created with Indexes that distribute `token`.
-  
   """
   totalSubscriptionsWithUnits: Int!
-  """
-  Counts all approved subscriptions whether or not they have units.
-  
-  """
+  """Counts all approved subscriptions whether or not they have units."""
   totalApprovedSubscriptions: Int!
-  """
-  The total number of Pools created with `token`.
-  
-  """
+  """The total number of Pools created with `token`."""
   totalNumberOfPools: Int!
   """
   The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`.
-  
   """
   totalNumberOfActivePools: Int!
   """
   The number of memberships which have units allocated to them created with Pools that distribute `token`.
-  
   """
   totalMembershipsWithUnits: Int!
-  """
-  Counts all approved memberships whether or not they have units.
-  
-  """
+  """Counts all approved memberships whether or not they have units."""
   totalConnectedMemberships: Int!
   """
   The total deposit held by all flow agreements for this particular `token`.
-  
   """
   totalDeposit: BigInt!
-  """
-  The total deposit held by the CFA for this particular `token`.
-  
-  """
+  """The total deposit held by the CFA for this particular `token`."""
   totalCFADeposit: BigInt!
   """
   The total deposit held by the GDA agreement for this particular `token`.
-  
   """
   totalGDADeposit: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for all flow agreements.
-  
   """
   totalOutflowRate: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for the CFA.
-  
   """
   totalCFAOutflowRate: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for the GDA.
-  
   """
   totalGDAOutflowRate: BigInt!
   """
   The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-  
   """
   totalAmountStreamedUntilUpdatedAt: BigInt!
   """
   The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-  
   """
   totalCFAAmountStreamedUntilUpdatedAt: BigInt!
   """
   The all-time total amount transferred until the `updatedAtTimestamp`/`updatedAtBlock`.
-  
   """
   totalAmountTransferredUntilUpdatedAt: BigInt!
   """
   The all-time total amount distributed until the `updatedAtTimestamp`/`updatedAtBlock`.
-  
   """
   totalAmountDistributedUntilUpdatedAt: BigInt!
   """
   The total supply of the token - this is impacted by users upgrading/downgrading their tokens.
-  
   """
   totalSupply: BigInt!
   """
   The total number of accounts that have interacted with the token (but might not hold a balance anymore).
-  
   """
   totalNumberOfAccounts: Int!
-  """
-  The total number of accounts holding a non-zero balance of the token.
-  
-  """
+  """The total number of accounts holding a non-zero balance of the token."""
   totalNumberOfHolders: Int!
   token: Token!
   tokenStatisticLogs(skip: Int = 0, first: Int = 100, orderBy: TokenStatisticLog_orderBy, orderDirection: OrderDirection, where: TokenStatisticLog_filter): [TokenStatisticLog!]!
@@ -18093,7 +15765,6 @@ type TokenStatistic {
 """
 TokenStatisticLog: Historical entries of `TokenStatistic` updates.
 WARNING: This entity has been deprecated. It is not indexed anymore. It's kept in schema to avoid breakage in the schema.
-
 """
 type TokenStatisticLog {
   id: ID!
@@ -18105,138 +15776,91 @@ type TokenStatisticLog {
   triggeredByEventName: String!
   """
   The total number of currently active `token` streams for all flow agreements.
-  
   """
   totalNumberOfActiveStreams: Int!
-  """
-  The total number of currently active `token` streams for the CFA.
-  
-  """
+  """The total number of currently active `token` streams for the CFA."""
   totalCFANumberOfActiveStreams: Int!
-  """
-  The total number of currently active `token` streams for the GDA.
-  
-  """
+  """The total number of currently active `token` streams for the GDA."""
   totalGDANumberOfActiveStreams: Int!
-  """
-  The count of closed streams for `token` for all flow agreements.
-  
-  """
+  """The count of closed streams for `token` for all flow agreements."""
   totalNumberOfClosedStreams: Int!
-  """
-  The count of closed streams for `token` for the CFA.
-  
-  """
+  """The count of closed streams for `token` for the CFA."""
   totalCFANumberOfClosedStreams: Int!
-  """
-  The count of closed streams for `token` for the GDA.
-  
-  """
+  """The count of closed streams for `token` for the GDA."""
   totalGDANumberOfClosedStreams: Int!
-  """
-  The total number of Indexes created with `token`.
-  
-  """
+  """The total number of Indexes created with `token`."""
   totalNumberOfIndexes: Int!
   """
   The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`.
-  
   """
   totalNumberOfActiveIndexes: Int!
   """
   The number of subscriptions which have units allocated to them created with Indexes that distribute `token`.
-  
   """
   totalSubscriptionsWithUnits: Int!
-  """
-  Counts all approved subscriptions whether or not they have units.
-  
-  """
+  """Counts all approved subscriptions whether or not they have units."""
   totalApprovedSubscriptions: Int!
-  """
-  The total number of Pools created with `token`.
-  
-  """
+  """The total number of Pools created with `token`."""
   totalNumberOfPools: Int!
   """
   The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`.
-  
   """
   totalNumberOfActivePools: Int!
   """
   The number of memberships which have units allocated to them created with Pools that distribute `token`.
-  
   """
   totalMembershipsWithUnits: Int!
-  """
-  Counts all connected memberships whether or not they have units.
-  
-  """
+  """Counts all connected memberships whether or not they have units."""
   totalConnectedMemberships: Int!
   """
   The total deposit held by the CFA agreement for this particular `token` for all flow agreements.
-  
   """
   totalDeposit: BigInt!
   """
   The total deposit held by the CFA agreement for this particular `token` for the CFA.
-  
   """
   totalCFADeposit: BigInt!
   """
   The total deposit held by the CFA agreement for this particular `token` for the GDA.
-  
   """
   totalGDADeposit: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for all flow agreements.
-  
   """
   totalOutflowRate: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for the CFA.
-  
   """
   totalCFAOutflowRate: BigInt!
   """
   The total outflow rate of the `token` (how much value is being moved) for the GDA.
-  
   """
   totalGDAOutflowRate: BigInt!
   """
   The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for all flow agreements.
-  
   """
   totalAmountStreamed: BigInt!
   """
   The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the CFA.
-  
   """
   totalCFAAmountStreamed: BigInt!
   """
   The all-time total amount of `token` transferred until the `timestamp`/`block`.
-  
   """
   totalAmountTransferred: BigInt!
   """
   The all-time total amount of `token` distributed until the `timestamp`/`block`.
-  
   """
   totalAmountDistributed: BigInt!
   """
   The total supply of the token - this is impacted by users upgrading/downgrading their tokens.
-  
   """
   totalSupply: BigInt!
   """
   The total number of accounts that have interacted with the token (but might not hold a balance anymore).
-  
   """
   totalNumberOfAccounts: Int!
-  """
-  The total number of accounts holding a non-zero balance of the token.
-  
-  """
+  """The total number of accounts holding a non-zero balance of the token."""
   totalNumberOfHolders: Int!
   token: Token!
   tokenStatistic: TokenStatistic!
@@ -18982,7 +16606,6 @@ type TokenUpgradedEvent implements Event {
   Contains the addresses that were impacted by this event:
   addresses[0] = `token` (superToken)
   addresses[1] = `account`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -19342,7 +16965,6 @@ type TransferEvent implements Event {
   addresses[0] = `token`
   addresses[1] = `from`
   addresses[2] = `to`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -19549,10 +17171,7 @@ type TrustedForwarderChangedEvent implements Event {
   gasUsed: BigInt
   timestamp: BigInt!
   name: String!
-  """
-  The address of the governance contract the event was emitted from.
-  
-  """
+  """The address of the governance contract the event was emitted from."""
   governanceAddress: Bytes!
   """
   Contains the addresses that were impacted by this event:
@@ -19560,7 +17179,6 @@ type TrustedForwarderChangedEvent implements Event {
   addresses[1] = `host`
   addresses[2] = `superToken`
   addresses[3] = `forwarder`
-  
   """
   addresses: [Bytes!]!
   blockNumber: BigInt!
@@ -19757,7 +17375,6 @@ type _Meta_ {
   will be null if the _meta field has a block constraint that asks for
   a block number. It will be filled if the _meta field has no block constraint
   and therefore asks for the latest  block
-  
   """
   block: _Block_!
   """The deployment ID"""

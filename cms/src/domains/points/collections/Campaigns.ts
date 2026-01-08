@@ -56,16 +56,6 @@ export const Campaigns: CollectionConfig = {
 	},
 	fields: [
 		{
-			name: "relatedEntities",
-			type: "ui",
-			admin: {
-				components: {
-					Cell: "/components/CampaignRelatedLinksCell#CampaignRelatedLinksCell",
-					Field: "/components/CampaignRelatedLinksField#CampaignRelatedLinksField",
-				},
-			},
-		},
-		{
 			name: "id",
 			label: "Campaign ID",
 			type: "number",
@@ -101,6 +91,16 @@ export const Campaigns: CollectionConfig = {
 						return value
 					},
 				],
+			},
+		},
+		{
+			name: "relatedEntities",
+			type: "ui",
+			admin: {
+				components: {
+					Cell: "/components/CampaignRelatedLinksCell#CampaignRelatedLinksCell",
+					Field: "/components/CampaignRelatedLinksField#CampaignRelatedLinksField",
+				},
 			},
 		},
 	],
