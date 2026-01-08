@@ -1,6 +1,5 @@
 import { task } from "@trigger.dev/sdk"
 import { getPayloadInstance } from "@/payload"
-import type { Campaign } from "@/payload-types"
 
 // Stack API Types
 type StackLeaderboardEntry = {
@@ -22,6 +21,7 @@ type SyncStackLeaderboardPayload = {
 	stackLeaderboardId: string
 	campaignId: number
 	persist?: boolean // Default false = dry-run, true = write to DB
+	disableNegativeSync?: boolean // Default false = sync negative deltas
 }
 
 // Constants
@@ -83,8 +83,9 @@ async function fetchAllStackEntries(leaderboardId: string): Promise<StackLeaderb
  *
  * For each account:
  * - If already synced (dedupKey exists): skip
- * - If Stack points <= CMS points: skip
- * - If Stack points > CMS points: create PointEvent for the delta
+ * - If delta === 0: skip
+ * - If disableNegativeSync=true and delta < 0: skip
+ * - Otherwise: create PointEvent for the delta
  */
 export const syncStackLeaderboard = task({
 	id: "sync-stack-leaderboard",
@@ -95,27 +96,28 @@ export const syncStackLeaderboard = task({
 		maxAttempts: 3,
 	},
 	run: async (payload: SyncStackLeaderboardPayload) => {
-		const { stackLeaderboardId, campaignId, persist = false } = payload
+		const { stackLeaderboardId, campaignId, persist = false, disableNegativeSync = false } = payload
 
 		// Calculate time window for deduplication (rounded to 15-minute intervals)
 		const timeWindow = Math.floor(Date.now() / DEDUP_WINDOW_MS) * DEDUP_WINDOW_MS
 		const uniqueId = `stack:${stackLeaderboardId}:${timeWindow}`
 
 		console.log(
-			`Starting Stack leaderboard sync: leaderboard=${stackLeaderboardId}, campaign=${campaignId}, persist=${persist}, timeWindow=${new Date(timeWindow).toISOString()}`,
+			`Starting Stack leaderboard sync: leaderboard=${stackLeaderboardId}, campaign=${campaignId}, persist=${persist}, disableNegativeSync=${disableNegativeSync}, timeWindow=${new Date(timeWindow).toISOString()}`,
 		)
 
 		const db = await getPayloadInstance()
 
-		// 1. Validate campaign exists
-		let campaign: Campaign
-		try {
-			campaign = await db.findByID({
-				collection: "campaigns",
-				id: campaignId,
-			})
-		} catch {
-			throw new Error(`Campaign ${campaignId} not found`)
+		// 1. Validate campaign exists (only when persisting)
+		if (persist) {
+			try {
+				await db.findByID({
+					collection: "campaigns",
+					id: campaignId,
+				})
+			} catch {
+				throw new Error(`Campaign ${campaignId} not found`)
+			}
 		}
 
 		// 2. Fetch all entries from Stack
@@ -204,8 +206,8 @@ export const syncStackLeaderboard = task({
 			// Calculate delta
 			const delta = entry.totalPoints - cmsBalance
 
-			if (delta <= 0) {
-				// CMS already has equal or more points
+			// Skip if no change, or if negative and disableNegativeSync is true
+			if (delta === 0 || (delta < 0 && disableNegativeSync)) {
 				skippedCount++
 				continue
 			}
