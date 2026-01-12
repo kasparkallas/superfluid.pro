@@ -225,6 +225,11 @@ export const BatchEventMinimalSchema = z
 // Single event with all fields
 export const PushEventSchema = z
 	.object({
+		campaign: z.number().int().positive().optional().openapi({
+			example: 42,
+			description:
+				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+		}),
 		eventName: z.string().min(1).max(100).openapi({
 			example: "swap",
 			description: "Name of the event (1-100 characters)",
@@ -256,6 +261,11 @@ export const SingleEventRequestSchema = PushEventSchema.openapi({
 // Format 2: Batch with root-level defaults
 export const BatchWithDefaultsRequestSchema = z
 	.object({
+		campaign: z.number().int().positive().optional().openapi({
+			example: 42,
+			description:
+				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+		}),
 		eventName: z.string().min(1).max(100).openapi({
 			example: "swap",
 			description: "Event name applied to all events in the batch",
@@ -276,6 +286,11 @@ export const BatchWithDefaultsRequestSchema = z
 // Format 3: Batch with per-event values
 export const BatchWithPerEventRequestSchema = z
 	.object({
+		campaign: z.number().int().positive().optional().openapi({
+			example: 42,
+			description:
+				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+		}),
 		events: z.array(PushEventSchema).min(1).max(1000).openapi({
 			description: "Array of events with individual eventNames (1-1000 items)",
 		}),

@@ -30,6 +30,7 @@ const eventWithoutEventName = baseEventSchema.extend({
 
 // Single event request (convenience)
 const singleEventSchema = z.object({
+	campaign: z.number().int().positive().optional(),
 	eventName: z.string().min(1).max(100),
 	account: z
 		.string()
@@ -41,6 +42,7 @@ const singleEventSchema = z.object({
 
 // Batch with root-level defaults
 const batchWithDefaultsSchema = z.object({
+	campaign: z.number().int().positive().optional(),
 	eventName: z.string().min(1).max(100),
 	uniqueId: z.string().max(255).optional(),
 	events: z.array(eventWithoutEventName).min(1).max(1000),
@@ -48,6 +50,7 @@ const batchWithDefaultsSchema = z.object({
 
 // Batch with per-event values
 const batchWithPerEventSchema = z.object({
+	campaign: z.number().int().positive().optional(),
 	eventName: z.never().optional(),
 	uniqueId: z.never().optional(),
 	events: z.array(eventWithEventName).min(1).max(1000),
@@ -127,6 +130,19 @@ export const POST = async (request: Request): Promise<Response> => {
 				},
 				{ status: 400 },
 			)
+		}
+
+		// If campaign ID provided, validate it matches the API key's campaign
+		if ("campaign" in parsed.data && parsed.data.campaign !== undefined) {
+			if (parsed.data.campaign !== campaign.id) {
+				return Response.json(
+					{
+						error: "Campaign mismatch",
+						message: `Provided campaign ID (${parsed.data.campaign}) does not match API key's campaign (${campaign.id})`,
+					},
+					{ status: 403 },
+				)
+			}
 		}
 
 		// Normalize to standard format

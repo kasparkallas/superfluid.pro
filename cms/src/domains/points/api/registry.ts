@@ -295,11 +295,16 @@ pointsRegistry.registerPath({
 	summary: "Push point events",
 	description: `Push one or more point events for processing. Events are processed asynchronously in the background.
 
+**Campaign Validation (Strongly Recommended):**
+
+Include the \`campaign\` field with the campaign ID to verify you're pushing to the correct campaign. If provided, it must match the API key's associated campaign or the request will be rejected with a 403 error.
+
 **Request Formats:**
 
 1. **Single Event** - Push a single event directly:
 \`\`\`json
 {
+  "campaign": 42, // optional but strongly recommended
   "eventName": "swap",
   "account": "0x...",
   "points": 100,
@@ -310,6 +315,7 @@ pointsRegistry.registerPath({
 2. **Batch with Shared eventName** - All events share the root eventName:
 \`\`\`json
 {
+  "campaign": 42, // optional but strongly recommended
   "eventName": "swap",
   "uniqueId": "batch-123", // optional, applied to all
   "events": [
@@ -322,6 +328,7 @@ pointsRegistry.registerPath({
 3. **Batch with Per-Event eventNames** - Each event has its own eventName:
 \`\`\`json
 {
+  "campaign": 42, // optional but strongly recommended
   "events": [
     { "eventName": "swap", "account": "0x...", "points": 100 },
     { "eventName": "stake", "account": "0x...", "points": 200 }
@@ -342,6 +349,7 @@ pointsRegistry.registerPath({
 						single: {
 							summary: "Single event",
 							value: {
+								campaign: 42,
 								eventName: "swap",
 								account: "0x1234567890abcdef1234567890abcdef12345678",
 								points: 100,
@@ -351,6 +359,7 @@ pointsRegistry.registerPath({
 						batchWithDefaults: {
 							summary: "Batch with shared eventName",
 							value: {
+								campaign: 42,
 								eventName: "daily_login",
 								events: [
 									{ account: "0x1234567890abcdef1234567890abcdef12345678", points: 10 },
@@ -361,6 +370,7 @@ pointsRegistry.registerPath({
 						batchPerEvent: {
 							summary: "Batch with per-event eventNames",
 							value: {
+								campaign: 42,
 								events: [
 									{
 										eventName: "swap",
@@ -406,6 +416,18 @@ pointsRegistry.registerPath({
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
+				},
+			},
+		},
+		403: {
+			description: "Campaign mismatch (provided campaign ID does not match API key's campaign)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+					example: {
+						error: "Campaign mismatch",
+						message: "Provided campaign ID (99) does not match API key's campaign (42)",
+					},
 				},
 			},
 		},
