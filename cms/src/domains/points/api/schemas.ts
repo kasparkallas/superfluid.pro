@@ -361,3 +361,55 @@ export const SignedBalanceResponseSchema = z
 		title: "SignedBalanceResponse",
 		description: "Signed point balance for on-chain verification",
 	})
+
+// ============================================
+// Batch Signed Balance Endpoint Schemas
+// ============================================
+
+export const SignedBalanceBatchQuerySchema = z
+	.object({
+		campaigns: z.string().openapi({
+			example: "1,2,3",
+			description: "Comma-separated list of campaign IDs (max 50)",
+		}),
+		account: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address to get signed balances for",
+		}),
+	})
+	.openapi({
+		title: "SignedBalanceBatchQuery",
+		description: "Query parameters for batch signed balance endpoint",
+	})
+
+export const SignedBalanceBatchResponseSchema = z
+	.object({
+		address: z.string().openapi({
+			example: "0x1234567890abcdef1234567890ABCDEF12345678",
+			description: "Checksummed Ethereum address",
+		}),
+		campaigns: z.array(z.number()).openapi({
+			example: [7853, 7852, 7850],
+			description: "Array of campaign IDs in request order",
+		}),
+		points: z.array(z.number()).openapi({
+			example: [100, 200, 300],
+			description: "Array of point balances matching campaign order",
+		}),
+		signatureTimestamp: z.number().openapi({
+			example: 1704672000,
+			description: "Unix timestamp when the signature was generated",
+		}),
+		signature: z.string().openapi({
+			example: "0x8afc2c13c4ed315fcff3f93e4be66815ef259042c789f7e30be2a6160a5fc70f...",
+			description: "Single EIP-191 signature covering all campaigns",
+		}),
+		signer: z.string().openapi({
+			example: "0xBc2cfCd4c615Ff1d06f1d07b37E3652b15bd40A2",
+			description: "Address of the signer that produced the signature",
+		}),
+	})
+	.openapi({
+		title: "SignedBalanceBatchResponse",
+		description: "Batch signed point balance for on-chain batch claims",
+	})

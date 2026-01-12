@@ -9,6 +9,8 @@ import {
 	PointEventSchema,
 	PointEventsResponseSchema,
 	PushResponseSchema,
+	SignedBalanceBatchQuerySchema,
+	SignedBalanceBatchResponseSchema,
 	SignedBalanceQuerySchema,
 	SignedBalanceResponseSchema,
 	SingleEventRequestSchema,
@@ -24,6 +26,7 @@ pointsRegistry.register("PointEventsResponse", PointEventsResponseSchema)
 pointsRegistry.register("Pagination", PaginationSchema)
 pointsRegistry.register("PushResponse", PushResponseSchema)
 pointsRegistry.register("SignedBalanceResponse", SignedBalanceResponseSchema)
+pointsRegistry.register("SignedBalanceBatchResponse", SignedBalanceBatchResponseSchema)
 pointsRegistry.register("ApiError", ApiErrorSchema)
 
 // Register security scheme
@@ -148,6 +151,75 @@ This can be verified on-chain using ECDSA recovery.`,
 		},
 		404: {
 			description: "Campaign not found",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error (signing not available or other error)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// GET /points/signed-balance-batch
+// ============================================
+pointsRegistry.registerPath({
+	method: "get",
+	path: "/points/signed-balance-batch",
+	summary: "Get batch signed point balances",
+	description: `Returns a single signature covering multiple campaigns for the same account. Enables batch on-chain claims.
+
+**Request:**
+- \`campaigns\`: Comma-separated list of campaign IDs (max 50)
+- \`account\`: Ethereum address
+
+**Signature Structure:**
+The message hash is computed as:
+\`\`\`
+keccak256(encodePacked([address, uint256[] points, uint256[] campaigns, uint256 timestamp]))
+\`\`\`
+
+This produces a single signature that covers all campaigns, allowing batch verification on-chain.`,
+	tags: ["Signed Balance"],
+	request: {
+		query: SignedBalanceBatchQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Batch signed balances retrieved successfully",
+			content: {
+				"application/json": {
+					schema: SignedBalanceBatchResponseSchema,
+					example: {
+						address: "0x1234567890abcdef1234567890ABCDEF12345678",
+						campaigns: [7853, 7852, 7850],
+						points: [100, 200, 300],
+						signatureTimestamp: 1704672000,
+						signature:
+							"0x8afc2c13c4ed315fcff3f93e4be66815ef259042c789f7e30be2a6160a5fc70f1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1c",
+						signer: "0xBc2cfCd4c615Ff1d06f1d07b37E3652b15bd40A2",
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (invalid address, campaign ID format, or exceeds 50 campaigns limit)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "One or more campaigns not found",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,

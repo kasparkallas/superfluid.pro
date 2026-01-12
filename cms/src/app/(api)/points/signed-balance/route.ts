@@ -1,5 +1,5 @@
 import { encodePacked, getAddress, isAddress, keccak256 } from "viem"
-import { privateKeyToAccount } from "viem/accounts"
+import { signMessageHash } from "@/domains/points/utils/signing"
 import { getPayloadInstance } from "@/payload"
 
 /**
@@ -12,13 +12,6 @@ import { getPayloadInstance } from "@/payload"
  */
 export const GET = async (request: Request): Promise<Response> => {
 	try {
-		// Validate signer key is configured
-		const signerPrivateKey = process.env.SIGNER_PRIVATE_KEY as `0x${string}` | undefined
-		if (!signerPrivateKey) {
-			console.error("SIGNER_PRIVATE_KEY is not configured")
-			return Response.json({ error: "Signing not available" }, { status: 500 })
-		}
-
 		const url = new URL(request.url)
 
 		// Get campaign parameter (required)
@@ -69,11 +62,8 @@ export const GET = async (request: Request): Promise<Response> => {
 			// Balance doesn't exist, default to 0
 		}
 
-		// Generate signature
-		const signer = privateKeyToAccount(signerPrivateKey)
-		const signatureTimestamp = Math.floor(Date.now() / 1000)
-
 		// Create message hash: keccak256(encodePacked([address, points, campaignId, timestamp]))
+		const signatureTimestamp = Math.floor(Date.now() / 1000)
 		const checksumAddress = getAddress(accountLower)
 		const messageHash = keccak256(
 			encodePacked(
@@ -83,16 +73,18 @@ export const GET = async (request: Request): Promise<Response> => {
 		)
 
 		// Sign the message hash
-		const signature = await signer.signMessage({
-			message: { raw: messageHash },
-		})
+		const signingResult = await signMessageHash(messageHash)
+		if (!signingResult) {
+			console.error("SIGNER_PRIVATE_KEY is not configured")
+			return Response.json({ error: "Signing not available" }, { status: 500 })
+		}
 
 		return Response.json({
 			address: checksumAddress,
 			points,
 			signatureTimestamp,
-			signature,
-			signer: signer.address,
+			signature: signingResult.signature,
+			signer: signingResult.signer,
 		})
 	} catch (error) {
 		console.error("Failed to get signed balance:", error)
