@@ -359,9 +359,133 @@ export function generatePointsOpenApiDocument() {
 			version: "1.0.0",
 			description: `API for managing point-based reward campaigns in the Superfluid ecosystem.
 
+## Overview
+
+Generate a type-safe TypeScript client from this OpenAPI specification. Choose between two approaches:
+
+| Approach | Best For | Semver | Output |
+|----------|----------|--------|--------|
+| **openapi-fetch** | Simple integrations, stability | Yes | Types + fetch wrapper |
+| **hey-api** | Full SDK, React Query, plugins | No | Complete SDK |
+
+## TypeScript Client: openapi-fetch
+
+A lightweight fetch wrapper with full TypeScript inference. Recommended for most integrations.
+
+**Why choose this?**
+- Follows [semver](https://semver.org/) - safe for production
+- Minimal bundle size (~5kb)
+- Uses native fetch - works everywhere
+- Maintained by [openapi-ts](https://openapi-ts.dev/)
+
+### Installation
+
+\`\`\`bash
+npm install openapi-fetch
+\`\`\`
+
+### Generate Types
+
+\`\`\`bash
+npx openapi-typescript YOUR_SERVER/points/openapi.json -o ./points-api.d.ts
+\`\`\`
+
+### Usage
+
+\`\`\`typescript
+import createClient from 'openapi-fetch';
+import type { paths } from './points-api';
+
+const client = createClient<paths>({ baseUrl: 'YOUR_SERVER' });
+
+// Query balance (public endpoint)
+const { data, error } = await client.GET('/points/balance', {
+  params: { query: { campaign: 'my-campaign', account: '0x1234...' } }
+});
+
+if (error) {
+  console.error('Failed to fetch balance:', error);
+} else {
+  console.log('Points:', data.points);
+}
+
+// Push events (requires API key)
+const { data: pushResult } = await client.POST('/points/push', {
+  headers: { 'X-API-Key': 'sfp_...' },
+  body: { eventName: 'swap', account: '0x1234...', points: 100 }
+});
+\`\`\`
+
+### Links
+
+- [Documentation](https://openapi-ts.dev/openapi-fetch/)
+- [openapi-fetch on npm](https://www.npmjs.com/package/openapi-fetch)
+- [openapi-typescript on npm](https://www.npmjs.com/package/openapi-typescript)
+
+## TypeScript Client: hey-api
+
+A full SDK generator with optional plugins for React Query, Zod validation, and more.
+
+**Why choose this?**
+- Generates complete SDK with typed functions
+- Plugin ecosystem (React Query, Zod, etc.)
+- No runtime dependency for basic usage
+- Highly configurable
+
+> **Warning:** hey-api does not follow semver. Pin exact versions in production (e.g., \`@hey-api/openapi-ts@0.61.2\`).
+
+### Generate SDK
+
+No installation required - run directly with npx:
+
+\`\`\`bash
+npx @hey-api/openapi-ts \\
+  -i YOUR_SERVER/points/openapi.json \\
+  -o ./src/points-client \\
+  -c @hey-api/client-fetch
+\`\`\`
+
+### Usage
+
+\`\`\`typescript
+import { getPointsBalance, postPointsPush } from './points-client';
+
+// Query balance
+const { data, error } = await getPointsBalance({
+  query: { campaign: 'my-campaign', account: '0x1234...' }
+});
+
+// Push events
+await postPointsPush({
+  headers: { 'X-API-Key': 'sfp_...' },
+  body: { eventName: 'swap', account: '0x1234...', points: 100 }
+});
+\`\`\`
+
+### Plugins
+
+Add [plugins](https://heyapi.dev/openapi-ts/plugins) for enhanced functionality:
+
+\`\`\`bash
+# With React Query
+npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
+  -o ./src/points-client -c @hey-api/client-fetch \\
+  --plugins @tanstack/react-query
+
+# With Zod validation
+npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
+  -o ./src/points-client -c @hey-api/client-fetch \\
+  --plugins zod
+\`\`\`
+
+### Links
+
+- [Documentation](https://heyapi.dev/)
+- [@hey-api/openapi-ts on npm](https://www.npmjs.com/package/@hey-api/openapi-ts)
+
 ## Authentication
 
-**Query Endpoints** (\`/balance\`, \`/events\`): Public access, no authentication required. Requires \`campaign\` query parameter (slug or numeric ID).
+**Query Endpoints** (\`/balance\`, \`/signed-balance\`, \`/events\`): Public access, no authentication required. Requires \`campaign\` query parameter (slug or numeric ID).
 
 **Push Endpoint** (\`/push\`): Requires API key in the \`X-API-Key\` header. API keys are scoped to a specific campaign.
 
