@@ -1,6 +1,7 @@
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
 import {
 	ApiErrorSchema,
+	BalancePostBodySchema,
 	BalanceQuerySchema,
 	EventsQuerySchema,
 	PaginationSchema,
@@ -9,7 +10,7 @@ import {
 	PointEventSchema,
 	PointEventsResponseSchema,
 	PushResponseSchema,
-	SignedBalanceBatchQuerySchema,
+	SignedBalanceBatchBodySchema,
 	SignedBalanceBatchResponseSchema,
 	SignedBalanceQuerySchema,
 	SignedBalanceResponseSchema,
@@ -43,42 +44,92 @@ pointsRegistry.registerComponent("securitySchemes", "ApiKeyAuth", {
 pointsRegistry.registerPath({
 	method: "get",
 	path: "/points/balance",
-	summary: "Get point balance(s)",
-	description:
-		"Retrieves point balance(s) for one or more Ethereum accounts. For a single account, returns a simple balance object. For multiple accounts (comma-separated), returns an array of balances. Requires a campaign slug or ID.",
+	summary: "Get point balance",
+	description: "Retrieves point balance for a single Ethereum account.",
 	tags: ["Balance"],
 	request: {
 		query: BalanceQuerySchema,
 	},
 	responses: {
 		200: {
-			description: "Point balance(s) retrieved successfully",
+			description: "Point balance retrieved successfully",
 			content: {
 				"application/json": {
-					schema: PointBalancesResponseSchema,
-					examples: {
-						single: {
-							summary: "Single account response",
-							value: {
-								account: "0x1234567890abcdef1234567890abcdef12345678",
-								points: 1500,
-							},
-						},
-						multiple: {
-							summary: "Multiple accounts response",
-							value: {
-								balances: [
-									{ account: "0x1234567890abcdef1234567890abcdef12345678", points: 1500 },
-									{ account: "0xabcdef1234567890abcdef1234567890abcdef12", points: 750 },
-								],
-							},
-						},
+					schema: PointBalanceSchema,
+					example: {
+						account: "0x1234567890abcdef1234567890abcdef12345678",
+						points: 1500,
 					},
 				},
 			},
 		},
 		400: {
-			description: "Invalid request (missing campaign/account parameter or invalid addresses)",
+			description: "Invalid request (missing campaignId/account parameter or invalid address)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "Campaign not found",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// POST /points/balance
+// ============================================
+pointsRegistry.registerPath({
+	method: "post",
+	path: "/points/balance",
+	summary: "Get point balances (bulk)",
+	description: "Retrieves point balances for multiple Ethereum accounts (up to 100).",
+	tags: ["Balance"],
+	request: {
+		body: {
+			description: "Campaign ID and accounts to query",
+			content: {
+				"application/json": {
+					schema: BalancePostBodySchema,
+					example: {
+						campaignId: 42,
+						accounts: ["0x1234567890abcdef1234567890abcdef12345678", "0xabcdef1234567890abcdef1234567890abcdef12"],
+					},
+				},
+			},
+		},
+	},
+	responses: {
+		200: {
+			description: "Point balances retrieved successfully",
+			content: {
+				"application/json": {
+					schema: PointBalancesResponseSchema,
+					example: {
+						balances: [
+							{ account: "0x1234567890abcdef1234567890abcdef12345678", points: 1500 },
+							{ account: "0xabcdef1234567890abcdef1234567890abcdef12", points: 750 },
+						],
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (invalid campaignId, missing/empty accounts array, or invalid addresses)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -142,7 +193,7 @@ This can be verified on-chain using ECDSA recovery.`,
 			},
 		},
 		400: {
-			description: "Invalid request (missing campaign/account parameter or invalid address)",
+			description: "Invalid request (missing campaignId/account parameter or invalid address)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -169,28 +220,35 @@ This can be verified on-chain using ECDSA recovery.`,
 })
 
 // ============================================
-// GET /points/signed-balance-batch
+// POST /points/signed-balance-batch
 // ============================================
 pointsRegistry.registerPath({
-	method: "get",
+	method: "post",
 	path: "/points/signed-balance-batch",
 	summary: "Get batch signed point balances",
 	description: `Returns a single signature covering multiple campaigns for the same account. Enables batch on-chain claims.
 
-**Request:**
-- \`campaigns\`: Comma-separated list of campaign IDs (max 50)
-- \`account\`: Ethereum address
-
 **Signature Structure:**
 The message hash is computed as:
 \`\`\`
-keccak256(encodePacked([address, uint256[] points, uint256[] campaigns, uint256 timestamp]))
+keccak256(encodePacked([address, uint256[] points, uint256[] campaignIds, uint256 timestamp]))
 \`\`\`
 
 This produces a single signature that covers all campaigns, allowing batch verification on-chain.`,
 	tags: ["Signed Balance"],
 	request: {
-		query: SignedBalanceBatchQuerySchema,
+		body: {
+			description: "Campaign IDs and account to get signed balances for",
+			content: {
+				"application/json": {
+					schema: SignedBalanceBatchBodySchema,
+					example: {
+						campaignIds: [1, 2, 3],
+						account: "0x1234567890abcdef1234567890abcdef12345678",
+					},
+				},
+			},
+		},
 	},
 	responses: {
 		200: {
@@ -200,7 +258,7 @@ This produces a single signature that covers all campaigns, allowing batch verif
 					schema: SignedBalanceBatchResponseSchema,
 					example: {
 						address: "0x1234567890abcdef1234567890ABCDEF12345678",
-						campaigns: [7853, 7852, 7850],
+						campaignIds: [1, 2, 3],
 						points: [100, 200, 300],
 						signatureTimestamp: 1704672000,
 						signature:
@@ -245,7 +303,7 @@ pointsRegistry.registerPath({
 	path: "/points/events",
 	summary: "Get point events",
 	description:
-		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first). Requires a campaign slug or ID.",
+		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first).",
 	tags: ["Events"],
 	request: {
 		query: EventsQuerySchema,
@@ -260,7 +318,7 @@ pointsRegistry.registerPath({
 			},
 		},
 		400: {
-			description: "Invalid request (missing campaign parameter, invalid pagination or address format)",
+			description: "Invalid request (missing/invalid campaignId, invalid pagination or address format)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
@@ -455,6 +513,10 @@ export function generatePointsOpenApiDocument() {
 
 ## Overview
 
+The Superfluid Points API enables you to build point-based reward campaigns. Track user actions, query balances, and generate signed proofs for on-chain verification.
+
+## TypeScript Clients
+
 Generate a type-safe TypeScript client from this OpenAPI specification. Choose between two approaches:
 
 | Approach | Best For | Semver | Output |
@@ -462,7 +524,7 @@ Generate a type-safe TypeScript client from this OpenAPI specification. Choose b
 | **openapi-fetch** | Simple integrations, stability | Yes | Types + fetch wrapper |
 | **hey-api** | Full SDK, React Query, plugins | No | Complete SDK |
 
-## TypeScript Client: openapi-fetch
+### openapi-fetch
 
 A lightweight fetch wrapper with full TypeScript inference. Recommended for most integrations.
 
@@ -472,19 +534,19 @@ A lightweight fetch wrapper with full TypeScript inference. Recommended for most
 - Uses native fetch - works everywhere
 - Maintained by [openapi-ts](https://openapi-ts.dev/)
 
-### Installation
+**Installation**
 
 \`\`\`bash
 npm install openapi-fetch
 \`\`\`
 
-### Generate Types
+**Generate Types**
 
 \`\`\`bash
 npx openapi-typescript YOUR_SERVER/points/openapi.json -o ./points-api.d.ts
 \`\`\`
 
-### Usage
+**Usage**
 
 \`\`\`typescript
 import createClient from 'openapi-fetch';
@@ -494,7 +556,7 @@ const client = createClient<paths>({ baseUrl: 'YOUR_SERVER' });
 
 // Query balance (public endpoint)
 const { data, error } = await client.GET('/points/balance', {
-  params: { query: { campaign: 'my-campaign', account: '0x1234...' } }
+  params: { query: { campaignId: 42, account: '0x1234...' } }
 });
 
 if (error) {
@@ -503,20 +565,25 @@ if (error) {
   console.log('Points:', data.points);
 }
 
+// Query balances for multiple accounts (POST)
+const { data: bulkData } = await client.POST('/points/balance', {
+  body: { campaignId: 42, accounts: ['0x1234...', '0x5678...'] }
+});
+
 // Push events (requires API key)
 const { data: pushResult } = await client.POST('/points/push', {
   headers: { 'X-API-Key': 'sfp_...' },
-  body: { eventName: 'swap', account: '0x1234...', points: 100 }
+  body: { campaign: 42, eventName: 'swap', account: '0x1234...', points: 100 }
 });
 \`\`\`
 
-### Links
+**Links**
 
 - [Documentation](https://openapi-ts.dev/openapi-fetch/)
 - [openapi-fetch on npm](https://www.npmjs.com/package/openapi-fetch)
 - [openapi-typescript on npm](https://www.npmjs.com/package/openapi-typescript)
 
-## TypeScript Client: hey-api
+### hey-api
 
 A full SDK generator with optional plugins for React Query, Zod validation, and more.
 
@@ -528,7 +595,7 @@ A full SDK generator with optional plugins for React Query, Zod validation, and 
 
 > **Warning:** hey-api does not follow semver. Pin exact versions in production (e.g., \`@hey-api/openapi-ts@0.61.2\`).
 
-### Generate SDK
+**Generate SDK**
 
 No installation required - run directly with npx:
 
@@ -539,24 +606,29 @@ npx @hey-api/openapi-ts \\
   -c @hey-api/client-fetch
 \`\`\`
 
-### Usage
+**Usage**
 
 \`\`\`typescript
-import { getPointsBalance, postPointsPush } from './points-client';
+import { getPointsBalance, postPointsBalance, postPointsPush } from './points-client';
 
-// Query balance
+// Query single balance
 const { data, error } = await getPointsBalance({
-  query: { campaign: 'my-campaign', account: '0x1234...' }
+  query: { campaignId: 42, account: '0x1234...' }
+});
+
+// Query multiple balances (bulk)
+const { data: bulk } = await postPointsBalance({
+  body: { campaignId: 42, accounts: ['0x1234...', '0x5678...'] }
 });
 
 // Push events
 await postPointsPush({
   headers: { 'X-API-Key': 'sfp_...' },
-  body: { eventName: 'swap', account: '0x1234...', points: 100 }
+  body: { campaign: 42, eventName: 'swap', account: '0x1234...', points: 100 }
 });
 \`\`\`
 
-### Plugins
+**Plugins**
 
 Add [plugins](https://heyapi.dev/openapi-ts/plugins) for enhanced functionality:
 
@@ -572,14 +644,16 @@ npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
   --plugins zod
 \`\`\`
 
-### Links
+**Links**
 
 - [Documentation](https://heyapi.dev/)
 - [@hey-api/openapi-ts on npm](https://www.npmjs.com/package/@hey-api/openapi-ts)
 
-## Authentication
+## API Basics
 
-**Query Endpoints** (\`/balance\`, \`/signed-balance\`, \`/events\`): Public access, no authentication required. Requires \`campaign\` query parameter (slug or numeric ID).
+### Authentication
+
+**Query Endpoints** (\`/balance\`, \`/signed-balance\`, \`/events\`): Public access, no authentication required. Use numeric \`campaignId\` as query parameter.
 
 **Push Endpoint** (\`/push\`): Requires API key in the \`X-API-Key\` header. API keys are scoped to a specific campaign.
 
@@ -587,14 +661,125 @@ npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
 X-API-Key: sfp_<64 hex characters>
 \`\`\`
 
-## Rate Limits
+### Rate Limits
 
 - Push endpoint: Max 1000 events per request
 - Query endpoints: Max 100 results per page
 
-## Deduplication
+### Deduplication
 
-Events can include a \`uniqueId\` field for deduplication. If an event with the same \`uniqueId\` already exists for the same account and campaign, it will be skipped.`,
+Events can include a \`uniqueId\` field for deduplication. If an event with the same \`uniqueId\` already exists for the same account and campaign, it will be skipped.
+
+## Migrating from Stack
+
+If you're migrating from [Stack.so](https://stack.so), here's how Superfluid Points API maps to Stack's SDK.
+
+### Initialization
+
+**Stack.so:**
+\`\`\`typescript
+import { StackClient } from '@stackso/js-core';
+const stack = new StackClient({ apiKey: 'your-key', pointSystemId: 123 });
+\`\`\`
+
+**Superfluid (using openapi-fetch):**
+\`\`\`typescript
+import createClient from 'openapi-fetch';
+import type { paths } from './points-api';
+
+const client = createClient<paths>({ baseUrl: 'YOUR_SERVER' });
+// API key passed per-request for push operations
+\`\`\`
+
+### Tracking Events
+
+**Stack.so:**
+\`\`\`typescript
+await stack.track('swap', {
+  points: 100,
+  account: '0x1234...',
+  uniqueId: 'tx-0xabc'
+});
+\`\`\`
+
+**Superfluid:**
+\`\`\`typescript
+await client.POST('/points/push', {
+  headers: { 'X-API-Key': 'sfp_...' },
+  body: {
+    campaign: 42,  // recommended
+    eventName: 'swap',
+    account: '0x1234...',
+    points: 100,
+    uniqueId: 'tx-0xabc'
+  }
+});
+\`\`\`
+
+### Getting Points
+
+**Stack.so:**
+\`\`\`typescript
+const points = await stack.getPoints('0x1234...');
+// Multiple: await stack.getPoints(['0x1234...', '0x5678...'])
+\`\`\`
+
+**Superfluid:**
+\`\`\`typescript
+// Single account (GET)
+const { data } = await client.GET('/points/balance', {
+  params: { query: { campaignId: 42, account: '0x1234...' } }
+});
+
+// Multiple accounts (POST)
+const { data: bulk } = await client.POST('/points/balance', {
+  body: { campaignId: 42, accounts: ['0x1234...', '0x5678...'] }
+});
+\`\`\`
+
+### Signed Points (On-Chain Verification)
+
+**Stack.so:**
+\`\`\`typescript
+const signed = await stack.getSignedPoints('0x1234...');
+// { amount, signatureTimestamp, signature }
+
+const batch = await stack.getSignedPointsBatch('0x1234...', [1, 2, 3]);
+// { systemIds, points, signatureTimestamp, signature }
+\`\`\`
+
+**Superfluid:**
+\`\`\`typescript
+// Single campaign (GET)
+const { data: signed } = await client.GET('/points/signed-balance', {
+  params: { query: { campaignId: 42, account: '0x1234...' } }
+});
+// { address, points, signatureTimestamp, signature, signer }
+
+// Multiple campaigns (POST)
+const { data: batch } = await client.POST('/points/signed-balance-batch', {
+  body: { campaignIds: [1, 2, 3], account: '0x1234...' }
+});
+// { address, campaignIds, points, signatureTimestamp, signature, signer }
+\`\`\`
+
+### Signature Compatibility
+
+Both APIs use the same signature format for on-chain verification:
+- **Single:** \`keccak256(encodePacked(address, points, campaignId, timestamp))\`
+- **Batch:** \`keccak256(encodePacked(address, points[], campaigns[], timestamp))\`
+
+Existing on-chain contracts that verify Stack signatures will work with Superfluid signatures.
+
+### Key Differences
+
+| Aspect | Stack.so | Superfluid |
+|--------|----------|------------|
+| Campaign binding | At SDK init (\`pointSystemId\`) | Query param (\`campaignId\`) + API key |
+| Bulk queries | Arrays in SDK | POST endpoints with typed arrays |
+| Response field | \`amount\` | \`points\` |
+| Terminology | \`programId\`, \`systemIds\` | \`campaignId\`, \`campaignIds\` |
+| Signer info | Not returned | Returns \`signer\` address |`,
 			contact: {
 				name: "Superfluid",
 				url: "https://superfluid.finance",
@@ -622,6 +807,12 @@ Events can include a \`uniqueId\` field for deduplication. If an event with the 
 			{
 				name: "Push",
 				description: "Push new point events",
+			},
+		],
+		"x-tagGroups": [
+			{
+				name: "Points API",
+				tags: ["Balance", "Signed Balance", "Events", "Push"],
 			},
 		],
 	})

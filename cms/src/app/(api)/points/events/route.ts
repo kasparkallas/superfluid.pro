@@ -4,32 +4,35 @@ import type { PointEventsResponse } from "@/domains/points/types"
 import { getPayloadInstance } from "@/payload"
 
 /**
- * GET /points/events?campaign=...
+ * GET /points/events?campaignId=42
  * Query events with filters: account, eventName, limit, page
  *
  * Examples:
- * - /points/events?campaign=my-campaign
- * - /points/events?campaign=my-campaign&account=0x1234...
- * - /points/events?campaign=my-campaign&eventName=swap
- * - /points/events?campaign=my-campaign&account=0x1234...&eventName=swap&limit=50&page=2
+ * - /points/events?campaignId=42
+ * - /points/events?campaignId=42&account=0x1234...
+ * - /points/events?campaignId=42&eventName=swap
+ * - /points/events?campaignId=42&account=0x1234...&eventName=swap&limit=50&page=2
  */
 export const GET = async (request: Request): Promise<Response> => {
 	try {
 		const url = new URL(request.url)
 
-		// Get campaign parameter (required)
-		const campaignParam = url.searchParams.get("campaign")
-		if (!campaignParam) {
-			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		// Get campaignId parameter (required, must be numeric)
+		const campaignIdParam = url.searchParams.get("campaignId")
+		if (!campaignIdParam) {
+			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
 		}
 
-		// Resolve campaign by ID or slug
-		const payload = await getPayloadInstance()
-		const isNumericId = /^\d+$/.test(campaignParam)
+		const campaignId = parseInt(campaignIdParam, 10)
+		if (isNaN(campaignId) || campaignId <= 0) {
+			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+		}
 
+		// Verify campaign exists
+		const payload = await getPayloadInstance()
 		const campaignResult = await payload.find({
 			collection: "campaigns",
-			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			where: { id: { equals: campaignId } },
 			limit: 1,
 		})
 

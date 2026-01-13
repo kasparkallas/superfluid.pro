@@ -52,18 +52,38 @@ export const ApiErrorSchema = z
 
 export const BalanceQuerySchema = z
 	.object({
-		campaign: z.string().openapi({
-			example: "my-campaign",
-			description: "Campaign slug or numeric ID",
+		campaignId: z.coerce.number().int().positive().openapi({
+			example: 42,
+			description: "Campaign ID",
 		}),
-		account: z.string().openapi({
+		account: EthereumAddressSchema.openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
-			description: "Ethereum address or comma-separated list of addresses",
+			description: "Ethereum address",
 		}),
 	})
 	.openapi({
 		title: "BalanceQuery",
-		description: "Query parameters for balance endpoint",
+		description: "Query parameters for single account balance endpoint",
+	})
+
+export const BalancePostBodySchema = z
+	.object({
+		campaignId: z.number().int().positive().openapi({
+			example: 42,
+			description: "Campaign ID",
+		}),
+		accounts: z
+			.array(EthereumAddressSchema)
+			.min(1)
+			.max(100)
+			.openapi({
+				example: ["0x1234567890abcdef1234567890abcdef12345678", "0xabcdef1234567890abcdef1234567890abcdef12"],
+				description: "Array of Ethereum addresses (1-100)",
+			}),
+	})
+	.openapi({
+		title: "BalancePostBody",
+		description: "Request body for bulk balance endpoint",
 	})
 
 export const PointBalanceSchema = z
@@ -99,9 +119,9 @@ export const PointBalancesResponseSchema = z
 
 export const EventsQuerySchema = z
 	.object({
-		campaign: z.string().openapi({
-			example: "my-campaign",
-			description: "Campaign slug or numeric ID",
+		campaignId: z.coerce.number().int().positive().openapi({
+			example: 42,
+			description: "Campaign ID",
 		}),
 		account: z.string().optional().openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
@@ -111,12 +131,12 @@ export const EventsQuerySchema = z
 			example: "swap",
 			description: "Filter by event name",
 		}),
-		limit: z.string().optional().openapi({
-			example: "50",
+		limit: z.coerce.number().int().min(1).max(100).optional().openapi({
+			example: 50,
 			description: "Number of results per page (1-100, default: 50)",
 		}),
-		page: z.string().optional().openapi({
-			example: "1",
+		page: z.coerce.number().int().positive().optional().openapi({
+			example: 1,
 			description: "Page number (default: 1)",
 		}),
 	})
@@ -335,11 +355,11 @@ export const PushResponseSchema = z
 
 export const SignedBalanceQuerySchema = z
 	.object({
-		campaign: z.string().openapi({
-			example: "my-campaign",
-			description: "Campaign slug or numeric ID",
+		campaignId: z.coerce.number().int().positive().openapi({
+			example: 42,
+			description: "Campaign ID",
 		}),
-		account: z.string().openapi({
+		account: EthereumAddressSchema.openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
 			description: "Ethereum address to get signed balance for",
 		}),
@@ -381,20 +401,24 @@ export const SignedBalanceResponseSchema = z
 // Batch Signed Balance Endpoint Schemas
 // ============================================
 
-export const SignedBalanceBatchQuerySchema = z
+export const SignedBalanceBatchBodySchema = z
 	.object({
-		campaigns: z.string().openapi({
-			example: "1,2,3",
-			description: "Comma-separated list of campaign IDs (max 50)",
-		}),
-		account: z.string().openapi({
+		campaignIds: z
+			.array(z.number().int().positive())
+			.min(1)
+			.max(50)
+			.openapi({
+				example: [1, 2, 3],
+				description: "Array of campaign IDs (1-50)",
+			}),
+		account: EthereumAddressSchema.openapi({
 			example: "0x1234567890abcdef1234567890abcdef12345678",
 			description: "Ethereum address to get signed balances for",
 		}),
 	})
 	.openapi({
-		title: "SignedBalanceBatchQuery",
-		description: "Query parameters for batch signed balance endpoint",
+		title: "SignedBalanceBatchBody",
+		description: "Request body for batch signed balance endpoint",
 	})
 
 export const SignedBalanceBatchResponseSchema = z
@@ -403,8 +427,8 @@ export const SignedBalanceBatchResponseSchema = z
 			example: "0x1234567890abcdef1234567890ABCDEF12345678",
 			description: "Checksummed Ethereum address",
 		}),
-		campaigns: z.array(z.number()).openapi({
-			example: [7853, 7852, 7850],
+		campaignIds: z.array(z.number()).openapi({
+			example: [1, 2, 3],
 			description: "Array of campaign IDs in request order",
 		}),
 		points: z.array(z.number()).openapi({

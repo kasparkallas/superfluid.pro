@@ -3,30 +3,40 @@ import type { PointBalanceResponse, PointBalancesResponse } from "@/domains/poin
 import { getPayloadInstance } from "@/payload"
 
 /**
- * GET /points/balance?campaign=...&account=0x...
- * Query points for one or more accounts (comma-separated).
- *
- * Examples:
- * - /points/balance?campaign=my-campaign&account=0x1234...
- * - /points/balance?campaign=my-campaign&account=0x1234...,0x5678...
+ * GET /points/balance?campaignId=42&account=0x...
+ * Query points for a single account.
  */
 export const GET = async (request: Request): Promise<Response> => {
 	try {
 		const url = new URL(request.url)
 
-		// Get campaign parameter (required)
-		const campaignParam = url.searchParams.get("campaign")
-		if (!campaignParam) {
-			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		// Get campaignId parameter (required, must be numeric)
+		const campaignIdParam = url.searchParams.get("campaignId")
+		if (!campaignIdParam) {
+			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
 		}
 
-		// Resolve campaign by ID or slug
-		const payload = await getPayloadInstance()
-		const isNumericId = /^\d+$/.test(campaignParam)
+		const campaignId = parseInt(campaignIdParam, 10)
+		if (isNaN(campaignId) || campaignId <= 0) {
+			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+		}
 
+		// Get account parameter (required, single address)
+		const accountParam = url.searchParams.get("account")
+		if (!accountParam) {
+			return Response.json({ error: "Missing required query parameter: account" }, { status: 400 })
+		}
+
+		const account = accountParam.toLowerCase()
+		if (!isAddress(account)) {
+			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+		}
+
+		// Verify campaign exists
+		const payload = await getPayloadInstance()
 		const campaignResult = await payload.find({
 			collection: "campaigns",
-			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			where: { id: { equals: campaignId } },
 			limit: 1,
 		})
 
@@ -34,25 +44,75 @@ export const GET = async (request: Request): Promise<Response> => {
 			return Response.json({ error: "Campaign not found" }, { status: 404 })
 		}
 
-		const campaign = campaignResult.docs[0]
-		const accountParam = url.searchParams.get("account")
+		// Query balance
+		const result = await payload.find({
+			collection: "point-balances",
+			where: {
+				and: [{ campaign: { equals: campaignId } }, { account: { equals: account } }],
+			},
+			limit: 1,
+		})
 
-		if (!accountParam) {
-			return Response.json({ error: "Missing required query parameter: account" }, { status: 400 })
+		const points = result.docs[0]?.totalPoints ?? 0
+		const response: PointBalanceResponse = { account, points }
+
+		return Response.json(response)
+	} catch (error) {
+		console.error("Failed to query balance:", error)
+
+		return Response.json(
+			{
+				error: "Failed to query balance",
+				message: error instanceof Error ? error.message : "Unknown error",
+			},
+			{ status: 500 },
+		)
+	}
+}
+
+/**
+ * POST /points/balance
+ * Query points for multiple accounts.
+ *
+ * Body: { campaignId: number, accounts: string[] }
+ */
+export const POST = async (request: Request): Promise<Response> => {
+	try {
+		const body = await request.json()
+
+		// Validate campaignId
+		const { campaignId, accounts } = body
+
+		if (typeof campaignId !== "number" || !Number.isInteger(campaignId) || campaignId <= 0) {
+			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
-		// Split by comma and normalize
-		const accounts = accountParam
-			.split(",")
-			.map((a) => a.trim().toLowerCase())
-			.filter(Boolean)
-
-		if (accounts.length === 0) {
-			return Response.json({ error: "No valid accounts provided" }, { status: 400 })
+		// Validate accounts array
+		if (!Array.isArray(accounts) || accounts.length === 0) {
+			return Response.json({ error: "accounts must be a non-empty array" }, { status: 400 })
 		}
 
-		// Validate all addresses
-		const invalidAddresses = accounts.filter((a) => !isAddress(a))
+		if (accounts.length > 100) {
+			return Response.json({ error: "Maximum 100 accounts per request" }, { status: 400 })
+		}
+
+		// Normalize and validate addresses
+		const normalizedAccounts: string[] = []
+		const invalidAddresses: string[] = []
+
+		for (const account of accounts) {
+			if (typeof account !== "string") {
+				invalidAddresses.push(String(account))
+				continue
+			}
+			const normalized = account.toLowerCase()
+			if (!isAddress(normalized)) {
+				invalidAddresses.push(account)
+			} else {
+				normalizedAccounts.push(normalized)
+			}
+		}
+
 		if (invalidAddresses.length > 0) {
 			return Response.json(
 				{
@@ -63,13 +123,25 @@ export const GET = async (request: Request): Promise<Response> => {
 			)
 		}
 
+		// Verify campaign exists
+		const payload = await getPayloadInstance()
+		const campaignResult = await payload.find({
+			collection: "campaigns",
+			where: { id: { equals: campaignId } },
+			limit: 1,
+		})
+
+		if (campaignResult.docs.length === 0) {
+			return Response.json({ error: "Campaign not found" }, { status: 404 })
+		}
+
 		// Query balances for all accounts
 		const result = await payload.find({
 			collection: "point-balances",
 			where: {
-				and: [{ campaign: { equals: campaign.id } }, { account: { in: accounts } }],
+				and: [{ campaign: { equals: campaignId } }, { account: { in: normalizedAccounts } }],
 			},
-			limit: accounts.length,
+			limit: normalizedAccounts.length,
 		})
 
 		// Build response mapping
@@ -78,17 +150,8 @@ export const GET = async (request: Request): Promise<Response> => {
 			balanceMap.set(doc.account, doc.totalPoints)
 		}
 
-		// Single account response
-		if (accounts.length === 1) {
-			const account = accounts[0]
-			const points = balanceMap.get(account) ?? 0
-			const response: PointBalanceResponse = { account, points }
-			return Response.json(response)
-		}
-
-		// Multiple accounts response
 		const response: PointBalancesResponse = {
-			balances: accounts.map((account) => ({
+			balances: normalizedAccounts.map((account) => ({
 				account,
 				points: balanceMap.get(account) ?? 0,
 			})),

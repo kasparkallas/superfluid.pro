@@ -3,7 +3,7 @@ import { signMessageHash } from "@/domains/points/utils/signing"
 import { getPayloadInstance } from "@/payload"
 
 /**
- * GET /points/signed-balance?campaign=...&account=0x...
+ * GET /points/signed-balance?campaignId=42&account=0x...
  *
  * Returns a signed point balance for on-chain verification.
  * The signature follows the same format as Stack's getSignedPoints API.
@@ -14,10 +14,15 @@ export const GET = async (request: Request): Promise<Response> => {
 	try {
 		const url = new URL(request.url)
 
-		// Get campaign parameter (required)
-		const campaignParam = url.searchParams.get("campaign")
-		if (!campaignParam) {
-			return Response.json({ error: "Missing required query parameter: campaign" }, { status: 400 })
+		// Get campaignId parameter (required, must be numeric)
+		const campaignIdParam = url.searchParams.get("campaignId")
+		if (!campaignIdParam) {
+			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
+		}
+
+		const campaignId = parseInt(campaignIdParam, 10)
+		if (isNaN(campaignId) || campaignId <= 0) {
+			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
 		// Get account parameter (required)
@@ -32,13 +37,11 @@ export const GET = async (request: Request): Promise<Response> => {
 			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
 		}
 
-		// Resolve campaign by ID or slug
+		// Verify campaign exists
 		const payload = await getPayloadInstance()
-		const isNumericId = /^\d+$/.test(campaignParam)
-
 		const campaignResult = await payload.find({
 			collection: "campaigns",
-			where: isNumericId ? { id: { equals: Number(campaignParam) } } : { slug: { equals: campaignParam } },
+			where: { id: { equals: campaignId } },
 			limit: 1,
 		})
 
