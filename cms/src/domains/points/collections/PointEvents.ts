@@ -71,7 +71,7 @@ export const PointEvents: CollectionConfig = {
 	slug: "point-events",
 	admin: {
 		useAsTitle: "eventName",
-		defaultColumns: ["eventName", "account", "points", "campaign", "uniqueId", "createdAt"],
+		defaultColumns: ["campaign", "eventName", "points", "account", "createdAt"],
 		group: "Points",
 	},
 	access: {

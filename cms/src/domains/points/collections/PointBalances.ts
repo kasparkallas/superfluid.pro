@@ -6,7 +6,7 @@ export const PointBalances: CollectionConfig = {
 	slug: "point-balances",
 	admin: {
 		useAsTitle: "id",
-		defaultColumns: ["id", "account", "totalPoints", "eventCount", "campaign", "lastEventAt"],
+		defaultColumns: ["campaign", "account", "totalPoints", "eventCount", "lastEventAt"],
 		group: "Points",
 	},
 	access: {

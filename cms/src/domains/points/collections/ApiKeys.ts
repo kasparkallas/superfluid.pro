@@ -18,7 +18,7 @@ export const ApiKeys: CollectionConfig = {
 	slug: "api-keys",
 	admin: {
 		useAsTitle: "name",
-		defaultColumns: ["name", "keyPrefix", "campaign", "status", "lastUsedAt", "createdAt"],
+		defaultColumns: ["campaign", "name", "status", "keyPrefix", "createdAt", "lastUsedAt"],
 		group: "Points",
 	},
 	access: {

@@ -6,7 +6,7 @@ export const PushRequests: CollectionConfig = {
 	slug: "push-requests",
 	admin: {
 		useAsTitle: "id",
-		defaultColumns: ["id", "campaign", "eventCount", "status", "createdAt", "processedAt"],
+		defaultColumns: ["campaign", "id", "eventCount", "status", "createdAt", "processedAt"],
 		group: "Points",
 	},
 	access: {
