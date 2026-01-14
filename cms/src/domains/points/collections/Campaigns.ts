@@ -42,7 +42,7 @@ export const Campaigns: CollectionConfig = {
 	slug: "campaigns",
 	admin: {
 		useAsTitle: "name",
-		defaultColumns: ["name", "slug", "relatedEntities", "createdAt"],
+		defaultColumns: ["id", "name", "slug", "relatedEntities", "createdAt"],
 		group: "Points",
 	},
 	access: {
