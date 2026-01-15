@@ -6,7 +6,7 @@ import { syncStackLeaderboard } from "./sync-stack-leaderboard"
 const S4_CAMPAIGNS = [
 	{
 		id: 7845,
-		stackLeaderboardId: "leaderboard-40a3-78225-7849",
+		stackLeaderboardId: "leaderboard-40a3-78225-7845",
 		name: "S4 streme.fun",
 		slug: "s4-streme-fun",
 		disableNegativeSync: false,
@@ -62,28 +62,28 @@ const S4_CAMPAIGNS = [
 	},
 	{
 		id: 7757,
-		stackLeaderboardId: "leaderboard-40a3-78225-7757",
+		stackLeaderboardId: "leaderboard-40a3-782251-7757",
 		name: "S3 Farcaster Miniapp Dev Rewards",
 		slug: "s3-miniapp-dev-rewards",
 		disableNegativeSync: false,
 	},
 	{
 		id: 7759,
-		stackLeaderboardId: "leaderboard-40a3-78225-7759",
+		stackLeaderboardId: "leaderboard-40a3-782251-7757",
 		name: "S3 Banger",
 		slug: "s3-banger",
 		disableNegativeSync: false,
 	},
 	{
 		id: 7761,
-		stackLeaderboardId: "leaderboard-40a3-78225-7761",
+		stackLeaderboardId: "leaderboard-40a3-782251-7761",
 		name: "S3 Flow State on Farcaster",
 		slug: "s3-flowstate",
 		disableNegativeSync: false,
 	},
 	{
 		id: 7762,
-		stackLeaderboardId: "leaderboard-40a3-78225-7762",
+		stackLeaderboardId: "leaderboard-40a3-782251-7762",
 		name: "S3 Beamr",
 		slug: "s3-beamr",
 		disableNegativeSync: false,
@@ -159,7 +159,7 @@ export const syncS4Campaigns = task({
 		if (syncPoints) {
 			console.log("Phase 2: Syncing points from Stack...")
 			for (const campaign of S4_CAMPAIGNS) {
-				console.log(`Syncing points for ${campaign.name}...`)
+				console.log(`Syncing points for ${campaign.name} (${campaign.id})...`)
 				const syncResult = await syncStackLeaderboard.triggerAndWait({
 					stackLeaderboardId: campaign.stackLeaderboardId,
 					campaignId: campaign.id,
