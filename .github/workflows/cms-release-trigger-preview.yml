@@ -1,0 +1,27 @@
+name: Deploy to Trigger.dev (preview)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: 🚀 Deploy Trigger.dev (preview)
+        env:
+          TRIGGER_ACCESS_TOKEN: ${{ secrets.CMS_TRIGGER_ACCESS_TOKEN }}
+        run: |
+          cd cms && npx trigger.dev@latest deploy --env preview

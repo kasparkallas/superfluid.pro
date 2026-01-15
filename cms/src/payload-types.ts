@@ -70,6 +70,12 @@ export interface Config {
 		users: User
 		tokens: Token
 		chains: Chain
+		campaigns: Campaign
+		"api-keys": ApiKey
+		"push-requests": PushRequest
+		"point-events": PointEvent
+		"point-balances": PointBalance
+		"payload-kv": PayloadKv
 		"payload-locked-documents": PayloadLockedDocument
 		"payload-preferences": PayloadPreference
 		"payload-migrations": PayloadMigration
@@ -79,6 +85,12 @@ export interface Config {
 		users: UsersSelect<false> | UsersSelect<true>
 		tokens: TokensSelect<false> | TokensSelect<true>
 		chains: ChainsSelect<false> | ChainsSelect<true>
+		campaigns: CampaignsSelect<false> | CampaignsSelect<true>
+		"api-keys": ApiKeysSelect<false> | ApiKeysSelect<true>
+		"push-requests": PushRequestsSelect<false> | PushRequestsSelect<true>
+		"point-events": PointEventsSelect<false> | PointEventsSelect<true>
+		"point-balances": PointBalancesSelect<false> | PointBalancesSelect<true>
+		"payload-kv": PayloadKvSelect<false> | PayloadKvSelect<true>
 		"payload-locked-documents": PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>
 		"payload-preferences": PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
 		"payload-migrations": PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
@@ -86,6 +98,7 @@ export interface Config {
 	db: {
 		defaultIDType: number
 	}
+	fallbackLocale: null
 	globals: {}
 	globalsSelect: {}
 	locale: null
@@ -293,6 +306,191 @@ export interface Chain {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns".
+ */
+export interface Campaign {
+	/**
+	 * Unique numeric identifier for this campaign
+	 */
+	id: number
+	/**
+	 * Human-readable name for this campaign
+	 */
+	name: string
+	/**
+	 * URL-friendly identifier (lowercase, hyphens only)
+	 */
+	slug: string
+	updatedAt: string
+	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-keys".
+ */
+export interface ApiKey {
+	id: number
+	/**
+	 * Identifier for this API key (e.g., "Frontend Integration")
+	 */
+	name: string
+	/**
+	 * The campaign this API key belongs to
+	 */
+	campaign: number | Campaign
+	/**
+	 * Full API key - copy this value (only shown after creation)
+	 */
+	rawKey?: string | null
+	keyHash?: string | null
+	/**
+	 * First 12 characters of the key for identification
+	 */
+	keyPrefix?: string | null
+	/**
+	 * Active keys can be used for API requests
+	 */
+	status: "active" | "revoked"
+	/**
+	 * Last time this key was used for an API request
+	 */
+	lastUsedAt?: string | null
+	updatedAt: string
+	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "push-requests".
+ */
+export interface PushRequest {
+	id: number
+	/**
+	 * The campaign this push request belongs to
+	 */
+	campaign: number | Campaign
+	/**
+	 * Full validated request payload for audit trail and reprocessing
+	 */
+	payload:
+		| {
+				[k: string]: unknown
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null
+	/**
+	 * Number of events in the payload
+	 */
+	eventCount: number
+	/**
+	 * Processing status of this push request
+	 */
+	status: "pending" | "processing" | "completed" | "failed"
+	/**
+	 * Error message if processing failed
+	 */
+	error?: string | null
+	/**
+	 * When this push request finished processing
+	 */
+	processedAt?: string | null
+	updatedAt: string
+	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "point-events".
+ */
+export interface PointEvent {
+	id: number
+	/**
+	 * The campaign this event belongs to
+	 */
+	campaign: number | Campaign
+	/**
+	 * The push request that created this event (for audit trail)
+	 */
+	pushRequest?: (number | null) | PushRequest
+	/**
+	 * Type of event (e.g., "swap", "stream_created")
+	 */
+	eventName: string
+	/**
+	 * Wallet address (normalized to lowercase)
+	 */
+	account: string
+	/**
+	 * Points awarded (can be positive or negative)
+	 */
+	points: number
+	/**
+	 * Deduplication key (unique per campaign + account)
+	 */
+	uniqueId?: string | null
+	/**
+	 * Computed deduplication key: campaignId:account:uniqueId
+	 */
+	dedupKey?: string | null
+	updatedAt: string
+	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "point-balances".
+ */
+export interface PointBalance {
+	/**
+	 * Composite ID: campaignId:account
+	 */
+	id: string
+	/**
+	 * The campaign this balance belongs to
+	 */
+	campaign: number | Campaign
+	/**
+	 * Wallet address (normalized to lowercase)
+	 */
+	account: string
+	/**
+	 * Aggregated total points for this account in this campaign
+	 */
+	totalPoints: number
+	/**
+	 * Number of point events for this account
+	 */
+	eventCount: number
+	/**
+	 * When the last point event was processed
+	 */
+	lastEventAt?: string | null
+	/**
+	 * All point events that contributed to this balance
+	 */
+	events?: (number | PointEvent)[] | null
+	updatedAt: string
+	createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+	id: number
+	key: string
+	data:
+		| {
+				[k: string]: unknown
+		  }
+		| unknown[]
+		| string
+		| number
+		| boolean
+		| null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -309,6 +507,26 @@ export interface PayloadLockedDocument {
 		| ({
 				relationTo: "chains"
 				value: number | Chain
+		  } | null)
+		| ({
+				relationTo: "campaigns"
+				value: number | Campaign
+		  } | null)
+		| ({
+				relationTo: "api-keys"
+				value: number | ApiKey
+		  } | null)
+		| ({
+				relationTo: "push-requests"
+				value: number | PushRequest
+		  } | null)
+		| ({
+				relationTo: "point-events"
+				value: number | PointEvent
+		  } | null)
+		| ({
+				relationTo: "point-balances"
+				value: string | PointBalance
 		  } | null)
 	globalSlug?: string | null
 	user: {
@@ -491,6 +709,84 @@ export interface ChainsSelect<T extends boolean = true> {
 		  }
 	updatedAt?: T
 	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campaigns_select".
+ */
+export interface CampaignsSelect<T extends boolean = true> {
+	id?: T
+	name?: T
+	slug?: T
+	updatedAt?: T
+	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-keys_select".
+ */
+export interface ApiKeysSelect<T extends boolean = true> {
+	name?: T
+	campaign?: T
+	rawKey?: T
+	keyHash?: T
+	keyPrefix?: T
+	status?: T
+	lastUsedAt?: T
+	updatedAt?: T
+	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "push-requests_select".
+ */
+export interface PushRequestsSelect<T extends boolean = true> {
+	campaign?: T
+	payload?: T
+	eventCount?: T
+	status?: T
+	error?: T
+	processedAt?: T
+	updatedAt?: T
+	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "point-events_select".
+ */
+export interface PointEventsSelect<T extends boolean = true> {
+	campaign?: T
+	pushRequest?: T
+	eventName?: T
+	account?: T
+	points?: T
+	uniqueId?: T
+	dedupKey?: T
+	updatedAt?: T
+	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "point-balances_select".
+ */
+export interface PointBalancesSelect<T extends boolean = true> {
+	id?: T
+	campaign?: T
+	account?: T
+	totalPoints?: T
+	eventCount?: T
+	lastEventAt?: T
+	events?: T
+	updatedAt?: T
+	createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+	key?: T
+	data?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -25,20 +25,14 @@ export type Scalars = {
   Timestamp: { input: any; output: any; }
 };
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type Account = {
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   updatedAtTimestamp: Scalars['BigInt']['output'];
   updatedAtBlockNumber: Scalars['BigInt']['output'];
-  /**
-   * Indicates whether the address/account is a super app.
-   *
-   */
+  /** Indicates whether the address/account is a super app. */
   isSuperApp: Scalars['Boolean']['output'];
   inflows: Array<Stream>;
   outflows: Array<Stream>;
@@ -54,10 +48,7 @@ export type Account = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountinflowsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -67,10 +58,7 @@ export type AccountinflowsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountoutflowsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -80,10 +68,7 @@ export type AccountoutflowsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountsubscriptionsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -93,10 +78,7 @@ export type AccountsubscriptionsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountpublishedIndexesArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -106,10 +88,7 @@ export type AccountpublishedIndexesArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountpoolsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -119,10 +98,7 @@ export type AccountpoolsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountpoolMembershipsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -132,10 +108,7 @@ export type AccountpoolMembershipsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountsentTransferEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -145,10 +118,7 @@ export type AccountsentTransferEventsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountreceivedTransferEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -158,10 +128,7 @@ export type AccountreceivedTransferEventsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccounttokenUpgradedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -171,10 +138,7 @@ export type AccounttokenUpgradedEventsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccounttokenDowngradedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -184,10 +148,7 @@ export type AccounttokenDowngradedEventsArgs = {
 };
 
 
-/**
- * Account: A higher order entity created for any addresses which interact with Superfluid contracts.
- *
- */
+/** Account: A higher order entity created for any addresses which interact with Superfluid contracts. */
 export type AccountaccountTokenSnapshotsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -196,15 +157,9 @@ export type AccountaccountTokenSnapshotsArgs = {
   where?: InputMaybe<AccountTokenSnapshot_filter>;
 };
 
-/**
- * AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`.
- *
- */
+/** AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`. */
 export type AccountTokenSnapshot = {
-  /**
-   * ID composed of: accountID-tokenID
-   *
-   */
+  /** ID composed of: accountID-tokenID */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -213,198 +168,94 @@ export type AccountTokenSnapshot = {
   /**
    * isLiquidationEstimateOptimistic, If `totalSubscriptionsWithUnits > 0`, it is true.
    * "Optimistic" can be thought of as conservative as it refers to the earliest time the user may be liquidated as they may receive ongoing distributions which aren't tracked by the subgraph.
-   *
    */
   isLiquidationEstimateOptimistic: Scalars['Boolean']['output'];
-  /**
-   * Optimistic liquidation estimation property.
-   *
-   */
+  /** Optimistic liquidation estimation property. */
   maybeCriticalAtTimestamp?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * The count of currently open streams for an account, both incoming and outgoing for all agreements.
-   *
-   */
+  /** The count of currently open streams for an account, both incoming and outgoing for all agreements. */
   totalNumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of currently open streams for an account, both incoming and outgoing for the CFA.
-   *
-   */
+  /** The count of currently open streams for an account, both incoming and outgoing for the CFA. */
   totalCFANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of currently open streams for an account, both incoming and outgoing for the GDA.
-   *
-   */
+  /** The count of currently open streams for an account, both incoming and outgoing for the GDA. */
   totalGDANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account for all agreements.
-   *
-   */
+  /** The count of active outgoing streams from this account for all agreements. */
   activeOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account for the CFA.
-   *
-   */
+  /** The count of active outgoing streams from this account for the CFA. */
   activeCFAOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account for the GDA.
-   *
-   */
+  /** The count of active outgoing streams from this account for the GDA. */
   activeGDAOutgoingStreamCount: Scalars['Int']['output'];
   /**
    * The count of active incoming streams to this account for the CFA.
    * GDA incoming streams are *NOT* counted here.
-   *
    */
   activeIncomingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of closed streams by `account`, both incoming and outgoing for all agreements.
-   *
-   */
+  /** The count of closed streams by `account`, both incoming and outgoing for all agreements. */
   totalNumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams by `account`, both incoming and outgoing for the CFA.
-   *
-   */
+  /** The count of closed streams by `account`, both incoming and outgoing for the CFA. */
   totalCFANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams by `account`, both incoming and outgoing for the GDA.
-   *
-   */
+  /** The count of closed streams by `account`, both incoming and outgoing for the GDA. */
   totalGDANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for all agreements.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for all agreements. */
   inactiveOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for the CFA.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for the CFA. */
   inactiveCFAOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for the GDA.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for the GDA. */
   inactiveGDAOutgoingStreamCount: Scalars['Int']['output'];
   /**
    * The count of closed incoming streams by `account` for the CFA.
    * Close incoming GDA streams are *NOT* counted here.
-   *
    */
   inactiveIncomingStreamCount: Scalars['Int']['output'];
-  /**
-   * The current (as of updatedAt) number of subscriptions with units allocated to them tied to this `account`.
-   *
-   */
+  /** The current (as of updatedAt) number of subscriptions with units allocated to them tied to this `account`. */
   totalSubscriptionsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all currently (as of updatedAt) approved subscriptions whether or not they have units.
-   *
-   */
+  /** Counts all currently (as of updatedAt) approved subscriptions whether or not they have units. */
   totalApprovedSubscriptions: Scalars['Int']['output'];
-  /**
-   * The current (as of updatedAt) number of membership with units allocated to them tied to this `account`. (both IDA and GDA)
-   *
-   */
+  /** The current (as of updatedAt) number of membership with units allocated to them tied to this `account`. (both IDA and GDA) */
   totalMembershipsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all currently (as of updatedAt) approved membership whether or not they have units. (both IDA and GDA)
-   *
-   */
+  /** Counts all currently (as of updatedAt) approved membership whether or not they have units. (both IDA and GDA) */
   totalConnectedMemberships: Scalars['Int']['output'];
-  /**
-   * Counts how many pools the account is a pool admin of. The pool admin can be set arbitrarily when creating a GDA pool. The pool admin might receive an "adjustment flow" if the pool has a flow distribution.
-   *
-   */
+  /** Counts how many pools the account is a pool admin of. The pool admin can be set arbitrarily when creating a GDA pool. The pool admin might receive an "adjustment flow" if the pool has a flow distribution. */
   adminOfPoolCount: Scalars['Int']['output'];
-  /**
-   * Balance of `account` as of `updatedAtTimestamp`/`updatedAtBlock`.
-   *
-   */
+  /** Balance of `account` as of `updatedAtTimestamp`/`updatedAtBlock`. */
   balanceUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The last block the balance was queried from an RPC (the most accurate source for balance data).
-   *
-   */
+  /** The last block the balance was queried from an RPC (the most accurate source for balance data). */
   balanceLastUpdatedFromRpcBlocknumber?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * The total deposit this account has held by all flow agreements for `account` active streams.
-   *
-   */
+  /** The total deposit this account has held by all flow agreements for `account` active streams. */
   totalDeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit this account has held by the CFA agreement for `account` active streams.
-   *
-   */
+  /** The total deposit this account has held by the CFA agreement for `account` active streams. */
   totalCFADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit this account has held by the GDA agreement for `account` active streams.
-   *
-   */
+  /** The total deposit this account has held by the GDA agreement for `account` active streams. */
   totalGDADeposit: Scalars['BigInt']['output'];
   /**
    * The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
    * This can be obtained by: `totalInflowRate - totalOutflowRate`.
    * NOTE: this property will NOT be 100% accurate all the time for receivers of GDA flows.
-   *
    */
   totalNetFlowRate: Scalars['BigInt']['output'];
-  /**
-   * The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-   *
-   */
+  /** The total net flow rate of the `account` as of `updatedAtTimestamp`/`updatedAtBlock` for the CFA. */
   totalCFANetFlowRate: Scalars['BigInt']['output'];
   /**
    * The total inflow rate (receive flowRate per second) of the `account` for the CFA.
    * GDA inflow rate is *NOT* included here.
-   *
    */
   totalInflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate (send flowrate per second) of the `account` for all flow agreements.
-   *
-   */
+  /** The total outflow rate (send flowrate per second) of the `account` for all flow agreements. */
   totalOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate (send flowrate per second) of the `account` for the CFA.
-   *
-   */
+  /** The total outflow rate (send flowrate per second) of the `account` for the CFA. */
   totalCFAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate (send flowrate per second) of the `account` for the GDA.
-   *
-   */
+  /** The total outflow rate (send flowrate per second) of the `account` for the GDA. */
   totalGDAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-   *
-   */
+  /** The total amount of `token` streamed into this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA. */
   totalAmountStreamedInUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-   *
-   */
+  /** The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements. */
   totalAmountStreamedOutUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-   *
-   */
+  /** The total amount of `token` streamed from this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA. */
   totalCFAAmountStreamedOutUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-   *
-   */
+  /** The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements. */
   totalAmountStreamedUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-   *
-   */
+  /** The total amount of `token` streamed through this `account` until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA. */
   totalCFAAmountStreamedUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total amount of `token` this `account` has transferred.
-   *
-   */
+  /** The total amount of `token` this `account` has transferred. */
   totalAmountTransferredUntilUpdatedAt: Scalars['BigInt']['output'];
   account: Account;
   token: Token;
@@ -413,10 +264,7 @@ export type AccountTokenSnapshot = {
 };
 
 
-/**
- * AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`.
- *
- */
+/** AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`. */
 export type AccountTokenSnapshotflowOperatorsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -426,10 +274,7 @@ export type AccountTokenSnapshotflowOperatorsArgs = {
 };
 
 
-/**
- * AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`.
- *
- */
+/** AccountTokenSnapshot: An aggregate entity which aggregates data between an `account`'s interaction with `token`. */
 export type AccountTokenSnapshotaccountTokenSnapshotLogsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -438,10 +283,7 @@ export type AccountTokenSnapshotaccountTokenSnapshotLogsArgs = {
   where?: InputMaybe<AccountTokenSnapshotLog_filter>;
 };
 
-/**
- * AccountTokenSnapshotLog: Historical entries of `AccountTokenSnapshot` updates.
- *
- */
+/** AccountTokenSnapshotLog: Historical entries of `AccountTokenSnapshot` updates. */
 export type AccountTokenSnapshotLog = {
   id: Scalars['ID']['output'];
   timestamp: Scalars['BigInt']['output'];
@@ -450,182 +292,81 @@ export type AccountTokenSnapshotLog = {
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   triggeredByEventName: Scalars['String']['output'];
-  /**
-   * Optimistic liquidation estimation property.
-   *
-   */
+  /** Optimistic liquidation estimation property. */
   maybeCriticalAtTimestamp?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * The current (as of timestamp) number of open streams for all agreements.
-   *
-   */
+  /** The current (as of timestamp) number of open streams for all agreements. */
   totalNumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) number of open streams.
-   *
-   */
+  /** The current (as of timestamp) number of open streams. */
   totalCFANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) number of open streams.
-   *
-   */
+  /** The current (as of timestamp) number of open streams. */
   totalGDANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account for all agreements.
-   *
-   */
+  /** The count of active outgoing streams from this account for all agreements. */
   activeOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account.
-   *
-   */
+  /** The count of active outgoing streams from this account. */
   activeCFAOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of active outgoing streams from this account.
-   *
-   */
+  /** The count of active outgoing streams from this account. */
   activeGDAOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of active incoming streams to this account for all agreements.
-   *
-   */
+  /** The count of active incoming streams to this account for all agreements. */
   activeIncomingStreamCount: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) count of closed streams for all agreements.
-   *
-   */
+  /** The current (as of timestamp) count of closed streams for all agreements. */
   totalNumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) count of closed streams for the CFA.
-   *
-   */
+  /** The current (as of timestamp) count of closed streams for the CFA. */
   totalCFANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) count of closed streams for the GDA.
-   *
-   */
+  /** The current (as of timestamp) count of closed streams for the GDA. */
   totalGDANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for all agreements.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for all agreements. */
   inactiveOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for the CFA.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for the CFA. */
   inactiveCFAOutgoingStreamCount: Scalars['Int']['output'];
-  /**
-   * The count of closed outgoing streams by `account` for the GDA.
-   *
-   */
+  /** The count of closed outgoing streams by `account` for the GDA. */
   inactiveGDAOutgoingStreamCount: Scalars['Int']['output'];
   /**
    * The count of closed incoming streams by `account` for the CFA.
    * Close incoming GDA streams are *NOT* counted here.
-   *
    */
   inactiveIncomingStreamCount: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) number of subscriptions with units allocated to them tied to this `account`.
-   *
-   */
+  /** The current (as of timestamp) number of subscriptions with units allocated to them tied to this `account`. */
   totalSubscriptionsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all currently (as of timestamp) approved subscriptions whether or not they have units.
-   *
-   */
+  /** Counts all currently (as of timestamp) approved subscriptions whether or not they have units. */
   totalApprovedSubscriptions: Scalars['Int']['output'];
-  /**
-   * The current (as of timestamp) number of membership with units allocated to them tied to this `account`.
-   *
-   */
+  /** The current (as of timestamp) number of membership with units allocated to them tied to this `account`. */
   totalMembershipsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all currently (as of timestamp) connected membership whether or not they have units.
-   *
-   */
+  /** Counts all currently (as of timestamp) connected membership whether or not they have units. */
   totalConnectedMemberships: Scalars['Int']['output'];
-  /**
-   * Balance of `account` as of `timestamp`/`block`.
-   *
-   */
+  /** Balance of `account` as of `timestamp`/`block`. */
   balance: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) deposit this account has held by all flow agreements for `account` active streams.
-   *
-   */
+  /** The total (as of timestamp) deposit this account has held by all flow agreements for `account` active streams. */
   totalDeposit: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) deposit this account has held by the CFA agreement for `account` active streams.
-   *
-   */
+  /** The total (as of timestamp) deposit this account has held by the CFA agreement for `account` active streams. */
   totalCFADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) deposit this account has held by the GDA agreement for `account` active streams.
-   *
-   */
+  /** The total (as of timestamp) deposit this account has held by the GDA agreement for `account` active streams. */
   totalGDADeposit: Scalars['BigInt']['output'];
   /**
    * The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block`.
    * This can be obtained by: `totalInflowRate - totalOutflowRate`
-   *
    */
   totalNetFlowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the CFA.
-   *
-   */
+  /** The total (as of timestamp) net flow rate of the `account` as of `timestamp`/`block` for the CFA. */
   totalCFANetFlowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) inflow rate (receive flowRate per second) of the `account`.
-   *
-   */
+  /** The total (as of timestamp) inflow rate (receive flowRate per second) of the `account`. */
   totalInflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) outflow rate (send flowrate per second) of the `account`.
-   *
-   */
+  /** The total (as of timestamp) outflow rate (send flowrate per second) of the `account`. */
   totalOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the CFA.
-   *
-   */
+  /** The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the CFA. */
   totalCFAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the GDA.
-   *
-   */
+  /** The total (as of timestamp) outflow rate (send flowrate per second) of the `account` for the GDA. */
   totalGDAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block`.
-   *
-   */
+  /** The total (as of timestamp) amount of `token` streamed into this `account` until the `timestamp`/`block`. */
   totalAmountStreamedIn: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block`.
-   *
-   */
+  /** The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block`. */
   totalAmountStreamedOut: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block` for the CFA.
-   *
-   */
+  /** The total (as of timestamp) amount of `token` streamed from this `account` until the `timestamp`/`block` for the CFA. */
   totalCFAAmountStreamedOut: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block`.
-   *
-   */
+  /** The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block`. */
   totalAmountStreamed: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the CFA.
-   *
-   */
+  /** The total (as of timestamp) net amount of `token` streamed through this `account` until the `timestamp`/`block` for the CFA. */
   totalCFAAmountStreamed: Scalars['BigInt']['output'];
-  /**
-   * The total (as of timestamp) amount of `token` this `account` has transferred out until the `timestamp`/`block`.
-   *
-   */
+  /** The total (as of timestamp) amount of `token` this `account` has transferred out until the `timestamp`/`block`. */
   totalAmountTransferred: Scalars['BigInt']['output'];
   account: Account;
   token: Token;
@@ -1709,7 +1450,6 @@ export type AgreementClassRegisteredEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `code`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -1862,7 +1602,6 @@ export type AgreementClassUpdatedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `code`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -2010,7 +1749,6 @@ export type AgreementClassUpdatedEvent_orderBy =
  * Replaced by: `AgreementLiquidatedV2Event`
  * See: https://docs.superfluid.finance/superfluid/sentinels/liquidations-and-toga#patricians-plebs-and-pirates-3ps for more details on the 3Ps system.
  * See: https://github.com/superfluid-finance/protocol-monorepo/blob/dev/packages/ethereum-contracts/contracts/interfaces/superfluid/ISuperfluidToken.sol#L425 for more details on the events.
- *
  */
 export type AgreementLiquidatedByEvent = Event & {
   id: Scalars['ID']['output'];
@@ -2025,7 +1763,6 @@ export type AgreementLiquidatedByEvent = Event & {
    * addresses[1] = liquidatorAccount (executor of liquidation)
    * addresses[2] = penaltyAccount (the sender of the flow/stream)
    * addresses[3] = bondAccount (the address receiving the reward - the reward account for the token, pre 3Ps)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -2039,15 +1776,9 @@ export type AgreementLiquidatedByEvent = Event & {
   bondAccount: Scalars['Bytes']['output'];
   rewardAmount: Scalars['BigInt']['output'];
   bailoutAmount: Scalars['BigInt']['output'];
-  /**
-   * The full deposit amount of the stream that was liquidated.
-   *
-   */
+  /** The full deposit amount of the stream that was liquidated. */
   deposit: Scalars['BigInt']['output'];
-  /**
-   * The flow rate of the stream at the time of liquidation.
-   *
-   */
+  /** The flow rate of the stream at the time of liquidation. */
   flowRateAtLiquidation: Scalars['BigInt']['output'];
 };
 
@@ -2277,7 +2008,6 @@ export type AgreementLiquidatedV2Event = Event & {
    * addresses[1] = `liquidatorAccount` (executor of liquidation)
    * addresses[2] = `targetAccount` (the sender of the flow/stream)
    * addresses[3] = `rewardAmountReceiver` (the address receiving the reward) addresses
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -2293,20 +2023,11 @@ export type AgreementLiquidatedV2Event = Event & {
   targetAccountBalanceDelta: Scalars['BigInt']['output'];
   version: Scalars['BigInt']['output'];
   liquidationType: Scalars['Int']['output'];
-  /**
-   * The full deposit amount of the stream that was liquidated.
-   *
-   */
+  /** The full deposit amount of the stream that was liquidated. */
   deposit: Scalars['BigInt']['output'];
-  /**
-   * The flow rate of the stream at the time of liquidation.
-   *
-   */
+  /** The flow rate of the stream at the time of liquidation. */
   flowRateAtLiquidation: Scalars['BigInt']['output'];
-  /**
-   * TO BE DEPRECATED in v2 endpoint - use rewardAmountReceiver instead
-   *
-   */
+  /** TO BE DEPRECATED in v2 endpoint - use rewardAmountReceiver instead */
   rewardAccount: Scalars['Bytes']['output'];
 };
 
@@ -2562,7 +2283,6 @@ export type AppRegisteredEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `app`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -2705,26 +2425,18 @@ export type ApprovalEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `owner`
    * addresses[2] = `to`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address that will be granting allowance to transfer ERC20.
-   *
-   */
+  /** The address that will be granting allowance to transfer ERC20. */
   owner: Account;
-  /**
-   * The address that will be granted allowance to transfer ERC20.
-   *
-   */
+  /** The address that will be granted allowance to transfer ERC20. */
   to: Account;
   /**
    * If `amount` is non-zero, this event was emitted for the approval of an ERC20.
    * Tne amount of ERC20 tokens that will be granted allowance to transfer.
-   *
    */
   amount: Scalars['BigInt']['output'];
 };
@@ -2925,21 +2637,14 @@ export type BondIncreasedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address of the `token` (supertoken).
-   *
-   */
+  /** The address of the `token` (supertoken). */
   token: Scalars['Bytes']['output'];
-  /**
-   * The additional amount added to the bond by the current Patrician In Charge (PIC).
-   *
-   */
+  /** The additional amount added to the bond by the current Patrician In Charge (PIC). */
   additionalBond: Scalars['BigInt']['output'];
 };
 
@@ -3087,7 +2792,6 @@ export type BufferAdjustedEvent = Event & {
    * addresses[1] = `pool`
    * addresses[2] = `distributor`
    * addresses[3] = `operator`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -3335,7 +3039,6 @@ export type BurnedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `from`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -3531,17 +3234,13 @@ export type CFAv1LiquidationPeriodChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `governanceAddress`
    * addresses[1] = `host`
    * addresses[2] = `superToken`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -3718,17 +3417,13 @@ export type ConfigChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `governanceAddress`
    * addresses[1] = `host`
    * addresses[2] = `superToken`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -3920,7 +3615,6 @@ export type CustomSuperTokenCreatedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -4063,7 +3757,6 @@ export type DistributionClaimedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `pool`
    * addresses[2] = `member`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -4292,63 +3985,34 @@ export type DistributionClaimedEvent_orderBy =
   | 'poolMember__syncedPerUnitSettledValue'
   | 'poolMember__syncedPerUnitFlowRate';
 
-/**
- * Event: An interface which is shared by all event entities and contains basic transaction data.
- *
- */
+/** Event: An interface which is shared by all event entities and contains basic transaction data. */
 export type Event = {
-  /**
-   * The id of the event entity.
-   *
-   */
+  /** The id of the event entity. */
   id: Scalars['ID']['output'];
-  /**
-   * The block number which the event was logged in.
-   *
-   */
+  /** The block number which the event was logged in. */
   blockNumber: Scalars['BigInt']['output'];
-  /**
-   * The index of the event, e.g. first event emitted would have `logIndex` of 0.
-   *
-   */
+  /** The index of the event, e.g. first event emitted would have `logIndex` of 0. */
   logIndex: Scalars['BigInt']['output'];
   /**
    * A number used internally to sort the order of transactions.
    * The formula: `blockNumber * ORDER_MULTIPLIER + logIndex`
    * where: ORDER_MULTIPLIER = 10000
-   *
    */
   order: Scalars['BigInt']['output'];
-  /**
-   * The name of the event - is a 1-to-1 match with the name in our smart contracts.
-   *
-   */
+  /** The name of the event - is a 1-to-1 match with the name in our smart contracts. */
   name: Scalars['String']['output'];
   /**
    * Contains the addresses for accounts that were "impacted" by the event.
    * This typically involves accounts which experienced a state change as a result of the transaction which emitted this event.
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
-  /**
-   * The block timestamp which the event was logged in.
-   *
-   */
+  /** The block timestamp which the event was logged in. */
   timestamp: Scalars['BigInt']['output'];
-  /**
-   * The transaction hash of the transaction that the event was logged in.
-   *
-   */
+  /** The transaction hash of the transaction that the event was logged in. */
   transactionHash: Scalars['Bytes']['output'];
-  /**
-   * The gas price of the transaction that the event was logged in.
-   *
-   */
+  /** The gas price of the transaction that the event was logged in. */
   gasPrice: Scalars['BigInt']['output'];
-  /**
-   * The gas used for this transaction.
-   *
-   */
+  /** The gas used for this transaction. */
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
 };
 
@@ -4473,21 +4137,14 @@ export type ExitRateChangedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address of the `token` (supertoken).
-   *
-   */
+  /** The address of the `token` (supertoken). */
   token: Scalars['Bytes']['output'];
-  /**
-   * The flowrate at which the bond is streamed back to the Patrician In Charge.
-   *
-   */
+  /** The flowrate at which the bond is streamed back to the Patrician In Charge. */
   exitRate: Scalars['BigInt']['output'];
 };
 
@@ -4635,7 +4292,6 @@ export type FlowDistributionUpdatedEvent = Event & {
    * addresses[1] = `pool`
    * addresses[2] = `poolDistributor`
    * addresses[3] = `operator`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -4928,15 +4584,9 @@ export type FlowDistributionUpdatedEvent_orderBy =
   | 'poolDistributor__totalBuffer'
   | 'poolDistributor__flowRate';
 
-/**
- * FlowOperator: A higher order entity that of a flow operator for an `AccountTokenSnapshot`.
- *
- */
+/** FlowOperator: A higher order entity that of a flow operator for an `AccountTokenSnapshot`. */
 export type FlowOperator = {
-  /**
-   * ID composed of: flowOperator-token-sender
-   *
-   */
+  /** ID composed of: flowOperator-token-sender */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -4948,26 +4598,18 @@ export type FlowOperator = {
    * Delete | Update | Create
    * | D | U | C |
    * | 0 | 0 | 0 |
-   *
    */
   permissions: Scalars['Int']['output'];
-  /**
-   * The flow rate allowance granted to the `flowOperator` by the `sender`. This can be reset if the `sender` updates the `flowOperator` flow rate allowance.
-   *
-   */
+  /** The flow rate allowance granted to the `flowOperator` by the `sender`. This can be reset if the `sender` updates the `flowOperator` flow rate allowance. */
   flowRateAllowanceGranted: Scalars['BigInt']['output'];
   /**
    * The remaining flow rate allowance the `flowOperator` has.
    * This will go down every time when the `flowOperator` uses the allowance, that is, if they increase flowRate for `sender` or create a new flow on behalf of `sender`.
    * It can only be reset if the `sender` updates the flow rate allowance.
    * NOTE: this value will NOT go down if max flow rate allowance is set.
-   *
    */
   flowRateAllowanceRemaining: Scalars['BigInt']['output'];
-  /**
-   * The transfer allowance granted to the `flowOperator` by the `sender`.
-   *
-   */
+  /** The transfer allowance granted to the `flowOperator` by the `sender`. */
   allowance: Scalars['BigInt']['output'];
   flowOperator: Scalars['Bytes']['output'];
   sender: Account;
@@ -4977,10 +4619,7 @@ export type FlowOperator = {
 };
 
 
-/**
- * FlowOperator: A higher order entity that of a flow operator for an `AccountTokenSnapshot`.
- *
- */
+/** FlowOperator: A higher order entity that of a flow operator for an `AccountTokenSnapshot`. */
 export type FlowOperatorflowOperatorUpdatedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -5001,22 +4640,17 @@ export type FlowOperatorUpdatedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = sender
    * addresses[2] = `flowOperator`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address of the `token` being streamed.
-   *
-   */
+  /** The address of the `token` being streamed. */
   token: Scalars['Bytes']['output'];
   sender: Scalars['Bytes']['output'];
   /**
    * The permissions granted to the `flowOperator`.
    * Octo bitmask representation.
-   *
    */
   permissions: Scalars['Int']['output'];
   flowRateAllowance: Scalars['BigInt']['output'];
@@ -5437,7 +5071,6 @@ export type FlowOperator_orderBy =
 /**
  * FlowUpdated: An `Event` entity that is emitted
  * when a flow is created, updated, or deleted.
- *
  */
 export type FlowUpdatedEvent = Event & {
   id: Scalars['ID']['output'];
@@ -5451,81 +5084,47 @@ export type FlowUpdatedEvent = Event & {
    * addresses[0] = `token` (supertoken)
    * addresses[1] = `sender`
    * addresses[2] = `receiver`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address of the `token` (supertoken) being streamed.
-   *
-   */
+  /** The address of the `token` (supertoken) being streamed. */
   token: Scalars['Bytes']['output'];
-  /**
-   * The address of the flow sender.
-   *
-   */
+  /** The address of the flow sender. */
   sender: Scalars['Bytes']['output'];
-  /**
-   * The address of the flow receiver.
-   *
-   */
+  /** The address of the flow receiver. */
   receiver: Scalars['Bytes']['output'];
   /**
    * The address that is executing the flow update transaction.
    * This will be the zero address until the flowOperator feature is live.
-   *
    */
   flowOperator: Scalars['Bytes']['output'];
-  /**
-   * The flow rate per second.
-   *
-   */
+  /** The flow rate per second. */
   flowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (global/account level) flow rate of `sender` for `token` as of this event.
-   *
-   */
+  /** The total (global/account level) flow rate of `sender` for `token` as of this event. */
   totalSenderFlowRate: Scalars['BigInt']['output'];
-  /**
-   * The total (global/account level) flow rate of `receiver` for `token` as of this event.
-   *
-   */
+  /** The total (global/account level) flow rate of `receiver` for `token` as of this event. */
   totalReceiverFlowRate: Scalars['BigInt']['output'];
-  /**
-   * The deposit amount put up for the creation of the flow.
-   *
-   */
+  /** The deposit amount put up for the creation of the flow. */
   deposit: Scalars['BigInt']['output'];
-  /**
-   * Arbitrary bytes (additional data) passed upon flow creation.
-   *
-   */
+  /** Arbitrary bytes (additional data) passed upon flow creation. */
   userData: Scalars['Bytes']['output'];
-  /**
-   * The previous flow rate, the absolute (positive) value.
-   *
-   */
+  /** The previous flow rate, the absolute (positive) value. */
   oldFlowRate: Scalars['BigInt']['output'];
   /**
    * The "type" of the `FlowUpdated` event.
    * 0 = create
    * 1 = update
    * 2 = terminate
-   *
    */
   type: Scalars['Int']['output'];
   /**
    * The total amount streamed until the timestamp
    * for the Stream entity linked to this event.
-   *
    */
   totalAmountStreamedUntilTimestamp: Scalars['BigInt']['output'];
-  /**
-   * The stream entity which is being modified.
-   *
-   */
+  /** The stream entity which is being modified. */
   stream: Stream;
 };
 
@@ -5803,7 +5402,6 @@ export type GovernanceReplacedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `oldGovernance`
    * addresses[1] = `newGovernance`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   oldGovernance: Scalars['Bytes']['output'];
@@ -5943,15 +5541,9 @@ export type GovernanceReplacedEvent_orderBy =
   | 'oldGovernance'
   | 'newGovernance';
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type Index = {
-  /**
-   * ID composed of: publisherAddress-tokenAddress-indexId
-   *
-   */
+  /** ID composed of: publisherAddress-tokenAddress-indexId */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -5960,49 +5552,33 @@ export type Index = {
   /**
    * NOTE: indexId is not the same as the id of the `Index` entity.
    * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
    */
   indexId: Scalars['BigInt']['output'];
   indexValue: Scalars['BigInt']['output'];
-  /**
-   * The number of subscriptions which have units allocated to them on the `Index`.
-   *
-   */
+  /** The number of subscriptions which have units allocated to them on the `Index`. */
   totalSubscriptionsWithUnits: Scalars['Int']['output'];
   /**
    * The number of units allocated by the `Index` that are pending.
    * This refers to the current (as of updatedAt) `totalUnitsPending`-not all that has ever been pending.
-   *
    */
   totalUnitsPending: Scalars['BigInt']['output'];
   /**
    * The number of units allocated by the `Index` that are approved.
    * This refers to the current (as of updatedAt) `totalUnitsApproved`-not all that has ever been approved.
-   *
    */
   totalUnitsApproved: Scalars['BigInt']['output'];
-  /**
-   * The sum of `totalUnitsPending` and `totalUnitsApproved`.
-   *
-   */
+  /** The sum of `totalUnitsPending` and `totalUnitsApproved`. */
   totalUnits: Scalars['BigInt']['output'];
-  /**
-   * The total amount distributed from this `Index`.
-   *
-   */
+  /** The total amount distributed from this `Index`. */
   totalAmountDistributedUntilUpdatedAt: Scalars['BigInt']['output'];
   token: Token;
   publisher: Account;
   /**
    * The subscriptions of the index, it will include approved, unapproved
    * and deleted subscriptions.
-   *
    */
   subscriptions: Array<IndexSubscription>;
-  /**
-   * IndexCreated event, there will only be one.
-   *
-   */
+  /** IndexCreated event, there will only be one. */
   indexCreatedEvent: IndexCreatedEvent;
   indexDistributionClaimedEvents: Array<IndexDistributionClaimedEvent>;
   indexUpdatedEvents: Array<IndexUpdatedEvent>;
@@ -6012,10 +5588,7 @@ export type Index = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexsubscriptionsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6025,10 +5598,7 @@ export type IndexsubscriptionsArgs = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexindexDistributionClaimedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6038,10 +5608,7 @@ export type IndexindexDistributionClaimedEventsArgs = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexindexUpdatedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6051,10 +5618,7 @@ export type IndexindexUpdatedEventsArgs = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexindexSubscribedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6064,10 +5628,7 @@ export type IndexindexSubscribedEventsArgs = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexindexUnitsUpdatedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6077,10 +5638,7 @@ export type IndexindexUnitsUpdatedEventsArgs = {
 };
 
 
-/**
- * Index: An Index higher order entity.
- *
- */
+/** Index: An Index higher order entity. */
 export type IndexindexUnsubscribedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6100,22 +5658,15 @@ export type IndexCreatedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   userData: Scalars['Bytes']['output'];
   index: Index;
@@ -6320,27 +5871,19 @@ export type IndexDistributionClaimedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
   amount: Scalars['BigInt']['output'];
@@ -6555,27 +6098,19 @@ export type IndexSubscribedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
   userData: Scalars['Bytes']['output'];
@@ -6780,15 +6315,9 @@ export type IndexSubscribedEvent_orderBy =
   | 'index__totalUnits'
   | 'index__totalAmountDistributedUntilUpdatedAt';
 
-/**
- * IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
- *
- */
+/** IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`. */
 export type IndexSubscription = {
-  /**
-   * ID composed of: subscriberAddress-publisherAddress-tokenAddress-IndexId
-   *
-   */
+  /** ID composed of: subscriberAddress-publisherAddress-tokenAddress-IndexId */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -6798,32 +6327,23 @@ export type IndexSubscription = {
   /**
    * A boolean indicating whether the `IndexSubscription` is approved.
    * Approved subscriptions don't require `subscriber` to claim tokens that are distributed from the publisher.
-   *
    */
   approved: Scalars['Boolean']['output'];
-  /**
-   * If `units` is `0`, it indicates that the subscription is "deleted" and `subscriber` is no longer subscribed to `index`.
-   *
-   */
+  /** If `units` is `0`, it indicates that the subscription is "deleted" and `subscriber` is no longer subscribed to `index`. */
   units: Scalars['BigInt']['output'];
   /**
    * The total amount of tokens you've received via IDA until
    * `updatedAtTimestamp`/`updatedAtBlock`.
-   *
    */
   totalAmountReceivedUntilUpdatedAt: Scalars['BigInt']['output'];
   /**
    * The previous index value - used to calculate `totalAmountReceivedUntilUpdatedAt` field as of the `index.updatedAtTimestamp`.
    * The formula to get this value is:
    * `IndexSubscription.totalAmountReceivedUntilUpdatedAt + ((index.newIndexValue - indexSubscription.indexValueUntilUpdatedAt) * indexSubscription.units)`.
-   *
    */
   indexValueUntilUpdatedAt: Scalars['BigInt']['output'];
   index: Index;
-  /**
-   * IndexSubscription approved events on the subscription.
-   *
-   */
+  /** IndexSubscription approved events on the subscription. */
   subscriptionApprovedEvents: Array<SubscriptionApprovedEvent>;
   subscriptionDistributionClaimedEvents: Array<SubscriptionDistributionClaimedEvent>;
   subscriptionRevokedEvents: Array<SubscriptionRevokedEvent>;
@@ -6831,10 +6351,7 @@ export type IndexSubscription = {
 };
 
 
-/**
- * IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
- *
- */
+/** IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`. */
 export type IndexSubscriptionsubscriptionApprovedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6844,10 +6361,7 @@ export type IndexSubscriptionsubscriptionApprovedEventsArgs = {
 };
 
 
-/**
- * IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
- *
- */
+/** IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`. */
 export type IndexSubscriptionsubscriptionDistributionClaimedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6857,10 +6371,7 @@ export type IndexSubscriptionsubscriptionDistributionClaimedEventsArgs = {
 };
 
 
-/**
- * IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
- *
- */
+/** IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`. */
 export type IndexSubscriptionsubscriptionRevokedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -6870,10 +6381,7 @@ export type IndexSubscriptionsubscriptionRevokedEventsArgs = {
 };
 
 
-/**
- * IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`.
- *
- */
+/** IndexSubscription: A higher order entity that contains subscription data for a `subscriber` account of a particular `Index`. */
 export type IndexSubscriptionsubscriptionUnitsUpdatedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -7050,27 +6558,19 @@ export type IndexUnitsUpdatedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
   units: Scalars['BigInt']['output'];
@@ -7307,27 +6807,19 @@ export type IndexUnsubscribedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
   userData: Scalars['Bytes']['output'];
@@ -7543,22 +7035,15 @@ export type IndexUpdatedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   token: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   oldIndexValue: Scalars['BigInt']['output'];
   newIndexValue: Scalars['BigInt']['output'];
@@ -8028,7 +7513,6 @@ export type InstantDistributionUpdatedEvent = Event & {
    * addresses[1] = `pool`
    * addresses[2] = `poolDistributor`
    * addresses[3] = `operator`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -8299,7 +7783,6 @@ export type JailEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `app`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -8452,7 +7935,6 @@ export type MemberUnitsUpdatedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `pool`
    * addresses[2] = `member`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -8703,7 +8185,6 @@ export type MintedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `operator`
    * addresses[2] = `to`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -8903,31 +8384,18 @@ export type NewPICEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `pic` (new Patrician In Charge)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
-  /**
-   * The address of the `token` (supertoken) the PIC is posting a bond for.
-   *
-   */
+  /** The address of the `token` (supertoken) the PIC is posting a bond for. */
   token: Scalars['Bytes']['output'];
-  /**
-   * The address of the new Patrician In Charge (PIC).
-   *
-   */
+  /** The address of the new Patrician In Charge (PIC). */
   pic: Scalars['Bytes']['output'];
-  /**
-   * The bond the new PIC staked in order to claim the position.
-   *
-   */
+  /** The bond the new PIC staked in order to claim the position. */
   bond: Scalars['BigInt']['output'];
-  /**
-   * The flowrate at which the bond is streamed back to the PIC.
-   *
-   */
+  /** The flowrate at which the bond is streamed back to the PIC. */
   exitRate: Scalars['BigInt']['output'];
 };
 
@@ -9094,17 +8562,13 @@ export type PPPConfigurationChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `governanceAddress`
    * addresses[1] = `host`
    * addresses[2] = `superToken`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -9285,10 +8749,7 @@ export type PPPConfigurationChangedEvent_orderBy =
   | 'patricianPeriod';
 
 export type Pool = {
-  /**
-   * ID: poolAddress
-   *
-   */
+  /** ID: poolAddress */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -9303,20 +8764,11 @@ export type Pool = {
   totalFlowAdjustmentAmountDistributedUntilUpdatedAt: Scalars['BigInt']['output'];
   perUnitSettledValue: Scalars['BigInt']['output'];
   perUnitFlowRate: Scalars['BigInt']['output'];
-  /**
-   * A member is any account which has more than 0 units in the pool.
-   *
-   */
+  /** A member is any account which has more than 0 units in the pool. */
   totalMembers: Scalars['Int']['output'];
-  /**
-   * A connected member is any account which has more than 0 units in the pool and is connected.
-   *
-   */
+  /** A connected member is any account which has more than 0 units in the pool and is connected. */
   totalConnectedMembers: Scalars['Int']['output'];
-  /**
-   * A disconnected member is any account which has more than 0 units in the pool and is not connected.
-   *
-   */
+  /** A disconnected member is any account which has more than 0 units in the pool and is not connected. */
   totalDisconnectedMembers: Scalars['Int']['output'];
   adjustmentFlowRate: Scalars['BigInt']['output'];
   flowRate: Scalars['BigInt']['output'];
@@ -9418,7 +8870,6 @@ export type PoolConnectionUpdatedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `pool`
    * addresses[2] = `poolMember`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -9658,7 +9109,6 @@ export type PoolCreatedEvent = Event & {
    * addresses[1] = `pool`
    * addresses[2] = `caller`
    * addresses[3] = `admin`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -9857,10 +9307,7 @@ export type PoolCreatedEvent_orderBy =
   | 'pool__totalBuffer';
 
 export type PoolDistributor = {
-  /**
-   * ID composed of: "poolDistributor"-pool-poolDistributorAddress
-   *
-   */
+  /** ID composed of: "poolDistributor"-pool-poolDistributorAddress */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -10081,10 +9528,7 @@ export type PoolDistributor_orderBy =
   | 'flowDistributionUpdatedEvents';
 
 export type PoolMember = {
-  /**
-   * ID composed of: "poolMember"-poolAddress-poolMemberAddress
-   *
-   */
+  /** ID composed of: "poolMember"-poolAddress-poolMemberAddress */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -12010,10 +11454,7 @@ export type Query_metaArgs = {
 };
 
 export type ResolverEntry = {
-  /**
-   * ID: the keccak256 hash of the set name
-   *
-   */
+  /** ID: the keccak256 hash of the set name */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -12118,10 +11559,7 @@ export type RewardAddressChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
@@ -12129,7 +11567,6 @@ export type RewardAddressChangedEvent = Event & {
    * addresses[1] = `host`
    * addresses[2] = `superToken`
    * addresses[3] = `rewardAddress`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -12312,7 +11749,6 @@ export type RoleAdminChangedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `previousAdminRole`
    * addresses[1] = `newAdminRole`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -12478,7 +11914,6 @@ export type RoleGrantedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `account`
    * addresses[1] = `sender`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -12644,7 +12079,6 @@ export type RoleRevokedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `account`
    * addresses[1] = `sender`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -12800,27 +12234,15 @@ export type RoleRevokedEvent_orderBy =
   | 'sender';
 
 export type SFMeta = {
-  /**
-   * The id is the commit hash.
-   *
-   */
+  /** The id is the commit hash. */
   id: Scalars['ID']['output'];
   timestamp: Scalars['BigInt']['output'];
   blockNumber: Scalars['BigInt']['output'];
-  /**
-   * Whether the branch is feature/dev/v1.
-   *
-   */
+  /** Whether the branch is feature/dev/v1. */
   configuration: Scalars['String']['output'];
-  /**
-   * The branch the current deployment is coming from.
-   *
-   */
+  /** The branch the current deployment is coming from. */
   branch: Scalars['String']['output'];
-  /**
-   * The subgraph package.json semver version of the current deployment.
-   *
-   */
+  /** The subgraph package.json semver version of the current deployment. */
   packageVersion: Scalars['String']['output'];
 };
 
@@ -12923,10 +12345,7 @@ export type SFMeta_orderBy =
   | 'branch'
   | 'packageVersion';
 
-/**
- * WARNING: This event has been deprecated. It is not indexed anymore. It's kept in schema to avoid breakage in the schema.
- *
- */
+/** WARNING: This event has been deprecated. It is not indexed anymore. It's kept in schema to avoid breakage in the schema. */
 export type SentEvent = Event & {
   id: Scalars['ID']['output'];
   transactionHash: Scalars['Bytes']['output'];
@@ -12939,7 +12358,6 @@ export type SentEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `operator`
    * addresses[2] = `from`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -13147,10 +12565,7 @@ export type SetEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * Empty addresses array.
-   *
-   */
+  /** Empty addresses array. */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
   logIndex: Scalars['BigInt']['output'];
@@ -13159,7 +12574,6 @@ export type SetEvent = Event & {
    * Because the name property is indexed, the
    * returned value will be a keccak256 hash
    * of the string.
-   *
    */
   hashedName: Scalars['Bytes']['output'];
   target: Scalars['Bytes']['output'];
@@ -13334,13 +12748,9 @@ export type SetEvent_orderBy =
  * A account can start a stream, update the flow rate, but when they close it, it is considered "dead".
  * The next stream you create with the same `sender` and `receiver` will create a new stream entity.
  * Therefore, multiple stream entities can be created between the same `sender` and `receiver`.
- *
  */
 export type Stream = {
-  /**
-   * ID composed of: senderAddress-receiverAddress-tokenAddress-revisionIndex
-   *
-   */
+  /** ID composed of: senderAddress-receiverAddress-tokenAddress-revisionIndex */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -13352,7 +12762,6 @@ export type Stream = {
    * The amount streamed until `updatedAtTimestamp`/`updatedAtBlock`.
    * The formula to get the current streamed amount is:
    * `streamedUntilUpdatedAt + ((currentTime in seconds) - updatedAtTimestamp) * currentFlowRate`.
-   *
    */
   streamedUntilUpdatedAt: Scalars['BigInt']['output'];
   token: Token;
@@ -13361,7 +12770,6 @@ export type Stream = {
   /**
    * The `userData` stored on the Stream is the last `userData` that was set in a `FlowUpdatedEvent`,
    * for this particular stream. To see the historical `userData` for this stream, you can query the `flowUpdatedEvents` field.
-   *
    */
   userData: Scalars['Bytes']['output'];
   flowUpdatedEvents: Array<FlowUpdatedEvent>;
@@ -13374,7 +12782,6 @@ export type Stream = {
  * A account can start a stream, update the flow rate, but when they close it, it is considered "dead".
  * The next stream you create with the same `sender` and `receiver` will create a new stream entity.
  * Therefore, multiple stream entities can be created between the same `sender` and `receiver`.
- *
  */
 export type StreamflowUpdatedEventsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -13390,7 +12797,6 @@ export type StreamflowUpdatedEventsArgs = {
  * A account can start a stream, update the flow rate, but when they close it, it is considered "dead".
  * The next stream you create with the same `sender` and `receiver` will create a new stream entity.
  * Therefore, multiple stream entities can be created between the same `sender` and `receiver`.
- *
  */
 export type StreamstreamPeriodsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
@@ -13400,15 +12806,9 @@ export type StreamstreamPeriodsArgs = {
   where?: InputMaybe<StreamPeriod_filter>;
 };
 
-/**
- * StreamPeriod: A higher order entity that represents a period of time in a Stream with a constant flowRate.
- *
- */
+/** StreamPeriod: A higher order entity that represents a period of time in a Stream with a constant flowRate. */
 export type StreamPeriod = {
-  /**
-   * ID composed of: streamId - periodRevisionIndex
-   *
-   */
+  /** ID composed of: streamId - periodRevisionIndex */
   id: Scalars['ID']['output'];
   stream: Stream;
   sender: Account;
@@ -13419,10 +12819,7 @@ export type StreamPeriod = {
   startedAtTimestamp: Scalars['BigInt']['output'];
   startedAtBlockNumber: Scalars['BigInt']['output'];
   startedAtEvent: FlowUpdatedEvent;
-  /**
-   * Following values are null until the StreamPeriod is terminated
-   *
-   */
+  /** Following values are null until the StreamPeriod is terminated */
   stoppedAtTimestamp?: Maybe<Scalars['BigInt']['output']>;
   stoppedAtBlockNumber?: Maybe<Scalars['BigInt']['output']>;
   stoppedAtEvent?: Maybe<FlowUpdatedEvent>;
@@ -13716,17 +13113,13 @@ export type StreamPeriod_orderBy =
   | 'totalAmountStreamed';
 
 export type StreamRevision = {
-  /**
-   * ID composed of: keccak256(abi.encode(sender,receiver))-tokenAddress
-   *
-   */
+  /** ID composed of: keccak256(abi.encode(sender,receiver))-tokenAddress */
   id: Scalars['ID']['output'];
   revisionIndex: Scalars['Int']['output'];
   periodRevisionIndex: Scalars['Int']['output'];
   /**
    * The "most recently alive" stream between a sender and receiver.
    * Note: The `revisionIndex` property may not be the same as the `revisionIndex` of `mostRecentStream`. Which means `mostRecentStream` has been closed and no new stream has been opened.
-   *
    */
   mostRecentStream: Stream;
 };
@@ -13982,1416 +13375,6 @@ export type Stream_orderBy =
   | 'flowUpdatedEvents'
   | 'streamPeriods';
 
-export type Subscription = {
-  flowUpdatedEvent?: Maybe<FlowUpdatedEvent>;
-  flowUpdatedEvents: Array<FlowUpdatedEvent>;
-  flowOperatorUpdatedEvent?: Maybe<FlowOperatorUpdatedEvent>;
-  flowOperatorUpdatedEvents: Array<FlowOperatorUpdatedEvent>;
-  indexCreatedEvent?: Maybe<IndexCreatedEvent>;
-  indexCreatedEvents: Array<IndexCreatedEvent>;
-  indexDistributionClaimedEvent?: Maybe<IndexDistributionClaimedEvent>;
-  indexDistributionClaimedEvents: Array<IndexDistributionClaimedEvent>;
-  indexUpdatedEvent?: Maybe<IndexUpdatedEvent>;
-  indexUpdatedEvents: Array<IndexUpdatedEvent>;
-  indexSubscribedEvent?: Maybe<IndexSubscribedEvent>;
-  indexSubscribedEvents: Array<IndexSubscribedEvent>;
-  indexUnitsUpdatedEvent?: Maybe<IndexUnitsUpdatedEvent>;
-  indexUnitsUpdatedEvents: Array<IndexUnitsUpdatedEvent>;
-  indexUnsubscribedEvent?: Maybe<IndexUnsubscribedEvent>;
-  indexUnsubscribedEvents: Array<IndexUnsubscribedEvent>;
-  subscriptionApprovedEvent?: Maybe<SubscriptionApprovedEvent>;
-  subscriptionApprovedEvents: Array<SubscriptionApprovedEvent>;
-  subscriptionDistributionClaimedEvent?: Maybe<SubscriptionDistributionClaimedEvent>;
-  subscriptionDistributionClaimedEvents: Array<SubscriptionDistributionClaimedEvent>;
-  subscriptionRevokedEvent?: Maybe<SubscriptionRevokedEvent>;
-  subscriptionRevokedEvents: Array<SubscriptionRevokedEvent>;
-  subscriptionUnitsUpdatedEvent?: Maybe<SubscriptionUnitsUpdatedEvent>;
-  subscriptionUnitsUpdatedEvents: Array<SubscriptionUnitsUpdatedEvent>;
-  poolCreatedEvent?: Maybe<PoolCreatedEvent>;
-  poolCreatedEvents: Array<PoolCreatedEvent>;
-  poolConnectionUpdatedEvent?: Maybe<PoolConnectionUpdatedEvent>;
-  poolConnectionUpdatedEvents: Array<PoolConnectionUpdatedEvent>;
-  bufferAdjustedEvent?: Maybe<BufferAdjustedEvent>;
-  bufferAdjustedEvents: Array<BufferAdjustedEvent>;
-  instantDistributionUpdatedEvent?: Maybe<InstantDistributionUpdatedEvent>;
-  instantDistributionUpdatedEvents: Array<InstantDistributionUpdatedEvent>;
-  flowDistributionUpdatedEvent?: Maybe<FlowDistributionUpdatedEvent>;
-  flowDistributionUpdatedEvents: Array<FlowDistributionUpdatedEvent>;
-  distributionClaimedEvent?: Maybe<DistributionClaimedEvent>;
-  distributionClaimedEvents: Array<DistributionClaimedEvent>;
-  memberUnitsUpdatedEvent?: Maybe<MemberUnitsUpdatedEvent>;
-  memberUnitsUpdatedEvents: Array<MemberUnitsUpdatedEvent>;
-  agreementClassRegisteredEvent?: Maybe<AgreementClassRegisteredEvent>;
-  agreementClassRegisteredEvents: Array<AgreementClassRegisteredEvent>;
-  agreementClassUpdatedEvent?: Maybe<AgreementClassUpdatedEvent>;
-  agreementClassUpdatedEvents: Array<AgreementClassUpdatedEvent>;
-  appRegisteredEvent?: Maybe<AppRegisteredEvent>;
-  appRegisteredEvents: Array<AppRegisteredEvent>;
-  governanceReplacedEvent?: Maybe<GovernanceReplacedEvent>;
-  governanceReplacedEvents: Array<GovernanceReplacedEvent>;
-  jailEvent?: Maybe<JailEvent>;
-  jailEvents: Array<JailEvent>;
-  superTokenFactoryUpdatedEvent?: Maybe<SuperTokenFactoryUpdatedEvent>;
-  superTokenFactoryUpdatedEvents: Array<SuperTokenFactoryUpdatedEvent>;
-  superTokenLogicUpdatedEvent?: Maybe<SuperTokenLogicUpdatedEvent>;
-  superTokenLogicUpdatedEvents: Array<SuperTokenLogicUpdatedEvent>;
-  roleAdminChangedEvent?: Maybe<RoleAdminChangedEvent>;
-  roleAdminChangedEvents: Array<RoleAdminChangedEvent>;
-  roleGrantedEvent?: Maybe<RoleGrantedEvent>;
-  roleGrantedEvents: Array<RoleGrantedEvent>;
-  roleRevokedEvent?: Maybe<RoleRevokedEvent>;
-  roleRevokedEvents: Array<RoleRevokedEvent>;
-  setEvent?: Maybe<SetEvent>;
-  setEvents: Array<SetEvent>;
-  cfav1LiquidationPeriodChangedEvent?: Maybe<CFAv1LiquidationPeriodChangedEvent>;
-  cfav1LiquidationPeriodChangedEvents: Array<CFAv1LiquidationPeriodChangedEvent>;
-  configChangedEvent?: Maybe<ConfigChangedEvent>;
-  configChangedEvents: Array<ConfigChangedEvent>;
-  rewardAddressChangedEvent?: Maybe<RewardAddressChangedEvent>;
-  rewardAddressChangedEvents: Array<RewardAddressChangedEvent>;
-  pppconfigurationChangedEvent?: Maybe<PPPConfigurationChangedEvent>;
-  pppconfigurationChangedEvents: Array<PPPConfigurationChangedEvent>;
-  superTokenMinimumDepositChangedEvent?: Maybe<SuperTokenMinimumDepositChangedEvent>;
-  superTokenMinimumDepositChangedEvents: Array<SuperTokenMinimumDepositChangedEvent>;
-  trustedForwarderChangedEvent?: Maybe<TrustedForwarderChangedEvent>;
-  trustedForwarderChangedEvents: Array<TrustedForwarderChangedEvent>;
-  agreementLiquidatedByEvent?: Maybe<AgreementLiquidatedByEvent>;
-  agreementLiquidatedByEvents: Array<AgreementLiquidatedByEvent>;
-  agreementLiquidatedV2Event?: Maybe<AgreementLiquidatedV2Event>;
-  agreementLiquidatedV2Events: Array<AgreementLiquidatedV2Event>;
-  burnedEvent?: Maybe<BurnedEvent>;
-  burnedEvents: Array<BurnedEvent>;
-  mintedEvent?: Maybe<MintedEvent>;
-  mintedEvents: Array<MintedEvent>;
-  sentEvent?: Maybe<SentEvent>;
-  sentEvents: Array<SentEvent>;
-  transferEvent?: Maybe<TransferEvent>;
-  transferEvents: Array<TransferEvent>;
-  tokenDowngradedEvent?: Maybe<TokenDowngradedEvent>;
-  tokenDowngradedEvents: Array<TokenDowngradedEvent>;
-  tokenUpgradedEvent?: Maybe<TokenUpgradedEvent>;
-  tokenUpgradedEvents: Array<TokenUpgradedEvent>;
-  approvalEvent?: Maybe<ApprovalEvent>;
-  approvalEvents: Array<ApprovalEvent>;
-  customSuperTokenCreatedEvent?: Maybe<CustomSuperTokenCreatedEvent>;
-  customSuperTokenCreatedEvents: Array<CustomSuperTokenCreatedEvent>;
-  superTokenCreatedEvent?: Maybe<SuperTokenCreatedEvent>;
-  superTokenCreatedEvents: Array<SuperTokenCreatedEvent>;
-  superTokenLogicCreatedEvent?: Maybe<SuperTokenLogicCreatedEvent>;
-  superTokenLogicCreatedEvents: Array<SuperTokenLogicCreatedEvent>;
-  newPICEvent?: Maybe<NewPICEvent>;
-  newPICEvents: Array<NewPICEvent>;
-  exitRateChangedEvent?: Maybe<ExitRateChangedEvent>;
-  exitRateChangedEvents: Array<ExitRateChangedEvent>;
-  bondIncreasedEvent?: Maybe<BondIncreasedEvent>;
-  bondIncreasedEvents: Array<BondIncreasedEvent>;
-  account?: Maybe<Account>;
-  accounts: Array<Account>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  poolMember?: Maybe<PoolMember>;
-  poolMembers: Array<PoolMember>;
-  poolDistributor?: Maybe<PoolDistributor>;
-  poolDistributors: Array<PoolDistributor>;
-  index?: Maybe<Index>;
-  indexes: Array<Index>;
-  indexSubscription?: Maybe<IndexSubscription>;
-  indexSubscriptions: Array<IndexSubscription>;
-  stream?: Maybe<Stream>;
-  streams: Array<Stream>;
-  flowOperator?: Maybe<FlowOperator>;
-  flowOperators: Array<FlowOperator>;
-  streamPeriod?: Maybe<StreamPeriod>;
-  streamPeriods: Array<StreamPeriod>;
-  tokenGovernanceConfig?: Maybe<TokenGovernanceConfig>;
-  tokenGovernanceConfigs: Array<TokenGovernanceConfig>;
-  streamRevision?: Maybe<StreamRevision>;
-  streamRevisions: Array<StreamRevision>;
-  token?: Maybe<Token>;
-  tokens: Array<Token>;
-  resolverEntry?: Maybe<ResolverEntry>;
-  resolverEntries: Array<ResolverEntry>;
-  accountTokenSnapshot?: Maybe<AccountTokenSnapshot>;
-  accountTokenSnapshots: Array<AccountTokenSnapshot>;
-  accountTokenSnapshotLog?: Maybe<AccountTokenSnapshotLog>;
-  accountTokenSnapshotLogs: Array<AccountTokenSnapshotLog>;
-  tokenStatistic?: Maybe<TokenStatistic>;
-  tokenStatistics: Array<TokenStatistic>;
-  tokenStatisticLog?: Maybe<TokenStatisticLog>;
-  tokenStatisticLogs: Array<TokenStatisticLog>;
-  sfmeta?: Maybe<SFMeta>;
-  sfmetas: Array<SFMeta>;
-  event?: Maybe<Event>;
-  events: Array<Event>;
-  /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
-};
-
-
-export type SubscriptionflowUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<FlowUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<FlowUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowOperatorUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowOperatorUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<FlowOperatorUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<FlowOperatorUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexCreatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexCreatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexCreatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexCreatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexDistributionClaimedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexDistributionClaimedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexDistributionClaimedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexDistributionClaimedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexSubscribedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexSubscribedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexSubscribedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexSubscribedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUnitsUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUnitsUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexUnitsUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexUnitsUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUnsubscribedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexUnsubscribedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexUnsubscribedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexUnsubscribedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionApprovedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionApprovedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SubscriptionApprovedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubscriptionApprovedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionDistributionClaimedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionDistributionClaimedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SubscriptionDistributionClaimedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubscriptionDistributionClaimedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionRevokedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionRevokedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SubscriptionRevokedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubscriptionRevokedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionUnitsUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubscriptionUnitsUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SubscriptionUnitsUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubscriptionUnitsUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolCreatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolCreatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolCreatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PoolCreatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolConnectionUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolConnectionUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolConnectionUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PoolConnectionUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbufferAdjustedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbufferAdjustedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<BufferAdjustedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BufferAdjustedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioninstantDistributionUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioninstantDistributionUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<InstantDistributionUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<InstantDistributionUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowDistributionUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowDistributionUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<FlowDistributionUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<FlowDistributionUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondistributionClaimedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondistributionClaimedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<DistributionClaimedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<DistributionClaimedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionmemberUnitsUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionmemberUnitsUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MemberUnitsUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<MemberUnitsUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementClassRegisteredEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementClassRegisteredEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AgreementClassRegisteredEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AgreementClassRegisteredEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementClassUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementClassUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AgreementClassUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AgreementClassUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionappRegisteredEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionappRegisteredEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AppRegisteredEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AppRegisteredEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongovernanceReplacedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongovernanceReplacedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<GovernanceReplacedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GovernanceReplacedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionjailEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionjailEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<JailEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<JailEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenFactoryUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenFactoryUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SuperTokenFactoryUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SuperTokenFactoryUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenLogicUpdatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenLogicUpdatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SuperTokenLogicUpdatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SuperTokenLogicUpdatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleAdminChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleAdminChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<RoleAdminChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RoleAdminChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleGrantedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleGrantedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<RoleGrantedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RoleGrantedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleRevokedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionroleRevokedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<RoleRevokedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RoleRevokedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsetEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsetEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SetEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SetEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Subscriptioncfav1LiquidationPeriodChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Subscriptioncfav1LiquidationPeriodChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<CFAv1LiquidationPeriodChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<CFAv1LiquidationPeriodChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionconfigChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionconfigChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<ConfigChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<ConfigChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionrewardAddressChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionrewardAddressChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<RewardAddressChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RewardAddressChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpppconfigurationChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpppconfigurationChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PPPConfigurationChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PPPConfigurationChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenMinimumDepositChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenMinimumDepositChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SuperTokenMinimumDepositChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SuperTokenMinimumDepositChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontrustedForwarderChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontrustedForwarderChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TrustedForwarderChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TrustedForwarderChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementLiquidatedByEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementLiquidatedByEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AgreementLiquidatedByEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AgreementLiquidatedByEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementLiquidatedV2EventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionagreementLiquidatedV2EventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AgreementLiquidatedV2Event_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AgreementLiquidatedV2Event_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionburnedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionburnedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<BurnedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BurnedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionmintedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionmintedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MintedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<MintedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsentEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsentEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SentEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SentEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontransferEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontransferEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TransferEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TransferEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenDowngradedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenDowngradedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenDowngradedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenDowngradedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenUpgradedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenUpgradedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenUpgradedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenUpgradedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionapprovalEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionapprovalEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<ApprovalEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<ApprovalEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncustomSuperTokenCreatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncustomSuperTokenCreatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<CustomSuperTokenCreatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<CustomSuperTokenCreatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenCreatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenCreatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SuperTokenCreatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SuperTokenCreatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenLogicCreatedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsuperTokenLogicCreatedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SuperTokenLogicCreatedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SuperTokenLogicCreatedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnewPICEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnewPICEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<NewPICEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NewPICEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionexitRateChangedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionexitRateChangedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<ExitRateChangedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<ExitRateChangedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbondIncreasedEventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbondIncreasedEventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<BondIncreasedEvent_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BondIncreasedEvent_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Account_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Account_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Pool_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Pool_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolMemberArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolMembersArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolMember_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PoolMember_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolDistributorArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolDistributorsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PoolDistributor_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PoolDistributor_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexesArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Index_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Index_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexSubscriptionArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexSubscriptionsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<IndexSubscription_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexSubscription_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Stream_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Stream_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowOperatorArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionflowOperatorsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<FlowOperator_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<FlowOperator_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamPeriodArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamPeriodsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<StreamPeriod_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<StreamPeriod_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenGovernanceConfigArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenGovernanceConfigsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenGovernanceConfig_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenGovernanceConfig_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamRevisionArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionstreamRevisionsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<StreamRevision_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<StreamRevision_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokensArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Token_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Token_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionresolverEntryArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionresolverEntriesArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<ResolverEntry_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<ResolverEntry_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountTokenSnapshotArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountTokenSnapshotsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AccountTokenSnapshot_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AccountTokenSnapshot_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountTokenSnapshotLogArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountTokenSnapshotLogsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AccountTokenSnapshotLog_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AccountTokenSnapshotLog_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenStatisticArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenStatisticsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenStatistic_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenStatistic_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenStatisticLogArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenStatisticLogsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokenStatisticLog_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenStatisticLog_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsfmetaArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsfmetasArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<SFMeta_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SFMeta_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioneventArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioneventsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<Event_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Event_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Subscription_metaArgs = {
-  block?: InputMaybe<Block_height>;
-};
-
 export type SubscriptionApprovedEvent = Event & {
   id: Scalars['ID']['output'];
   transactionHash: Scalars['Bytes']['output'];
@@ -15404,7 +13387,6 @@ export type SubscriptionApprovedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -15414,18 +13396,11 @@ export type SubscriptionApprovedEvent = Event & {
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   userData: Scalars['Bytes']['output'];
   subscription: IndexSubscription;
@@ -15638,7 +13613,6 @@ export type SubscriptionDistributionClaimedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -15648,18 +13622,11 @@ export type SubscriptionDistributionClaimedEvent = Event & {
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   amount: Scalars['BigInt']['output'];
   subscription: IndexSubscription;
@@ -15870,7 +13837,6 @@ export type SubscriptionRevokedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -15880,18 +13846,11 @@ export type SubscriptionRevokedEvent = Event & {
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   userData: Scalars['Bytes']['output'];
   subscription: IndexSubscription;
@@ -16104,7 +14063,6 @@ export type SubscriptionUnitsUpdatedEvent = Event & {
    * addresses[0] = `token` (superToken)
    * addresses[1] = `publisher`
    * addresses[2] = `subscriber`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -16114,18 +14072,11 @@ export type SubscriptionUnitsUpdatedEvent = Event & {
   /**
    * The account that is subscribed to `index`. A possible recipient of distributions from the `publisher`.
    * `subscriber` only receives tokens if they have been allocated units (can be thought of as shares).
-   *
    */
   subscriber: Scalars['Bytes']['output'];
-  /**
-   * The creator of the `index`.
-   *
-   */
+  /** The creator of the `index`. */
   publisher: Scalars['Bytes']['output'];
-  /**
-   * An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`.
-   *
-   */
+  /** An arbitrary uint32 value used to allow a publisher to create multiple indexes for a specific `token`. */
   indexId: Scalars['BigInt']['output'];
   units: Scalars['BigInt']['output'];
   userData: Scalars['Bytes']['output'];
@@ -16356,7 +14307,6 @@ export type SuperTokenCreatedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -16497,7 +14447,6 @@ export type SuperTokenFactoryUpdatedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `newFactory`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -16638,7 +14587,6 @@ export type SuperTokenLogicCreatedEvent = Event & {
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `tokenLogic`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -16780,7 +14728,6 @@ export type SuperTokenLogicUpdatedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token`
    * addresses[1] = `code`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -16930,17 +14877,13 @@ export type SuperTokenMinimumDepositChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `governanceAddress`
    * addresses[1] = `host`
    * addresses[2] = `superToken`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -17110,15 +15053,9 @@ export type SuperTokenMinimumDepositChangedEvent_orderBy =
   | 'isKeySet'
   | 'minimumDeposit';
 
-/**
- * Token: A higher order entity created for super tokens (and underlying tokens) that are "valid" (tokens that have Superfluid's host contract address set as the host).
- *
- */
+/** Token: A higher order entity created for super tokens (and underlying tokens) that are "valid" (tokens that have Superfluid's host contract address set as the host). */
 export type Token = {
-  /**
-   * ID: the token address
-   *
-   */
+  /** ID: the token address */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
@@ -17126,30 +15063,15 @@ export type Token = {
   name: Scalars['String']['output'];
   symbol: Scalars['String']['output'];
   isSuperToken: Scalars['Boolean']['output'];
-  /**
-   * A boolean indicating whether the token is a NativeAssetSuperToken.
-   *
-   */
+  /** A boolean indicating whether the token is a NativeAssetSuperToken. */
   isNativeAssetSuperToken: Scalars['Boolean']['output'];
-  /**
-   * A boolean indicating whether the token is a part of our resolver list.
-   *
-   */
+  /** A boolean indicating whether the token is a part of our resolver list. */
   isListed: Scalars['Boolean']['output'];
-  /**
-   * The address of the underlying ERC20 token (zero address for non-ERC20WrapperSuperToken's)
-   *
-   */
+  /** The address of the underlying ERC20 token (zero address for non-ERC20WrapperSuperToken's) */
   underlyingAddress: Scalars['Bytes']['output'];
-  /**
-   * The underlying ERC20 token for a ERC20WrapperSuperToken otherwise null.
-   *
-   */
+  /** The underlying ERC20 token for a ERC20WrapperSuperToken otherwise null. */
   underlyingToken?: Maybe<Token>;
-  /**
-   * If `governanceConfig.id` is the zero address, the token uses the default governance config.
-   *
-   */
+  /** If `governanceConfig.id` is the zero address, the token uses the default governance config. */
   governanceConfig?: Maybe<TokenGovernanceConfig>;
 };
 
@@ -17165,7 +15087,6 @@ export type TokenDowngradedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `account`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -17337,50 +15258,32 @@ export type TokenDowngradedEvent_orderBy =
 /**
  * TokenGovernanceConfig: A higher order entity that represents the governance configs for a token.
  * If `id` is `address(0)`, it will be used as the default config.
- *
  */
 export type TokenGovernanceConfig = {
   /**
    * id is the address of the SuperToken
    * NOTE: the zero address is reserved for the default config for all tokens with unset configs.
-   *
    */
   id: Scalars['ID']['output'];
   createdAtTimestamp: Scalars['BigInt']['output'];
   createdAtBlockNumber: Scalars['BigInt']['output'];
   updatedAtTimestamp: Scalars['BigInt']['output'];
   updatedAtBlockNumber: Scalars['BigInt']['output'];
-  /**
-   * If true, `id` is `address(0)` and this is the default config for all tokens with unset configs.
-   *
-   */
+  /** If true, `id` is `address(0)` and this is the default config for all tokens with unset configs. */
   isDefault: Scalars['Boolean']['output'];
-  /**
-   * The (default or token-specific) address that receives liquidation rewards for a token prior to 3Ps and the TOGA address after 3Ps.
-   *
-   */
+  /** The (default or token-specific) address that receives liquidation rewards for a token prior to 3Ps and the TOGA address after 3Ps. */
   rewardAddress?: Maybe<Scalars['Bytes']['output']>;
   /**
    * The (default or token-specific) liquidation period (buffer amount required for a token).
    * This field can be used to calculate the liquidation buffer (or deposit) amount for a token: `liquidationBufferAmount = liquidationPeriod * flowRate`.
    * Note that if `minimumDeposit` is set, the liquidation buffer amount will be the greater of the two values.
-   *
    */
   liquidationPeriod?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * The (default or token-specific) patrician period, the patrician period is the window in which a patrician receives all rewards for a liquidation, no matter the liquidating account.
-   *
-   */
+  /** The (default or token-specific) patrician period, the patrician period is the window in which a patrician receives all rewards for a liquidation, no matter the liquidating account. */
   patricianPeriod?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * The (default or token-specific) minimum deposit amount.
-   *
-   */
+  /** The (default or token-specific) minimum deposit amount. */
   minimumDeposit?: Maybe<Scalars['BigInt']['output']>;
-  /**
-   * A reverse lookup to the token it is associated with and null if it is the default config.
-   *
-   */
+  /** A reverse lookup to the token it is associated with and null if it is the default config. */
   token?: Maybe<Token>;
 };
 
@@ -17513,162 +15416,72 @@ export type TokenGovernanceConfig_orderBy =
   | 'token__isListed'
   | 'token__underlyingAddress';
 
-/**
- * TokenStatistic: An aggregate entity which contains aggregate data for `token`.
- *
- */
+/** TokenStatistic: An aggregate entity which contains aggregate data for `token`. */
 export type TokenStatistic = {
-  /**
-   * id: `token` (superToken) address
-   *
-   */
+  /** id: `token` (superToken) address */
   id: Scalars['ID']['output'];
   updatedAtTimestamp: Scalars['BigInt']['output'];
   updatedAtBlockNumber: Scalars['BigInt']['output'];
-  /**
-   * The total number of currently active `token` streams.
-   *
-   */
+  /** The total number of currently active `token` streams. */
   totalNumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The total number of currently active `token` streams for the CFA.
-   *
-   */
+  /** The total number of currently active `token` streams for the CFA. */
   totalCFANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The total number of currently active `token` streams for the GDA.
-   *
-   */
+  /** The total number of currently active `token` streams for the GDA. */
   totalGDANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token`.
-   *
-   */
+  /** The count of closed streams for `token`. */
   totalNumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token` for the CFA.
-   *
-   */
+  /** The count of closed streams for `token` for the CFA. */
   totalCFANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token` for the GDA.
-   *
-   */
+  /** The count of closed streams for `token` for the GDA. */
   totalGDANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The total number of Indexes created with `token`.
-   *
-   */
+  /** The total number of Indexes created with `token`. */
   totalNumberOfIndexes: Scalars['Int']['output'];
-  /**
-   * The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`.
-   *
-   */
+  /** The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`. */
   totalNumberOfActiveIndexes: Scalars['Int']['output'];
-  /**
-   * The number of subscriptions which have units allocated to them created with Indexes that distribute `token`.
-   *
-   */
+  /** The number of subscriptions which have units allocated to them created with Indexes that distribute `token`. */
   totalSubscriptionsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all approved subscriptions whether or not they have units.
-   *
-   */
+  /** Counts all approved subscriptions whether or not they have units. */
   totalApprovedSubscriptions: Scalars['Int']['output'];
-  /**
-   * The total number of Pools created with `token`.
-   *
-   */
+  /** The total number of Pools created with `token`. */
   totalNumberOfPools: Scalars['Int']['output'];
-  /**
-   * The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`.
-   *
-   */
+  /** The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`. */
   totalNumberOfActivePools: Scalars['Int']['output'];
-  /**
-   * The number of memberships which have units allocated to them created with Pools that distribute `token`.
-   *
-   */
+  /** The number of memberships which have units allocated to them created with Pools that distribute `token`. */
   totalMembershipsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all approved memberships whether or not they have units.
-   *
-   */
+  /** Counts all approved memberships whether or not they have units. */
   totalConnectedMemberships: Scalars['Int']['output'];
-  /**
-   * The total deposit held by all flow agreements for this particular `token`.
-   *
-   */
+  /** The total deposit held by all flow agreements for this particular `token`. */
   totalDeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit held by the CFA for this particular `token`.
-   *
-   */
+  /** The total deposit held by the CFA for this particular `token`. */
   totalCFADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit held by the GDA agreement for this particular `token`.
-   *
-   */
+  /** The total deposit held by the GDA agreement for this particular `token`. */
   totalGDADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for all flow agreements.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for all flow agreements. */
   totalOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for the CFA.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for the CFA. */
   totalCFAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for the GDA.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for the GDA. */
   totalGDAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements.
-   *
-   */
+  /** The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for all flow agreements. */
   totalAmountStreamedUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA.
-   *
-   */
+  /** The all-time total amount streamed (outflows) until the `updatedAtTimestamp`/`updatedAtBlock` for the CFA. */
   totalCFAAmountStreamedUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount transferred until the `updatedAtTimestamp`/`updatedAtBlock`.
-   *
-   */
+  /** The all-time total amount transferred until the `updatedAtTimestamp`/`updatedAtBlock`. */
   totalAmountTransferredUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount distributed until the `updatedAtTimestamp`/`updatedAtBlock`.
-   *
-   */
+  /** The all-time total amount distributed until the `updatedAtTimestamp`/`updatedAtBlock`. */
   totalAmountDistributedUntilUpdatedAt: Scalars['BigInt']['output'];
-  /**
-   * The total supply of the token - this is impacted by users upgrading/downgrading their tokens.
-   *
-   */
+  /** The total supply of the token - this is impacted by users upgrading/downgrading their tokens. */
   totalSupply: Scalars['BigInt']['output'];
-  /**
-   * The total number of accounts that have interacted with the token (but might not hold a balance anymore).
-   *
-   */
+  /** The total number of accounts that have interacted with the token (but might not hold a balance anymore). */
   totalNumberOfAccounts: Scalars['Int']['output'];
-  /**
-   * The total number of accounts holding a non-zero balance of the token.
-   *
-   */
+  /** The total number of accounts holding a non-zero balance of the token. */
   totalNumberOfHolders: Scalars['Int']['output'];
   token: Token;
   tokenStatisticLogs: Array<TokenStatisticLog>;
 };
 
 
-/**
- * TokenStatistic: An aggregate entity which contains aggregate data for `token`.
- *
- */
+/** TokenStatistic: An aggregate entity which contains aggregate data for `token`. */
 export type TokenStatistictokenStatisticLogsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -17680,7 +15493,6 @@ export type TokenStatistictokenStatisticLogsArgs = {
 /**
  * TokenStatisticLog: Historical entries of `TokenStatistic` updates.
  * WARNING: This entity has been deprecated. It is not indexed anymore. It's kept in schema to avoid breakage in the schema.
- *
  */
 export type TokenStatisticLog = {
   id: Scalars['ID']['output'];
@@ -17690,140 +15502,59 @@ export type TokenStatisticLog = {
   logIndex: Scalars['BigInt']['output'];
   order: Scalars['BigInt']['output'];
   triggeredByEventName: Scalars['String']['output'];
-  /**
-   * The total number of currently active `token` streams for all flow agreements.
-   *
-   */
+  /** The total number of currently active `token` streams for all flow agreements. */
   totalNumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The total number of currently active `token` streams for the CFA.
-   *
-   */
+  /** The total number of currently active `token` streams for the CFA. */
   totalCFANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The total number of currently active `token` streams for the GDA.
-   *
-   */
+  /** The total number of currently active `token` streams for the GDA. */
   totalGDANumberOfActiveStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token` for all flow agreements.
-   *
-   */
+  /** The count of closed streams for `token` for all flow agreements. */
   totalNumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token` for the CFA.
-   *
-   */
+  /** The count of closed streams for `token` for the CFA. */
   totalCFANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The count of closed streams for `token` for the GDA.
-   *
-   */
+  /** The count of closed streams for `token` for the GDA. */
   totalGDANumberOfClosedStreams: Scalars['Int']['output'];
-  /**
-   * The total number of Indexes created with `token`.
-   *
-   */
+  /** The total number of Indexes created with `token`. */
   totalNumberOfIndexes: Scalars['Int']['output'];
-  /**
-   * The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`.
-   *
-   */
+  /** The total number of "active" (has greater than 0 units and has distributed it at least once) Indexes created with `token`. */
   totalNumberOfActiveIndexes: Scalars['Int']['output'];
-  /**
-   * The number of subscriptions which have units allocated to them created with Indexes that distribute `token`.
-   *
-   */
+  /** The number of subscriptions which have units allocated to them created with Indexes that distribute `token`. */
   totalSubscriptionsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all approved subscriptions whether or not they have units.
-   *
-   */
+  /** Counts all approved subscriptions whether or not they have units. */
   totalApprovedSubscriptions: Scalars['Int']['output'];
-  /**
-   * The total number of Pools created with `token`.
-   *
-   */
+  /** The total number of Pools created with `token`. */
   totalNumberOfPools: Scalars['Int']['output'];
-  /**
-   * The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`.
-   *
-   */
+  /** The total number of "active" (has greater than 0 units and has distributed it at least once) Pools created with `token`. */
   totalNumberOfActivePools: Scalars['Int']['output'];
-  /**
-   * The number of memberships which have units allocated to them created with Pools that distribute `token`.
-   *
-   */
+  /** The number of memberships which have units allocated to them created with Pools that distribute `token`. */
   totalMembershipsWithUnits: Scalars['Int']['output'];
-  /**
-   * Counts all connected memberships whether or not they have units.
-   *
-   */
+  /** Counts all connected memberships whether or not they have units. */
   totalConnectedMemberships: Scalars['Int']['output'];
-  /**
-   * The total deposit held by the CFA agreement for this particular `token` for all flow agreements.
-   *
-   */
+  /** The total deposit held by the CFA agreement for this particular `token` for all flow agreements. */
   totalDeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit held by the CFA agreement for this particular `token` for the CFA.
-   *
-   */
+  /** The total deposit held by the CFA agreement for this particular `token` for the CFA. */
   totalCFADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total deposit held by the CFA agreement for this particular `token` for the GDA.
-   *
-   */
+  /** The total deposit held by the CFA agreement for this particular `token` for the GDA. */
   totalGDADeposit: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for all flow agreements.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for all flow agreements. */
   totalOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for the CFA.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for the CFA. */
   totalCFAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The total outflow rate of the `token` (how much value is being moved) for the GDA.
-   *
-   */
+  /** The total outflow rate of the `token` (how much value is being moved) for the GDA. */
   totalGDAOutflowRate: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for all flow agreements.
-   *
-   */
+  /** The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for all flow agreements. */
   totalAmountStreamed: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the CFA.
-   *
-   */
+  /** The all-time total amount of `token` streamed (outflows) until the `timestamp`/`block` for the CFA. */
   totalCFAAmountStreamed: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount of `token` transferred until the `timestamp`/`block`.
-   *
-   */
+  /** The all-time total amount of `token` transferred until the `timestamp`/`block`. */
   totalAmountTransferred: Scalars['BigInt']['output'];
-  /**
-   * The all-time total amount of `token` distributed until the `timestamp`/`block`.
-   *
-   */
+  /** The all-time total amount of `token` distributed until the `timestamp`/`block`. */
   totalAmountDistributed: Scalars['BigInt']['output'];
-  /**
-   * The total supply of the token - this is impacted by users upgrading/downgrading their tokens.
-   *
-   */
+  /** The total supply of the token - this is impacted by users upgrading/downgrading their tokens. */
   totalSupply: Scalars['BigInt']['output'];
-  /**
-   * The total number of accounts that have interacted with the token (but might not hold a balance anymore).
-   *
-   */
+  /** The total number of accounts that have interacted with the token (but might not hold a balance anymore). */
   totalNumberOfAccounts: Scalars['Int']['output'];
-  /**
-   * The total number of accounts holding a non-zero balance of the token.
-   *
-   */
+  /** The total number of accounts holding a non-zero balance of the token. */
   totalNumberOfHolders: Scalars['Int']['output'];
   token: Token;
   tokenStatistic: TokenStatistic;
@@ -18567,7 +16298,6 @@ export type TokenUpgradedEvent = Event & {
    * Contains the addresses that were impacted by this event:
    * addresses[0] = `token` (superToken)
    * addresses[1] = `account`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -18925,7 +16655,6 @@ export type TransferEvent = Event & {
    * addresses[0] = `token`
    * addresses[1] = `from`
    * addresses[2] = `to`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -19131,10 +16860,7 @@ export type TrustedForwarderChangedEvent = Event & {
   gasUsed?: Maybe<Scalars['BigInt']['output']>;
   timestamp: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
-  /**
-   * The address of the governance contract the event was emitted from.
-   *
-   */
+  /** The address of the governance contract the event was emitted from. */
   governanceAddress: Scalars['Bytes']['output'];
   /**
    * Contains the addresses that were impacted by this event:
@@ -19142,7 +16868,6 @@ export type TrustedForwarderChangedEvent = Event & {
    * addresses[1] = `host`
    * addresses[2] = `superToken`
    * addresses[3] = `forwarder`
-   *
    */
   addresses: Array<Scalars['Bytes']['output']>;
   blockNumber: Scalars['BigInt']['output'];
@@ -19338,7 +17063,6 @@ export type _Meta_ = {
    * will be null if the _meta field has a block constraint that asks for
    * a block number. It will be filled if the _meta field has no block constraint
    * and therefore asks for the latest  block
-   *
    */
   block: _Block_;
   /** The deployment ID */
@@ -19643,288 +17367,7 @@ export type _SubgraphErrorPolicy_ =
   };
 
   export type SubscriptionSdk = {
-      /** null **/
-  flowUpdatedEvent: InContextSdkMethod<Subscription['flowUpdatedEvent'], SubscriptionflowUpdatedEventArgs, MeshContext>,
-  /** null **/
-  flowUpdatedEvents: InContextSdkMethod<Subscription['flowUpdatedEvents'], SubscriptionflowUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  flowOperatorUpdatedEvent: InContextSdkMethod<Subscription['flowOperatorUpdatedEvent'], SubscriptionflowOperatorUpdatedEventArgs, MeshContext>,
-  /** null **/
-  flowOperatorUpdatedEvents: InContextSdkMethod<Subscription['flowOperatorUpdatedEvents'], SubscriptionflowOperatorUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  indexCreatedEvent: InContextSdkMethod<Subscription['indexCreatedEvent'], SubscriptionindexCreatedEventArgs, MeshContext>,
-  /** null **/
-  indexCreatedEvents: InContextSdkMethod<Subscription['indexCreatedEvents'], SubscriptionindexCreatedEventsArgs, MeshContext>,
-  /** null **/
-  indexDistributionClaimedEvent: InContextSdkMethod<Subscription['indexDistributionClaimedEvent'], SubscriptionindexDistributionClaimedEventArgs, MeshContext>,
-  /** null **/
-  indexDistributionClaimedEvents: InContextSdkMethod<Subscription['indexDistributionClaimedEvents'], SubscriptionindexDistributionClaimedEventsArgs, MeshContext>,
-  /** null **/
-  indexUpdatedEvent: InContextSdkMethod<Subscription['indexUpdatedEvent'], SubscriptionindexUpdatedEventArgs, MeshContext>,
-  /** null **/
-  indexUpdatedEvents: InContextSdkMethod<Subscription['indexUpdatedEvents'], SubscriptionindexUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  indexSubscribedEvent: InContextSdkMethod<Subscription['indexSubscribedEvent'], SubscriptionindexSubscribedEventArgs, MeshContext>,
-  /** null **/
-  indexSubscribedEvents: InContextSdkMethod<Subscription['indexSubscribedEvents'], SubscriptionindexSubscribedEventsArgs, MeshContext>,
-  /** null **/
-  indexUnitsUpdatedEvent: InContextSdkMethod<Subscription['indexUnitsUpdatedEvent'], SubscriptionindexUnitsUpdatedEventArgs, MeshContext>,
-  /** null **/
-  indexUnitsUpdatedEvents: InContextSdkMethod<Subscription['indexUnitsUpdatedEvents'], SubscriptionindexUnitsUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  indexUnsubscribedEvent: InContextSdkMethod<Subscription['indexUnsubscribedEvent'], SubscriptionindexUnsubscribedEventArgs, MeshContext>,
-  /** null **/
-  indexUnsubscribedEvents: InContextSdkMethod<Subscription['indexUnsubscribedEvents'], SubscriptionindexUnsubscribedEventsArgs, MeshContext>,
-  /** null **/
-  subscriptionApprovedEvent: InContextSdkMethod<Subscription['subscriptionApprovedEvent'], SubscriptionsubscriptionApprovedEventArgs, MeshContext>,
-  /** null **/
-  subscriptionApprovedEvents: InContextSdkMethod<Subscription['subscriptionApprovedEvents'], SubscriptionsubscriptionApprovedEventsArgs, MeshContext>,
-  /** null **/
-  subscriptionDistributionClaimedEvent: InContextSdkMethod<Subscription['subscriptionDistributionClaimedEvent'], SubscriptionsubscriptionDistributionClaimedEventArgs, MeshContext>,
-  /** null **/
-  subscriptionDistributionClaimedEvents: InContextSdkMethod<Subscription['subscriptionDistributionClaimedEvents'], SubscriptionsubscriptionDistributionClaimedEventsArgs, MeshContext>,
-  /** null **/
-  subscriptionRevokedEvent: InContextSdkMethod<Subscription['subscriptionRevokedEvent'], SubscriptionsubscriptionRevokedEventArgs, MeshContext>,
-  /** null **/
-  subscriptionRevokedEvents: InContextSdkMethod<Subscription['subscriptionRevokedEvents'], SubscriptionsubscriptionRevokedEventsArgs, MeshContext>,
-  /** null **/
-  subscriptionUnitsUpdatedEvent: InContextSdkMethod<Subscription['subscriptionUnitsUpdatedEvent'], SubscriptionsubscriptionUnitsUpdatedEventArgs, MeshContext>,
-  /** null **/
-  subscriptionUnitsUpdatedEvents: InContextSdkMethod<Subscription['subscriptionUnitsUpdatedEvents'], SubscriptionsubscriptionUnitsUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  poolCreatedEvent: InContextSdkMethod<Subscription['poolCreatedEvent'], SubscriptionpoolCreatedEventArgs, MeshContext>,
-  /** null **/
-  poolCreatedEvents: InContextSdkMethod<Subscription['poolCreatedEvents'], SubscriptionpoolCreatedEventsArgs, MeshContext>,
-  /** null **/
-  poolConnectionUpdatedEvent: InContextSdkMethod<Subscription['poolConnectionUpdatedEvent'], SubscriptionpoolConnectionUpdatedEventArgs, MeshContext>,
-  /** null **/
-  poolConnectionUpdatedEvents: InContextSdkMethod<Subscription['poolConnectionUpdatedEvents'], SubscriptionpoolConnectionUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  bufferAdjustedEvent: InContextSdkMethod<Subscription['bufferAdjustedEvent'], SubscriptionbufferAdjustedEventArgs, MeshContext>,
-  /** null **/
-  bufferAdjustedEvents: InContextSdkMethod<Subscription['bufferAdjustedEvents'], SubscriptionbufferAdjustedEventsArgs, MeshContext>,
-  /** null **/
-  instantDistributionUpdatedEvent: InContextSdkMethod<Subscription['instantDistributionUpdatedEvent'], SubscriptioninstantDistributionUpdatedEventArgs, MeshContext>,
-  /** null **/
-  instantDistributionUpdatedEvents: InContextSdkMethod<Subscription['instantDistributionUpdatedEvents'], SubscriptioninstantDistributionUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  flowDistributionUpdatedEvent: InContextSdkMethod<Subscription['flowDistributionUpdatedEvent'], SubscriptionflowDistributionUpdatedEventArgs, MeshContext>,
-  /** null **/
-  flowDistributionUpdatedEvents: InContextSdkMethod<Subscription['flowDistributionUpdatedEvents'], SubscriptionflowDistributionUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  distributionClaimedEvent: InContextSdkMethod<Subscription['distributionClaimedEvent'], SubscriptiondistributionClaimedEventArgs, MeshContext>,
-  /** null **/
-  distributionClaimedEvents: InContextSdkMethod<Subscription['distributionClaimedEvents'], SubscriptiondistributionClaimedEventsArgs, MeshContext>,
-  /** null **/
-  memberUnitsUpdatedEvent: InContextSdkMethod<Subscription['memberUnitsUpdatedEvent'], SubscriptionmemberUnitsUpdatedEventArgs, MeshContext>,
-  /** null **/
-  memberUnitsUpdatedEvents: InContextSdkMethod<Subscription['memberUnitsUpdatedEvents'], SubscriptionmemberUnitsUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  agreementClassRegisteredEvent: InContextSdkMethod<Subscription['agreementClassRegisteredEvent'], SubscriptionagreementClassRegisteredEventArgs, MeshContext>,
-  /** null **/
-  agreementClassRegisteredEvents: InContextSdkMethod<Subscription['agreementClassRegisteredEvents'], SubscriptionagreementClassRegisteredEventsArgs, MeshContext>,
-  /** null **/
-  agreementClassUpdatedEvent: InContextSdkMethod<Subscription['agreementClassUpdatedEvent'], SubscriptionagreementClassUpdatedEventArgs, MeshContext>,
-  /** null **/
-  agreementClassUpdatedEvents: InContextSdkMethod<Subscription['agreementClassUpdatedEvents'], SubscriptionagreementClassUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  appRegisteredEvent: InContextSdkMethod<Subscription['appRegisteredEvent'], SubscriptionappRegisteredEventArgs, MeshContext>,
-  /** null **/
-  appRegisteredEvents: InContextSdkMethod<Subscription['appRegisteredEvents'], SubscriptionappRegisteredEventsArgs, MeshContext>,
-  /** null **/
-  governanceReplacedEvent: InContextSdkMethod<Subscription['governanceReplacedEvent'], SubscriptiongovernanceReplacedEventArgs, MeshContext>,
-  /** null **/
-  governanceReplacedEvents: InContextSdkMethod<Subscription['governanceReplacedEvents'], SubscriptiongovernanceReplacedEventsArgs, MeshContext>,
-  /** null **/
-  jailEvent: InContextSdkMethod<Subscription['jailEvent'], SubscriptionjailEventArgs, MeshContext>,
-  /** null **/
-  jailEvents: InContextSdkMethod<Subscription['jailEvents'], SubscriptionjailEventsArgs, MeshContext>,
-  /** null **/
-  superTokenFactoryUpdatedEvent: InContextSdkMethod<Subscription['superTokenFactoryUpdatedEvent'], SubscriptionsuperTokenFactoryUpdatedEventArgs, MeshContext>,
-  /** null **/
-  superTokenFactoryUpdatedEvents: InContextSdkMethod<Subscription['superTokenFactoryUpdatedEvents'], SubscriptionsuperTokenFactoryUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  superTokenLogicUpdatedEvent: InContextSdkMethod<Subscription['superTokenLogicUpdatedEvent'], SubscriptionsuperTokenLogicUpdatedEventArgs, MeshContext>,
-  /** null **/
-  superTokenLogicUpdatedEvents: InContextSdkMethod<Subscription['superTokenLogicUpdatedEvents'], SubscriptionsuperTokenLogicUpdatedEventsArgs, MeshContext>,
-  /** null **/
-  roleAdminChangedEvent: InContextSdkMethod<Subscription['roleAdminChangedEvent'], SubscriptionroleAdminChangedEventArgs, MeshContext>,
-  /** null **/
-  roleAdminChangedEvents: InContextSdkMethod<Subscription['roleAdminChangedEvents'], SubscriptionroleAdminChangedEventsArgs, MeshContext>,
-  /** null **/
-  roleGrantedEvent: InContextSdkMethod<Subscription['roleGrantedEvent'], SubscriptionroleGrantedEventArgs, MeshContext>,
-  /** null **/
-  roleGrantedEvents: InContextSdkMethod<Subscription['roleGrantedEvents'], SubscriptionroleGrantedEventsArgs, MeshContext>,
-  /** null **/
-  roleRevokedEvent: InContextSdkMethod<Subscription['roleRevokedEvent'], SubscriptionroleRevokedEventArgs, MeshContext>,
-  /** null **/
-  roleRevokedEvents: InContextSdkMethod<Subscription['roleRevokedEvents'], SubscriptionroleRevokedEventsArgs, MeshContext>,
-  /** null **/
-  setEvent: InContextSdkMethod<Subscription['setEvent'], SubscriptionsetEventArgs, MeshContext>,
-  /** null **/
-  setEvents: InContextSdkMethod<Subscription['setEvents'], SubscriptionsetEventsArgs, MeshContext>,
-  /** null **/
-  cfav1LiquidationPeriodChangedEvent: InContextSdkMethod<Subscription['cfav1LiquidationPeriodChangedEvent'], Subscriptioncfav1LiquidationPeriodChangedEventArgs, MeshContext>,
-  /** null **/
-  cfav1LiquidationPeriodChangedEvents: InContextSdkMethod<Subscription['cfav1LiquidationPeriodChangedEvents'], Subscriptioncfav1LiquidationPeriodChangedEventsArgs, MeshContext>,
-  /** null **/
-  configChangedEvent: InContextSdkMethod<Subscription['configChangedEvent'], SubscriptionconfigChangedEventArgs, MeshContext>,
-  /** null **/
-  configChangedEvents: InContextSdkMethod<Subscription['configChangedEvents'], SubscriptionconfigChangedEventsArgs, MeshContext>,
-  /** null **/
-  rewardAddressChangedEvent: InContextSdkMethod<Subscription['rewardAddressChangedEvent'], SubscriptionrewardAddressChangedEventArgs, MeshContext>,
-  /** null **/
-  rewardAddressChangedEvents: InContextSdkMethod<Subscription['rewardAddressChangedEvents'], SubscriptionrewardAddressChangedEventsArgs, MeshContext>,
-  /** null **/
-  pppconfigurationChangedEvent: InContextSdkMethod<Subscription['pppconfigurationChangedEvent'], SubscriptionpppconfigurationChangedEventArgs, MeshContext>,
-  /** null **/
-  pppconfigurationChangedEvents: InContextSdkMethod<Subscription['pppconfigurationChangedEvents'], SubscriptionpppconfigurationChangedEventsArgs, MeshContext>,
-  /** null **/
-  superTokenMinimumDepositChangedEvent: InContextSdkMethod<Subscription['superTokenMinimumDepositChangedEvent'], SubscriptionsuperTokenMinimumDepositChangedEventArgs, MeshContext>,
-  /** null **/
-  superTokenMinimumDepositChangedEvents: InContextSdkMethod<Subscription['superTokenMinimumDepositChangedEvents'], SubscriptionsuperTokenMinimumDepositChangedEventsArgs, MeshContext>,
-  /** null **/
-  trustedForwarderChangedEvent: InContextSdkMethod<Subscription['trustedForwarderChangedEvent'], SubscriptiontrustedForwarderChangedEventArgs, MeshContext>,
-  /** null **/
-  trustedForwarderChangedEvents: InContextSdkMethod<Subscription['trustedForwarderChangedEvents'], SubscriptiontrustedForwarderChangedEventsArgs, MeshContext>,
-  /** null **/
-  agreementLiquidatedByEvent: InContextSdkMethod<Subscription['agreementLiquidatedByEvent'], SubscriptionagreementLiquidatedByEventArgs, MeshContext>,
-  /** null **/
-  agreementLiquidatedByEvents: InContextSdkMethod<Subscription['agreementLiquidatedByEvents'], SubscriptionagreementLiquidatedByEventsArgs, MeshContext>,
-  /** null **/
-  agreementLiquidatedV2Event: InContextSdkMethod<Subscription['agreementLiquidatedV2Event'], SubscriptionagreementLiquidatedV2EventArgs, MeshContext>,
-  /** null **/
-  agreementLiquidatedV2Events: InContextSdkMethod<Subscription['agreementLiquidatedV2Events'], SubscriptionagreementLiquidatedV2EventsArgs, MeshContext>,
-  /** null **/
-  burnedEvent: InContextSdkMethod<Subscription['burnedEvent'], SubscriptionburnedEventArgs, MeshContext>,
-  /** null **/
-  burnedEvents: InContextSdkMethod<Subscription['burnedEvents'], SubscriptionburnedEventsArgs, MeshContext>,
-  /** null **/
-  mintedEvent: InContextSdkMethod<Subscription['mintedEvent'], SubscriptionmintedEventArgs, MeshContext>,
-  /** null **/
-  mintedEvents: InContextSdkMethod<Subscription['mintedEvents'], SubscriptionmintedEventsArgs, MeshContext>,
-  /** null **/
-  sentEvent: InContextSdkMethod<Subscription['sentEvent'], SubscriptionsentEventArgs, MeshContext>,
-  /** null **/
-  sentEvents: InContextSdkMethod<Subscription['sentEvents'], SubscriptionsentEventsArgs, MeshContext>,
-  /** null **/
-  transferEvent: InContextSdkMethod<Subscription['transferEvent'], SubscriptiontransferEventArgs, MeshContext>,
-  /** null **/
-  transferEvents: InContextSdkMethod<Subscription['transferEvents'], SubscriptiontransferEventsArgs, MeshContext>,
-  /** null **/
-  tokenDowngradedEvent: InContextSdkMethod<Subscription['tokenDowngradedEvent'], SubscriptiontokenDowngradedEventArgs, MeshContext>,
-  /** null **/
-  tokenDowngradedEvents: InContextSdkMethod<Subscription['tokenDowngradedEvents'], SubscriptiontokenDowngradedEventsArgs, MeshContext>,
-  /** null **/
-  tokenUpgradedEvent: InContextSdkMethod<Subscription['tokenUpgradedEvent'], SubscriptiontokenUpgradedEventArgs, MeshContext>,
-  /** null **/
-  tokenUpgradedEvents: InContextSdkMethod<Subscription['tokenUpgradedEvents'], SubscriptiontokenUpgradedEventsArgs, MeshContext>,
-  /** null **/
-  approvalEvent: InContextSdkMethod<Subscription['approvalEvent'], SubscriptionapprovalEventArgs, MeshContext>,
-  /** null **/
-  approvalEvents: InContextSdkMethod<Subscription['approvalEvents'], SubscriptionapprovalEventsArgs, MeshContext>,
-  /** null **/
-  customSuperTokenCreatedEvent: InContextSdkMethod<Subscription['customSuperTokenCreatedEvent'], SubscriptioncustomSuperTokenCreatedEventArgs, MeshContext>,
-  /** null **/
-  customSuperTokenCreatedEvents: InContextSdkMethod<Subscription['customSuperTokenCreatedEvents'], SubscriptioncustomSuperTokenCreatedEventsArgs, MeshContext>,
-  /** null **/
-  superTokenCreatedEvent: InContextSdkMethod<Subscription['superTokenCreatedEvent'], SubscriptionsuperTokenCreatedEventArgs, MeshContext>,
-  /** null **/
-  superTokenCreatedEvents: InContextSdkMethod<Subscription['superTokenCreatedEvents'], SubscriptionsuperTokenCreatedEventsArgs, MeshContext>,
-  /** null **/
-  superTokenLogicCreatedEvent: InContextSdkMethod<Subscription['superTokenLogicCreatedEvent'], SubscriptionsuperTokenLogicCreatedEventArgs, MeshContext>,
-  /** null **/
-  superTokenLogicCreatedEvents: InContextSdkMethod<Subscription['superTokenLogicCreatedEvents'], SubscriptionsuperTokenLogicCreatedEventsArgs, MeshContext>,
-  /** null **/
-  newPICEvent: InContextSdkMethod<Subscription['newPICEvent'], SubscriptionnewPICEventArgs, MeshContext>,
-  /** null **/
-  newPICEvents: InContextSdkMethod<Subscription['newPICEvents'], SubscriptionnewPICEventsArgs, MeshContext>,
-  /** null **/
-  exitRateChangedEvent: InContextSdkMethod<Subscription['exitRateChangedEvent'], SubscriptionexitRateChangedEventArgs, MeshContext>,
-  /** null **/
-  exitRateChangedEvents: InContextSdkMethod<Subscription['exitRateChangedEvents'], SubscriptionexitRateChangedEventsArgs, MeshContext>,
-  /** null **/
-  bondIncreasedEvent: InContextSdkMethod<Subscription['bondIncreasedEvent'], SubscriptionbondIncreasedEventArgs, MeshContext>,
-  /** null **/
-  bondIncreasedEvents: InContextSdkMethod<Subscription['bondIncreasedEvents'], SubscriptionbondIncreasedEventsArgs, MeshContext>,
-  /** null **/
-  account: InContextSdkMethod<Subscription['account'], SubscriptionaccountArgs, MeshContext>,
-  /** null **/
-  accounts: InContextSdkMethod<Subscription['accounts'], SubscriptionaccountsArgs, MeshContext>,
-  /** null **/
-  pool: InContextSdkMethod<Subscription['pool'], SubscriptionpoolArgs, MeshContext>,
-  /** null **/
-  pools: InContextSdkMethod<Subscription['pools'], SubscriptionpoolsArgs, MeshContext>,
-  /** null **/
-  poolMember: InContextSdkMethod<Subscription['poolMember'], SubscriptionpoolMemberArgs, MeshContext>,
-  /** null **/
-  poolMembers: InContextSdkMethod<Subscription['poolMembers'], SubscriptionpoolMembersArgs, MeshContext>,
-  /** null **/
-  poolDistributor: InContextSdkMethod<Subscription['poolDistributor'], SubscriptionpoolDistributorArgs, MeshContext>,
-  /** null **/
-  poolDistributors: InContextSdkMethod<Subscription['poolDistributors'], SubscriptionpoolDistributorsArgs, MeshContext>,
-  /** null **/
-  index: InContextSdkMethod<Subscription['index'], SubscriptionindexArgs, MeshContext>,
-  /** null **/
-  indexes: InContextSdkMethod<Subscription['indexes'], SubscriptionindexesArgs, MeshContext>,
-  /** null **/
-  indexSubscription: InContextSdkMethod<Subscription['indexSubscription'], SubscriptionindexSubscriptionArgs, MeshContext>,
-  /** null **/
-  indexSubscriptions: InContextSdkMethod<Subscription['indexSubscriptions'], SubscriptionindexSubscriptionsArgs, MeshContext>,
-  /** null **/
-  stream: InContextSdkMethod<Subscription['stream'], SubscriptionstreamArgs, MeshContext>,
-  /** null **/
-  streams: InContextSdkMethod<Subscription['streams'], SubscriptionstreamsArgs, MeshContext>,
-  /** null **/
-  flowOperator: InContextSdkMethod<Subscription['flowOperator'], SubscriptionflowOperatorArgs, MeshContext>,
-  /** null **/
-  flowOperators: InContextSdkMethod<Subscription['flowOperators'], SubscriptionflowOperatorsArgs, MeshContext>,
-  /** null **/
-  streamPeriod: InContextSdkMethod<Subscription['streamPeriod'], SubscriptionstreamPeriodArgs, MeshContext>,
-  /** null **/
-  streamPeriods: InContextSdkMethod<Subscription['streamPeriods'], SubscriptionstreamPeriodsArgs, MeshContext>,
-  /** null **/
-  tokenGovernanceConfig: InContextSdkMethod<Subscription['tokenGovernanceConfig'], SubscriptiontokenGovernanceConfigArgs, MeshContext>,
-  /** null **/
-  tokenGovernanceConfigs: InContextSdkMethod<Subscription['tokenGovernanceConfigs'], SubscriptiontokenGovernanceConfigsArgs, MeshContext>,
-  /** null **/
-  streamRevision: InContextSdkMethod<Subscription['streamRevision'], SubscriptionstreamRevisionArgs, MeshContext>,
-  /** null **/
-  streamRevisions: InContextSdkMethod<Subscription['streamRevisions'], SubscriptionstreamRevisionsArgs, MeshContext>,
-  /** null **/
-  token: InContextSdkMethod<Subscription['token'], SubscriptiontokenArgs, MeshContext>,
-  /** null **/
-  tokens: InContextSdkMethod<Subscription['tokens'], SubscriptiontokensArgs, MeshContext>,
-  /** null **/
-  resolverEntry: InContextSdkMethod<Subscription['resolverEntry'], SubscriptionresolverEntryArgs, MeshContext>,
-  /** null **/
-  resolverEntries: InContextSdkMethod<Subscription['resolverEntries'], SubscriptionresolverEntriesArgs, MeshContext>,
-  /** null **/
-  accountTokenSnapshot: InContextSdkMethod<Subscription['accountTokenSnapshot'], SubscriptionaccountTokenSnapshotArgs, MeshContext>,
-  /** null **/
-  accountTokenSnapshots: InContextSdkMethod<Subscription['accountTokenSnapshots'], SubscriptionaccountTokenSnapshotsArgs, MeshContext>,
-  /** null **/
-  accountTokenSnapshotLog: InContextSdkMethod<Subscription['accountTokenSnapshotLog'], SubscriptionaccountTokenSnapshotLogArgs, MeshContext>,
-  /** null **/
-  accountTokenSnapshotLogs: InContextSdkMethod<Subscription['accountTokenSnapshotLogs'], SubscriptionaccountTokenSnapshotLogsArgs, MeshContext>,
-  /** null **/
-  tokenStatistic: InContextSdkMethod<Subscription['tokenStatistic'], SubscriptiontokenStatisticArgs, MeshContext>,
-  /** null **/
-  tokenStatistics: InContextSdkMethod<Subscription['tokenStatistics'], SubscriptiontokenStatisticsArgs, MeshContext>,
-  /** null **/
-  tokenStatisticLog: InContextSdkMethod<Subscription['tokenStatisticLog'], SubscriptiontokenStatisticLogArgs, MeshContext>,
-  /** null **/
-  tokenStatisticLogs: InContextSdkMethod<Subscription['tokenStatisticLogs'], SubscriptiontokenStatisticLogsArgs, MeshContext>,
-  /** null **/
-  sfmeta: InContextSdkMethod<Subscription['sfmeta'], SubscriptionsfmetaArgs, MeshContext>,
-  /** null **/
-  sfmetas: InContextSdkMethod<Subscription['sfmetas'], SubscriptionsfmetasArgs, MeshContext>,
-  /** null **/
-  event: InContextSdkMethod<AgreementClassRegisteredEvent | AgreementClassUpdatedEvent | AgreementLiquidatedByEvent | AgreementLiquidatedV2Event | AppRegisteredEvent | ApprovalEvent | BondIncreasedEvent | BufferAdjustedEvent | BurnedEvent | CFAv1LiquidationPeriodChangedEvent | ConfigChangedEvent | CustomSuperTokenCreatedEvent | DistributionClaimedEvent | ExitRateChangedEvent | FlowDistributionUpdatedEvent | FlowOperatorUpdatedEvent | FlowUpdatedEvent | GovernanceReplacedEvent | IndexCreatedEvent | IndexDistributionClaimedEvent | IndexSubscribedEvent | IndexUnitsUpdatedEvent | IndexUnsubscribedEvent | IndexUpdatedEvent | InstantDistributionUpdatedEvent | JailEvent | MemberUnitsUpdatedEvent | MintedEvent | NewPICEvent | PPPConfigurationChangedEvent | PoolConnectionUpdatedEvent | PoolCreatedEvent | RewardAddressChangedEvent | RoleAdminChangedEvent | RoleGrantedEvent | RoleRevokedEvent | SentEvent | SetEvent | SubscriptionApprovedEvent | SubscriptionDistributionClaimedEvent | SubscriptionRevokedEvent | SubscriptionUnitsUpdatedEvent | SuperTokenCreatedEvent | SuperTokenFactoryUpdatedEvent | SuperTokenLogicCreatedEvent | SuperTokenLogicUpdatedEvent | SuperTokenMinimumDepositChangedEvent | TokenDowngradedEvent | TokenUpgradedEvent | TransferEvent | TrustedForwarderChangedEvent, SubscriptioneventArgs, MeshContext>,
-  /** null **/
-  events: InContextSdkMethod<[AgreementClassRegisteredEvent | AgreementClassUpdatedEvent | AgreementLiquidatedByEvent | AgreementLiquidatedV2Event | AppRegisteredEvent | ApprovalEvent | BondIncreasedEvent | BufferAdjustedEvent | BurnedEvent | CFAv1LiquidationPeriodChangedEvent | ConfigChangedEvent | CustomSuperTokenCreatedEvent | DistributionClaimedEvent | ExitRateChangedEvent | FlowDistributionUpdatedEvent | FlowOperatorUpdatedEvent | FlowUpdatedEvent | GovernanceReplacedEvent | IndexCreatedEvent | IndexDistributionClaimedEvent | IndexSubscribedEvent | IndexUnitsUpdatedEvent | IndexUnsubscribedEvent | IndexUpdatedEvent | InstantDistributionUpdatedEvent | JailEvent | MemberUnitsUpdatedEvent | MintedEvent | NewPICEvent | PPPConfigurationChangedEvent | PoolConnectionUpdatedEvent | PoolCreatedEvent | RewardAddressChangedEvent | RoleAdminChangedEvent | RoleGrantedEvent | RoleRevokedEvent | SentEvent | SetEvent | SubscriptionApprovedEvent | SubscriptionDistributionClaimedEvent | SubscriptionRevokedEvent | SubscriptionUnitsUpdatedEvent | SuperTokenCreatedEvent | SuperTokenFactoryUpdatedEvent | SuperTokenLogicCreatedEvent | SuperTokenLogicUpdatedEvent | SuperTokenMinimumDepositChangedEvent | TokenDowngradedEvent | TokenUpgradedEvent | TransferEvent | TrustedForwarderChangedEvent!]!, SubscriptioneventsArgs, MeshContext>,
-  /** Access to subgraph metadata **/
-  _meta: InContextSdkMethod<Subscription['_meta'], Subscription_metaArgs, MeshContext>
+    
   };
 
   export type Context = {

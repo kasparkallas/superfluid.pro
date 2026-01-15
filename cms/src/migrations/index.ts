@@ -1,5 +1,6 @@
 import * as migration_20250818_102658_initial from "./20250818_102658_initial"
 import * as migration_20250822_123052_order from "./20250822_123052_order"
+import * as migration_20251209_140506 from "./20251209_140506"
 
 export const migrations = [
 	{
@@ -11,5 +12,10 @@ export const migrations = [
 		up: migration_20250822_123052_order.up,
 		down: migration_20250822_123052_order.down,
 		name: "20250822_123052_order",
+	},
+	{
+		up: migration_20251209_140506.up,
+		down: migration_20251209_140506.down,
+		name: "20251209_140506",
 	},
 ]

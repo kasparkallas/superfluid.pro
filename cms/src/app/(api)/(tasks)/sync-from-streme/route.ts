@@ -1,4 +1,4 @@
-import { syncFromStreme } from "@/features/sync-tokens/syncFromStreme"
+import { syncFromStreme } from "@/domains/tokens/features/sync-tokens"
 import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request): Promise<Response> => {

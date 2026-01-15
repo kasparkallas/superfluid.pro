@@ -1,23 +1,7 @@
 import type { Where } from "payload"
+import type { TokenResponse } from "@/domains/tokens/types"
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-
-interface TokenResponse {
-	id: string
-	chainId: number
-	address: string
-	name: string
-	symbol: string
-	decimals: number
-	logoUri?: string | null
-	isListed?: boolean | null
-	coingeckoId?: string | null
-	tags?: ("streme" | "testnet" | "underlying" | "supertoken")[] | null
-	tokenType: "underlyingToken" | "pureSuperToken" | "nativeAssetSuperToken" | "wrapperSuperToken"
-	underlyingAddress?: string | null
-	note?: string | null
-	order?: number | null
-}
 
 export async function GET(request: Request) {
 	try {

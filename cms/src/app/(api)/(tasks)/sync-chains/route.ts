@@ -1,4 +1,4 @@
-import { syncChains } from "@/features/sync-chains"
+import { syncChains } from "@/domains/tokens/features/sync-chains"
 import { requireAdmin } from "@/utils/api-auth"
 
 export const GET = async (_request: Request): Promise<Response> => {
