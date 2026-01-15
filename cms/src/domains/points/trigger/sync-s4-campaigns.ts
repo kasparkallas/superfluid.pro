@@ -5,7 +5,7 @@ import { syncStackLeaderboard } from "./sync-stack-leaderboard"
 // S4 Campaign Configuration
 const S4_CAMPAIGNS = [
 	{
-		id: 7849,
+		id: 7845,
 		stackLeaderboardId: "leaderboard-40a3-78225-7849",
 		name: "S4 streme.fun",
 		slug: "s4-streme-fun",
@@ -25,10 +25,16 @@ const S4_CAMPAIGNS = [
 		slug: "s4-community-activations",
 		disableNegativeSync: false,
 	},
-	// { id: 7855, stackLeaderboardId: "leaderboard-40a3-78225-7855", name: "S4 SUP reserve names", slug: "s4-sup-reserve-names", disableNegativeSync: false },
 	{
-		id: 7856,
-		stackLeaderboardId: "leaderboard-40a3-78225-7856",
+		id: 7855,
+		stackLeaderboardId: "leaderboard-40a3-78225-7855",
+		name: "S4 SUP reserve names",
+		slug: "s4-sup-reserve-names",
+		disableNegativeSync: false,
+	},
+	{
+		id: 7846,
+		stackLeaderboardId: "leaderboard-40a3-78225-7846",
 		name: "S4 Degen Dogs",
 		slug: "s4-degen-dogs",
 		disableNegativeSync: false,

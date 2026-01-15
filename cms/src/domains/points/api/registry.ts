@@ -543,7 +543,7 @@ npm install openapi-fetch
 **Generate Types**
 
 \`\`\`bash
-npx openapi-typescript YOUR_SERVER/points/openapi.json -o ./points-api.d.ts
+npx openapi-typescript https://cms.superfluid.pro/points/openapi.json -o ./points-api.d.ts
 \`\`\`
 
 **Usage**
@@ -552,7 +552,7 @@ npx openapi-typescript YOUR_SERVER/points/openapi.json -o ./points-api.d.ts
 import createClient from 'openapi-fetch';
 import type { paths } from './points-api';
 
-const client = createClient<paths>({ baseUrl: 'YOUR_SERVER' });
+const client = createClient<paths>({ baseUrl: 'https://cms.superfluid.pro' });
 
 // Query balance (public endpoint)
 const { data, error } = await client.GET('/points/balance', {
@@ -601,7 +601,7 @@ No installation required - run directly with npx:
 
 \`\`\`bash
 npx @hey-api/openapi-ts \\
-  -i YOUR_SERVER/points/openapi.json \\
+  -i https://cms.superfluid.pro/points/openapi.json \\
   -o ./src/points-client \\
   -c @hey-api/client-fetch
 \`\`\`
@@ -634,12 +634,12 @@ Add [plugins](https://heyapi.dev/openapi-ts/plugins) for enhanced functionality:
 
 \`\`\`bash
 # With React Query
-npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
+npx @hey-api/openapi-ts -i https://cms.superfluid.pro/points/openapi.json \\
   -o ./src/points-client -c @hey-api/client-fetch \\
   --plugins @tanstack/react-query
 
 # With Zod validation
-npx @hey-api/openapi-ts -i YOUR_SERVER/points/openapi.json \\
+npx @hey-api/openapi-ts -i https://cms.superfluid.pro/points/openapi.json \\
   -o ./src/points-client -c @hey-api/client-fetch \\
   --plugins zod
 \`\`\`
@@ -687,7 +687,7 @@ const stack = new StackClient({ apiKey: 'your-key', pointSystemId: 123 });
 import createClient from 'openapi-fetch';
 import type { paths } from './points-api';
 
-const client = createClient<paths>({ baseUrl: 'YOUR_SERVER' });
+const client = createClient<paths>({ baseUrl: 'https://cms.superfluid.pro' });
 // API key passed per-request for push operations
 \`\`\`
 
