@@ -60,6 +60,41 @@ const S4_CAMPAIGNS = [
 		slug: "s4-gooddollar",
 		disableNegativeSync: false,
 	},
+	{
+		id: 7757,
+		stackLeaderboardId: "leaderboard-40a3-78225-7757",
+		name: "S3 Farcaster Miniapp Dev Rewards",
+		slug: "s3-miniapp-dev-rewards",
+		disableNegativeSync: false,
+	},
+	{
+		id: 7759,
+		stackLeaderboardId: "leaderboard-40a3-78225-7759",
+		name: "S3 Banger",
+		slug: "s3-banger",
+		disableNegativeSync: false,
+	},
+	{
+		id: 7761,
+		stackLeaderboardId: "leaderboard-40a3-78225-7761",
+		name: "S3 Flow State on Farcaster",
+		slug: "s3-flowstate",
+		disableNegativeSync: false,
+	},
+	{
+		id: 7762,
+		stackLeaderboardId: "leaderboard-40a3-78225-7762",
+		name: "S3 Beamr",
+		slug: "s3-beamr",
+		disableNegativeSync: false,
+	},
+	{
+		id: 7739,
+		stackLeaderboardId: "leaderboard-40a3-78225-7739",
+		name: "S2 Nerite",
+		slug: "s2-nerite",
+		disableNegativeSync: false,
+	},
 ] as const
 
 type SyncS4CampaignsPayload = {
