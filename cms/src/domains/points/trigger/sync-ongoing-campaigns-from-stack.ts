@@ -2,8 +2,8 @@ import { task } from "@trigger.dev/sdk"
 import { getPayloadInstance } from "@/payload"
 import { syncStackLeaderboard } from "./sync-stack-leaderboard"
 
-// S4 Campaign Configuration
-const S4_CAMPAIGNS = [
+// Ongoing Campaign Configuration (includes S2, S3, S4 campaigns)
+const ONGOING_CAMPAIGNS = [
 	{
 		id: 7845,
 		stackLeaderboardId: "leaderboard-40a3-78225-7849",
@@ -97,13 +97,13 @@ const S4_CAMPAIGNS = [
 	},
 ] as const
 
-type SyncS4CampaignsPayload = {
+type SyncOngoingCampaignsPayload = {
 	syncPoints?: boolean // Default false = don't sync points
 	persist?: boolean // Default false = dry-run (no DB writes)
 }
 
 /**
- * Ensures all S4 campaigns exist in the CMS and optionally syncs their entries from Stack.
+ * Ensures all ongoing campaigns exist in the CMS and optionally syncs their entries from Stack.
  *
  * Usage:
  * - { } - Dry-run: see what campaigns would be created (no DB writes)
@@ -111,18 +111,18 @@ type SyncS4CampaignsPayload = {
  * - { persist: true } - Actually create campaigns
  * - { persist: true, syncPoints: true } - Create campaigns + persist synced points
  *
- * Note: disableNegativeSync is configured per-campaign in S4_CAMPAIGNS array.
+ * Note: disableNegativeSync is configured per-campaign in ONGOING_CAMPAIGNS array.
  */
-export const syncS4Campaigns = task({
-	id: "sync-s4-campaigns",
+export const syncOngoingCampaignsFromStack = task({
+	id: "sync-ongoing-campaigns-from-stack",
 	retry: {
 		maxAttempts: 1,
 	},
-	run: async (payload: SyncS4CampaignsPayload) => {
+	run: async (payload: SyncOngoingCampaignsPayload) => {
 		const { syncPoints = false, persist = false } = payload
 		const db = await getPayloadInstance()
 
-		console.log(`Starting S4 campaigns sync: syncPoints=${syncPoints}, persist=${persist}`)
+		console.log(`Starting ongoing campaigns sync: syncPoints=${syncPoints}, persist=${persist}`)
 
 		const results = {
 			campaignsCreated: 0,
@@ -131,8 +131,8 @@ export const syncS4Campaigns = task({
 		}
 
 		// Phase 1: Ensure all campaigns exist (only create if persist=true)
-		console.log("Phase 1: Checking S4 campaigns...")
-		for (const campaign of S4_CAMPAIGNS) {
+		console.log("Phase 1: Checking ongoing campaigns...")
+		for (const campaign of ONGOING_CAMPAIGNS) {
 			try {
 				await db.findByID({ collection: "campaigns", id: campaign.id })
 				console.log(`Campaign ${campaign.name} (${campaign.id}) already exists`)
@@ -158,7 +158,7 @@ export const syncS4Campaigns = task({
 		// Phase 2: Optionally sync points from Stack
 		if (syncPoints) {
 			console.log("Phase 2: Syncing points from Stack...")
-			for (const campaign of S4_CAMPAIGNS) {
+			for (const campaign of ONGOING_CAMPAIGNS) {
 				console.log(`Syncing points for ${campaign.name}...`)
 				const syncResult = await syncStackLeaderboard.triggerAndWait({
 					stackLeaderboardId: campaign.stackLeaderboardId,
