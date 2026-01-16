@@ -1,6 +1,6 @@
 import { task } from "@trigger.dev/sdk"
 import { getPayloadInstance } from "@/payload"
-import { syncStackLeaderboard } from "./sync-stack-leaderboard"
+import { syncStackLeaderboard } from "./sync-from-stack-leaderboard"
 
 // Ongoing Campaign Configuration (includes S2, S3, S4 campaigns)
 const ONGOING_CAMPAIGNS = [

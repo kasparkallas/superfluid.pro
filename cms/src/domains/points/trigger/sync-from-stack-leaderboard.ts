@@ -88,7 +88,7 @@ async function fetchAllStackEntries(leaderboardId: string): Promise<StackLeaderb
  * - Otherwise: create PointEvent for the delta
  */
 export const syncStackLeaderboard = task({
-	id: "sync-stack-leaderboard",
+	id: "sync-from-stack-leaderboard",
 	queue: {
 		concurrencyLimit: 1,
 	},
@@ -111,10 +111,11 @@ export const syncStackLeaderboard = task({
 		// 1. Validate campaign exists (only when persisting)
 		if (persist) {
 			try {
-				await db.findByID({
+				const campaign = await db.findByID({
 					collection: "campaigns",
 					id: campaignId,
 				})
+				console.log(`Campaign: ${campaign.name}`)
 			} catch {
 				throw new Error(`Campaign ${campaignId} not found`)
 			}
