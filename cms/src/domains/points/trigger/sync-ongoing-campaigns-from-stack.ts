@@ -69,7 +69,7 @@ const ONGOING_CAMPAIGNS = [
 	},
 	{
 		id: 7759,
-		stackLeaderboardId: "leaderboard-40a3-782251-7757",
+		stackLeaderboardId: "leaderboard-40a3-782251-7759",
 		name: "S3 Banger",
 		slug: "s3-banger",
 		disableNegativeSync: false,
