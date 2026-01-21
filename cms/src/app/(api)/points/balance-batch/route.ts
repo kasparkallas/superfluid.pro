@@ -1,18 +1,15 @@
-import { encodePacked, getAddress, isAddress, keccak256 } from "viem"
-import { signMessageHash } from "@/domains/points/utils/signing"
+import { isAddress } from "viem"
 import { getPayloadInstance } from "@/payload"
 
 const MAX_CAMPAIGNS = 50
 
 /**
- * POST /points/signed-balance-batch
+ * POST /points/balance-batch
  *
  * Body: { campaignIds: number[], account: string }
  *
- * Returns a single signature covering multiple campaigns for the same account.
- * Enables batch on-chain claims.
- *
- * Signature message: keccak256(encodePacked([address, points[], campaigns[], timestamp]))
+ * Returns point balances for multiple campaigns for a single account.
+ * Missing campaigns return 0 points with a warning entry.
  */
 export const POST = async (request: Request): Promise<Response> => {
 	try {
@@ -69,18 +66,13 @@ export const POST = async (request: Request): Promise<Response> => {
 			limit: MAX_CAMPAIGNS,
 		})
 
-		// Check all campaigns exist
+		// Collect warnings for missing campaigns (instead of returning 404)
 		const foundIds = new Set(campaignResult.docs.map((c) => c.id))
-		const missingIds = validIds.filter((id) => !foundIds.has(id))
-
-		if (missingIds.length > 0) {
-			return Response.json(
-				{
-					error: "One or more campaigns not found",
-					missing: missingIds,
-				},
-				{ status: 404 },
-			)
+		const warnings: Array<{ campaignId: number; message: string }> = []
+		for (const id of validIds) {
+			if (!foundIds.has(id)) {
+				warnings.push({ campaignId: id, message: "Campaign not found" })
+			}
 		}
 
 		// Fetch balances for all campaigns
@@ -104,44 +96,21 @@ export const POST = async (request: Request): Promise<Response> => {
 		}
 
 		// Build points array in same order as requested campaigns
+		// Missing campaigns get 0 points
 		const pointsArray = validIds.map((id) => balanceMap.get(id) ?? 0)
-
-		// Create message hash: keccak256(encodePacked([address, points[], campaigns[], timestamp]))
-		const signatureTimestamp = Math.floor(Date.now() / 1000)
-		const checksumAddress = getAddress(accountLower)
-		const messageHash = keccak256(
-			encodePacked(
-				["address", "uint256[]", "uint256[]", "uint256"],
-				[
-					checksumAddress,
-					pointsArray.map((p) => BigInt(p)),
-					validIds.map((id) => BigInt(id)),
-					BigInt(signatureTimestamp),
-				],
-			),
-		)
-
-		// Sign the message hash
-		const signingResult = await signMessageHash(messageHash)
-		if (!signingResult) {
-			console.error("SIGNER_PRIVATE_KEY is not configured")
-			return Response.json({ error: "Signing not available" }, { status: 500 })
-		}
 
 		return Response.json({
 			address: accountLower,
 			campaignIds: validIds,
 			points: pointsArray,
-			signatureTimestamp,
-			signature: signingResult.signature,
-			signer: signingResult.signer,
+			...(warnings.length > 0 && { warnings }),
 		})
 	} catch (error) {
-		console.error("Failed to get batch signed balance:", error)
+		console.error("Failed to get batch balance:", error)
 
 		return Response.json(
 			{
-				error: "Failed to get batch signed balance",
+				error: "Failed to get batch balance",
 				message: error instanceof Error ? error.message : "Unknown error",
 			},
 			{ status: 500 },

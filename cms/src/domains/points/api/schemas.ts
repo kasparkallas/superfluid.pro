@@ -372,8 +372,8 @@ export const SignedBalanceQuerySchema = z
 export const SignedBalanceResponseSchema = z
 	.object({
 		address: z.string().openapi({
-			example: "0x1234567890abcdef1234567890ABCDEF12345678",
-			description: "Checksummed Ethereum address",
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Lowercase Ethereum address",
 		}),
 		points: z.number().openapi({
 			example: 1500,
@@ -424,8 +424,8 @@ export const SignedBalanceBatchBodySchema = z
 export const SignedBalanceBatchResponseSchema = z
 	.object({
 		address: z.string().openapi({
-			example: "0x1234567890abcdef1234567890ABCDEF12345678",
-			description: "Checksummed Ethereum address",
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Lowercase Ethereum address",
 		}),
 		campaignIds: z.array(z.number()).openapi({
 			example: [1, 2, 3],
@@ -451,4 +451,71 @@ export const SignedBalanceBatchResponseSchema = z
 	.openapi({
 		title: "SignedBalanceBatchResponse",
 		description: "Batch signed point balance for on-chain batch claims",
+	})
+
+// ============================================
+// Batch Balance Endpoint Schemas (unsigned)
+// ============================================
+
+export const BalanceBatchBodySchema = z
+	.object({
+		campaignIds: z
+			.array(z.number().int().positive())
+			.min(1)
+			.max(50)
+			.openapi({
+				example: [1, 2, 3],
+				description: "Array of campaign IDs (1-50)",
+			}),
+		account: EthereumAddressSchema.openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address to get balances for",
+		}),
+	})
+	.openapi({
+		title: "BalanceBatchBody",
+		description: "Request body for batch balance endpoint",
+	})
+
+export const BalanceBatchWarningSchema = z
+	.object({
+		campaignId: z.number().openapi({
+			example: 2,
+			description: "Campaign ID that triggered the warning",
+		}),
+		message: z.string().openapi({
+			example: "Campaign not found",
+			description: "Warning message",
+		}),
+	})
+	.openapi({
+		title: "BalanceBatchWarning",
+		description: "Warning for a specific campaign in batch balance request",
+	})
+
+export const BalanceBatchResponseSchema = z
+	.object({
+		address: z.string().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Lowercase Ethereum address",
+		}),
+		campaignIds: z.array(z.number()).openapi({
+			example: [1, 2, 3],
+			description: "Array of campaign IDs in request order",
+		}),
+		points: z.array(z.number()).openapi({
+			example: [100, 0, 300],
+			description: "Array of point balances matching campaign order (0 for missing campaigns)",
+		}),
+		warnings: z
+			.array(BalanceBatchWarningSchema)
+			.optional()
+			.openapi({
+				example: [{ campaignId: 2, message: "Campaign not found" }],
+				description: "Warnings for campaigns that could not be found (still returns 0 points for those)",
+			}),
+	})
+	.openapi({
+		title: "BalanceBatchResponse",
+		description: "Batch point balances for multiple campaigns",
 	})

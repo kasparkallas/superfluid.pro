@@ -37,7 +37,7 @@
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
 		"rimraf": "^6.1.2",
-		"turbo": "^2.7.3"
+		"turbo": "^2.7.5"
 	},
 	"packageManager": "pnpm@10.6.2",
 	"overrides": {
