@@ -83,7 +83,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		}
 
 		return Response.json({
-			address: checksumAddress,
+			address: accountLower,
 			points,
 			signatureTimestamp,
 			signature: signingResult.signature,

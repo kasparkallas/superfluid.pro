@@ -1,6 +1,8 @@
 import { OpenAPIRegistry, OpenApiGeneratorV31 } from "@asteasolutions/zod-to-openapi"
 import {
 	ApiErrorSchema,
+	BalanceBatchBodySchema,
+	BalanceBatchResponseSchema,
 	BalancePostBodySchema,
 	BalanceQuerySchema,
 	EventsQuerySchema,
@@ -28,6 +30,7 @@ pointsRegistry.register("Pagination", PaginationSchema)
 pointsRegistry.register("PushResponse", PushResponseSchema)
 pointsRegistry.register("SignedBalanceResponse", SignedBalanceResponseSchema)
 pointsRegistry.register("SignedBalanceBatchResponse", SignedBalanceBatchResponseSchema)
+pointsRegistry.register("BalanceBatchResponse", BalanceBatchResponseSchema)
 pointsRegistry.register("ApiError", ApiErrorSchema)
 
 // Register security scheme
@@ -156,6 +159,66 @@ pointsRegistry.registerPath({
 })
 
 // ============================================
+// POST /points/balance-batch
+// ============================================
+pointsRegistry.registerPath({
+	method: "post",
+	path: "/points/balance-batch",
+	summary: "Get point balances for multiple campaigns",
+	description: `Retrieves point balances for a single account across multiple campaigns (up to 50).
+
+**Missing Campaign Handling:**
+Missing campaigns return 0 points with a warning entry. The call never fails due to missing campaigns - only for validation errors.`,
+	tags: ["Balance"],
+	request: {
+		body: {
+			description: "Campaign IDs and account to query",
+			content: {
+				"application/json": {
+					schema: BalanceBatchBodySchema,
+					example: {
+						campaignIds: [1, 2, 3],
+						account: "0x1234567890abcdef1234567890abcdef12345678",
+					},
+				},
+			},
+		},
+	},
+	responses: {
+		200: {
+			description: "Point balances retrieved successfully",
+			content: {
+				"application/json": {
+					schema: BalanceBatchResponseSchema,
+					example: {
+						address: "0x1234567890abcdef1234567890abcdef12345678",
+						campaignIds: [1, 2, 3],
+						points: [100, 0, 300],
+						warnings: [{ campaignId: 2, message: "Campaign not found" }],
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (invalid address, campaign ID format, or exceeds 50 campaigns limit)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
 // GET /points/signed-balance
 // ============================================
 pointsRegistry.registerPath({
@@ -182,7 +245,7 @@ This can be verified on-chain using ECDSA recovery.`,
 				"application/json": {
 					schema: SignedBalanceResponseSchema,
 					example: {
-						address: "0x1234567890abcdef1234567890ABCDEF12345678",
+						address: "0x1234567890abcdef1234567890abcdef12345678",
 						points: 1500,
 						signatureTimestamp: 1704672000,
 						signature:
@@ -257,7 +320,7 @@ This produces a single signature that covers all campaigns, allowing batch verif
 				"application/json": {
 					schema: SignedBalanceBatchResponseSchema,
 					example: {
-						address: "0x1234567890abcdef1234567890ABCDEF12345678",
+						address: "0x1234567890abcdef1234567890abcdef12345678",
 						campaignIds: [1, 2, 3],
 						points: [100, 200, 300],
 						signatureTimestamp: 1704672000,
@@ -735,7 +798,16 @@ const { data } = await client.GET('/points/balance', {
 const { data: bulk } = await client.POST('/points/balance', {
   body: { campaignId: 42, accounts: ['0x1234...', '0x5678...'] }
 });
+
+// Multiple campaigns for single account (POST)
+const { data: campaigns } = await client.POST('/points/balance-batch', {
+  body: { campaignIds: [1, 2, 3], account: '0x1234...' }
+});
+// { address, campaignIds, points, warnings? }
 \`\`\`
+
+> **Note:** Stack.so only offered \`getSignedPointsBatch()\` for querying multiple campaigns (signed).
+> The unsigned \`/points/balance-batch\` endpoint is a new capability.
 
 ### Signed Points (On-Chain Verification)
 
@@ -779,7 +851,8 @@ Existing on-chain contracts that verify Stack signatures will work with Superflu
 | Bulk queries | Arrays in SDK | POST endpoints with typed arrays |
 | Response field | \`amount\` | \`points\` |
 | Terminology | \`programId\`, \`systemIds\` | \`campaignId\`, \`campaignIds\` |
-| Signer info | Not returned | Returns \`signer\` address |`,
+| Signer info | Not returned | Returns \`signer\` address |
+| Multi-campaign query | Signed only (\`getSignedPointsBatch\`) | Both signed and unsigned endpoints |`,
 			contact: {
 				name: "Superfluid",
 				url: "https://superfluid.finance",
