@@ -18,13 +18,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s4-superboring",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7853,
-		stackLeaderboardId: "leaderboard-40a3-78225-7853",
-		name: "S4 Community Activations",
-		slug: "s4-community-activations",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7853,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7853",
+	// 	name: "S4 Community Activations",
+	// 	slug: "s4-community-activations",
+	// 	disableNegativeSync: false,
+	// },
 	{
 		id: 7855,
 		stackLeaderboardId: "leaderboard-40a3-78225-7855",
@@ -98,14 +98,14 @@ const ONGOING_CAMPAIGNS = [
 	{
 		id: 7856,
 		stackLeaderboardId: "leaderboard-40a3-78225-7856",
-		name: "GoodDollar x Gardens",
+		name: "S4 GoodDollar x Gardens",
 		slug: "s4-gooddollar-x-gardens",
 		disableNegativeSync: false,
 	},
 	{
 		id: 7854,
 		stackLeaderboardId: "leaderboard-40a3-78225-7854",
-		name: "Super Token Swapping Incentives",
+		name: "S4 Super Token Swapping Incentives",
 		slug: "s4-supertoken-trading-incentives",
 		disableNegativeSync: false,
 	},
