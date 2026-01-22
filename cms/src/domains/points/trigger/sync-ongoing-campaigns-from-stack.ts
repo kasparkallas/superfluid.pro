@@ -11,13 +11,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s4-streme-fun",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7850,
-		stackLeaderboardId: "leaderboard-40a3-78225-7850",
-		name: "S4 SuperBoring",
-		slug: "s4-superboring",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7850,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7850",
+	// 	name: "S4 SuperBoring",
+	// 	slug: "s4-superboring",
+	// 	disableNegativeSync: false,
+	// },
 	// {
 	// 	id: 7853,
 	// 	stackLeaderboardId: "leaderboard-40a3-78225-7853",
@@ -25,13 +25,13 @@ const ONGOING_CAMPAIGNS = [
 	// 	slug: "s4-community-activations",
 	// 	disableNegativeSync: false,
 	// },
-	{
-		id: 7855,
-		stackLeaderboardId: "leaderboard-40a3-78225-7855",
-		name: "S4 SUP reserve names",
-		slug: "s4-sup-reserve-names",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7855,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7855",
+	// 	name: "S4 SUP reserve names",
+	// 	slug: "s4-sup-reserve-names",
+	// 	disableNegativeSync: false,
+	// },
 	{
 		id: 7846,
 		stackLeaderboardId: "leaderboard-40a3-78225-7846",
@@ -39,13 +39,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s4-degen-dogs",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7857,
-		stackLeaderboardId: "leaderboard-40a3-78225-7857",
-		name: "S4 Giveth",
-		slug: "s4-giveth",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7857,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7857",
+	// 	name: "S4 Giveth",
+	// 	slug: "s4-giveth",
+	// 	disableNegativeSync: false,
+	// },
 	{
 		id: 7859,
 		stackLeaderboardId: "leaderboard-40a3-78225-7859",
@@ -102,13 +102,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s4-gooddollar-x-gardens",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7854,
-		stackLeaderboardId: "leaderboard-40a3-78225-7854",
-		name: "S4 Super Token Swapping Incentives",
-		slug: "s4-supertoken-trading-incentives",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7854,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7854",
+	// 	name: "S4 Super Token Swapping Incentives",
+	// 	slug: "s4-supertoken-trading-incentives",
+	// 	disableNegativeSync: false,
+	// },
 ] as const
 
 type SyncOngoingCampaignsPayload = {
