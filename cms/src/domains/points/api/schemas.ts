@@ -245,10 +245,14 @@ export const BatchEventMinimalSchema = z
 // Single event with all fields
 export const PushEventSchema = z
 	.object({
+		campaignId: z.number().int().positive().optional().openapi({
+			example: 42,
+			description: "Campaign ID (optional). If provided, must match the API key's associated campaign.",
+		}),
 		campaign: z.number().int().positive().optional().openapi({
 			example: 42,
 			description:
-				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+				"**Deprecated**: Use 'campaignId' instead. Campaign ID (optional). If provided, must match the API key's associated campaign.",
 		}),
 		eventName: z.string().min(1).max(100).openapi({
 			example: "swap",
@@ -267,6 +271,10 @@ export const PushEventSchema = z
 			description: "Unique identifier for deduplication (max 255 chars)",
 		}),
 	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
+	})
 	.openapi({
 		title: "PushEvent",
 		description: "A single point event to push",
@@ -281,10 +289,14 @@ export const SingleEventRequestSchema = PushEventSchema.openapi({
 // Format 2: Batch with root-level defaults
 export const BatchWithDefaultsRequestSchema = z
 	.object({
+		campaignId: z.number().int().positive().optional().openapi({
+			example: 42,
+			description: "Campaign ID (optional). If provided, must match the API key's associated campaign.",
+		}),
 		campaign: z.number().int().positive().optional().openapi({
 			example: 42,
 			description:
-				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+				"**Deprecated**: Use 'campaignId' instead. Campaign ID (optional). If provided, must match the API key's associated campaign.",
 		}),
 		eventName: z.string().min(1).max(100).openapi({
 			example: "swap",
@@ -298,6 +310,10 @@ export const BatchWithDefaultsRequestSchema = z
 			description: "Array of events (1-1000 items)",
 		}),
 	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
+	})
 	.openapi({
 		title: "BatchWithDefaultsRequest",
 		description: "Push multiple events with shared eventName from root",
@@ -306,14 +322,22 @@ export const BatchWithDefaultsRequestSchema = z
 // Format 3: Batch with per-event values
 export const BatchWithPerEventRequestSchema = z
 	.object({
+		campaignId: z.number().int().positive().optional().openapi({
+			example: 42,
+			description: "Campaign ID (optional). If provided, must match the API key's associated campaign.",
+		}),
 		campaign: z.number().int().positive().optional().openapi({
 			example: 42,
 			description:
-				"Campaign ID (optional but strongly recommended). If provided, must match the API key's associated campaign.",
+				"**Deprecated**: Use 'campaignId' instead. Campaign ID (optional). If provided, must match the API key's associated campaign.",
 		}),
 		events: z.array(PushEventSchema).min(1).max(1000).openapi({
 			description: "Array of events with individual eventNames (1-1000 items)",
 		}),
+	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
 	})
 	.openapi({
 		title: "BatchWithPerEventRequest",

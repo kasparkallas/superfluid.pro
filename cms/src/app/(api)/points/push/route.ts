@@ -29,32 +29,50 @@ const eventWithoutEventName = baseEventSchema.extend({
 })
 
 // Single event request (convenience)
-const singleEventSchema = z.object({
-	campaign: z.number().int().positive().optional(),
-	eventName: z.string().min(1).max(100),
-	account: z
-		.string()
-		.refine(isAddress, "Invalid Ethereum address")
-		.transform((val) => val.toLowerCase()),
-	points: z.number().int("Points must be an integer"),
-	uniqueId: z.string().max(255).optional(),
-})
+const singleEventSchema = z
+	.object({
+		campaignId: z.number().int().positive().optional(),
+		campaign: z.number().int().positive().optional(), // @deprecated - use campaignId
+		eventName: z.string().min(1).max(100),
+		account: z
+			.string()
+			.refine(isAddress, "Invalid Ethereum address")
+			.transform((val) => val.toLowerCase()),
+		points: z.number().int("Points must be an integer"),
+		uniqueId: z.string().max(255).optional(),
+	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
+	})
 
 // Batch with root-level defaults
-const batchWithDefaultsSchema = z.object({
-	campaign: z.number().int().positive().optional(),
-	eventName: z.string().min(1).max(100),
-	uniqueId: z.string().max(255).optional(),
-	events: z.array(eventWithoutEventName).min(1).max(1000),
-})
+const batchWithDefaultsSchema = z
+	.object({
+		campaignId: z.number().int().positive().optional(),
+		campaign: z.number().int().positive().optional(), // @deprecated - use campaignId
+		eventName: z.string().min(1).max(100),
+		uniqueId: z.string().max(255).optional(),
+		events: z.array(eventWithoutEventName).min(1).max(1000),
+	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
+	})
 
 // Batch with per-event values
-const batchWithPerEventSchema = z.object({
-	campaign: z.number().int().positive().optional(),
-	eventName: z.never().optional(),
-	uniqueId: z.never().optional(),
-	events: z.array(eventWithEventName).min(1).max(1000),
-})
+const batchWithPerEventSchema = z
+	.object({
+		campaignId: z.number().int().positive().optional(),
+		campaign: z.number().int().positive().optional(), // @deprecated - use campaignId
+		eventName: z.never().optional(),
+		uniqueId: z.never().optional(),
+		events: z.array(eventWithEventName).min(1).max(1000),
+	})
+	.refine((data) => !(data.campaignId !== undefined && data.campaign !== undefined), {
+		message: "Cannot specify both 'campaignId' and 'campaign'. Use 'campaignId' instead ('campaign' is deprecated).",
+		path: ["campaign"],
+	})
 
 // Combined schema - discriminated by presence of events array
 const pushRequestSchema = z.union([batchWithDefaultsSchema, batchWithPerEventSchema, singleEventSchema])
@@ -132,17 +150,19 @@ export const POST = async (request: Request): Promise<Response> => {
 			)
 		}
 
-		// If campaign ID provided, validate it matches the API key's campaign
-		if ("campaign" in parsed.data && parsed.data.campaign !== undefined) {
-			if (parsed.data.campaign !== campaign.id) {
-				return Response.json(
-					{
-						error: "Campaign mismatch",
-						message: `Provided campaign ID (${parsed.data.campaign}) does not match API key's campaign (${campaign.id})`,
-					},
-					{ status: 403 },
-				)
-			}
+		// If campaign ID provided (via campaignId or deprecated campaign field), validate it matches the API key's campaign
+		const providedCampaignId =
+			("campaignId" in parsed.data ? parsed.data.campaignId : undefined) ??
+			("campaign" in parsed.data ? parsed.data.campaign : undefined)
+
+		if (providedCampaignId !== undefined && providedCampaignId !== campaign.id) {
+			return Response.json(
+				{
+					error: "Campaign mismatch",
+					message: `Provided campaign ID (${providedCampaignId}) does not match API key's campaign (${campaign.id})`,
+				},
+				{ status: 403 },
+			)
 		}
 
 		// Normalize to standard format
