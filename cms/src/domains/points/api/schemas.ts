@@ -127,6 +127,16 @@ export const EventsQuerySchema = z
 			example: "swap",
 			description: "Filter by event name",
 		}),
+		startTime: z.string().optional().openapi({
+			example: "2024-03-23T00:00:00.000Z",
+			description:
+				"Filter events created at or after this time. Accepts ISO 8601 (e.g., 2024-03-23T00:00:00.000Z) or Unix timestamp in seconds (e.g., 1711152000)",
+		}),
+		endTime: z.string().optional().openapi({
+			example: "2024-12-31T23:59:59.999Z",
+			description:
+				"Filter events created at or before this time. Accepts ISO 8601 (e.g., 2024-12-31T23:59:59.999Z) or Unix timestamp in seconds (e.g., 1735689599)",
+		}),
 		limit: z.coerce.number().int().min(1).max(100).optional().openapi({
 			example: 50,
 			description: "Number of results per page (1-100, default: 50)",
