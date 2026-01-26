@@ -4,13 +4,31 @@ import type { PointEventsResponse } from "@/domains/points/types"
 import { getPayloadInstance } from "@/payload"
 
 /**
+ * Parse timestamp from either ISO 8601 or Unix timestamp (seconds)
+ * Returns Date or null if invalid
+ */
+function parseTimestamp(value: string): Date | null {
+	// Try Unix timestamp first (all digits)
+	if (/^\d+$/.test(value)) {
+		const seconds = parseInt(value, 10)
+		const date = new Date(seconds * 1000)
+		return isNaN(date.getTime()) ? null : date
+	}
+	// Try ISO 8601
+	const date = new Date(value)
+	return isNaN(date.getTime()) ? null : date
+}
+
+/**
  * GET /points/events?campaignId=42
- * Query events with filters: account, eventName, limit, page
+ * Query events with filters: account, eventName, startTime, endTime, limit, page
  *
  * Examples:
  * - /points/events?campaignId=42
  * - /points/events?campaignId=42&account=0x1234...
  * - /points/events?campaignId=42&eventName=swap
+ * - /points/events?campaignId=42&startTime=2024-03-23T00:00:00.000Z
+ * - /points/events?campaignId=42&startTime=1711152000&endTime=1735689599
  * - /points/events?campaignId=42&account=0x1234...&eventName=swap&limit=50&page=2
  */
 export const GET = async (request: Request): Promise<Response> => {
@@ -66,6 +84,45 @@ export const GET = async (request: Request): Promise<Response> => {
 			page = parsed
 		}
 
+		// Parse and validate timestamp filters
+		const startTimeParam = url.searchParams.get("startTime")
+		const endTimeParam = url.searchParams.get("endTime")
+
+		let startTime: Date | undefined
+		let endTime: Date | undefined
+
+		if (startTimeParam) {
+			const parsed = parseTimestamp(startTimeParam)
+			if (!parsed) {
+				return Response.json(
+					{
+						error:
+							"Invalid startTime format. Use ISO 8601 (e.g., 2024-03-23T00:00:00.000Z) or Unix timestamp in seconds (e.g., 1711152000)",
+					},
+					{ status: 400 },
+				)
+			}
+			startTime = parsed
+		}
+
+		if (endTimeParam) {
+			const parsed = parseTimestamp(endTimeParam)
+			if (!parsed) {
+				return Response.json(
+					{
+						error:
+							"Invalid endTime format. Use ISO 8601 (e.g., 2024-03-23T00:00:00.000Z) or Unix timestamp in seconds (e.g., 1711152000)",
+					},
+					{ status: 400 },
+				)
+			}
+			endTime = parsed
+		}
+
+		if (startTime && endTime && startTime > endTime) {
+			return Response.json({ error: "startTime must be before or equal to endTime" }, { status: 400 })
+		}
+
 		// Validate account if provided
 		if (accountParam && !isAddress(accountParam)) {
 			return Response.json({ message: "Invalid Ethereum address" }, { status: 400 })
@@ -80,6 +137,14 @@ export const GET = async (request: Request): Promise<Response> => {
 
 		if (eventNameParam) {
 			conditions.push({ eventName: { equals: eventNameParam } })
+		}
+
+		if (startTime) {
+			conditions.push({ createdAt: { greater_than_equal: startTime.toISOString() } })
+		}
+
+		if (endTime) {
+			conditions.push({ createdAt: { less_than_equal: endTime.toISOString() } })
 		}
 
 		const result = await payload.find({

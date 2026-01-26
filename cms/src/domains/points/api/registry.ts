@@ -366,7 +366,7 @@ pointsRegistry.registerPath({
 	path: "/points/events",
 	summary: "Get point events",
 	description:
-		"Retrieves point events with optional filtering by account and event name. Results are paginated and sorted by creation time (newest first).",
+		"Retrieves point events with optional filtering by account, event name, and time range. Results are paginated and sorted by creation time (newest first).",
 	tags: ["Events"],
 	request: {
 		query: EventsQuerySchema,
@@ -381,7 +381,7 @@ pointsRegistry.registerPath({
 			},
 		},
 		400: {
-			description: "Invalid request (missing/invalid campaignId, invalid pagination or address format)",
+			description: "Invalid request (missing/invalid campaignId, invalid pagination, address, or timestamp format)",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,
