@@ -212,23 +212,23 @@ function shouldUpdateToken(
 	const lastFetch = new Date(lastFetchTimestamp)
 	const hoursSinceLastFetch = (now.getTime() - lastFetch.getTime()) / (1000 * 60 * 60)
 
-	// Listed tokens: update daily (24 hours)
-	if (token.isListed) {
+	// Very popular tokens (listed AND >100 holders): update daily (24 hours)
+	if (token.isListed && token.totalNumberOfHolders > 100) {
 		return hoursSinceLastFetch >= 24
 	}
 
-	// High activity tokens (>100 holders): update every 2 days (48 hours)
-	if (token.totalNumberOfHolders > 100) {
+	// Popular tokens (listed OR >200 holders): update every 2 days (48 hours)
+	if (token.isListed || token.totalNumberOfHolders > 200) {
 		return hoursSinceLastFetch >= 48
 	}
 
-	// Semi-active tokens (50-100 holders): update weekly (168 hours)
-	if (token.totalNumberOfHolders >= 50) {
-		return hoursSinceLastFetch >= 168
+	// Active tokens (>100 holders): update every 5 days (120 hours)
+	if (token.totalNumberOfHolders > 100) {
+		return hoursSinceLastFetch >= 120
 	}
 
-	// Low activity tokens (<50 holders): update bi-weekly (336 hours)
-	return hoursSinceLastFetch >= 336
+	// Standard tokens (>10 holders, already filtered): update weekly (168 hours)
+	return hoursSinceLastFetch >= 168
 }
 
 // Helper function to merge price data (newer data takes precedence)
