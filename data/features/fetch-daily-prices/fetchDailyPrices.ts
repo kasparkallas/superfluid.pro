@@ -212,17 +212,22 @@ function shouldUpdateToken(
 	const lastFetch = new Date(lastFetchTimestamp)
 	const hoursSinceLastFetch = (now.getTime() - lastFetch.getTime()) / (1000 * 60 * 60)
 
-	// Listed tokens or high activity: update daily (24 hours)
-	if (token.isListed || token.totalNumberOfHolders > 100) {
+	// Very popular tokens (listed AND >100 holders): update daily (24 hours)
+	if (token.isListed && token.totalNumberOfHolders > 100) {
 		return hoursSinceLastFetch >= 24
 	}
 
-	// Semi-active tokens: update every 3 days (72 hours)
-	if (token.totalNumberOfHolders >= 50) {
-		return hoursSinceLastFetch >= 72
+	// Popular tokens (listed OR >200 holders): update every 2 days (48 hours)
+	if (token.isListed || token.totalNumberOfHolders > 200) {
+		return hoursSinceLastFetch >= 48
 	}
 
-	// Low activity tokens: update weekly (168 hours)
+	// Active tokens (>100 holders): update every 5 days (120 hours)
+	if (token.totalNumberOfHolders > 100) {
+		return hoursSinceLastFetch >= 120
+	}
+
+	// Standard tokens (>10 holders, already filtered): update weekly (168 hours)
 	return hoursSinceLastFetch >= 168
 }
 
@@ -370,10 +375,10 @@ const fetchDailyPrices = async (storageType: StorageType, tokenLimit?: number, s
 		totalTokens: coingeckoMappings.totalSuperTokens,
 	})
 
-	// First, filter out dead tokens (≤5 holders) unless they are listed
+	// First, filter out dead tokens (≤10 holders) unless they are listed
 	const activeTokens = aggregatedData.tokens.filter((token) => {
 		if (token.isListed) return true // Always include listed tokens
-		return token.totalNumberOfHolders > 5 // Only include unlisted tokens with >5 holders
+		return token.totalNumberOfHolders > 10 // Only include unlisted tokens with >10 holders
 	})
 
 	const skippedTokens = aggregatedData.tokens.length - activeTokens.length
