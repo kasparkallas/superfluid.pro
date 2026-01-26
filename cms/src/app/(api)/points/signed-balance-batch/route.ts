@@ -21,11 +21,11 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		// Validate campaignIds array
 		if (!Array.isArray(campaignIds) || campaignIds.length === 0) {
-			return Response.json({ error: "campaignIds must be a non-empty array" }, { status: 400 })
+			return Response.json({ message: "campaignIds must be a non-empty array" }, { status: 400 })
 		}
 
 		if (campaignIds.length > MAX_CAMPAIGNS) {
-			return Response.json({ error: `Maximum ${MAX_CAMPAIGNS} campaigns allowed per request` }, { status: 400 })
+			return Response.json({ message: `Maximum ${MAX_CAMPAIGNS} campaigns allowed per request` }, { status: 400 })
 		}
 
 		// Validate all are positive integers
@@ -43,7 +43,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (invalidIds.length > 0) {
 			return Response.json(
 				{
-					error: "Invalid campaign IDs (must be positive integers)",
+					message: "Invalid campaign IDs (must be positive integers)",
 					invalid: invalidIds,
 				},
 				{ status: 400 },
@@ -52,12 +52,12 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		// Validate account
 		if (typeof account !== "string") {
-			return Response.json({ error: "account must be a string" }, { status: 400 })
+			return Response.json({ message: "account must be a string" }, { status: 400 })
 		}
 
 		const accountLower = account.toLowerCase()
 		if (!isAddress(accountLower)) {
-			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+			return Response.json({ message: "Invalid Ethereum address" }, { status: 400 })
 		}
 
 		// Fetch all campaigns
@@ -76,7 +76,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (missingIds.length > 0) {
 			return Response.json(
 				{
-					error: "One or more campaigns not found",
+					message: "One or more campaigns not found",
 					missing: missingIds,
 				},
 				{ status: 404 },
@@ -125,7 +125,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		const signingResult = await signMessageHash(messageHash)
 		if (!signingResult) {
 			console.error("SIGNER_PRIVATE_KEY is not configured")
-			return Response.json({ error: "Signing not available" }, { status: 500 })
+			return Response.json({ message: "Signing not available" }, { status: 500 })
 		}
 
 		return Response.json({
@@ -141,8 +141,7 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to get batch signed balance",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to get batch signed balance",
 			},
 			{ status: 500 },
 		)

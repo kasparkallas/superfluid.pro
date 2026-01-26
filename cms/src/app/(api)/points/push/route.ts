@@ -140,7 +140,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (!parsed.success) {
 			return Response.json(
 				{
-					error: "Validation failed",
+					message: "Validation failed",
 					details: parsed.error.issues.map((issue) => ({
 						path: issue.path.join("."),
 						message: issue.message,
@@ -158,7 +158,6 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (providedCampaignId !== undefined && providedCampaignId !== campaign.id) {
 			return Response.json(
 				{
-					error: "Campaign mismatch",
 					message: `Provided campaign ID (${providedCampaignId}) does not match API key's campaign (${campaign.id})`,
 				},
 				{ status: 403 },
@@ -200,8 +199,7 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to process push request",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to process push request",
 			},
 			{ status: 500 },
 		)

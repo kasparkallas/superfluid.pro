@@ -37,14 +37,14 @@ export async function validateApiKey(): Promise<ApiKeyValidationResult> {
 	// 1. Check header exists
 	if (!apiKeyHeader) {
 		return {
-			error: Response.json({ error: "Missing X-API-Key header" }, { status: 401 }),
+			error: Response.json({ message: "Missing X-API-Key header" }, { status: 401 }),
 		}
 	}
 
 	// 2. Validate format
 	if (!isValidApiKeyFormat(apiKeyHeader)) {
 		return {
-			error: Response.json({ error: "Invalid API key format" }, { status: 401 }),
+			error: Response.json({ message: "Invalid API key format" }, { status: 401 }),
 		}
 	}
 
@@ -63,7 +63,7 @@ export async function validateApiKey(): Promise<ApiKeyValidationResult> {
 
 	if (result.docs.length === 0) {
 		return {
-			error: Response.json({ error: "Invalid API key" }, { status: 401 }),
+			error: Response.json({ message: "Invalid API key" }, { status: 401 }),
 		}
 	}
 
@@ -72,7 +72,7 @@ export async function validateApiKey(): Promise<ApiKeyValidationResult> {
 	// 4. Check key status
 	if (apiKey.status !== API_KEY_STATUS.ACTIVE) {
 		return {
-			error: Response.json({ error: "API key has been revoked" }, { status: 401 }),
+			error: Response.json({ message: "API key has been revoked" }, { status: 401 }),
 		}
 	}
 
@@ -81,7 +81,7 @@ export async function validateApiKey(): Promise<ApiKeyValidationResult> {
 
 	if (!campaign) {
 		return {
-			error: Response.json({ error: "Campaign not found" }, { status: 500 }),
+			error: Response.json({ message: "Campaign not found" }, { status: 500 }),
 		}
 	}
 

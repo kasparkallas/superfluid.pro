@@ -526,7 +526,7 @@ Include the \`campaign\` field with the campaign ID to verify you're pushing to 
 				"application/json": {
 					schema: ApiErrorSchema,
 					example: {
-						error: "Validation failed",
+						message: "Validation failed",
 						details: [{ path: "eventName", message: "String must contain at least 1 character(s)" }],
 					},
 				},
@@ -546,7 +546,6 @@ Include the \`campaign\` field with the campaign ID to verify you're pushing to 
 				"application/json": {
 					schema: ApiErrorSchema,
 					example: {
-						error: "Campaign mismatch",
 						message: "Provided campaign ID (99) does not match API key's campaign (42)",
 					},
 				},
@@ -852,7 +851,13 @@ Existing on-chain contracts that verify Stack signatures will work with Superflu
 | Response field | \`amount\` | \`points\` |
 | Terminology | \`programId\`, \`systemIds\` | \`campaignId\`, \`campaignIds\` |
 | Signer info | Not returned | Returns \`signer\` address |
-| Multi-campaign query | Signed only (\`getSignedPointsBatch\`) | Both signed and unsigned endpoints |`,
+| Multi-campaign query | Signed only (\`getSignedPointsBatch\`) | Both signed and unsigned endpoints |
+
+## Changelog
+
+### 2026-01-26
+
+- **Error response format**: Changed from \`{ error: "..." }\` to \`{ message: "..." }\` to align with Next.js conventions. The \`message\` field is now the primary error field.`,
 			contact: {
 				name: "Superfluid",
 				url: "https://superfluid.finance",
