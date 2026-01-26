@@ -4,7 +4,7 @@ import { fetchCoingeckoIds } from "@/features/fetch-coingecko-ids"
 // Task definition - can be triggered manually via UI or scheduled
 export const fetchCoingeckoIdsScheduled = schedules.task({
 	id: "fetch-coingecko-ids",
-	cron: "0 0 * * 1", // Every Monday at 00:00 UTC (once per week, after Sunday's super tokens run)
+	cron: "0 0 1,15 * *", // 1st and 15th of each month at 00:00 UTC (CoinGecko IDs are stable)
 	retry: {
 		maxAttempts: 2,
 	},

@@ -5,7 +5,7 @@ import type { processPushRequest } from "./process-push-request"
 
 /**
  * CRON job to retry stale push requests.
- * Runs every 15 minutes.
+ * Runs once per hour.
  * Finds push requests that:
  * - Are NOT completed
  * - Were created more than 15 minutes ago
@@ -13,7 +13,7 @@ import type { processPushRequest } from "./process-push-request"
  */
 export const retryStaleRequests = schedules.task({
 	id: "retry-stale-push-requests",
-	cron: "*/15 * * * *", // Every 15 minutes
+	cron: "0 * * * *", // Once per hour at minute 0
 	retry: {
 		maxAttempts: 3,
 	},

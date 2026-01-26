@@ -4,7 +4,7 @@ import { fetchDailyPrices } from "@/features/fetch-daily-prices"
 // Task definition - can be triggered manually via UI or scheduled
 export const fetchDailyPricesScheduled = schedules.task({
 	id: "fetch-daily-prices",
-	cron: "0 1 * * *", // Every day at 01:00 UTC (once per day, after super tokens fetch)
+	cron: "0 1 */3 * *", // Every 3 days at 01:00 UTC (tiered refresh handles token-specific intervals)
 	retry: {
 		maxAttempts: 2,
 	},
