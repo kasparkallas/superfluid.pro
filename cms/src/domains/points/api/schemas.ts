@@ -18,13 +18,9 @@ export const EthereumAddressSchema = z
 
 export const ApiErrorSchema = z
 	.object({
-		error: z.string().openapi({
+		message: z.string().openapi({
 			example: "Validation failed",
-			description: "Error type",
-		}),
-		message: z.string().optional().openapi({
-			example: "Invalid Ethereum address",
-			description: "Detailed error message",
+			description: "Error message",
 		}),
 		details: z
 			.array(

@@ -17,24 +17,24 @@ export const GET = async (request: Request): Promise<Response> => {
 		// Get campaignId parameter (required, must be numeric)
 		const campaignIdParam = url.searchParams.get("campaignId")
 		if (!campaignIdParam) {
-			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
+			return Response.json({ message: "Missing required query parameter: campaignId" }, { status: 400 })
 		}
 
 		const campaignId = parseInt(campaignIdParam, 10)
 		if (isNaN(campaignId) || campaignId <= 0) {
-			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+			return Response.json({ message: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
 		// Get account parameter (required)
 		const accountParam = url.searchParams.get("account")
 		if (!accountParam) {
-			return Response.json({ error: "Missing required query parameter: account" }, { status: 400 })
+			return Response.json({ message: "Missing required query parameter: account" }, { status: 400 })
 		}
 
 		// Validate account address
 		const accountLower = accountParam.toLowerCase()
 		if (!isAddress(accountLower)) {
-			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+			return Response.json({ message: "Invalid Ethereum address" }, { status: 400 })
 		}
 
 		// Verify campaign exists
@@ -46,7 +46,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		})
 
 		if (campaignResult.docs.length === 0) {
-			return Response.json({ error: "Campaign not found" }, { status: 404 })
+			return Response.json({ message: "Campaign not found" }, { status: 404 })
 		}
 
 		const campaign = campaignResult.docs[0]
@@ -79,7 +79,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		const signingResult = await signMessageHash(messageHash)
 		if (!signingResult) {
 			console.error("SIGNER_PRIVATE_KEY is not configured")
-			return Response.json({ error: "Signing not available" }, { status: 500 })
+			return Response.json({ message: "Signing not available" }, { status: 500 })
 		}
 
 		return Response.json({
@@ -94,8 +94,7 @@ export const GET = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to get signed balance",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to get signed balance",
 			},
 			{ status: 500 },
 		)

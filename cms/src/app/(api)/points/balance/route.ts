@@ -13,23 +13,23 @@ export const GET = async (request: Request): Promise<Response> => {
 		// Get campaignId parameter (required, must be numeric)
 		const campaignIdParam = url.searchParams.get("campaignId")
 		if (!campaignIdParam) {
-			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
+			return Response.json({ message: "Missing required query parameter: campaignId" }, { status: 400 })
 		}
 
 		const campaignId = parseInt(campaignIdParam, 10)
 		if (isNaN(campaignId) || campaignId <= 0) {
-			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+			return Response.json({ message: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
 		// Get account parameter (required, single address)
 		const accountParam = url.searchParams.get("account")
 		if (!accountParam) {
-			return Response.json({ error: "Missing required query parameter: account" }, { status: 400 })
+			return Response.json({ message: "Missing required query parameter: account" }, { status: 400 })
 		}
 
 		const account = accountParam.toLowerCase()
 		if (!isAddress(account)) {
-			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+			return Response.json({ message: "Invalid Ethereum address" }, { status: 400 })
 		}
 
 		// Verify campaign exists
@@ -41,7 +41,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		})
 
 		if (campaignResult.docs.length === 0) {
-			return Response.json({ error: "Campaign not found" }, { status: 404 })
+			return Response.json({ message: "Campaign not found" }, { status: 404 })
 		}
 
 		// Query balance
@@ -62,8 +62,7 @@ export const GET = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to query balance",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to query balance",
 			},
 			{ status: 500 },
 		)
@@ -84,16 +83,16 @@ export const POST = async (request: Request): Promise<Response> => {
 		const { campaignId, accounts } = body
 
 		if (typeof campaignId !== "number" || !Number.isInteger(campaignId) || campaignId <= 0) {
-			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+			return Response.json({ message: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
 		// Validate accounts array
 		if (!Array.isArray(accounts) || accounts.length === 0) {
-			return Response.json({ error: "accounts must be a non-empty array" }, { status: 400 })
+			return Response.json({ message: "accounts must be a non-empty array" }, { status: 400 })
 		}
 
 		if (accounts.length > 100) {
-			return Response.json({ error: "Maximum 100 accounts per request" }, { status: 400 })
+			return Response.json({ message: "Maximum 100 accounts per request" }, { status: 400 })
 		}
 
 		// Normalize and validate addresses
@@ -116,7 +115,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		if (invalidAddresses.length > 0) {
 			return Response.json(
 				{
-					error: "Invalid Ethereum addresses",
+					message: "Invalid Ethereum addresses",
 					invalid: invalidAddresses,
 				},
 				{ status: 400 },
@@ -132,7 +131,7 @@ export const POST = async (request: Request): Promise<Response> => {
 		})
 
 		if (campaignResult.docs.length === 0) {
-			return Response.json({ error: "Campaign not found" }, { status: 404 })
+			return Response.json({ message: "Campaign not found" }, { status: 404 })
 		}
 
 		// Query balances for all accounts
@@ -163,8 +162,7 @@ export const POST = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to query balances",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to query balances",
 			},
 			{ status: 500 },
 		)

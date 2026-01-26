@@ -20,12 +20,12 @@ export const GET = async (request: Request): Promise<Response> => {
 		// Get campaignId parameter (required, must be numeric)
 		const campaignIdParam = url.searchParams.get("campaignId")
 		if (!campaignIdParam) {
-			return Response.json({ error: "Missing required query parameter: campaignId" }, { status: 400 })
+			return Response.json({ message: "Missing required query parameter: campaignId" }, { status: 400 })
 		}
 
 		const campaignId = parseInt(campaignIdParam, 10)
 		if (isNaN(campaignId) || campaignId <= 0) {
-			return Response.json({ error: "campaignId must be a positive integer" }, { status: 400 })
+			return Response.json({ message: "campaignId must be a positive integer" }, { status: 400 })
 		}
 
 		// Verify campaign exists
@@ -37,7 +37,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		})
 
 		if (campaignResult.docs.length === 0) {
-			return Response.json({ error: "Campaign not found" }, { status: 404 })
+			return Response.json({ message: "Campaign not found" }, { status: 404 })
 		}
 
 		const campaign = campaignResult.docs[0]
@@ -51,7 +51,7 @@ export const GET = async (request: Request): Promise<Response> => {
 		if (limitParam) {
 			const parsed = Number.parseInt(limitParam, 10)
 			if (Number.isNaN(parsed) || parsed < 1 || parsed > 100) {
-				return Response.json({ error: "limit must be between 1 and 100" }, { status: 400 })
+				return Response.json({ message: "limit must be between 1 and 100" }, { status: 400 })
 			}
 			limit = parsed
 		}
@@ -61,14 +61,14 @@ export const GET = async (request: Request): Promise<Response> => {
 		if (pageParam) {
 			const parsed = Number.parseInt(pageParam, 10)
 			if (Number.isNaN(parsed) || parsed < 1) {
-				return Response.json({ error: "page must be a positive integer" }, { status: 400 })
+				return Response.json({ message: "page must be a positive integer" }, { status: 400 })
 			}
 			page = parsed
 		}
 
 		// Validate account if provided
 		if (accountParam && !isAddress(accountParam)) {
-			return Response.json({ error: "Invalid Ethereum address" }, { status: 400 })
+			return Response.json({ message: "Invalid Ethereum address" }, { status: 400 })
 		}
 
 		// Build where clause
@@ -115,8 +115,7 @@ export const GET = async (request: Request): Promise<Response> => {
 
 		return Response.json(
 			{
-				error: "Failed to query events",
-				message: error instanceof Error ? error.message : "Unknown error",
+				message: error instanceof Error ? error.message : "Failed to query events",
 			},
 			{ status: 500 },
 		)
