@@ -10,10 +10,11 @@ export const PushRequests: CollectionConfig = {
 		group: "Points",
 	},
 	access: {
-		read: AccessControl.adminOnly,
+		read: AccessControl.campaignChildAccess,
 		create: () => false, // Only created programmatically via /points/push
 		update: AccessControl.adminOnly,
 		delete: AccessControl.adminOnly,
+		admin: AccessControl.viewerOrAbove,
 	},
 	fields: [
 		{

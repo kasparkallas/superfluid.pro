@@ -46,10 +46,11 @@ export const Campaigns: CollectionConfig = {
 		group: "Points",
 	},
 	access: {
-		read: AccessControl.viewerOrAbove,
+		read: AccessControl.campaignAccess,
 		create: AccessControl.adminOnly,
 		update: AccessControl.adminOnly,
 		delete: AccessControl.adminOnly,
+		admin: AccessControl.viewerOrAbove,
 	},
 	hooks: {
 		beforeDelete: [cascadeDeleteRelatedRecords],

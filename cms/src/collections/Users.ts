@@ -12,7 +12,7 @@ export const Users: CollectionConfig = {
 		create: AccessControl.adminOnly,
 		update: AccessControl.selfOrAdmin,
 		delete: AccessControl.adminOnly,
-		admin: AccessControl.adminOnly,
+		admin: AccessControl.viewerOrAbove,
 	},
 	hooks: {
 		beforeChange: [
@@ -134,6 +134,42 @@ export const Users: CollectionConfig = {
 					fields: [
 						{
 							name: "chainId",
+							type: "number",
+							required: true,
+						},
+					],
+				},
+			],
+		},
+		{
+			name: "campaignPermissions",
+			type: "group",
+			admin: {
+				condition: (data) => data?.role === "editor" || data?.role === "viewer",
+				description: "Configure which campaigns this user can access",
+			},
+			access: {
+				update: AccessControl.fieldAdminOnly,
+			},
+			fields: [
+				{
+					name: "canAccessAllCampaigns",
+					type: "checkbox",
+					defaultValue: false,
+					admin: {
+						description: "If checked, user can access all campaigns. If unchecked, only assigned campaigns.",
+					},
+				},
+				{
+					name: "allowedCampaignIds",
+					type: "array",
+					admin: {
+						description: "Campaign IDs this user can access",
+						condition: (data) => !data?.campaignPermissions?.canAccessAllCampaigns,
+					},
+					fields: [
+						{
+							name: "campaignId",
 							type: "number",
 							required: true,
 						},

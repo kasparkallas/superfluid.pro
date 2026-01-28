@@ -22,10 +22,11 @@ export const ApiKeys: CollectionConfig = {
 		group: "Points",
 	},
 	access: {
-		read: AccessControl.adminOnly,
-		create: AccessControl.adminOnly,
-		update: AccessControl.adminOnly,
-		delete: AccessControl.adminOnly,
+		read: AccessControl.campaignChildAccess,
+		create: AccessControl.campaignChildEditorAccess,
+		update: AccessControl.campaignChildEditorAccess,
+		delete: AccessControl.adminOnly, // Only admins can delete (safety)
+		admin: AccessControl.viewerOrAbove,
 	},
 	hooks: {
 		beforeChange: [autoGenerateApiKey],

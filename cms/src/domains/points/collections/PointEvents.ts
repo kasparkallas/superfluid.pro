@@ -75,11 +75,12 @@ export const PointEvents: CollectionConfig = {
 		group: "Points",
 	},
 	access: {
-		read: AccessControl.viewerOrAbove,
+		read: AccessControl.campaignChildAccess,
 		// Internal creation only - no direct API access
 		create: AccessControl.adminOnly,
 		update: AccessControl.adminOnly,
 		delete: AccessControl.adminOnly,
+		admin: AccessControl.viewerOrAbove,
 	},
 	hooks: {
 		afterChange: [updatePointBalance],

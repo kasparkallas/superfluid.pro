@@ -44,8 +44,28 @@ export const sharedConfig = {
 					password: "admin123",
 					role: "admin",
 				},
-			})
-			payload.logger.info("Seeded admin user: admin@superfluid.pro / admin123")
+			}),
+				payload.logger.info("Seeded admin user: admin@superfluid.pro / admin123")
+
+			await payload.create({
+				collection: "users",
+				data: {
+					email: "viewer@superfluid.pro",
+					password: "viewer123",
+					role: "viewer",
+				},
+			}),
+				payload.logger.info("Seeded viewer user: viewer@superfluid.pro / viewer123")
+
+			await payload.create({
+				collection: "users",
+				data: {
+					email: "editor@superfluid.pro",
+					password: "editor123",
+					role: "editor",
+				},
+			}),
+				payload.logger.info("Seeded viewer user: editor@superfluid.pro / editor123")
 		}
 	},
 	collections: [Users, Tokens, Chains, Campaigns, ApiKeys, PushRequests, PointEvents, PointBalances],
