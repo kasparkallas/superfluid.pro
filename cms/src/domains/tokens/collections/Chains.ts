@@ -19,7 +19,7 @@ export const Chains: CollectionConfig = {
 		create: AccessControl.editorOrAdmin,
 		update: AccessControl.editorOrAdmin,
 		delete: AccessControl.editorOrAdmin,
-		admin: AccessControl.editorOrAdmin,
+		admin: AccessControl.adminOnly,
 	},
 	fields: [
 		{

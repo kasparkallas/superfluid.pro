@@ -172,6 +172,24 @@ export interface User {
 			  }[]
 			| null
 	}
+	/**
+	 * Configure which campaigns this user can access
+	 */
+	campaignPermissions?: {
+		/**
+		 * If checked, user can access all campaigns. If unchecked, only assigned campaigns.
+		 */
+		canAccessAllCampaigns?: boolean | null
+		/**
+		 * Campaign IDs this user can access
+		 */
+		allowedCampaignIds?:
+			| {
+					campaignId: number
+					id?: string | null
+			  }[]
+			| null
+	}
 	updatedAt: string
 	createdAt: string
 	email: string
@@ -597,6 +615,17 @@ export interface UsersSelect<T extends boolean = true> {
 					| T
 					| {
 							chainId?: T
+							id?: T
+					  }
+		  }
+	campaignPermissions?:
+		| T
+		| {
+				canAccessAllCampaigns?: T
+				allowedCampaignIds?:
+					| T
+					| {
+							campaignId?: T
 							id?: T
 					  }
 		  }

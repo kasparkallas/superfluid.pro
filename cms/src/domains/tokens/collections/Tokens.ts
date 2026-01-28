@@ -22,7 +22,7 @@ export const Tokens: CollectionConfig = {
 		create: AccessControl.editorOrAdmin,
 		update: AccessControl.tokenAccess,
 		delete: AccessControl.tokenAccess,
-		admin: AccessControl.editorOrAdmin,
+		admin: AccessControl.tokenAdminAccess,
 	},
 	fields: [
 		{

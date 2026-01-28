@@ -10,12 +10,18 @@ export const PointBalances: CollectionConfig = {
 		group: "Points",
 	},
 	access: {
-		// Public read for balance queries
-		read: AccessControl.publicRead,
+		// Public API access (no user = API request), but scope admin panel view
+		read: ({ req: { user } }) => {
+			if (!user) return true
+			return AccessControl.campaignChildAccess({ req: { user } } as Parameters<
+				typeof AccessControl.campaignChildAccess
+			>[0])
+		},
 		// Internal creation/update only
 		create: AccessControl.adminOnly,
 		update: AccessControl.adminOnly,
 		delete: AccessControl.adminOnly,
+		admin: AccessControl.viewerOrAbove,
 	},
 	fields: [
 		{
