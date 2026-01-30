@@ -60,13 +60,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s4-gooddollar",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7757,
-		stackLeaderboardId: "leaderboard-40a3-782251-7757",
-		name: "S3 Farcaster Miniapp Dev Rewards",
-		slug: "s3-miniapp-dev-rewards",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7757,
+	// 	stackLeaderboardId: "leaderboard-40a3-782251-7757",
+	// 	name: "S3 Farcaster Miniapp Dev Rewards",
+	// 	slug: "s3-miniapp-dev-rewards",
+	// 	disableNegativeSync: false,
+	// },
 	{
 		id: 7759,
 		stackLeaderboardId: "leaderboard-40a3-782251-7759",
