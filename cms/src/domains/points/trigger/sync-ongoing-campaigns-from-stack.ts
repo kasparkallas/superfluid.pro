@@ -88,13 +88,13 @@ const ONGOING_CAMPAIGNS = [
 		slug: "s3-beamr",
 		disableNegativeSync: false,
 	},
-	{
-		id: 7739,
-		stackLeaderboardId: "leaderboard-40a3-78225-7739",
-		name: "S2 Nerite",
-		slug: "s2-nerite",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7739,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7739",
+	// 	name: "S2 Nerite",
+	// 	slug: "s2-nerite",
+	// 	disableNegativeSync: false,
+	// },
 	{
 		id: 7856,
 		stackLeaderboardId: "leaderboard-40a3-78225-7856",
