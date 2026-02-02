@@ -5,6 +5,8 @@ import {
 	BalanceBatchResponseSchema,
 	BalancePostBodySchema,
 	BalanceQuerySchema,
+	EventBalanceQuerySchema,
+	EventBalanceResponseSchema,
 	EventsQuerySchema,
 	PaginationSchema,
 	PointBalanceSchema,
@@ -31,6 +33,7 @@ pointsRegistry.register("PushResponse", PushResponseSchema)
 pointsRegistry.register("SignedBalanceResponse", SignedBalanceResponseSchema)
 pointsRegistry.register("SignedBalanceBatchResponse", SignedBalanceBatchResponseSchema)
 pointsRegistry.register("BalanceBatchResponse", BalanceBatchResponseSchema)
+pointsRegistry.register("EventBalanceResponse", EventBalanceResponseSchema)
 pointsRegistry.register("ApiError", ApiErrorSchema)
 
 // Register security scheme
@@ -201,6 +204,77 @@ Missing campaigns return 0 points with a warning entry. The call never fails due
 		},
 		400: {
 			description: "Invalid request (invalid address, campaign ID format, or exceeds 50 campaigns limit)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		500: {
+			description: "Internal server error",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+	},
+})
+
+// ============================================
+// GET /points/event-balance
+// ============================================
+pointsRegistry.registerPath({
+	method: "get",
+	path: "/points/event-balance",
+	summary: "Get aggregated points for an event type",
+	description: `Retrieves the total points for a specific event type within a campaign.
+
+**With account filter:** Returns the sum of points for that account and event type.
+
+**Without account filter:** Returns the sum of points across all accounts for that event type.
+
+This endpoint queries the raw point events and aggregates on-demand, unlike \`/balance\` which uses pre-aggregated balances.`,
+	tags: ["Balance"],
+	request: {
+		query: EventBalanceQuerySchema,
+	},
+	responses: {
+		200: {
+			description: "Event balance retrieved successfully",
+			content: {
+				"application/json": {
+					schema: EventBalanceResponseSchema,
+					examples: {
+						withAccount: {
+							summary: "With account filter",
+							value: {
+								eventName: "swap",
+								account: "0x1234567890abcdef1234567890abcdef12345678",
+								points: 150,
+							},
+						},
+						withoutAccount: {
+							summary: "Without account filter (all accounts)",
+							value: {
+								eventName: "swap",
+								points: 5000,
+							},
+						},
+					},
+				},
+			},
+		},
+		400: {
+			description: "Invalid request (missing campaignId/eventName or invalid address)",
+			content: {
+				"application/json": {
+					schema: ApiErrorSchema,
+				},
+			},
+		},
+		404: {
+			description: "Campaign not found",
 			content: {
 				"application/json": {
 					schema: ApiErrorSchema,

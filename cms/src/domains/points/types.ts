@@ -79,3 +79,12 @@ export const pointBalancesResponseSchema = z.object({
 })
 
 export type PointBalancesResponse = z.infer<typeof pointBalancesResponseSchema>
+
+// Event balance response (aggregated by event type)
+export const eventBalanceResponseSchema = z.object({
+	eventName: z.string(),
+	points: z.number(),
+	account: z.string().optional(),
+})
+
+export type EventBalanceResponse = z.infer<typeof eventBalanceResponseSchema>

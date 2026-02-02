@@ -484,6 +484,50 @@ export const SignedBalanceBatchResponseSchema = z
 	})
 
 // ============================================
+// Event Balance Endpoint Schemas
+// ============================================
+
+export const EventBalanceQuerySchema = z
+	.object({
+		campaignId: z.coerce.number().int().positive().openapi({
+			example: 42,
+			description: "Campaign ID",
+		}),
+		eventName: z.string().min(1).max(100).openapi({
+			example: "swap",
+			description: "Event name to aggregate points for",
+		}),
+		account: EthereumAddressSchema.optional().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Optional: Filter by Ethereum address. If omitted, returns total for all accounts.",
+		}),
+	})
+	.openapi({
+		title: "EventBalanceQuery",
+		description: "Query parameters for event balance endpoint",
+	})
+
+export const EventBalanceResponseSchema = z
+	.object({
+		eventName: z.string().openapi({
+			example: "swap",
+			description: "Event name that was queried",
+		}),
+		points: z.number().openapi({
+			example: 1500,
+			description: "Total aggregated points for this event type",
+		}),
+		account: z.string().optional().openapi({
+			example: "0x1234567890abcdef1234567890abcdef12345678",
+			description: "Ethereum address (included when account filter was provided)",
+		}),
+	})
+	.openapi({
+		title: "EventBalanceResponse",
+		description: "Aggregated point balance for a specific event type",
+	})
+
+// ============================================
 // Batch Balance Endpoint Schemas (unsigned)
 // ============================================
 
