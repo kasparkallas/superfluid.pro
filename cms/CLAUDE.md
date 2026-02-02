@@ -142,6 +142,9 @@ API routes remain in `src/app/(api)/` per Next.js App Router convention, but imp
   - Automatic deduplication via uniqueId
 - `GET /points/balance` - Query point balances
   - Query params: `account` (single) or `accounts` (up to 100, comma-separated)
+- `GET /points/event-balance` - Query aggregated points for a specific event type
+  - Query params: `campaignId`, `eventName` (required), `account` (optional)
+  - Returns sum of points for the event type, optionally filtered by account
 - `GET /points/events` - Query point events with pagination
   - Query params: `account`, `eventName`, `page`, `limit`, `sort`, `order`
 - `GET /points/api-docs` - Interactive Swagger UI for Points API
