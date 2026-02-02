@@ -21,15 +21,15 @@
 		"graphql-request": "^7.4.0",
 		"graphql-tag": "^2.12.6",
 		"next": "16.0.8",
-		"react": "^19.2.3",
-		"react-dom": "^19.2.3",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
 		"redis": "^5.10.0",
-		"viem": "^2.44.4",
+		"viem": "^2.45.1",
 		"zod": "^3.25.76"
 	},
 	"devDependencies": {
 		"@types/node": "^24.10.9",
-		"@types/react": "^19.2.9",
+		"@types/react": "^19.2.10",
 		"@types/react-dom": "^19.2.3",
 		"typescript": "^5.9.3"
 	}
