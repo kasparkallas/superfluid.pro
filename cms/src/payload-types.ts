@@ -452,6 +452,10 @@ export interface PointEvent {
 	 */
 	informational?: boolean | null
 	/**
+	 * When the event occurred (defaults to creation time, can be set for historical imports)
+	 */
+	eventTime: string
+	/**
 	 * Computed deduplication key: campaignId:account:uniqueId
 	 */
 	dedupKey?: string | null
@@ -795,6 +799,7 @@ export interface PointEventsSelect<T extends boolean = true> {
 	points?: T
 	uniqueId?: T
 	informational?: T
+	eventTime?: T
 	dedupKey?: T
 	updatedAt?: T
 	createdAt?: T

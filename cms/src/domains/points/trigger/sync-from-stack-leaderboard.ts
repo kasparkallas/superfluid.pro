@@ -224,6 +224,7 @@ export const syncStackLeaderboard = task({
 							account: account,
 							points: delta,
 							uniqueId: uniqueId,
+							eventTime: new Date().toISOString(),
 						},
 					})
 					existingDedupKeys.add(dedupKey) // Track within batch to catch duplicates

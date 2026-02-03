@@ -166,6 +166,29 @@ export const PointEvents: CollectionConfig = {
 			},
 		},
 		{
+			name: "eventTime",
+			type: "date",
+			required: true,
+			index: true,
+			admin: {
+				description: "When the event occurred (defaults to creation time, can be set for historical imports)",
+				date: {
+					pickerAppearance: "dayAndTime",
+				},
+			},
+			hooks: {
+				beforeChange: [
+					({ value, operation }) => {
+						// If no value provided on create, default to now
+						if (operation === "create" && !value) {
+							return new Date().toISOString()
+						}
+						return value
+					},
+				],
+			},
+		},
+		{
 			name: "dedupKey",
 			type: "text",
 			unique: true,

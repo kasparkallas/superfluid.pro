@@ -52,7 +52,7 @@ export const pointEventResponseSchema = z.object({
 	account: z.string(),
 	points: z.number(),
 	uniqueId: z.string().nullable(),
-	createdAt: z.string(),
+	createdAt: z.string(), // Returns eventTime value
 })
 
 export type PointEventResponse = z.infer<typeof pointEventResponseSchema>

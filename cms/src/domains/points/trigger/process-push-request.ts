@@ -118,6 +118,7 @@ export const processPushRequest = task({
 						account: event.account.toLowerCase(),
 						points: event.points,
 						uniqueId: event.uniqueId,
+						eventTime: new Date().toISOString(),
 					},
 				})
 

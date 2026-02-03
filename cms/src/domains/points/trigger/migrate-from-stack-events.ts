@@ -306,6 +306,7 @@ export const migrateFromStackEvents = task({
 								points: event.points,
 								uniqueId: uniqueId,
 								informational: true, // Mark as informational - does not affect balances
+								eventTime: event.timestamp, // Use original Stack timestamp
 							},
 						})
 						existingReplayDedupKeys.add(dedupKey) // Track within batch
