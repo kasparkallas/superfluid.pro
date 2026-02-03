@@ -18,7 +18,6 @@ type StoredStackEvent = {
 	address: string
 	timestamp: string
 	points: number
-	metadata?: Record<string, unknown>
 }
 
 type StoredEventsData = {
@@ -104,6 +103,9 @@ export const migrateFromStackEvents = task({
 	},
 	retry: {
 		maxAttempts: 3,
+	},
+	machine: {
+		preset: "medium-2x",
 	},
 	run: async (payload: MigrateFromStackEventsPayload) => {
 		const { campaignId, stackPointSystemId, stackApiKeyEnvVar, persist = false, skipReplay = false } = payload
@@ -203,7 +205,6 @@ export const migrateFromStackEvents = task({
 					address: event.address,
 					timestamp: timestampStr,
 					points: event.points,
-					metadata: event.metadata as Record<string, unknown> | undefined,
 				})
 				existingEventKeys.add(key)
 			} else {
