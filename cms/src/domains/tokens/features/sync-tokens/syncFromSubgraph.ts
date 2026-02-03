@@ -1,10 +1,17 @@
 import { getPayloadInstance } from "@/payload"
 import type { Chain, Token } from "@/payload-types"
 import { type FetchAllTokensQuery, getBuiltGraphSDKWithUrl } from "@/subgraph-protocol"
-import { getAllChains, getAllExistingTokens, getTokenTags, hasChanges, mergeTags, type TokenType } from "."
+import { getAllChains, getExistingToken, getTokenTags, hasChanges, mergeTags, type TokenType } from "."
 
 // # Types
 type SubgraphToken = FetchAllTokensQuery["tokens"][number]
+
+interface ChainSyncStats {
+	created: number
+	updated: number
+	skipped: number
+	failed: number
+}
 
 // # Main Function
 export async function syncFromSubgraph() {
@@ -24,8 +31,6 @@ export async function syncFromSubgraph() {
 		`Found ${chainsWithSubgraph.length} chains with subgraph endpoints (out of ${chains.length} total chains)`,
 	)
 
-	const existingTokensMap = await getAllExistingTokens(payload)
-
 	// Track overall statistics
 	let totalCreated = 0
 	let totalUpdated = 0
@@ -36,7 +41,7 @@ export async function syncFromSubgraph() {
 	// Process each chain
 	for (const chain of chainsWithSubgraph) {
 		try {
-			const stats = await syncChainTokens(chain, existingTokensMap)
+			const stats = await syncChainTokens(chain, payload)
 			totalCreated += stats.created
 			totalUpdated += stats.updated
 			totalSkipped += stats.skipped
@@ -57,14 +62,10 @@ export async function syncFromSubgraph() {
 
 // # Helper Functions
 
-interface ChainSyncStats {
-	created: number
-	updated: number
-	skipped: number
-	failed: number
-}
-
-async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Token>): Promise<ChainSyncStats> {
+async function syncChainTokens(
+	chain: Chain,
+	payload: Awaited<ReturnType<typeof getPayloadInstance>>,
+): Promise<ChainSyncStats> {
 	const endpoint = chain.subgraphV1?.hostedEndpoint
 	if (!endpoint) {
 		throw new Error(`No subgraph endpoint for chain ${chain.id}`)
@@ -73,11 +74,19 @@ async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Toke
 	console.log(`Syncing tokens for chain ${chain.humanReadableName} (${chain.id})...`)
 
 	const sdk = getBuiltGraphSDKWithUrl(endpoint)
-	const allTokens: SubgraphToken[] = []
 
-	// Pagination using id_gt pattern
+	// Track statistics for this chain
+	const stats: ChainSyncStats = {
+		created: 0,
+		updated: 0,
+		skipped: 0,
+		failed: 0,
+	}
+
+	// Pagination using id_gt pattern - process each page immediately
 	let lastId = ""
 	let pageCount = 0
+	let totalTokensFetched = 0
 
 	while (true) {
 		const result = await sdk.FetchAllTokens({ id_gt: lastId })
@@ -87,12 +96,19 @@ async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Toke
 			break
 		}
 
-		allTokens.push(...tokens)
 		pageCount++
+		totalTokensFetched += tokens.length
 
 		console.log(
-			`Fetched page ${pageCount} with ${tokens.length} tokens for chain ${chain.humanReadableName}. Total so far: ${allTokens.length}`,
+			`Fetched page ${pageCount} with ${tokens.length} tokens for chain ${chain.humanReadableName}. Total fetched: ${totalTokensFetched}`,
 		)
+
+		// Process this page immediately
+		const pageStats = await processSubgraphPage(tokens, chain, payload)
+		stats.created += pageStats.created
+		stats.updated += pageStats.updated
+		stats.skipped += pageStats.skipped
+		stats.failed += pageStats.failed
 
 		// Update lastId for next iteration
 		lastId = tokens[tokens.length - 1].id
@@ -103,11 +119,19 @@ async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Toke
 		}
 	}
 
-	console.log(`Fetched total of ${allTokens.length} tokens for chain ${chain.humanReadableName}`)
+	// Log summary for this chain
+	console.log(
+		`Processed ${totalTokensFetched} tokens for ${chain.humanReadableName}: ${stats.created} created, ${stats.updated} updated, ${stats.skipped} skipped, ${stats.failed} failed`,
+	)
 
-	const payload = await getPayloadInstance()
+	return stats
+}
 
-	// Track statistics for this chain
+async function processSubgraphPage(
+	tokens: SubgraphToken[],
+	chain: Chain,
+	payload: Awaited<ReturnType<typeof getPayloadInstance>>,
+): Promise<ChainSyncStats> {
 	const stats: ChainSyncStats = {
 		created: 0,
 		updated: 0,
@@ -115,12 +139,12 @@ async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Toke
 		failed: 0,
 	}
 
-	// Process each token
-	for (const subgraphToken of allTokens) {
+	for (const subgraphToken of tokens) {
 		const tokenType = determineTokenType(subgraphToken)
 		const tags = getTokenTags(tokenType, chain.isTestnet || false)
-		const key = `${subgraphToken.id}-${chain.id}`
-		const existingToken = existingTokensMap.get(key)
+
+		// On-demand lookup for each token
+		const existingToken = await getExistingToken(subgraphToken.id, chain.id, payload)
 
 		// Extract underlying address (normalize empty string to null)
 		const underlyingAddress =
@@ -189,11 +213,6 @@ async function syncChainTokens(chain: Chain, existingTokensMap: Map<string, Toke
 			}
 		}
 	}
-
-	// Log summary for this chain
-	console.log(
-		`Processed ${allTokens.length} tokens for ${chain.humanReadableName}: ${stats.created} created, ${stats.updated} updated, ${stats.skipped} skipped, ${stats.failed} failed`,
-	)
 
 	return stats
 }

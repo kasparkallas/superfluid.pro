@@ -71,6 +71,19 @@ export async function getAllExistingTokens(payload?: Payload): Promise<Map<strin
 	return existingTokensMap
 }
 
+export async function getExistingToken(address: string, chainId: number, payload?: Payload): Promise<Token | null> {
+	const payloadInstance = payload || (await getPayloadInstance())
+	const compositeId = `${chainId}:${address.toLowerCase()}`
+
+	const result = await payloadInstance.find({
+		collection: "tokens",
+		where: { id: { equals: compositeId } },
+		limit: 1,
+	})
+
+	return result.docs.length > 0 ? result.docs[0] : null
+}
+
 // Lean interface for order calculation - only fields needed
 interface LeanToken {
 	id: string
