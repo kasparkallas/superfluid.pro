@@ -1,6 +1,6 @@
 import { getPayloadInstance } from "@/payload"
 import type { Chain } from "@/payload-types"
-import { createStorageProvider, getStorageConfig } from "@/utils/storage"
+import { createStorageProvider, getPricingStorageConfig } from "@/utils/storage"
 
 interface PriceDataPoint {
 	date: string
@@ -88,7 +88,7 @@ export async function GET(request: Request, context: { params: Promise<{ chainId
 				return Response.json({ error: "Network not found", message: `Chain ${chainIdNum} not found` }, { status: 404 })
 			}
 
-			const storage = createStorageProvider(getStorageConfig())
+			const storage = createStorageProvider(getPricingStorageConfig())
 			const networkName = (chain as Chain).canonicalName
 			const priceFileName = `${token.symbol}_${address}.json`
 			const priceDataJson = await storage.get(`daily-prices/${networkName}/${priceFileName}`)

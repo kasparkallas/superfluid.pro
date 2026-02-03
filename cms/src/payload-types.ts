@@ -448,6 +448,10 @@ export interface PointEvent {
 	 */
 	uniqueId?: string | null
 	/**
+	 * If true, this event is recorded for history only and does not affect the account balance
+	 */
+	informational?: boolean | null
+	/**
 	 * Computed deduplication key: campaignId:account:uniqueId
 	 */
 	dedupKey?: string | null
@@ -790,6 +794,7 @@ export interface PointEventsSelect<T extends boolean = true> {
 	account?: T
 	points?: T
 	uniqueId?: T
+	informational?: T
 	dedupKey?: T
 	updatedAt?: T
 	createdAt?: T
