@@ -1,6 +1,6 @@
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { getAllExistingTokens, getTokenTags, hasChanges, mergeTags, type TokenType, type TokenTypeInfo } from "."
+import { getExistingToken, getTokenTags, hasChanges, mergeTags, type TokenType, type TokenTypeInfo } from "."
 
 // # Types
 interface DataApiToken {
@@ -21,6 +21,13 @@ interface DataApiToken {
 	lastUpdated: string
 }
 
+interface SyncStats {
+	created: number
+	updated: number
+	skipped: number
+	failed: number
+}
+
 // # Main Function
 export async function syncTokensFromDataApi() {
 	// Fetch both tokens and mappings data in parallel
@@ -39,7 +46,7 @@ export async function syncTokensFromDataApi() {
 
 	const dataApiTokens: DataApiToken[] = await tokensResponse.json()
 
-	// Process CoinGecko mappings if available
+	// Process CoinGecko mappings if available (this is a small lookup map, fine to keep in memory)
 	const coingeckoMap = new Map<string, string>()
 	if (mappingsResponse.ok) {
 		try {
@@ -59,14 +66,23 @@ export async function syncTokensFromDataApi() {
 		}
 	}
 
-	const existingTokensMap = await getAllExistingTokens()
-
 	const payload = await getPayloadInstance()
+
+	// Track statistics
+	const stats: SyncStats = {
+		created: 0,
+		updated: 0,
+		skipped: 0,
+		failed: 0,
+	}
+
+	console.log(`Processing ${dataApiTokens.length} tokens from Data API...`)
 
 	for (const dataApiToken of dataApiTokens) {
 		const { tokenType, underlyingAddress } = getTokenTypeFromDataApi(dataApiToken)
-		const key = `${dataApiToken.address}-${dataApiToken.chainId}`
-		const existingToken = existingTokensMap.get(key)
+
+		// On-demand lookup for each token
+		const existingToken = await getExistingToken(dataApiToken.address, dataApiToken.chainId, payload)
 
 		// Determine appropriate tags for this token
 		const dataApiTags = getTokenTags(tokenType, dataApiToken.chainId)
@@ -93,11 +109,6 @@ export async function syncTokensFromDataApi() {
 				updateData.coingeckoId = coingeckoId
 			}
 
-			// Update logoUri only if current one is empty/null (data API doesn't provide logoUri)
-			if (!existingToken.logoUri || existingToken.logoUri === "") {
-				// Keep existing logoUri if available, otherwise leave empty
-			}
-
 			// Merge tags - add data API tags that don't already exist
 			const mergedTags = mergeTags(existingToken.tags, dataApiTags)
 			if (mergedTags) {
@@ -107,20 +118,23 @@ export async function syncTokensFromDataApi() {
 			// Only update if there are changes
 			if (hasChanges(existingToken, updateData)) {
 				try {
-					const updatedToken = await payload.update({
+					await payload.update({
 						collection: "tokens",
 						id: existingToken.id,
 						data: updateData,
 					})
-					console.log(`Updated token with ID ${updatedToken.id}`)
+					stats.updated++
 				} catch (error) {
 					console.error(`Failed to update token ${dataApiToken.address} on chain ${dataApiToken.chainId}:`, error)
+					stats.failed++
 				}
+			} else {
+				stats.skipped++
 			}
 		} else {
 			// Token doesn't exist, create it
 			try {
-				const createdToken = await payload.create({
+				await payload.create({
 					collection: "tokens",
 					data: {
 						address: dataApiToken.address,
@@ -138,12 +152,17 @@ export async function syncTokensFromDataApi() {
 					},
 				})
 
-				console.log(`Created token with ID ${createdToken.id}`)
+				stats.created++
 			} catch (error) {
 				console.error(`Failed to create token ${dataApiToken.address} on chain ${dataApiToken.chainId}:`, error)
+				stats.failed++
 			}
 		}
 	}
+
+	console.log(
+		`Data API sync completed: ${dataApiTokens.length} tokens processed, ${stats.created} created, ${stats.updated} updated, ${stats.skipped} skipped, ${stats.failed} failed`,
+	)
 }
 
 // # Helper Functions
