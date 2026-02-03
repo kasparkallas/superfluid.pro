@@ -1,6 +1,6 @@
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
-import { getAllExistingTokens, hasChanges, mergeTags, shouldUpdateLogoUri } from "."
+import { getExistingToken, hasChanges, mergeTags, shouldUpdateLogoUri } from "."
 
 // # Types
 interface StremeToken {
@@ -44,14 +44,31 @@ interface StremeToken {
 	created_at: string
 }
 
+interface SyncStats {
+	created: number
+	updated: number
+	skipped: number
+	failed: number
+}
+
 // # Main Function
 export async function syncFromStreme() {
-	const allStremeTokens: StremeToken[] = []
-	let page = 1
-	let beforeTimestamp: number | undefined
+	const payload = await getPayloadInstance()
 	const pageSize = 200 // API returns 200 tokens per page
 
-	// Fetch all pages
+	// Track overall statistics
+	const stats: SyncStats = {
+		created: 0,
+		updated: 0,
+		skipped: 0,
+		failed: 0,
+	}
+
+	let page = 1
+	let beforeTimestamp: number | undefined
+	let totalFetched = 0
+
+	// Process pages as they come - don't accumulate all tokens
 	while (true) {
 		const url = beforeTimestamp
 			? `https://api.streme.fun/api/tokens?before=${beforeTimestamp}`
@@ -74,8 +91,19 @@ export async function syncFromStreme() {
 			break
 		}
 
-		allStremeTokens.push(...pageTokens)
-		console.log(`Fetched ${pageTokens.length} tokens on page ${page}. Total so far: ${allStremeTokens.length}`)
+		totalFetched += pageTokens.length
+		console.log(`Fetched ${pageTokens.length} tokens on page ${page}. Total fetched: ${totalFetched}`)
+
+		// Process this page immediately
+		const pageStats = await processStremePage(pageTokens, payload)
+		stats.created += pageStats.created
+		stats.updated += pageStats.updated
+		stats.skipped += pageStats.skipped
+		stats.failed += pageStats.failed
+
+		console.log(
+			`Page ${page} processed: ${pageStats.created} created, ${pageStats.updated} updated, ${pageStats.skipped} skipped, ${pageStats.failed} failed`,
+		)
 
 		// If we got fewer tokens than the page size, we've reached the end
 		if (pageTokens.length < pageSize) {
@@ -95,16 +123,27 @@ export async function syncFromStreme() {
 		page++
 	}
 
-	console.log(`Fetched total of ${allStremeTokens.length} tokens from Streme API`)
+	console.log(
+		`Streme sync completed: ${totalFetched} tokens fetched, ${stats.created} created, ${stats.updated} updated, ${stats.skipped} skipped, ${stats.failed} failed`,
+	)
+}
 
-	const stremeTokens = allStremeTokens
-	const existingTokensMap = await getAllExistingTokens()
+// # Helper Functions
 
-	const payload = await getPayloadInstance()
+async function processStremePage(
+	stremeTokens: StremeToken[],
+	payload: Awaited<ReturnType<typeof getPayloadInstance>>,
+): Promise<SyncStats> {
+	const stats: SyncStats = {
+		created: 0,
+		updated: 0,
+		skipped: 0,
+		failed: 0,
+	}
 
 	for (const stremeToken of stremeTokens) {
-		const key = `${stremeToken.contract_address}-${stremeToken.chain_id}`
-		const existingToken = existingTokensMap.get(key)
+		// On-demand lookup for each token
+		const existingToken = await getExistingToken(stremeToken.contract_address, stremeToken.chain_id, payload)
 
 		if (existingToken) {
 			// Token exists, update with Streme information
@@ -131,23 +170,26 @@ export async function syncFromStreme() {
 			// Only update if there are changes
 			if (hasChanges(existingToken, updateData)) {
 				try {
-					const updatedToken = await payload.update({
+					await payload.update({
 						collection: "tokens",
 						id: existingToken.id,
 						data: updateData,
 					})
-					console.log(`Updated Streme token with ID ${updatedToken.id}`)
+					stats.updated++
 				} catch (error) {
 					console.error(
 						`Failed to update Streme token ${stremeToken.contract_address} on chain ${stremeToken.chain_id}:`,
 						error,
 					)
+					stats.failed++
 				}
+			} else {
+				stats.skipped++
 			}
 		} else {
 			// Token doesn't exist, create it
 			try {
-				const createdToken = await payload.create({
+				await payload.create({
 					collection: "tokens",
 					data: {
 						address: stremeToken.contract_address,
@@ -164,13 +206,16 @@ export async function syncFromStreme() {
 					},
 				})
 
-				console.log(`Created Streme token with ID ${createdToken.id}`)
+				stats.created++
 			} catch (error) {
 				console.error(
 					`Failed to create Streme token ${stremeToken.contract_address} on chain ${stremeToken.chain_id}:`,
 					error,
 				)
+				stats.failed++
 			}
 		}
 	}
+
+	return stats
 }

@@ -2,7 +2,7 @@ import { fetchLatestExtendedSuperTokenList } from "@superfluid-finance/tokenlist
 import { getPayloadInstance } from "@/payload"
 import type { Token } from "@/payload-types"
 import {
-	getAllExistingTokens,
+	getExistingToken,
 	hasChanges,
 	mergeTags,
 	shouldUpdateLogoUri,
@@ -17,18 +17,34 @@ export interface SuperTokenInfo {
 	underlyingTokenAddress?: string
 }
 
+interface SyncStats {
+	created: number
+	updated: number
+	skipped: number
+	failed: number
+}
+
 // # Main Function
 export async function syncTokensFromTokenList() {
 	const tokenList = await fetchLatestExtendedSuperTokenList()
-	const existingTokensMap = await getAllExistingTokens()
-
 	const payload = await getPayloadInstance()
+
+	// Track statistics
+	const stats: SyncStats = {
+		created: 0,
+		updated: 0,
+		skipped: 0,
+		failed: 0,
+	}
+
+	console.log(`Processing ${tokenList.tokens.length} tokens from TokenList...`)
 
 	for (const token of tokenList.tokens) {
 		const superTokenInfo = token.extensions?.superTokenInfo
 		const { tokenType, underlyingAddress } = getTokenTypeInfo(superTokenInfo)
-		const key = `${token.address}-${token.chainId}`
-		const existingToken = existingTokensMap.get(key)
+
+		// On-demand lookup for each token
+		const existingToken = await getExistingToken(token.address, token.chainId, payload)
 
 		if (existingToken) {
 			// Token exists, update logoUri (if not specified) and add missing tags
@@ -50,20 +66,23 @@ export async function syncTokensFromTokenList() {
 			// Only update if there are changes
 			if (hasChanges(existingToken, updateData)) {
 				try {
-					const updatedToken = await payload.update({
+					await payload.update({
 						collection: "tokens",
 						id: existingToken.id,
 						data: updateData,
 					})
-					console.log(`Updated token with ID ${updatedToken.id}`)
+					stats.updated++
 				} catch (error) {
 					console.error(`Failed to update token ${token.address} on chain ${token.chainId}:`, error)
+					stats.failed++
 				}
+			} else {
+				stats.skipped++
 			}
 		} else {
 			// Token doesn't exist, create it
 			try {
-				const createdToken = await payload.create({
+				await payload.create({
 					collection: "tokens",
 					data: {
 						address: token.address,
@@ -81,12 +100,17 @@ export async function syncTokensFromTokenList() {
 					},
 				})
 
-				console.log(`Created token with ID ${createdToken.id}`)
+				stats.created++
 			} catch (error) {
 				console.error(`Failed to create token ${token.address} on chain ${token.chainId}:`, error)
+				stats.failed++
 			}
 		}
 	}
+
+	console.log(
+		`TokenList sync completed: ${tokenList.tokens.length} tokens processed, ${stats.created} created, ${stats.updated} updated, ${stats.skipped} skipped, ${stats.failed} failed`,
+	)
 }
 
 // # Helper Functions
