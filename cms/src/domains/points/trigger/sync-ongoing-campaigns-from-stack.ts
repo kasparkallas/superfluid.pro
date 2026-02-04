@@ -95,13 +95,13 @@ const ONGOING_CAMPAIGNS = [
 	// 	slug: "s2-nerite",
 	// 	disableNegativeSync: false,
 	// },
-	// {
-	// 	id: 7856,
-	// 	stackLeaderboardId: "leaderboard-40a3-78225-7856",
-	// 	name: "S4 GoodDollar x Gardens",
-	// 	slug: "s4-gooddollar-x-gardens",
-	// 	disableNegativeSync: false,
-	// },
+	{
+		id: 7856,
+		stackLeaderboardId: "leaderboard-40a3-78225-7856",
+		name: "S4 GoodDollar x Gardens",
+		slug: "s4-gooddollar-x-gardens",
+		disableNegativeSync: false,
+	},
 	// {
 	// 	id: 7854,
 	// 	stackLeaderboardId: "leaderboard-40a3-78225-7854",
