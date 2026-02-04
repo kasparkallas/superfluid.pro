@@ -37,6 +37,8 @@ class VercelBlobStorageProvider implements StorageProvider {
 		const blob = await put(key, content, {
 			access: "public",
 			token: this.token,
+			addRandomSuffix: false,
+			allowOverwrite: true,
 		})
 		return blob.url
 	}
