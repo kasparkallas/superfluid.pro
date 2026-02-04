@@ -62,14 +62,18 @@ async function fetchAllStackEvents(client: StackClient, startTimestamp?: Date): 
 			// If we have a start timestamp, filter events
 			if (startTimestamp) {
 				const filteredEvents = events.filter((e) => new Date(e.timestamp) >= startTimestamp)
-				allEvents.push(...filteredEvents)
+				for (const event of filteredEvents) {
+					allEvents.push(event)
+				}
 
 				// If we got fewer filtered events than fetched, we've passed the cutoff
 				if (filteredEvents.length < events.length) {
 					hasMore = false
 				}
 			} else {
-				allEvents.push(...events)
+				for (const event of events) {
+					allEvents.push(event)
+				}
 			}
 
 			offset += events.length
@@ -169,8 +173,7 @@ export const migrateFromStackEvents = task({
 		let stackEvents: StackEvent[]
 		if (existingData && existingData.events.length > 0) {
 			// Find latest timestamp and subtract 1 minute for safety buffer
-			const timestamps = existingData.events.map((e) => new Date(e.timestamp).getTime())
-			const latestTimestamp = Math.max(...timestamps)
+			const latestTimestamp = existingData.events.reduce((max, e) => Math.max(max, new Date(e.timestamp).getTime()), 0)
 			const startTimestamp = new Date(latestTimestamp - 60 * 1000) // 1 minute buffer
 
 			console.log(`Fetching new events since ${startTimestamp.toISOString()}`)
@@ -226,7 +229,7 @@ export const migrateFromStackEvents = task({
 				events: mergedEvents,
 			}
 
-			blobUrl = await storage.put(blobKey, JSON.stringify(dataToStore, null, 2))
+			blobUrl = await storage.put(blobKey, JSON.stringify(dataToStore))
 			console.log(`Stored events to blob: ${blobUrl}`)
 		} else {
 			console.log("[DRY-RUN] Would store events to blob")
