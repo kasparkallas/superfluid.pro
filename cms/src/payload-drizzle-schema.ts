@@ -95,6 +95,25 @@ export const users_token_permissions_allowed_chain_ids = pgTable(
 	],
 )
 
+export const users_campaign_permissions_allowed_campaign_ids = pgTable(
+	"users_campaign_permissions_allowed_campaign_ids",
+	{
+		_order: integer("_order").notNull(),
+		_parentID: integer("_parent_id").notNull(),
+		id: varchar("id").primaryKey(),
+		campaignId: numeric("campaign_id", { mode: "number" }),
+	},
+	(columns) => [
+		index("users_campaign_permissions_allowed_campaign_ids_order_idx").on(columns._order),
+		index("users_campaign_permissions_allowed_campaign_ids_parent_id_idx").on(columns._parentID),
+		foreignKey({
+			columns: [columns["_parentID"]],
+			foreignColumns: [users.id],
+			name: "users_campaign_permissions_allowed_campaign_ids_parent_id_fk",
+		}).onDelete("cascade"),
+	],
+)
+
 export const users_sessions = pgTable(
 	"users_sessions",
 	{
@@ -126,6 +145,7 @@ export const users = pgTable(
 		name: varchar("name"),
 		role: enum_users_role("role").notNull().default("admin"),
 		tokenPermissions_canEditAllTokens: boolean("token_permissions_can_edit_all_tokens").default(true),
+		campaignPermissions_canAccessAllCampaigns: boolean("campaign_permissions_can_access_all_campaigns").default(false),
 		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true, precision: 3 }).defaultNow().notNull(),
 		createdAt: timestamp("created_at", { mode: "string", withTimezone: true, precision: 3 }).defaultNow().notNull(),
 		email: varchar("email").notNull(),
@@ -363,6 +383,12 @@ export const point_events = pgTable(
 		account: varchar("account").notNull(),
 		points: numeric("points", { mode: "number" }).notNull(),
 		uniqueId: varchar("unique_id"),
+		informational: boolean("informational").default(false),
+		eventTime: timestamp("event_time", {
+			mode: "string",
+			withTimezone: true,
+			precision: 3,
+		}).notNull(),
 		dedupKey: varchar("dedup_key"),
 		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true, precision: 3 }).defaultNow().notNull(),
 		createdAt: timestamp("created_at", { mode: "string", withTimezone: true, precision: 3 }).defaultNow().notNull(),
@@ -373,6 +399,7 @@ export const point_events = pgTable(
 		index("point_events_event_name_idx").on(columns.eventName),
 		index("point_events_account_idx").on(columns.account),
 		index("point_events_unique_id_idx").on(columns.uniqueId),
+		index("point_events_event_time_idx").on(columns.eventTime),
 		uniqueIndex("point_events_dedup_key_idx").on(columns.dedupKey),
 		index("point_events_updated_at_idx").on(columns.updatedAt),
 		index("point_events_created_at_idx").on(columns.createdAt),
@@ -619,6 +646,16 @@ export const relations_users_token_permissions_allowed_chain_ids = relations(
 		}),
 	}),
 )
+export const relations_users_campaign_permissions_allowed_campaign_ids = relations(
+	users_campaign_permissions_allowed_campaign_ids,
+	({ one }) => ({
+		_parentID: one(users, {
+			fields: [users_campaign_permissions_allowed_campaign_ids._parentID],
+			references: [users.id],
+			relationName: "campaignPermissions_allowedCampaignIds",
+		}),
+	}),
+)
 export const relations_users_sessions = relations(users_sessions, ({ one }) => ({
 	_parentID: one(users, {
 		fields: [users_sessions._parentID],
@@ -635,6 +672,9 @@ export const relations_users = relations(users, ({ many }) => ({
 	}),
 	tokenPermissions_allowedChainIds: many(users_token_permissions_allowed_chain_ids, {
 		relationName: "tokenPermissions_allowedChainIds",
+	}),
+	campaignPermissions_allowedCampaignIds: many(users_campaign_permissions_allowed_campaign_ids, {
+		relationName: "campaignPermissions_allowedCampaignIds",
 	}),
 	sessions: many(users_sessions, {
 		relationName: "sessions",
@@ -804,6 +844,7 @@ type DatabaseSchema = {
 	users_token_permissions_allowed_tags: typeof users_token_permissions_allowed_tags
 	users_token_permissions_allowed_addresses: typeof users_token_permissions_allowed_addresses
 	users_token_permissions_allowed_chain_ids: typeof users_token_permissions_allowed_chain_ids
+	users_campaign_permissions_allowed_campaign_ids: typeof users_campaign_permissions_allowed_campaign_ids
 	users_sessions: typeof users_sessions
 	users: typeof users
 	tokens_tags: typeof tokens_tags
@@ -826,6 +867,7 @@ type DatabaseSchema = {
 	relations_users_token_permissions_allowed_tags: typeof relations_users_token_permissions_allowed_tags
 	relations_users_token_permissions_allowed_addresses: typeof relations_users_token_permissions_allowed_addresses
 	relations_users_token_permissions_allowed_chain_ids: typeof relations_users_token_permissions_allowed_chain_ids
+	relations_users_campaign_permissions_allowed_campaign_ids: typeof relations_users_campaign_permissions_allowed_campaign_ids
 	relations_users_sessions: typeof relations_users_sessions
 	relations_users: typeof relations_users
 	relations_tokens_tags: typeof relations_tokens_tags
