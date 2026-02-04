@@ -140,11 +140,11 @@ export const GET = async (request: Request): Promise<Response> => {
 		}
 
 		if (startTime) {
-			conditions.push({ createdAt: { greater_than_equal: startTime.toISOString() } })
+			conditions.push({ eventTime: { greater_than_equal: startTime.toISOString() } })
 		}
 
 		if (endTime) {
-			conditions.push({ createdAt: { less_than_equal: endTime.toISOString() } })
+			conditions.push({ eventTime: { less_than_equal: endTime.toISOString() } })
 		}
 
 		const result = await payload.find({
@@ -152,7 +152,7 @@ export const GET = async (request: Request): Promise<Response> => {
 			where: { and: conditions },
 			limit,
 			page,
-			sort: "-createdAt",
+			sort: "-eventTime",
 		})
 
 		const response: PointEventsResponse = {
@@ -162,7 +162,7 @@ export const GET = async (request: Request): Promise<Response> => {
 				account: event.account,
 				points: event.points,
 				uniqueId: event.uniqueId ?? null,
-				createdAt: event.createdAt,
+				createdAt: event.eventTime, // Use eventTime, not createdAt
 			})),
 			pagination: {
 				page: result.page ?? 1,

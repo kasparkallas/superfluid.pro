@@ -440,7 +440,7 @@ pointsRegistry.registerPath({
 	path: "/points/events",
 	summary: "Get point events",
 	description:
-		"Retrieves point events with optional filtering by account, event name, and time range. Results are paginated and sorted by creation time (newest first).",
+		"Retrieves point events with optional filtering by account, event name, and time range. Results are paginated and sorted by event time (newest first).",
 	tags: ["Events"],
 	request: {
 		query: EventsQuerySchema,

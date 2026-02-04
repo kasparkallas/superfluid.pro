@@ -1,7 +1,7 @@
 import CoinGecko from "@coingecko/coingecko-typescript"
 import { find } from "lodash"
 import { zeroAddress } from "viem"
-import { createStorageProvider, getStorageConfig } from "@/utils/storage"
+import { createStorageProvider, getPricingStorageConfig } from "@/utils/storage"
 
 interface SuperTokenData {
 	address: string
@@ -188,7 +188,7 @@ export async function GET(_request: Request, context: { params: Promise<{ chainI
 		}
 
 		// Get storage provider
-		const storage = createStorageProvider(getStorageConfig())
+		const storage = createStorageProvider(getPricingStorageConfig())
 
 		// Fetch fresh token data from aggregated file
 		const allNetworksData = await storage.get("super-tokens/latest/all-networks.json")

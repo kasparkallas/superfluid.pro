@@ -21,6 +21,9 @@ const pointsSchema = z.number().int("Points must be an integer")
 const updatePointBalance: CollectionAfterChangeHook<PointEvent> = async ({ doc, req, operation }) => {
 	if (operation !== "create") return doc
 
+	// Skip balance update for informational events (e.g., migrated history)
+	if (doc.informational) return doc
+
 	const { campaign, account, points, id: eventId } = doc
 	const campaignId = typeof campaign === "object" ? campaign.id : campaign
 	const balanceId = `${campaignId}:${account}`
@@ -152,6 +155,37 @@ export const PointEvents: CollectionConfig = {
 			index: true,
 			admin: {
 				description: "Deduplication key (unique per campaign + account)",
+			},
+		},
+		{
+			name: "informational",
+			type: "checkbox",
+			defaultValue: false,
+			admin: {
+				description: "If true, this event is recorded for history only and does not affect the account balance",
+			},
+		},
+		{
+			name: "eventTime",
+			type: "date",
+			required: true,
+			index: true,
+			admin: {
+				description: "When the event occurred (defaults to creation time, can be set for historical imports)",
+				date: {
+					pickerAppearance: "dayAndTime",
+				},
+			},
+			hooks: {
+				beforeChange: [
+					({ value, operation }) => {
+						// If no value provided on create, default to now
+						if (operation === "create" && !value) {
+							return new Date().toISOString()
+						}
+						return value
+					},
+				],
 			},
 		},
 		{

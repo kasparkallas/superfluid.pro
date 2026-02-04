@@ -130,12 +130,12 @@ export const EventsQuerySchema = z
 		startTime: z.string().optional().openapi({
 			example: "2024-03-23T00:00:00.000Z",
 			description:
-				"Filter events created at or after this time. Accepts ISO 8601 (e.g., 2024-03-23T00:00:00.000Z) or Unix timestamp in seconds (e.g., 1711152000)",
+				"Filter events that occurred at or after this time. Accepts ISO 8601 (e.g., 2024-03-23T00:00:00.000Z) or Unix timestamp in seconds (e.g., 1711152000)",
 		}),
 		endTime: z.string().optional().openapi({
 			example: "2024-12-31T23:59:59.999Z",
 			description:
-				"Filter events created at or before this time. Accepts ISO 8601 (e.g., 2024-12-31T23:59:59.999Z) or Unix timestamp in seconds (e.g., 1735689599)",
+				"Filter events that occurred at or before this time. Accepts ISO 8601 (e.g., 2024-12-31T23:59:59.999Z) or Unix timestamp in seconds (e.g., 1735689599)",
 		}),
 		limit: z.coerce.number().int().min(1).max(100).optional().openapi({
 			example: 50,
@@ -175,7 +175,7 @@ export const PointEventSchema = z
 		}),
 		createdAt: z.string().openapi({
 			example: "2025-01-07T12:00:00.000Z",
-			description: "ISO 8601 timestamp of event creation",
+			description: "ISO 8601 timestamp of when the event occurred",
 		}),
 	})
 	.openapi({

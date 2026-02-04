@@ -1,5 +1,5 @@
 import type { Token } from "@/payload-types"
-import { createStorageProvider, getStorageConfig } from "./storage"
+import { createStorageProvider, getPricingStorageConfig } from "./storage"
 
 export interface TokenPrice {
 	priceUsd: string | null
@@ -23,7 +23,7 @@ interface CoinGeckoSimplePriceResponse {
 
 export async function fetchTokenPrice(token: Token): Promise<TokenPrice | null> {
 	try {
-		const storage = createStorageProvider(getStorageConfig())
+		const storage = createStorageProvider(getPricingStorageConfig())
 
 		// Get CoinGecko mappings
 		const mappingsData = await storage.get("coingecko-mappings/super-token-ids.json")

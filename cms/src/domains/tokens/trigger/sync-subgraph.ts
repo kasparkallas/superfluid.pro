@@ -8,6 +8,7 @@ export const syncSubgraphScheduled = schedules.task({
 	retry: {
 		maxAttempts: 3,
 	},
+	machine: "small-2x",
 	run: async () => {
 		console.log("Starting scheduled subgraph sync...")
 

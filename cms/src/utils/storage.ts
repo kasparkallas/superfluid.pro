@@ -10,6 +10,7 @@ export interface StorageConfig {
 
 export interface StorageProvider {
 	get(key: string): Promise<string | null>
+	put(key: string, content: string): Promise<string>
 }
 
 class VercelBlobStorageProvider implements StorageProvider {
@@ -30,6 +31,15 @@ class VercelBlobStorageProvider implements StorageProvider {
 			return null
 		}
 	}
+
+	async put(key: string, content: string): Promise<string> {
+		const { put } = await import("@vercel/blob")
+		const blob = await put(key, content, {
+			access: "public",
+			token: this.token,
+		})
+		return blob.url
+	}
 }
 
 class LocalStorageProvider implements StorageProvider {
@@ -45,6 +55,15 @@ class LocalStorageProvider implements StorageProvider {
 			console.error(`Local storage get operation failed for key ${key}:`, error)
 			return null
 		}
+	}
+
+	async put(key: string, content: string): Promise<string> {
+		const { writeFile, mkdir } = await import("node:fs/promises")
+		const { join, dirname } = await import("node:path")
+		const filePath = join(this.basePath, key)
+		await mkdir(dirname(filePath), { recursive: true })
+		await writeFile(filePath, content, "utf8")
+		return filePath
 	}
 }
 
@@ -62,11 +81,20 @@ export function createStorageProvider(config: StorageConfig): StorageProvider {
 	}
 }
 
-export function getStorageConfig(): StorageConfig {
+export function getPricingStorageConfig(): StorageConfig {
 	const isProduction = process.env.NODE_ENV === "production"
 	return {
 		type: isProduction ? "blob" : "local",
 		localPath: process.env.LOCAL_STORAGE_PATH || "./data",
 		blobReadWriteToken: process.env.SUPERFLUID_DATA_BLOB_READ_WRITE_TOKEN,
+	}
+}
+
+export function getPointsStorageConfig(): StorageConfig {
+	const isProduction = process.env.NODE_ENV === "production"
+	return {
+		type: isProduction ? "blob" : "local",
+		localPath: process.env.LOCAL_STORAGE_PATH || "./data",
+		blobReadWriteToken: process.env.BLOB_READ_WRITE_TOKEN,
 	}
 }
