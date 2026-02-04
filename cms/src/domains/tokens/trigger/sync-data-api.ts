@@ -8,6 +8,7 @@ export const syncDataApiScheduled = schedules.task({
 	retry: {
 		maxAttempts: 3,
 	},
+	machine: "small-2x",
 	run: async () => {
 		console.log("Starting scheduled data API sync...")
 
