@@ -1,4 +1,4 @@
-import type { CollectionAfterChangeHook, CollectionConfig } from "payload"
+import type { CollectionAfterChangeHook, CollectionAfterDeleteHook, CollectionConfig } from "payload"
 import { z } from "zod"
 import type { PointEvent } from "../../../payload-types"
 import { AccessControl } from "../../../utils/AccessControl"
@@ -70,6 +70,52 @@ const updatePointBalance: CollectionAfterChangeHook<PointEvent> = async ({ doc, 
 	return doc
 }
 
+/**
+ * After deleting a PointEvent, adjust the corresponding PointBalance.
+ * This reverses the effect of the original event on the balance.
+ */
+const adjustPointBalanceOnDelete: CollectionAfterDeleteHook<PointEvent> = async ({ doc, req }) => {
+	// Skip balance adjustment for informational events
+	if (doc.informational) return doc
+
+	const { campaign, account, points, id: eventId } = doc
+	const campaignId = typeof campaign === "object" ? campaign.id : campaign
+	const balanceId = `${campaignId}:${account}`
+
+	// Find existing balance
+	const existing = await req.payload.find({
+		req,
+		collection: "point-balances",
+		where: { id: { equals: balanceId } },
+		limit: 1,
+		depth: 0,
+	})
+
+	if (existing.docs.length > 0) {
+		const balance = existing.docs[0]
+		const existingEventIds = (balance.events as number[]) || []
+
+		// Remove the deleted event from the events array
+		const updatedEventIds = existingEventIds.filter((id) => id !== eventId)
+
+		await req.payload.update({
+			req,
+			collection: "point-balances",
+			id: balance.id,
+			data: {
+				// NOTE: Deleting a large negative event from an account that was capped at 0
+				// may grant unintended points. E.g., if -1000 points brought balance from 100 to 0
+				// (capped), deleting that event would set balance to 0 - (-1000) = 1000, not 100.
+				totalPoints: Math.max(0, balance.totalPoints - points),
+				eventCount: Math.max(0, balance.eventCount - 1),
+				events: updatedEventIds,
+			},
+		})
+	}
+
+	return doc
+}
+
 export const PointEvents: CollectionConfig = {
 	slug: "point-events",
 	admin: {
@@ -87,6 +133,7 @@ export const PointEvents: CollectionConfig = {
 	},
 	hooks: {
 		afterChange: [updatePointBalance],
+		afterDelete: [adjustPointBalanceOnDelete],
 	},
 	fields: [
 		{
