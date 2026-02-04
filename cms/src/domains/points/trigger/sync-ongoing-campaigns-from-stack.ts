@@ -53,13 +53,13 @@ const ONGOING_CAMPAIGNS = [
 	// 	slug: "s4-gardens",
 	// 	disableNegativeSync: false,
 	// },
-	{
-		id: 7860,
-		stackLeaderboardId: "leaderboard-40a3-78225-7860",
-		name: "S4 GoodDollar",
-		slug: "s4-gooddollar",
-		disableNegativeSync: false,
-	},
+	// {
+	// 	id: 7860,
+	// 	stackLeaderboardId: "leaderboard-40a3-78225-7860",
+	// 	name: "S4 GoodDollar",
+	// 	slug: "s4-gooddollar",
+	// 	disableNegativeSync: false,
+	// },
 	// {
 	// 	id: 7757,
 	// 	stackLeaderboardId: "leaderboard-40a3-782251-7757",
