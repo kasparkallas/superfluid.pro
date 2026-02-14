@@ -67,13 +67,13 @@ const ONGOING_CAMPAIGNS = [
 	// 	slug: "s3-miniapp-dev-rewards",
 	// 	disableNegativeSync: false,
 	// },
-	{
-		id: 7759,
-		stackLeaderboardId: "leaderboard-40a3-782251-7759",
-		name: "S3 Banger",
-		slug: "s3-banger",
-		disableNegativeSync: false,
-	},
+	// {
+	//	id: 7759,
+	//	stackLeaderboardId: "leaderboard-40a3-782251-7759",
+	//	name: "S3 Banger",
+	//	slug: "s3-banger",
+	//	disableNegativeSync: false,
+	// },
 	// {
 	// 	id: 7761,
 	// 	stackLeaderboardId: "leaderboard-40a3-782251-7761",
